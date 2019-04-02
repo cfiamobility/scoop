@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".searchActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
-        <activity android:name=".infoScreen"></activity>
+        <activity android:name=".rotateImage"></activity>
+        <activity
+            android:name=".searchActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".infoScreen" />
         <activity android:name=".settingsScreen" />
         <activity android:name=".editProfileScreen" />
         <activity android:name=".savedPostScreen" />
