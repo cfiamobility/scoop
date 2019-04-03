@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class bottomSheetDialog extends BottomSheetDialogFragment {
 
@@ -22,6 +23,9 @@ public class bottomSheetDialog extends BottomSheetDialogFragment {
         Button shareButton = view.findViewById(R.id.shareButton);
         Button deleteButton = view.findViewById(R.id.deleteButton);
         Button reportButton = view.findViewById(R.id.reportButton);
+
+        ImageView share = view.findViewById(R.id.shareImage);
+        share.setVisibility(View.VISIBLE);
 
         // onClick listeners for all the buttons
         saveButton.setOnClickListener(new View.OnClickListener() {

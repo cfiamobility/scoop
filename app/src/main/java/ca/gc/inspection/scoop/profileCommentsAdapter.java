@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class commentsAdapter extends RecyclerView.Adapter<commentsAdapter.likesViewHolder> {
+public class profileCommentsAdapter extends RecyclerView.Adapter<profileCommentsAdapter.likesViewHolder> {
 
     // test array list
     List<String> testLikes;
 
-    public commentsAdapter(List<String> test) {
+    public profileCommentsAdapter(List<String> test) {
         this.testLikes = test;
     }
 

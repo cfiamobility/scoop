@@ -28,7 +28,6 @@ public class profileScreen extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_screen, container, false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Profile");
 
         // initializing the tab layout for profile -> posts, likes, comments
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);

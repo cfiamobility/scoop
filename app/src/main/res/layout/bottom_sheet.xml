@@ -11,9 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="268dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="213dp"
         android:background="@android:color/transparent"
+        android:fontFamily="@font/open_sans_bold"
         android:text="@string/share"
         android:textAlignment="viewStart" />
 
@@ -22,8 +23,8 @@
         android:layout_width="53dp"
         android:layout_height="34dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="-7dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="4dp"
         android:layout_toStartOf="@+id/shareButton"
         app:srcCompat="@drawable/ic_menu_share" />
 
@@ -33,15 +34,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/shareButton"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-2dp"
-        android:layout_marginEnd="266dp"
+        android:layout_marginTop="-1dp"
+        android:layout_marginEnd="213dp"
         android:background="@android:color/transparent"
+        android:fontFamily="@font/open_sans_bold"
         android:text="@string/save"
         android:textAlignment="textStart" />
 
     <ImageView
         android:id="@+id/saveImage"
-        android:layout_width="40dp"
+        android:layout_width="53dp"
         android:layout_height="34dp"
         android:layout_below="@+id/shareImage"
         android:layout_marginTop="11dp"
@@ -55,16 +57,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/saveButton"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-2dp"
-        android:layout_marginEnd="268dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="213dp"
         android:background="@android:color/transparent"
+        android:fontFamily="@font/open_sans_bold"
         android:text="@string/delete"
         android:textAlignment="textStart" />
 
     <ImageView
         android:id="@+id/deleteImage"
-        android:layout_width="35dp"
-        android:layout_height="36dp"
+        android:layout_width="53dp"
+        android:layout_height="34dp"
         android:layout_below="@+id/saveImage"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="4dp"
@@ -77,19 +80,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/deleteButton"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-2dp"
-        android:layout_marginEnd="268dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="213dp"
         android:background="@android:color/transparent"
+        android:fontFamily="@font/open_sans_bold"
         android:text="@string/report"
         android:textAlignment="viewStart" />
 
     <ImageView
         android:id="@+id/imageView10"
-        android:layout_width="38dp"
+        android:layout_width="53dp"
         android:layout_height="34dp"
         android:layout_below="@+id/deleteImage"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginEnd="4dp"
         android:layout_toStartOf="@+id/reportButton"
         app:srcCompat="@drawable/ic_report_black_24dp" />
 

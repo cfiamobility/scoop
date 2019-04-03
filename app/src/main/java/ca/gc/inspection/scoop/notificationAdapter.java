@@ -27,7 +27,6 @@ public class notificationAdapter extends RecyclerView.Adapter<notificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull notificationViewHolder notificationViewHolder, int i) {
-        Log.i("NOTIFICATION", testNotification.toString());
         notificationViewHolder.notificationText.setText(testNotification.get(i));
     }
 

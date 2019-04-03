@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="165dp">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         <ImageView
             android:id="@+id/profileImage"
             android:layout_width="41dp"
-            android:layout_height="34dp"
+            android:layout_height="43dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="18dp"
@@ -24,8 +24,8 @@
             android:layout_width="208dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="29dp"
             android:layout_marginEnd="15dp"
             android:layout_toStartOf="@+id/date"
             android:layout_toEndOf="@+id/profileImage"
@@ -33,7 +33,7 @@
             android:text="@string/name"
             android:textAlignment="textStart"
             android:textAllCaps="true"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
@@ -42,11 +42,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="27dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="18dp"
-            android:fontFamily="@font/open_sans"
+            android:fontFamily="@font/open_sans_light"
             android:text="2019-01-01"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/activityTitle"
@@ -60,7 +60,7 @@
             android:layout_marginEnd="18dp"
             android:fontFamily="@font/open_sans_bold"
             android:text="Replying to Chun Wu's Post"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
@@ -73,7 +73,9 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="18dp"
-            android:text="TextView" />
+            android:fontFamily="@font/open_sans"
+            android:text="TextView"
+            android:textSize="12sp" />
 
         <View
             android:id="@+id/horizontalDivider"
@@ -81,7 +83,7 @@
             android:layout_height="1dp"
             android:layout_below="@+id/postText"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="22dp"
             android:layout_marginEnd="0dp"
             android:background="?android:attr/listDivider" />
     </RelativeLayout>

@@ -39,9 +39,6 @@ public class communityFeedScreen extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_community_feed_screen, container, false);
 
-        // setting the title of the activity for the custom tool bar
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Community");
-
         // initializing the test array
         test = new ArrayList<>();
 

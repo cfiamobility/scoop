@@ -37,7 +37,6 @@ public class notificationScreen extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notifications_screen, container, false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Notifications");
 
         // initializing test array list
         test = new ArrayList<>();

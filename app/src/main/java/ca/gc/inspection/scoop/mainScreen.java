@@ -43,7 +43,7 @@ public class mainScreen extends AppCompatActivity {
         setContentView(R.layout.navigation_drawer);
 
         // set out custom toolbar_menu as the default action bar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // initializing create post button
@@ -96,18 +96,22 @@ public class mainScreen extends AppCompatActivity {
                     case R.id.community:
                         viewPager.setCurrentItem(0);
                         createPost.setVisibility(View.VISIBLE);
+                        getSupportActionBar().setTitle("Community");
                         break;
                     case R.id.official:
                         viewPager.setCurrentItem(1);
                         createPost.setVisibility(View.VISIBLE);
+                        getSupportActionBar().setTitle("Official");
                         break;
                     case R.id.notifications:
                         viewPager.setCurrentItem(2);
                         createPost.setVisibility(View.INVISIBLE);
+                        getSupportActionBar().setTitle("Notifications");
                         break;
                     case R.id.profile:
                         viewPager.setCurrentItem(3);
                         createPost.setVisibility(View.INVISIBLE);
+                        getSupportActionBar().setTitle("Profile");
                         break;
                 }
                 return false;
@@ -130,6 +134,17 @@ public class mainScreen extends AppCompatActivity {
                 }
                 bottomNavigationView.getMenu().getItem(i).setChecked(true);
                 previousMenuItem = bottomNavigationView.getMenu().getItem(i);
+
+                // setting the title of the page every time you switch tabs
+                if (i == 0) {
+                    getSupportActionBar().setTitle("Community");
+                } else if (i == 1) {
+                    getSupportActionBar().setTitle("Official");
+                } else if (i == 2) {
+                    getSupportActionBar().setTitle("Notifications");
+                } else {
+                    getSupportActionBar().setTitle("Profile");
+                }
             }
 
             @Override

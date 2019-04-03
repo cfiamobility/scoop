@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".CreatePostScreen">
 
     <Button
         android:id="@+id/backButton"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
+        android:layout_width="29dp"
+        android:layout_height="32dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="13dp"
@@ -24,13 +24,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="15dp"
         android:fontFamily="@font/open_sans_bold"
         android:text="@string/create_a_post"
         android:textAllCaps="true"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/profileImage"
@@ -83,9 +83,9 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/createAPost"
+        android:layout_below="@+id/postEditText"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="355dp"
+        android:layout_marginTop="191dp"
         android:layout_marginEnd="0dp"
         android:background="?android:attr/listDivider" />
 
@@ -117,11 +117,12 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="13dp"
         android:layout_toEndOf="@+id/createAPost"
         android:background="@drawable/button_shape"
         android:backgroundTint="@color/medium_blue"
+        android:fontFamily="@font/open_sans_bold"
         android:onClick="returnToPrevious"
         android:text="@string/post"
         android:textColor="@color/white" />

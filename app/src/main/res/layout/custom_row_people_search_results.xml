@@ -24,13 +24,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="40dp"
             android:layout_toEndOf="@+id/searchResultsProfileImage"
             android:fontFamily="@font/open_sans_bold"
             android:text="Timmy Truong"
             android:textAllCaps="true"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <View
             android:id="@+id/divider17"

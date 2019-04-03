@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,14 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.myViewHolder> 
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");
+            }
+        });
+
+        // tapping on any item from the view holder will go to the display post activity
+        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.getContext().startActivity(new Intent(v.getContext(), displayPost.class));
             }
         });
     }

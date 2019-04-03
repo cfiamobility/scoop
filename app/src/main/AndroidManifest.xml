@@ -20,7 +20,7 @@
         <activity android:name=".savedPostScreen" />
         <activity
             android:name=".CreatePostScreen"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
             android:name=".loginScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

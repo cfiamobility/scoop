@@ -61,4 +61,6 @@
     <string name="photo_gallery">Photo Gallery</string>
 
     <string name="name">NAME</string>
+
+    <string name="view_post">Viewing Post</string>
 </resources>
