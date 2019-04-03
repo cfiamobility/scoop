@@ -47,6 +47,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -453,7 +454,7 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 				public void onClick(DialogInterface dialog, int which) {
 					Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
 					choosePictureIntent.setType("image/*");
-					startActivityForResult(choosePictureIntent, CHOOSE_PIC_REQUEST_CODE);
+					startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), CHOOSE_PIC_REQUEST_CODE);
 
 				}
 			});
@@ -508,6 +509,7 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 //		startActivityForResult(intent, TAKE_PIC_REQUEST_CODE);
 //	}
 
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -516,9 +518,31 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 				if (data == null) {
 					Toast.makeText(getApplicationContext(), "Image cannot be null!", Toast.LENGTH_LONG).show();
 				} else {
-					mMediaUri = data.getData();
-					//set previews
-					mPreviewImageView.setImageURI(mMediaUri);
+					try {
+						Uri uri = data.getData();
+
+						String realPath = ImageFilePath.getPath(edit_profile_screen.this, data.getData());
+						Log.i("path", realPath);
+
+
+						Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+
+						Bitmap newBitmap = imageOreintationValidator(bitmap, realPath);
+						mPreviewImageView.setImageBitmap(newBitmap);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+
+
+
+
+
+
+//					Bitmap bitmap = data.getData();
+//					mMediaUri = data.getData();
+//					//set previews
+//					mPreviewImageView.setImageURI(mMediaUri);
 
 				}
 			} else {
@@ -604,7 +628,7 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 		try {
 			ei = new ExifInterface(path);
 			int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-					ExifInterface.ORIENTATION_NORMAL) + 6;
+					ExifInterface.ORIENTATION_NORMAL) + 5;
 			Log.i("orientation", Integer.toString(orientation));
 			switch (orientation) {
 				case ExifInterface.ORIENTATION_ROTATE_90:
