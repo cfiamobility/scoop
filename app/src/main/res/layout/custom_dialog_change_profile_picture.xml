@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="300dp"
+    android:layout_height="300dp">
+
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="85dp"
+        android:layout_height="54dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/ic_person_black_24dp" />
+
+    <Button
+        android:id="@+id/takePhotoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/medium_blue"
+        android:padding="15dp"
+        android:text="@string/take_photo"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/photoGalleryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/takePhotoButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/medium_blue"
+        android:padding="15dp"
+        android:text="@string/photo_gallery"
+        android:textColor="@color/white" />
+
+</RelativeLayout>
