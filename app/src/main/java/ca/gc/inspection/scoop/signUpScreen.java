@@ -1,30 +1,16 @@
 package ca.gc.inspection.scoop;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class signUpScreen extends AppCompatActivity {
 
@@ -56,9 +42,9 @@ public class signUpScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Getting the text from the edit texts
-                firstNameText = firstNameET.getText().toString();
-                lastNameText = lastNameET.getText().toString();
-                emailText = emailET.getText().toString();
+                firstNameText = capitalizeFirstLetter(firstNameET.getText().toString());
+                lastNameText = capitalizeFirstLetter(lastNameET.getText().toString());
+                emailText = (emailET.getText().toString()).toLowerCase();
                 passwordText = passwordET.getText().toString();
 
                 // Using the user-inputted information to register the user via this method
@@ -78,7 +64,6 @@ public class signUpScreen extends AppCompatActivity {
                 return true;
             }
         });
-
     }
 
     // [INPUT]:         The first name, last name, email, and password that the user entered is passed into this function
@@ -86,8 +71,6 @@ public class signUpScreen extends AppCompatActivity {
     // [PROCESSING]:    Makes request to NodeJS server and sends info to NodeJS as a Map<String, String>
     // [OUTPUT]:        Toasts to notify of error or success.
     private void registerUser(final String firstName, final String lastName, final String email, final String password) {
-
-
         // Checks for string validity
         if (TextUtils.isEmpty(email) || !email.contains("@canada.ca")) {
             Toast.makeText(this, "Email is invalid", Toast.LENGTH_SHORT).show();
@@ -102,63 +85,29 @@ public class signUpScreen extends AppCompatActivity {
             Toast.makeText(this, "Please enter a last name", Toast.LENGTH_SHORT).show();
             return;
         }
+        Controller.registerUser(getApplicationContext(), email, password, firstName, lastName, this);
+    }
 
+    private String capitalizeFirstLetter(String word) {
+        char ch[] = word.toCharArray();
+        for (int i = 0; i < word.length(); i++) {
 
-
-
-        // IP ADDRESS OF NODEJS SERVER, CHANGE ACCORDINGLY
-        String URL = "http://10.0.2.2:3000/register";
-        // IMPORTANT
-
-
-
-
-        // Volley Request
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.contains("Success")) {
-                    // Split the string to get userID - response in form of "Success <USERID>"
-                    String[] c = response.split(" ");
-
-                    // c[1] is then userID which is stored in shared preferences
-                    SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-                    sharedPreferences.edit().putString("userId", c[1]).apply();
-
-                    // Toast to show that the user has successfully signed in
-                    Toast.makeText(signUpScreen.this, "You have successfully signed up!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), mainScreen.class));
-                    finish();
+            // If first character of a word is found
+            if ((i == 0 && ch[i] != ' ') || (ch[i] != ' ' && ch[i - 1] == ' ')) {
+                // If it is in lower-case
+                if (ch[i] >= 'a' && ch[i] <= 'z') {
+                    // Convert into Upper-case
+                    ch[i] = (char)(ch[i] - 'a' + 'A');
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Error response (usually timeout)
-                Log.i("error info", error.toString());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Map of information to send to NODEJS
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("password", password);
-                params.put("firstname", firstName);
-                params.put("lastname", lastName);
-                return params;
-            }
-        };
-
-        // Stops the application from sending the data twice. Don't know why it works, but it does.
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        // Sends the data to NodeJS
-        requestQueue.add(stringRequest);
+            // If apart from first character
+            // Any one is in Upper-case
+            else if (ch[i] >= 'A' && ch[i] <= 'Z')
+                // Convert into Lower-Case
+                ch[i] = (char)(ch[i] + 'a' - 'A');
+        }
+        // Convert the char array to equivalent String
+        return new String(ch);
     }
 
     // [INPUT]:         The password string is passed into this function
