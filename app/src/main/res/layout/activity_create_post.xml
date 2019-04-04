@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".CreatePostScreen">
 
     <Button
@@ -29,7 +29,7 @@
         android:text="@string/create_a_post"
         android:textAllCaps="true"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <ImageView
@@ -64,7 +64,7 @@
     <EditText
         android:id="@+id/postEditText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_below="@+id/profileImage"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -77,7 +77,8 @@
         android:hint="@string/post_template"
         android:importantForAutofill="no"
         android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:gravity="top"/>
 
     <View
         android:id="@+id/divider"
@@ -85,7 +86,7 @@
         android:layout_height="1dp"
         android:layout_below="@+id/postEditText"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="191dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="0dp"
         android:background="?android:attr/listDivider" />
 

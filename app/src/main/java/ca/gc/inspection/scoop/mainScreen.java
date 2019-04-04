@@ -22,7 +22,7 @@ public class mainScreen extends AppCompatActivity {
 
     private Button createPost;
 
-    private ViewPager viewPager;
+    static ViewPager viewPager;
 
     // fragments
     communityFeedScreen communityFragment;

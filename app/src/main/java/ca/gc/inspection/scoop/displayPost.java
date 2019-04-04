@@ -1,5 +1,7 @@
 package ca.gc.inspection.scoop;
 
+import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -17,6 +20,8 @@ import java.util.List;
 public class displayPost extends AppCompatActivity {
 
     private ListView listView;
+
+    private ImageView optionsMenu;
 
     public void goBack (View view) {
         finish();
@@ -32,6 +37,8 @@ public class displayPost extends AppCompatActivity {
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         listView = findViewById(R.id.commentListView);
+
+        optionsMenu = findViewById(R.id.optionsMenu);
 
         List<Comments> commentsList = new ArrayList<>();
 
@@ -58,6 +65,16 @@ public class displayPost extends AppCompatActivity {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 return true;
+            }
+        });
+
+        optionsMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog bottomSheetDialog = new bottomSheetDialog();
+                final Context context = v.getContext();
+                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                bottomSheetDialog.show(fragmentManager, "bottomSheet");
             }
         });
     }

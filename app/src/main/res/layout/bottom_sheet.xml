@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="213dp"
         android:background="@android:color/transparent"
         android:fontFamily="@font/open_sans_bold"
@@ -23,7 +23,7 @@
         android:layout_width="53dp"
         android:layout_height="34dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="4dp"
         android:layout_toStartOf="@+id/shareButton"
         app:srcCompat="@drawable/ic_menu_share" />
