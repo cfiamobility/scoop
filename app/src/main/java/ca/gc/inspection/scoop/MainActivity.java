@@ -8,8 +8,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import android.util.Log;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -21,8 +19,15 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, edit_profile_screen.class);
-        startActivity(intent);
+
+        Button edit = findViewById(R.id.editProfile);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), edit_profile_screen.class);
+                startActivity(intent);
+            }
+        });
 
         Button button = findViewById(R.id.sendPost);
         button.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        }
+    }
 
 
 }

@@ -44,25 +44,13 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class edit_profile_screen extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
-	public static final int TAKE_PIC_REQUEST_CODE = 0;
-	public static final int CHOOSE_PIC_REQUEST_CODE = 1;
-	public static final int MEDIA_TYPE_IMAGE = 2;
-	private static final int MY_CAMERA_PERMISSION_CODE = 100;
-
-
 	// UI Declarations
 	AutoCompleteTextView positionET, buildingET, divisionET;
 	EditText firstNameET, lastNameET, cityET, linkedinET, twitterET, facebookET;
@@ -78,7 +66,6 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 	String firstNameText, lastNameText, positionText, divisionText, buildingText, cityText, provinceText, linkedinText, twitterText, facebookText;
 	ArrayList<String> positionAutoComplete, buildingsAutoComplete, cityAL, provinceAL, divisionsAutoComplete;
 	HashMap<String, String> positionObjects, buildingsObjects, divisionsObjects;
-	Uri mMediaUri;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -454,7 +441,7 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 				public void onClick(DialogInterface dialog, int which) {
 					Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
 					choosePictureIntent.setType("image/*");
-					startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), CHOOSE_PIC_REQUEST_CODE);
+					startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
 
 				}
 			});
@@ -462,7 +449,7 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-						requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_CAMERA_PERMISSION_CODE);
+						requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MyCamera.MY_CAMERA_PERMISSION_CODE);
 					} else {
 						takePicture();
 					}
@@ -473,48 +460,29 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 		}
 	};
 
+	public static Uri mMediaUri;
 	public void takePicture() {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 			File photoFile = null;
 			try {
-				photoFile = createImageFile();
+				photoFile = MyCamera.createImageFile(this);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			if (photoFile != null) {
-				mMediaUri = FileProvider.getUriForFile(edit_profile_screen.this, "com.example.android.fileprovider", photoFile);
-				Log.i("info", mMediaUri.toString() + " _ extra");
+				mMediaUri = FileProvider.getUriForFile(getApplicationContext(), "com.example.android.fileprovider", photoFile);
 				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-				startActivityForResult(takePictureIntent, TAKE_PIC_REQUEST_CODE);
+				startActivityForResult(takePictureIntent, MyCamera.TAKE_PIC_REQUEST_CODE);
 			}
 		}
 	}
-
-
-//
-//	public static Uri imageUri;
-//	public static Bitmap temp;
-//
-//	private void takePicture() {
-//		ContentValues values = new ContentValues();
-//		values.put(MediaStore.Images.Media.TITLE, "New Picture");
-//		values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
-//
-//		imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//
-//		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//triggers action image capture to save a full size image
-//
-//		startActivityForResult(intent, TAKE_PIC_REQUEST_CODE);
-//	}
-
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
-			if (requestCode == CHOOSE_PIC_REQUEST_CODE) {
+			if (requestCode == MyCamera.CHOOSE_PIC_REQUEST_CODE) {
 				if (data == null) {
 					Toast.makeText(getApplicationContext(), "Image cannot be null!", Toast.LENGTH_LONG).show();
 				} else {
@@ -527,28 +495,15 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 
 						Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 
-						Bitmap newBitmap = imageOreintationValidator(bitmap, realPath);
+						Bitmap newBitmap = MyCamera.imageOrientationValidator(bitmap, realPath);
 						mPreviewImageView.setImageBitmap(newBitmap);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
-
-
-
-
-
-
-//					Bitmap bitmap = data.getData();
-//					mMediaUri = data.getData();
-//					//set previews
-//					mPreviewImageView.setImageURI(mMediaUri);
-
 				}
 			} else {
-				Log.i("path", currentPhotoPath);
 				Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-				File f = new File(currentPhotoPath);
+				File f = new File(MyCamera.currentPhotoPath);
 				Uri contentUri = Uri.fromFile(f);
 				mediaScanIntent.setData(contentUri);
 				this.sendBroadcast(mediaScanIntent);
@@ -558,7 +513,8 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 
 				BitmapFactory.Options bmOptions = new BitmapFactory.Options();
 				bmOptions.inJustDecodeBounds = true;
-				BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+				BitmapFactory.decodeFile(MyCamera.currentPhotoPath, bmOptions);
+
 				int photoW = bmOptions.outWidth;
 				int photoH = bmOptions.outHeight;
 
@@ -568,51 +524,19 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 				bmOptions.inSampleSize = scaleFactor;
 				bmOptions.inPurgeable = true;
 
-				Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-				Bitmap newBitmap = imageOreintationValidator(bitmap, currentPhotoPath);
+				Bitmap bitmap = BitmapFactory.decodeFile(MyCamera.currentPhotoPath, bmOptions);
+				Bitmap newBitmap = MyCamera.imageOrientationValidator(bitmap, MyCamera.currentPhotoPath);
 				mPreviewImageView.setImageBitmap(newBitmap);
-
-//				Log.i("uri", mMediaUri.toString() + " _ extra");
-//				mPreviewImageView.setImageURI(mMediaUri);
-
-//				try {
-//					temp = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-//					Log.i("bitmap", temp.toString());
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//
-//				mPreviewImageView.setImageBitmap(temp);
-////				Uri tempUri = data.getData();
-////				Log.i("uri", tempUri.toString());
-////
-////				mPreviewImageView.setImageURI(tempUri);
 			}
 
 		} else if (resultCode != RESULT_CANCELED) {
 			Toast.makeText(getApplicationContext(), "Cancelled!", Toast.LENGTH_LONG).show();
 		}
 	}
-	String currentPhotoPath;
-	private File createImageFile() throws IOException {
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String imageFileName = "IMG_" + timeStamp;
-		File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-		File image = File.createTempFile(
-				imageFileName,  /* prefix */
-				".jpg",         /* suffix */
-				storageDir      /* directory */
-		);
-		currentPhotoPath = image.getAbsolutePath();
-		return image;
-	}
-
-
 		@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		if (requestCode == MY_CAMERA_PERMISSION_CODE) {
+		if (requestCode == MyCamera.MY_CAMERA_PERMISSION_CODE) {
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 				Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
 				takePicture();
@@ -621,48 +545,4 @@ public class edit_profile_screen extends AppCompatActivity implements AdapterVie
 			}
 		}
 	}
-
-	private Bitmap imageOreintationValidator(Bitmap bitmap, String path) {
-
-		ExifInterface ei;
-		try {
-			ei = new ExifInterface(path);
-			int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-					ExifInterface.ORIENTATION_NORMAL) + 5;
-			Log.i("orientation", Integer.toString(orientation));
-			switch (orientation) {
-				case ExifInterface.ORIENTATION_ROTATE_90:
-					bitmap = rotateImage(bitmap, 90);
-					Log.i("90", "done");
-					break;
-				case ExifInterface.ORIENTATION_ROTATE_180:
-					bitmap = rotateImage(bitmap, 180);
-					Log.i("180", "done");
-					break;
-				case ExifInterface.ORIENTATION_ROTATE_270:
-					bitmap = rotateImage(bitmap, 270);
-					Log.i("270", "done");
-					break;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return bitmap;
-	}
-
-	private Bitmap rotateImage(Bitmap source, float angle) {
-
-		Bitmap bitmap = null;
-		Matrix matrix = new Matrix();
-		matrix.postRotate(angle);
-		try {
-			bitmap = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-					matrix, true);
-		} catch (OutOfMemoryError err) {
-			err.printStackTrace();
-		}
-		return bitmap;
-	}
-
 }
