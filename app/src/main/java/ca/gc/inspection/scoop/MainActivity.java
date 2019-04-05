@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.i("TEST", "Hello World");
-        Intent intent = new Intent(this, login_user.class);
+        Intent intent = new Intent(this, get_notifs.class);
         startActivity(intent);
         //deleted the commend to test jenkins
     }
