@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 public class loginScreen extends AppCompatActivity {
+
+    EditText email, password;
 
     // to return to the splash screen
     public void goBackToSplash (View v) {
@@ -18,8 +21,7 @@ public class loginScreen extends AppCompatActivity {
 
     // if the login was successful -> go to the main screen
     public void logInSuccessful (View v) {
-        startActivity(new Intent(v.getContext(), mainScreen.class));
-        finish();
+        LoginController.loginUser(email.getText().toString(), password.getText().toString(), getApplicationContext(), this); //calling the loginUser method
     }
 
     @Override
@@ -40,5 +42,9 @@ public class loginScreen extends AppCompatActivity {
             }
         });
 
+        email = (EditText) findViewById(R.id.email); //instantiating email
+        password = (EditText) findViewById(R.id.password); //instantiating password
+
     }
 }
+
