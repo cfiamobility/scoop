@@ -430,7 +430,7 @@
         android:text="@string/province"
         android:textSize="18sp" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
         android:layout_width="113dp"
         android:layout_height="89dp"

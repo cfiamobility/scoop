@@ -1,28 +1,8 @@
 <resources>
-    <string name="app_name">scoop</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="app">Scoop</string>
-    <string name="login_sentence">Already have an account? <b>Log In</b></string>
-    <string name="login_page">Login</string>
-    <string name="create_account">Create Account</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="forgot_password">Forgot your password?</string>
-    <string name="login_verb">Log In</string>
-    <string name="title_activity_community_feed_screen">community_feed_screen</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
 
-    <string name="navigation_community">Community</string>
-    <string name="navigation_official">Official</string>
-    <string name="navigation_notifications">Notifications</string>
-    <string name="navigation_profile">Profile</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -96,6 +76,7 @@
     <string name="cityET">City</string>
     <string name="provinces_prompt">Choose a province/territory.</string>
     <string-array name="provinces_array">
+        <item></item>
         <item>AB</item>
         <item>BC</item>
         <item>MB</item>
@@ -116,4 +97,5 @@
     <string name="twitterETText">twitter.com/YOUR-TWITTER</string>
     <string name="facebookET">facebook.com/</string>
     <string name="facebookETText">facebook.com/YOUR-FACEBOOK</string>
+    <string name="invalidNameEntry">Please enter a first and last name.</string>
 </resources>
