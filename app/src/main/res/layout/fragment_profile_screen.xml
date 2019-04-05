@@ -52,9 +52,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/positionName"
-        android:layout_alignStart="@+id/profileImage"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
         android:fontFamily="@font/open_sans"
         android:text="Ottawa, ON" />
 
@@ -70,34 +69,7 @@
         android:layout_toStartOf="@+id/locationText"
         android:src="@drawable/ic_location_on_black_24dp" />
 
-    <ImageView
-        android:id="@+id/facebookLogo"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
-        android:layout_below="@+id/locationText"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="7dp"
-        android:layout_toStartOf="@+id/instagramLogo"
-        android:src="@drawable/facebook" />
 
-    <ImageView
-        android:id="@+id/instagramLogo"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
-        android:layout_below="@+id/locationText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="9dp"
-        android:src="@drawable/instagram" />
-
-    <ImageView
-        android:id="@+id/linkedinLogo"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
-        android:layout_below="@+id/locationText"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="9dp"
-        android:layout_toEndOf="@+id/instagramLogo"
-        android:src="@drawable/linkedin" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
@@ -121,5 +93,46 @@
         android:layout_marginTop="2dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp" />
+
+    <LinearLayout
+        android:id="@+id/socialMediaIcons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/locationText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/facebookLogo"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginLeft="3dp"
+            android:src="@drawable/facebook" />
+
+        <ImageView
+            android:id="@+id/instagramLogo"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginLeft="3dp"
+            android:src="@drawable/instagram" />
+
+        <ImageView
+            android:id="@+id/linkedinLogo"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginLeft="3dp"
+            android:src="@drawable/linkedin" />
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginLeft="3dp"
+            android:src="@drawable/twitter"/>
+    </LinearLayout>
 
 </RelativeLayout>

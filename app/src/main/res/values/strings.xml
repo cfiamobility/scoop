@@ -63,4 +63,6 @@
     <string name="name">NAME</string>
 
     <string name="view_post">Viewing Post</string>
+
+    <string-array name="provinces_array"></string-array>
 </resources>

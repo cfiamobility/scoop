@@ -20,7 +20,6 @@ import java.util.List;
 public class displayPost extends AppCompatActivity {
 
     private ListView listView;
-
     private ImageView optionsMenu;
 
     public void goBack (View view) {
@@ -33,8 +32,7 @@ public class displayPost extends AppCompatActivity {
         setContentView(R.layout.activity_view_post);
 
         // to prevent the soft keyboard from opening when the activity starts
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         listView = findViewById(R.id.commentListView);
 
