@@ -39,6 +39,32 @@ public class signUpScreen extends AppCompatActivity {
                 return true;
             }
         });
+<<<<<<< Updated upstream
+=======
+    }
+
+    // [INPUT]:         The first name, last name, email, and password that the user entered is passed into this function
+    // [PROCESSING]:    Checks to see if the strings are valid (Ex. of invalid strings: empty, email isn't @canada.ca, password doesn't have uppercase, lowercase, number, or symbol)
+    // [PROCESSING]:    Makes request to NodeJS server and sends info to NodeJS as a Map<String, String>
+    // [OUTPUT]:        Toasts to notify of error or success.
+    private void registerUser(final String firstName, final String lastName, final String email, final String password) {
+        // Checks for string validity
+        if (TextUtils.isEmpty(email) || !email.contains("@canada.ca")) {
+            Toast.makeText(this, "Email is invalid", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(password) || password.length() < 8 || !isValidPassword(password)) {
+            Toast.makeText(this, "Password is invalid. Ensure your password contains at least one of the following: Uppercase Letter, Lowercase Letter, Number, Symbol.", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(firstName)) {
+            Toast.makeText(this, "Please enter a first name.", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(lastName)) {
+            Toast.makeText(this, "Please enter a last name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        RegisterController.registerUser(getApplicationContext(), email, password, firstName, lastName, this);
+    }
+>>>>>>> Stashed changes
 
     }
 }
