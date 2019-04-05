@@ -1,7 +1,7 @@
 package ca.gc.inspection.scoop;
 
 class Config {
-    static String url = "http://10.0.2.2:3000/";
+    static String baseIP = "http://10.0.2.2:3000/";
 
     //For Post/Comment activity
     static int postType = 1;
