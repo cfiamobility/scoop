@@ -23,7 +23,7 @@ class Controller {
 	static void registerUser(final Context context, final String email, final String password, final String firstName, final String lastName, final Activity activity) {
 
 		// URL Call
-		String url = Config.baseIP + "register";
+		String url = Config.baseIP + "signup/register";
 
 		// Volley Request
 		RequestQueue requestQueue = Volley.newRequestQueue(context);
