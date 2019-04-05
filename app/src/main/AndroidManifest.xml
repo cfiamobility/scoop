@@ -17,6 +17,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".displayPost"></activity>
+        <activity android:name=".rotateImage" />
+        <activity
+            android:name=".searchActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".infoScreen" />
+        <activity android:name=".settingsScreen" />
+        <activity android:name=".editProfileScreen" />
+        <activity android:name=".savedPostScreen" />
+        <activity
+            android:name=".CreatePostScreen"
+            android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
+        <activity
+            android:name=".loginScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".signUpScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".splashScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".edit_profile_screen"/>
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -37,6 +58,11 @@
         </provider>
 
 
+        <activity android:name=".mainScreen" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
