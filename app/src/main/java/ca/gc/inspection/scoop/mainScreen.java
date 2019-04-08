@@ -27,7 +27,7 @@ public class mainScreen extends AppCompatActivity {
     // fragments
     communityFeedScreen communityFragment;
     officialFeedScreen officialFragment;
-    notificationScreen notificationFragment;
+    NotificationsScreen notificationFragment;
     profileScreen profileFragment;
 
     MenuItem previousMenuItem;
@@ -160,13 +160,14 @@ public class mainScreen extends AppCompatActivity {
         viewPagerAdapter adapter = new viewPagerAdapter(getSupportFragmentManager());
         communityFragment =new communityFeedScreen();
         officialFragment = new officialFeedScreen();
-        notificationFragment = new notificationScreen();
+        notificationFragment = new NotificationsScreen();
         profileFragment =  new profileScreen();
         adapter.addFragment(communityFragment);
         adapter.addFragment(officialFragment);
         adapter.addFragment(notificationFragment);
         adapter.addFragment(profileFragment);
         viewPager.setAdapter(adapter);
+//        viewPager.setOffscreenPageLimit(2);
     }
 
 
