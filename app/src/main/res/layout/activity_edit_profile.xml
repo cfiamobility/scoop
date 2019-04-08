@@ -437,7 +437,6 @@
         android:layout_below="@+id/titleText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp"
-        android:src="@drawable/ic_account_circle_black_24dp"
         android:contentDescription="TODO" />
 
     <TextView

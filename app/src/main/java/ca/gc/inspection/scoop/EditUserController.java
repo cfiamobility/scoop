@@ -15,13 +15,12 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-public class EditUserController {
+class EditUserController {
 
-	public static void initialFill(Context context) {
+	// Runs when the edit profile is pressed
+	static void initialFill(Context context) {
 
 		// URL TO BE CHANGED - userID passed as a parameter to NodeJS
 		String URL = Config.baseIP + "edituser/getinitial/" + editProfileScreen.userID;
@@ -45,7 +44,8 @@ public class EditUserController {
 		requestQueue.add(getRequest);
 	}
 
-	public static void positionAutoComplete(Context context, String positionChangedCapped) {
+	// takes care of the requests when the text is changed in the positions edittext
+	static void positionAutoComplete(final Context context, String positionChangedCapped) {
 		// URL TO BE CHANGED - position entered passed to NodeJS as a parameter
 		String URL = Config.baseIP + "edituser/positionchanged/" + positionChangedCapped;
 
@@ -56,7 +56,7 @@ public class EditUserController {
 		JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
 			@Override
 			public void onResponse(JSONArray response) {
-				editProfileScreen.positionAutoSetup(response);
+				editProfileScreen.positionAutoSetup(response, context);
 			}
 		}, new Response.ErrorListener() {
 			@Override
@@ -65,7 +65,8 @@ public class EditUserController {
 		requestQueue.add(getRequest);
 	}
 
-	public static void addressAutoComplete(Context context, String addressChangedCapped) {
+	// takes care of the requests when the text is changed in the building edittext
+	static void addressAutoComplete(final Context context, String addressChangedCapped) {
 		// URL TO BE CHANGED - address passed as parameter to nodeJS
 		String URL = Config.baseIP + "edituser/addresschanged/" + addressChangedCapped;
 
@@ -76,7 +77,7 @@ public class EditUserController {
 		JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
 			@Override
 			public void onResponse(JSONArray response) {
-				editProfileScreen.addressAutoSetup(response);
+				editProfileScreen.addressAutoSetup(response, context);
 			}
 		}, new Response.ErrorListener() {
 			@Override
@@ -86,7 +87,8 @@ public class EditUserController {
 		requestQueue.add(getRequest);
 	}
 
-	public static void divisionAutoComplete(Context context, String divisionChangedCapped) {
+	// takes care of the requests when the text is changed in the divisions edittext
+	static void divisionAutoComplete(final Context context, String divisionChangedCapped) {
 		// Inputted division is passed as a parameter to NodeJS
 		String URL = Config.baseIP + "edituser/divisionchanged/" + divisionChangedCapped;
 
@@ -97,7 +99,7 @@ public class EditUserController {
 		JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
 			@Override
 			public void onResponse(JSONArray response) {
-				editProfileScreen.divisionAutoSetup(response);
+				editProfileScreen.divisionAutoSetup(response, context);
 			}
 		}, new Response.ErrorListener() {
 			@Override
@@ -107,12 +109,16 @@ public class EditUserController {
 		requestQueue.add(jsonArrayRequest);
 	}
 
-	public static void updateUserInfo(Context context, final Map<String, String> params) {
+	// Takes care of the request when the save button is pressed
+	static void updateUserInfo(Context context, final Map<String, String> params) {
 
+		// Request url
 		String URL = Config.baseIP + "edituser/updatedatabase";
 
+		// Request for the put method
 		RequestQueue requestQueue = Volley.newRequestQueue(context);
 
+		// Asking for a string back
 		StringRequest stringRequest = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {}
@@ -120,11 +126,14 @@ public class EditUserController {
 			@Override
 			public void onErrorResponse(VolleyError error) {}
 		}) {
+			// Inputting the hashmap into the get params method
 			@Override
 			protected Map<String, String> getParams() {
 				return params;
 			}
 		};
+
+		// submitting the request
 		requestQueue.add(stringRequest);
 
 	}
