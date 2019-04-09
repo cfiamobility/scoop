@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,8 +25,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NotificationAdapterController {
-    private JSONObject notification;
+public class NotificationsScreenAdapterController {
+    private JSONObject notification, image;
     private NotificationViewHolder holder;
     private NotificationAdapterInterface notificationAdapterInterface;
     private Map<String, String> ids;
@@ -33,11 +34,12 @@ public class NotificationAdapterController {
     private String timeType;
     private RequestQueue requestQueue;
 
-    public NotificationAdapterController(NotificationViewHolder holder, int i, NotificationAdapterInterface notificationAdapterInterface, JSONArray response, Timestamp currentTime, String timeType, RequestQueue requestQueue){
+    public NotificationsScreenAdapterController(NotificationViewHolder holder, int i, NotificationAdapterInterface notificationAdapterInterface, JSONArray response, JSONArray images, Timestamp currentTime, String timeType, RequestQueue requestQueue){
         this.holder = holder;
         this.notificationAdapterInterface = notificationAdapterInterface;
         try {
             this.notification = response.getJSONObject(i);
+            this.image = response.getJSONObject(i);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -48,20 +50,28 @@ public class NotificationAdapterController {
     }
 
     public void displayNotifications() throws JSONException {
-        if(timeType.equals("today")){ //for today notifications, sets appropriate time formatting
-            setTodayTime();
-        }else{ //for recent notifications, sets appropriate time formatting
-            setRecentTime();
-        }
+
+        new TimeTask().execute(timeType); //executes setting time in a background task thread
+
         if(!notification.getString("activityid").equals("null")) { //for notifications with an activity id
-            getActivity(notification.getString("activityid"), null);
+           setActivity();
+           setProfileImage(image.getString("activityprofileimage"));
         }else{
-            getLikes();
+           setLikes();
+           setProfileImage(image.getString("likesprofileimage"));
         }
+
+
+        holder.activityType.setOnClickListener(new View.OnClickListener() { //sets on click listener for when activity type is clicked
+            @Override
+            public void onClick(View view) {
+                goToPost(ids); //calls goToPost
+            }
+        });
 
     }
 
-    private void setTodayTime(){
+    private String setTodayTime(){
         try {
             String createdDate = notification.getString("createddate"); //gets when the notification was created
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
@@ -69,105 +79,53 @@ public class NotificationAdapterController {
             Timestamp timestamp = new Timestamp(parsedDate.getTime()); //creates a timestamp from the date
             long diff = currentTime.getTime() - timestamp.getTime(); //gets the difference between the two timestamps
             String diffHours = String.valueOf((int)((diff/(1000*60*60)))); //stores it in a string representing hours
-            notificationAdapterInterface.setTime(diffHours + " hours ago", holder);
-
+            return diffHours + " hours ago";
         }catch(Exception e){
             e.printStackTrace();
-            notificationAdapterInterface.hideTime(holder); //sets visibility to gone
+            return null;
+
         }
     }
 
-    private void setRecentTime(){
+    private String setRecentTime(){
         try {
             String time = notification.getString("createddate"); //gets when notification was created
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(time); //parses the created date to be in specified date format
             DateFormat properDateFormat = new SimpleDateFormat("MMMM d 'at' h:mm a"); //formats the date to be how we want it to output
-            notificationAdapterInterface.setTime(properDateFormat.format(parsedDate), holder); //sets text to appropriate formatted date
+            return properDateFormat.format(parsedDate);
+
         }catch(Exception e){
             e.printStackTrace();
-            notificationAdapterInterface.hideTime(holder); //sets visibility to gone
+            return null;
         }
     }
 
-    private void getActivity(String activityId, final JSONObject likeResponse) throws JSONException {
+    private void setActivity() throws JSONException{
         final String[] actionTypeResponses = new String[]{"X", "posted", "commented on"}; //the possible actionType responses for activityid
-        String activityURL = Config.baseIP + "notifications/activitynotifs/" + activityId; //url to get activity notifications
-        JsonArrayRequest activityRequest = new JsonArrayRequest(Request.Method.GET, activityURL, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    JSONObject activityResponse = response.getJSONObject(0); //gets the JSONobject from the JSONarray
-                    final String referenceActivityId = activityResponse.getString("activityreference"); //gets the id for which the activity is referencing towards
-                    final int activityType = Integer.parseInt(activityResponse.getString("activitytype")); //gets the activity's activity type
-                    String fullName;
-
-                    if(likeResponse == null){
-                        ids.put("userid", activityResponse.getString("userid")); //puts the corresponding user id into the map
-                        checkReferenceActivityId(referenceActivityId, activityResponse);
-                        //getUserImage(activityResponse.getString("userid"), holder); //gets the user image based on the user id
-                        fullName = checkFirstName(activityResponse.getString("firstname")) + checkLastName(activityResponse.getString("lastname"));
-                        notificationAdapterInterface.setActionType(actionTypeResponses[activityType], holder); //sets the action type for corresponding activity type
-                    }else{
-                        ids.put("userid", likeResponse.getString("userid")); //putting the user id of the like into ids
-                        checkActivityType(activityType, activityResponse);
-                        //getUserImage(likeResponse.get("userid"), holder);
-                        fullName = checkFirstName(likeResponse.getString("firstname")) + checkLastName(likeResponse.getString("lastname"));
-                        notificationAdapterInterface.setActionType("liked", holder);
-                    }
-                    notificationAdapterInterface.setFullName(fullName, holder);
-
-                    holder.fullName.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            goToProfile(ids);
-                        }
-                    });
-
-                    holder.activityType.setOnClickListener(new View.OnClickListener() { //sets on click listener for when activity type is clicked
-                        @Override
-                        public void onClick(View view) {
-                            goToPost(ids); //calls goToPost
-                        }
-                    });
-
-
-                }catch(JSONException e){
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        requestQueue.add(activityRequest);
+        final String referenceActivityId = notification.getString("activityactivityreference"); //gets the id for which the activity is referencing towards
+        final int activityType = Integer.parseInt(notification.getString("activityactivitytype")); //gets the activity's activity type
+        ids.put("userid", notification.getString("userid")); //puts the corresponding user id into the map
+        checkReferenceActivityId(referenceActivityId, notification);
+        //getUserImage(activityResponse.getString("userid"), holder); //gets the user image based on the user id
+        new NameTask().execute(notification.getString("activityfirstname"), notification.getString("activitylastname"));
+        notificationAdapterInterface.setActionType(actionTypeResponses[activityType], holder); //sets the action type for corresponding activity type
     }
 
-    private void getLikes() throws JSONException {
-
-        String likesURL = Config.baseIP + "notifications/likenotifs/" + notification.getString("likeid"); //the url to get like notifications
-        JsonArrayRequest likeRequest = new JsonArrayRequest(Request.Method.GET, likesURL, null, new Response.Listener<JSONArray>() { //making a like request
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    JSONObject likeResponse = response.getJSONObject(0); //converting the response to a JSONObject
-                    String activityId = likeResponse.getString("activityid"); //getting the activity id related to the like
-                    getActivity(activityId, likeResponse);
-                }catch(JSONException e){
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        requestQueue.add(likeRequest); //adds likerequest to request queue
+    private void setLikes() throws JSONException{
+        final int activityType = Integer.parseInt(notification.getString("likesactivitytype")); //gets the activity's activity type
+        ids.put("userid", notification.getString("likesuserid")); //putting the user id of the like into ids
+        checkActivityType(activityType, notification);
+        //getUserImage(likeResponse.get("userid"), holder);
+        new NameTask().execute(notification.getString("likesfirstname"), notification.getString("likeslastname"));
+        notificationAdapterInterface.setActionType("liked", holder);
     }
 
+    private void setProfileImage(String image) {
+//        Bitmap bitmap = MyCamera.StringToBitmap(image);
+//        notificationAdapterInterface.setImage(bitmap, holder);
+
+    }
 
     /**
      * Description: gets the user image and sets the image view
@@ -191,7 +149,6 @@ public class NotificationAdapterController {
                 error.printStackTrace();
             }
         });
-
 //        requestQueue.add(imageRequest);
     }
 
@@ -203,7 +160,6 @@ public class NotificationAdapterController {
         Intent intent = new Intent(MyApplication.getContext(), userprofile.class);
         intent.putExtra("userid", ids.get("userid")); //puts the user id into the intent
         MyApplication.getContext().startActivity(intent); //changes to the user profile activity
-
     }
 
     /**
@@ -220,11 +176,11 @@ public class NotificationAdapterController {
         final String[] activityTypeResponses = new String[]{"your post", "a new post"}; //the possible activityType responses for activityid
         if(!referenceActivityId.equals("null")) { //if there is a reference activity id (the activity is not a post)
             notificationAdapterInterface.setActivityType(activityTypeResponses[0], holder); //sets the activity type response
-            ids.put("activityid", activityResponse.getString("activityreference")); //puts the activity reference id into the ids map
+            ids.put("activityid", activityResponse.getString("activityactivityreference")); //puts the activity reference id into the ids map
 
         }else{ //if there is no reference activity id (the activity is a post)
             notificationAdapterInterface.setActivityType(activityTypeResponses[1], holder); //sets the activity type response
-            ids.put("activityid", activityResponse.getString("activityid")); //puts the activity id into the ids map
+            ids.put("activityid", activityResponse.getString("activityactivityid")); //puts the activity id into the ids map
 
         }
     }
@@ -232,12 +188,11 @@ public class NotificationAdapterController {
     private void checkActivityType(int activityType, JSONObject activityResponse) throws JSONException {
         final String[] activityTypeResponse = new String[]{"X", "your post", "your comment"}; //the possible activityType responses for userid
         if(activityType == 1){ //if the activity is a post
-            ids.put("activityid", activityResponse.getString("activityid")); //enter the activity id of the post into ids
-            holder.activityType.setText(activityTypeResponse[activityType]); //setting text based on activityTypeResponse
+            ids.put("activityid", activityResponse.getString("likesactivityid")); //enter the activity id of the post into ids
         }else { //if the activity is a comment
-            ids.put("activityid", activityResponse.getString("activityreference")); //putting the activity reference of the activity which is a post
-            holder.activityType.setText(activityTypeResponse[activityType]); //setting text based on activityTypeResponse
+            ids.put("activityid", activityResponse.getString("likesactivityreference")); //putting the activity reference of the activity which is a post
         }
+        holder.activityType.setText(activityTypeResponse[activityType]); //setting text based on activityTypeResponse
     }
 
     private String checkFirstName(String firstName){
@@ -260,13 +215,55 @@ public class NotificationAdapterController {
 
     public interface NotificationAdapterInterface{
 
-
         void setActionType(String actionType, NotificationViewHolder holder);
-        void hideActionType(NotificationViewHolder holder);
         void setActivityType(String activityType, NotificationViewHolder holder);
-        void hideActivityType(NotificationViewHolder holder);
         void setTime(String time, NotificationViewHolder holder);
         void hideTime(NotificationViewHolder holder);
         void setFullName(String fullName, NotificationViewHolder holder);
+        void setImage(Bitmap bitmap, NotificationViewHolder holder);
     }
+
+    private class TimeTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... timeType) {
+            String time;
+            if(timeType[0].equals("today")){ //for today notifications, sets appropriate time formatting
+                time = setTodayTime();
+
+            }else{ //for recent notifications, sets appropriate time formatting
+                time = setRecentTime();
+            }
+            return time;
+        }
+
+        @Override
+        protected void onPostExecute(String time){
+            if(time !=null) {
+                notificationAdapterInterface.setTime(time, holder);
+            }else{
+                notificationAdapterInterface.hideTime(holder); //sets visibility to gone
+            }
+        }
+    }
+
+    private class NameTask extends AsyncTask<String, Void, String>{
+        @Override
+        protected String doInBackground(String... names){
+            return checkFirstName(names[0]) + checkLastName(names[1]);
+        }
+
+        @Override
+        protected void onPostExecute(String fullName){
+            notificationAdapterInterface.setFullName(fullName, holder);
+            holder.fullName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goToProfile(ids);
+                }
+            });
+        }
+    }
+
+
 }

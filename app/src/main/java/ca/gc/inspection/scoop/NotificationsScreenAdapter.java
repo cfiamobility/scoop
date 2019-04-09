@@ -1,38 +1,21 @@
 package ca.gc.inspection.scoop;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-public class NotificationsScreenAdapter extends RecyclerView.Adapter<NotificationViewHolder> implements NotificationAdapterController.NotificationAdapterInterface{
-    private JSONArray notifications;
+public class NotificationsScreenAdapter extends RecyclerView.Adapter<NotificationViewHolder> implements NotificationsScreenAdapterController.NotificationAdapterInterface{
+    private JSONArray notifications, images;
     private RequestQueue requestQueue;
 
     private String timeType;
@@ -42,11 +25,11 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
      *
      * @param notifs: represents the JSONArray for all the notifications relevant to the user
      * @param requestQueue: represents the requestQueue used for adding future requests to
-     * @param context: represents the context of the activity which is relevant to the adapter
      * @param timeType: represents whether the type of time which should be displayed is for today or for recent notifications
      */
-    NotificationsScreenAdapter(JSONArray notifs, RequestQueue requestQueue, String timeType, Timestamp currentTime){
+    NotificationsScreenAdapter(JSONArray notifs, JSONArray images,  RequestQueue requestQueue, String timeType, Timestamp currentTime){
         this.notifications = notifs;
+        this.images = images;
         this.requestQueue = requestQueue;
         this.timeType = timeType;
         this.currentTime = currentTime;
@@ -73,7 +56,7 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
      */
     @Override
     public void onBindViewHolder(@NonNull final NotificationViewHolder holder, int i) {
-        NotificationAdapterController controller = new NotificationAdapterController(holder, i, this, notifications, currentTime, timeType, requestQueue);
+        NotificationsScreenAdapterController controller = new NotificationsScreenAdapterController(holder, i, this, notifications, images, currentTime, timeType, requestQueue);
         try {
             controller.displayNotifications();
         } catch (JSONException e) {
@@ -87,19 +70,10 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
         holder.actionType.setText(actionType);
     }
 
-    @Override
-    public void hideActionType(NotificationViewHolder holder) {
-        holder.actionType.setVisibility(View.GONE);
-    }
 
     @Override
     public void setActivityType(String activityType, NotificationViewHolder holder) {
         holder.activityType.setText(activityType);
-    }
-
-    @Override
-    public void hideActivityType(NotificationViewHolder holder) {
-        holder.activityType.setVisibility(View.GONE);
     }
 
     /**
@@ -130,6 +104,10 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
      * @param holder: the holder for the row in recycler view
      */
 
+    @Override
+    public void setImage(Bitmap bitmap, NotificationViewHolder holder){
+        holder.profileImage.setImageBitmap(bitmap);
+    }
 
 
     /**
