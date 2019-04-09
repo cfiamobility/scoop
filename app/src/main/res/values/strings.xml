@@ -21,10 +21,12 @@
 
     <string name="position">Position</string>
     <string name="division">Division</string>
-    <string name="building">Building</string>
+    <string name="address">Address</string>
+    <string name="work_address">Work Address</string>
     <string name="linkedin">LinkedIn</string>
     <string name="twitter">Twitter</string>
     <string name="facebook">Facebook</string>
+    <string name="instagram">Instagram</string>
     <string name="city">City</string>
     <string name="province">Province</string>
     <string name="save">Save</string>

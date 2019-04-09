@@ -57,7 +57,7 @@ public class editProfileScreen extends AppCompatActivity implements AdapterView.
 
 	// UI Declarations
 	static AutoCompleteTextView positionET, buildingET, divisionET;
-	static EditText firstNameET, lastNameET, cityET, linkedinET, twitterET, facebookET;
+	static EditText firstNameET, lastNameET, cityET, linkedinET, twitterET, facebookET, instagramET;
 	static Spinner provinceSpinner;
 	static TextView changeProfilePicBTN;
 	static CircleImageView previewProfilePic;
@@ -69,7 +69,7 @@ public class editProfileScreen extends AppCompatActivity implements AdapterView.
 	static ArrayAdapter<String> buildingAdapter, positionAdapter, divisionAdapter;
 
 	// Application Side Variable Declarations
-	static String firstNameText, lastNameText, positionText, divisionText, buildingText, cityText, provinceText, linkedinText, twitterText, facebookText, userID, currentPhotoPath;
+	static String firstNameText, lastNameText, positionText, divisionText, buildingText, cityText, provinceText, linkedinText, twitterText, facebookText, instagramText, userID, currentPhotoPath;
 	static ArrayList<String> positionAutoComplete, buildingsAutoComplete, cityAL, provinceAL, divisionsAutoComplete;
 	static HashMap<String, String> positionObjects, buildingsObjects, divisionsObjects;
 	static Uri mMediaUri;
@@ -96,6 +96,7 @@ public class editProfileScreen extends AppCompatActivity implements AdapterView.
 		linkedinET = findViewById(R.id.linkedinEditText);
 		twitterET = findViewById(R.id.twitterEditText);
 		facebookET = findViewById(R.id.facebookEditText);
+		instagramET = findViewById(R.id.instagramEditText);
 		profilePreview = findViewById(R.id.profileImage);
 
 		// Button Definition
@@ -118,7 +119,7 @@ public class editProfileScreen extends AppCompatActivity implements AdapterView.
 		SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
 
 		// DEFAULT TO BE CHANGED TO ""
-		userID = sharedPreferences.getString("userID", "");
+		userID = sharedPreferences.getString("userid", "");
 
 		Log.i("userid", userID + "_");
 
@@ -215,6 +216,11 @@ public class editProfileScreen extends AppCompatActivity implements AdapterView.
 					linkedinText = response.get("linkedin").toString();
 					linkedinET.setText(linkedinText);
 				}
+				// If the user has already inputted an instagram url
+				if (!response.get("instagram").toString().equals("null")) {
+					instagramText = response.get("instagram").toString();
+					instagramET.setText(instagramText);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -235,7 +241,7 @@ public class editProfileScreen extends AppCompatActivity implements AdapterView.
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// Only submits request if the entered text is >= 3 characters for specificity
-				if (positionET.getText().length() >= 3) {
+				if (positionET.getText().length() >= 2) {
 					// Text inputted converted to have a cap letter to start ie. "start" -> "Start"
 					String positionChanged = positionET.getText().toString();
 					String positionChangedCapped = capFirstLetter(positionChanged);
@@ -263,7 +269,7 @@ public class editProfileScreen extends AppCompatActivity implements AdapterView.
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 
 				// Only runs when there is >= 1 character(S) in the edittext
-				if (buildingET.getText().length() >= 1) {
+				if (buildingET.getText().length() >= 2) {
 					// Text inputted converted to have a cap letter to start ie. "start" -> "Start"
 					String addressChanged = buildingET.getText().toString();
 					String addressChangedCapped = capFirstLetter(addressChanged);
@@ -664,6 +670,7 @@ public class editProfileScreen extends AppCompatActivity implements AdapterView.
 				params.put("building", buildingET.getText().toString());
 				params.put("linkedin", linkedinET.getText().toString());
 				params.put("twitter", twitterET.getText().toString());
+				params.put("instagram", instagramET.getText().toString());
 				params.put("facebook", facebookET.getText().toString());
 				params.put("city", cityET.getText().toString());
 				params.put("province", provinceSpinner.getSelectedItem().toString());
