@@ -41,6 +41,7 @@ public class LoginController {
                     Toast.makeText(context, c[0], Toast.LENGTH_SHORT).show(); //toast appears depending on the response message
                     SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString("userId", c[1]).apply();//store user id into application
+                    Config.currentUser = c[1];
                     Intent intent = new Intent(context, mainScreen.class); //changes activities once login is successful
                     context.startActivity(intent);
                     activity.finish();

@@ -18,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-class Controller {
+class RegisterController {
 
 	static void registerUser(final Context context, final String email, final String password, final String firstName, final String lastName, final Activity activity) {
 
@@ -37,6 +37,8 @@ class Controller {
 					// c[1] is then userID which is stored in shared preferences
 					SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
 					sharedPreferences.edit().putString("userId", c[1]).apply();
+					Config.currentUser = c[1];
+
 
 					// Toast to show that the user has successfully signed in
 					Toast.makeText(context, "You have successfully signed up!", Toast.LENGTH_SHORT).show();

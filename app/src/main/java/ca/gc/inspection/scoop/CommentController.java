@@ -3,7 +3,6 @@ package ca.gc.inspection.scoop;
 import android.content.Context;
 import android.util.Log;
 
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -14,17 +13,16 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreatePostController {
-    /** SendPostToDatabase
-     * Simple post request to store the newly created post to the postcomment table
-     * @param context Context of CreatePostController.java
-     * @param userId current user's userid
-     * @param title userinputted title (Mandatory)
-     * @param text userinputted test (Mandatory)
-     * @param imageBitmap userinputted image (Optional)
+public class CommentController {
+    /** simple post command
+     *
+     * @param context context of displayPost.java
+     * @param userId current userID
+     * @param comment user inputted comment
+     * @param otherPostActivity the post the current user is commenting to
      */
-    public static void sendPostToDatabase(Context context, final String userId, final String title, final String text, final String imageBitmap) {
-        String URL = Config.baseIP + "add-post";
+    static void sendCommentToDatabase(Context context, final String userId, final String comment, final String otherPostActivity){
+        String URL = Config.baseIP + "add-comment";
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -37,6 +35,7 @@ public class CreatePostController {
                         Log.d("Response", response);
                         if (response.contains("Success")){
                             Log.i("Info", "We good");
+                            displayPost.updateCommentList();
                         }
                     }
                 },
@@ -54,13 +53,14 @@ public class CreatePostController {
             {
                 Map<String, String>  params = new HashMap<>();
                 params.put("userid", userId); // post test user
-                params.put("activitytype", Integer.toString(Config.postType));
-                params.put("posttitle", title);
-                params.put("posttext", text);
-                params.put("postimage", imageBitmap);
+                params.put("activitytype", Integer.toString(Config.commentType));
+                params.put("posttext", comment);
+                params.put("otheractivityid", otherPostActivity);
                 return params;
             }
         };
         requestQueue.add(postRequest);
+
     }
+
 }

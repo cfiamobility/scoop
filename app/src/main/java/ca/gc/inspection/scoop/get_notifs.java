@@ -71,9 +71,8 @@ public class get_notifs extends AppCompatActivity{
      *  Description: used to get and display all the notifications pertaining to the current user
      */
     private void getNotifs(){
-        SharedPreferences sharedPreferences = this.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE); //instantiates shared preferences within package
-        String todayURL = "http://10.0.2.2:3000/todaynotifs/" + "1a3860f2-a8f2-4af6-a577-b43f7cc17cdd"; //sharedPreferences.getString("userId", "lol"); //the url to get notifications related to today with userid obtained from shared preferences
-        String recentURL = "http://10.0.2.2:3000/recentnotifs/" + "1a3860f2-a8f2-4af6-a577-b43f7cc17cdd"; //sharedPreferences.getString("userId", "lol"); //the url to get notifications related to recent with userid obtained from shared preferences
+        String todayURL = "http://10.0.2.2:3000/todaynotifs/" + Config.currentUser; //sharedPreferences.getString("userId", "lol"); //the url to get notifications related to today with userid obtained from shared preferences
+        String recentURL = "http://10.0.2.2:3000/recentnotifs/" + Config.currentUser; //sharedPreferences.getString("userId", "lol"); //the url to get notifications related to recent with userid obtained from shared preferences
 
 
         requestQueue = Volley.newRequestQueue(getApplicationContext()); //instantiating the request queue for volley

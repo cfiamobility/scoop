@@ -3,11 +3,14 @@ package ca.gc.inspection.scoop;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import androidx.exifinterface.media.ExifInterface;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -18,7 +21,7 @@ class MyCamera {
     static final int TAKE_PIC_REQUEST_CODE = 0;
     static final int CHOOSE_PIC_REQUEST_CODE = 1;
     static final int MY_CAMERA_PERMISSION_CODE = 100;
-
+    static final int MY_CAMERA_ROLL_PERMISSION_CODE = 101;
 
     static String currentPhotoPath;
 
@@ -80,5 +83,17 @@ class MyCamera {
             err.printStackTrace();
         }
         return bitmap;
+    }
+
+    static String bitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+    static Bitmap stringToBitmap(String string) {
+        byte[] decodedImage = Base64.decode(string, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
     }
 }

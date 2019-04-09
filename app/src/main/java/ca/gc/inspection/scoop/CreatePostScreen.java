@@ -1,10 +1,13 @@
 package ca.gc.inspection.scoop;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -12,11 +15,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -31,40 +39,84 @@ public class CreatePostScreen extends AppCompatActivity {
     private EditText postTitle, postText;
     private ImageView postImage;
 
+    private TextView counter;
+    private final TextWatcher mTextEditorWatcher = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //This sets a textview to the current length
+            counter.setText(String.valueOf(s.length()) + "/255");
+        }
+
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
-        // grab input
+
+        /** Initialize edit texts, image view, and buttons for create post xml
+         *  postTitle: title of the post
+         *  postText: message or description of the post (set to have a character limit of 255)
+         *  postImage: (OPTIONAL) user can choose to add a picture to their post from either the camera, or the camera roll
+         *  counter: character counter for postText
+         *
+         */
         postTitle = findViewById(R.id.postTitle);
+
         postText = findViewById(R.id.postText);
+        postText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(255) });
+        postText.addTextChangedListener(mTextEditorWatcher);
+
         postImage = findViewById(R.id.postImage);
+
+        counter = findViewById(R.id.counter);
 
         Button camera = findViewById(R.id.cameraButton);
         Button cameraRoll = findViewById(R.id.imageButton);
         Button send = findViewById(R.id.postSend);
 
+
+        /** OnClickListener for the camera button that launches the native camera app.
+         *  Deals with permission checks for Camera
+         */
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MyCamera.MY_CAMERA_PERMISSION_CODE);
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, MyCamera.MY_CAMERA_PERMISSION_CODE);
                 } else {
                     takePicture();
                 }
             }
         });
 
+
+        /** OnClickListenger for the camera roll button that launches the native photo app of the phone which
+         *  allows users to select an image from the camera roll
+         *  deals with permission checks for read external storage
+          */
         cameraRoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                choosePictureIntent.setType("image/*");
-                startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE);
+                } else {
+                    Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    choosePictureIntent.setType("image/*");
+                    startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
+                }
+
             }
         });
 
+        /** OnClickListenger for the send button that will grab all the user inputs and send everthing to the CreatePostController
+         *
+         */
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,15 +125,22 @@ public class CreatePostScreen extends AppCompatActivity {
                 } else if (postText.getText().toString().isEmpty()) {
                     Toast.makeText(CreatePostScreen.this, "Add a message to continue", Toast.LENGTH_SHORT).show();
                 } else {
-                    String userId = "";
                     String title = postTitle.getText().toString();
                     String text = postText.getText().toString();
-                    CreatePostController.sendPostToDatabase(CreatePostScreen.this, userId, title, text, MyCamera.currentPhotoPath);
+                    String imageBitmap = "";
+                    if (postImage.getDrawable() != null){
+                        imageBitmap = MyCamera.bitmapToString(((BitmapDrawable)postImage.getDrawable()).getBitmap());
+                        Log.i("bitmap", imageBitmap);
+                    }
+                    CreatePostController.sendPostToDatabase(CreatePostScreen.this, Config.currentUser, title, text, imageBitmap);
+
                     finish();
                 }
             }
         });
     }
+
+
     public static Uri mMediaUri;
     public void takePicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -104,14 +163,25 @@ public class CreatePostScreen extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MyCamera.MY_CAMERA_PERMISSION_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
                 takePicture();
             } else {
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
             }
+        } else if (requestCode == MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
+                Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                choosePictureIntent.setType("image/*");
+                startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
+            }
         }
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -136,10 +206,9 @@ public class CreatePostScreen extends AppCompatActivity {
                 mediaScanIntent.setData(uri);
                 this.sendBroadcast(mediaScanIntent);
                 path = MyCamera.currentPhotoPath;
-
             }
 
-            if (!path.isEmpty() && uri != null) {
+            if (path != null || uri != null) {
                 BitmapFactory.Options bmOptions = new BitmapFactory.Options();
                 bmOptions.inJustDecodeBounds = true;
                 BitmapFactory.decodeFile(path, bmOptions);
@@ -158,6 +227,8 @@ public class CreatePostScreen extends AppCompatActivity {
                 layoutParams.addRule(RelativeLayout.BELOW, R.id.postText);
                 postImage.setLayoutParams(layoutParams);
                 postImage.setImageBitmap(newBitmap);
+            } else {
+                Toast.makeText(this, "Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT).show();
             }
 
         } else if (resultCode != RESULT_CANCELED) {
