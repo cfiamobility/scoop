@@ -25,6 +25,12 @@ public class signUpScreen extends AppCompatActivity {
         finish();
     }
 
+    // if sign up was successful -> to to the main screen
+    public void signUpSuccessful(View v) {
+        startActivity(new Intent(v.getContext(), mainScreen.class));
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
