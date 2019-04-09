@@ -223,7 +223,7 @@ public class CreatePostScreen extends AppCompatActivity {
                 }
                 Bitmap newBitmap = MyCamera.imageOrientationValidator(bitmap, path);
 
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.addRule(RelativeLayout.BELOW, R.id.postText);
                 postImage.setLayoutParams(layoutParams);
                 postImage.setImageBitmap(newBitmap);
