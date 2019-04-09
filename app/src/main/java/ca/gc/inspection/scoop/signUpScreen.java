@@ -25,6 +25,12 @@ public class signUpScreen extends AppCompatActivity {
         finish();
     }
 
+    // if sign up was successful -> to to the main screen
+    public void signUpSuccessful(View v) {
+        startActivity(new Intent(v.getContext(), mainScreen.class));
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +91,7 @@ public class signUpScreen extends AppCompatActivity {
             Toast.makeText(this, "Please enter a last name", Toast.LENGTH_SHORT).show();
             return;
         }
-        Controller.registerUser(getApplicationContext(), email, password, firstName, lastName, this);
+        RegisterController.registerUser(getApplicationContext(), email, password, firstName, lastName, this);
     }
 
     private String capitalizeFirstLetter(String word) {
