@@ -49,10 +49,20 @@ public class NotificationsScreenAdapterController {
 
         if (!notification.getString("activityid").equals("null")) { //for notifications with an activity id
             setActivity(); //sets activity notification
-            setProfileImage(image.getString("activityprofileimage"), holder); //sets profile image
+
+            if(image != null) {
+                setProfileImage(image.getString("activityprofileimage"), holder); //sets profile image
+            }else{
+                notificationAdapterInterface.hideImage(holder);
+            }
         } else { //for notifications with a likeid
             setLikes(); //sets like notification
-            setProfileImage(image.getString("likesprofileimage"), holder); //sets profile image
+
+            if(image !=null) {
+                setProfileImage(image.getString("likesprofileimage"), holder); //sets profile image
+            }else{
+                notificationAdapterInterface.hideImage(holder);
+            }
         }
 
         holder.activityType.setOnClickListener(new View.OnClickListener() { //sets on click listener for when activity type is clicked
@@ -127,7 +137,7 @@ public class NotificationsScreenAdapterController {
         ids.put("userid", notification.getString("likesuserid")); //putting the user id of the like into ids
         checkActivityType(activityType, notification); //checks activity type
         new NameTask().execute(notification.getString("likesfirstname"), notification.getString("likeslastname"));
-        notificationAdapterInterface.setActionType("liked", holder); //sets action type as liked
+        notificationAdapterInterface.setActionType(MyApplication.getContext().getResources().getString(R.string.liked), holder); //sets action type as liked
     }
 
     /**
@@ -249,6 +259,8 @@ public class NotificationsScreenAdapterController {
         void setFullName(String fullName, NotificationViewHolder holder);
 
         void setImage(Bitmap bitmap, NotificationViewHolder holder);
+
+        void hideImage(NotificationViewHolder holder);
     }
 
     /**

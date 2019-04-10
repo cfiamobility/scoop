@@ -94,6 +94,11 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
         holder.profileImage.setImageBitmap(bitmap);
     }
 
+    @Override
+    public void hideImage(NotificationViewHolder holder){
+        holder.profileImage.setVisibility(View.GONE);
+    }
+
     /**
      * @return how many rows there will be based on how many notifications there are
      */

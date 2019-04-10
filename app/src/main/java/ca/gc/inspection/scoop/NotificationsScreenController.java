@@ -37,11 +37,11 @@ public class NotificationsScreenController {
      * Description: performs the request to get the notifications within the last 24 hours
      */
     public void getTodayNotifications(){
-        String todayURL = Config.baseIP + "notifications/todaynotifs/" + "1a3860f2-a8f2-4af6-a577-b43f7cc17cdd"; //sharedPreferences.getString("userId", "lol"); //the url to get notifications related to today with userid obtained from shared preferences
+        String todayURL = Config.baseIP + "notifications/todaynotifs/" + Config.currentUser; //the url to get notifications related to today with userid
         JsonArrayRequest todayRequest = new JsonArrayRequest(Request.Method.GET, todayURL, null, new Response.Listener<JSONArray>() { //making a get request for today notifications
             @Override
             public void onResponse(final JSONArray notificationResponse) {
-                String todayImagesURL = Config.baseIP + "notifications/todayimages/"  + "1a3860f2-a8f2-4af6-a577-b43f7cc17cdd"; //url for getting images related to today with user id
+                String todayImagesURL = Config.baseIP + "notifications/todayimages/"  + Config.currentUser; //url for getting images related to today with user id
                 JsonArrayRequest todayImageRequest = new JsonArrayRequest(Request.Method.GET, todayImagesURL, null, new Response.Listener<JSONArray>() { //making a get request for today images
                     @Override
                     public void onResponse(final JSONArray imageResponse) {
@@ -68,11 +68,11 @@ public class NotificationsScreenController {
      * Description: performs the request to get the notifications past 24 hours
      */
     public void getRecentNotifications(){
-        String recentURL = Config.baseIP + "notifications/recentnotifs/" + "1a3860f2-a8f2-4af6-a577-b43f7cc17cdd"; //sharedPreferences.getString("userId", "lol"); //the url to get notifications related to recent with userid obtained from shared preferences
+        String recentURL = Config.baseIP + "notifications/recentnotifs/" + Config.currentUser; //the url to get notifications related to recent with userid"1a3860f2-a8f2-4af6-a577-b43f7cc17cdd";
         JsonArrayRequest recentRequest = new JsonArrayRequest(Request.Method.GET, recentURL, null, new Response.Listener<JSONArray>() { //making a get request for recent notifications
             @Override
             public void onResponse(final JSONArray notificationResponse) {
-                String recentImagesUrl = Config.baseIP + "notifications/recentimages/"  + "1a3860f2-a8f2-4af6-a577-b43f7cc17cdd"; //url for getting images related to recent with user id
+                String recentImagesUrl = Config.baseIP + "notifications/recentimages/"  + Config.currentUser; //url for getting images related to recent with user id
                 JsonArrayRequest recentImageRequest = new JsonArrayRequest(Request.Method.GET, recentImagesUrl, null, new Response.Listener<JSONArray>() { //making a get request for recent images
                     @Override
                     public void onResponse(final JSONArray imageResponse) {
