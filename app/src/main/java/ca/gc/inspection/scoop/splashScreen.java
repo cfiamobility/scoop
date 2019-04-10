@@ -28,14 +28,11 @@ public class splashScreen extends AppCompatActivity {
         setContentView(R.layout.splash_screen);
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-        String userId = sharedPreferences.getString("userId", "");
-        if (!userId.isEmpty()){
-            Config.currentUser = userId;
-            startActivity(new Intent(this, mainScreen.class));
-        }
 
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.medium_blue));
+
+        SplashScreenController.goToMainScreen(getApplicationContext(), this);
 
     }
 }
