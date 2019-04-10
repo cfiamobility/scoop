@@ -36,7 +36,9 @@ class RegisterController {
 
 					// c[1] is then userID which is stored in shared preferences
 					SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-					sharedPreferences.edit().putString("userid", c[1]).apply();
+					sharedPreferences.edit().putString("userId", c[1]).apply();
+					Config.currentUser = c[1];
+
 
 					// Toast to show that the user has successfully signed in
 					Toast.makeText(context, "You have successfully signed up!", Toast.LENGTH_SHORT).show();
