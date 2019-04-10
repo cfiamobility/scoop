@@ -39,20 +39,24 @@ public class NotificationsScreen extends Fragment implements NotificationsScreen
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        notificationsScreenController = new NotificationsScreenController(this);
+        notificationsScreenController = new NotificationsScreenController(this); //instantiates controller for notifications screen
 
-        new TodayTask().execute();
-        new RecentTask().execute();
-        notificationsScreenController.getTodayImages();
-        notificationsScreenController.getRecentImages();
+        new TodayTask().execute(); //executes async task for today notifications
+        new RecentTask().execute(); //executes async task for recent notifications
 
 
         today = (TextView) view.findViewById(R.id.today); //instantiating the today textview
         recent = (TextView) view.findViewById(R.id.recent); //instantiating the recent textview
     }
 
-  
 
+    /**
+     * Description: sets the recycler view for recent notifications
+     * @param currentTime: the current time of when notifications were loaded
+     * @param requestQueue: request queue to add requests to
+     * @param notificationResponse: all the notifications received
+     * @param imageResponse: all the images received
+     */
     @Override
     public void setRecentRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notificationResponse, JSONArray imageResponse) {
         recentRecyclerView = (RecyclerView) view.findViewById(R.id.recentrecyclerview); //instantiating the recyclerview
@@ -65,18 +69,28 @@ public class NotificationsScreen extends Fragment implements NotificationsScreen
 
     }
 
+    /**
+     * Description: sets the recycler view for today notifications
+     * @param currentTime: the current time of when the notifications were loaded
+     * @param requestQueue: request queue to add requests to
+     * @param notificationResponse: all the notifications received
+     * @param imageResponse: all the images received
+     */
     @Override
-    public void setTodayRecyclerView(Timestamp currentTime, RequestQueue requestQueue, final JSONArray response) {
+    public void setTodayRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notificationResponse, JSONArray imageResponse) {
         todayRecyclerView = (RecyclerView) view.findViewById(R.id.todayrecyclerview); //instantiating the recyclerview
         todayRecyclerView.setHasFixedSize(true); //
         todayLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
         todayRecyclerView.setLayoutManager(todayLayoutManager); //sets the layout manager to one chosen
-        todayAdapter = new NotificationsScreenAdapter(response, requestQueue, "today", currentTime); //instantiates the adapter
+        todayAdapter = new NotificationsScreenAdapter(notificationResponse, imageResponse, requestQueue, "today", currentTime); //instantiates the adapter
         todayRecyclerView.setAdapter(todayAdapter); //sets the adapter
-        notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, response);
+        notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
 
     }
 
+    /**
+     * Description: shows the today portion of the fragment
+     */
     @Override
     public void showTodaySection() {
         today.setVisibility(View.VISIBLE);
@@ -85,6 +99,9 @@ public class NotificationsScreen extends Fragment implements NotificationsScreen
         view.findViewById(R.id.view2).setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Description: hides the today portion of the fragment
+     */
     @Override
     public void hideTodaySection() {
         todayRecyclerView.setVisibility(View.GONE);
@@ -93,6 +110,9 @@ public class NotificationsScreen extends Fragment implements NotificationsScreen
         view.findViewById(R.id.view2).setVisibility(View.GONE);
     }
 
+    /**
+     * Description: shows the recent portion of the fragment
+     */
     @Override
     public void showRecentSection() {
         view.findViewById(R.id.view3).setVisibility(View.VISIBLE);
@@ -101,31 +121,52 @@ public class NotificationsScreen extends Fragment implements NotificationsScreen
         recentRecyclerView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Description: hides the loading panel
+     */
     @Override
     public void hideLoadingPanel(){
         view.findViewById(R.id.loadingPanel).setVisibility(View.GONE); //sets the loading screen to gone
     }
 
+    /**
+     * Description: requests focus to the top of the page rather than the today recycler view
+     */
     @Override
-    public void requestFocus(){
+    public void requestTodayFocus(){
         view.findViewById(R.id.todayrecyclerview).setFocusable(false);
         view.findViewById(R.id.view1).requestFocus();
     }
 
+    /**
+     * Description: requests focus to the top of the recent view rather than the recent recycler view
+     */
+    @Override
+    public void requestRecentFocus(){
+        view.findViewById(R.id.recentrecyclerview).setFocusable(false);
+        view.findViewById(R.id.view3).requestFocus();
+    }
+
+    /**
+     * Description: performs the call to the notifications screen controller in the background
+     */
     private class TodayTask extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            notificationsScreenController.getTodayNotifications();
+            notificationsScreenController.getTodayNotifications(); //gets the today notifications
             return null;
         }
     }
 
+    /**
+     * Description: performs the call to the notifications screen controller in the background
+     */
     private class RecentTask extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            notificationsScreenController.getRecentNotifications();
+            notificationsScreenController.getRecentNotifications(); //gets the recent notifications
             return null;
         }
     }

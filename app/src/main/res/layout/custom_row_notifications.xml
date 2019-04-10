@@ -28,7 +28,7 @@
 
         android:layout_marginEnd="2.5dp"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="24dp"
         android:layout_toEndOf="@+id/profile_image"
         android:onClick="goToProfile"
         android:textStyle="bold" />
@@ -41,24 +41,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="2.5dp"
         android:layout_marginEnd="2.5dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="24dp"
         android:layout_toEndOf="@+id/fullname"
         />
-
-    <!--<LinearLayout-->
-            <!--android:id="@+id/notification_text"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_marginEnd="28dp"-->
-            <!--android:layout_marginStart="27dp"-->
-            <!--android:layout_marginTop="18dp"-->
-            <!--android:layout_toEndOf="@+id/profile_image"-->
-            <!--android:orientation="horizontal">-->
-
-
-    <!--</LinearLayout>-->
 
     <TextView
         android:id="@+id/activitytype"
@@ -68,7 +53,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="2.5dp"
         android:layout_marginEnd="2.5dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="24dp"
         android:layout_toEndOf="@+id/actiontype"
         android:onClick="goToPost"
         android:textStyle="bold" />
@@ -80,7 +65,7 @@
             android:layout_below="@+id/fullname"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="27dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
             android:layout_toEndOf="@+id/profile_image"
             android:text="1 hour ago"

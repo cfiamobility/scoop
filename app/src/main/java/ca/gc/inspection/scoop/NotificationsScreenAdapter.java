@@ -56,7 +56,7 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
      */
     @Override
     public void onBindViewHolder(@NonNull final NotificationViewHolder holder, int i) {
-        NotificationsScreenAdapterController controller = new NotificationsScreenAdapterController(holder, i, this, notifications, images, currentTime, timeType, requestQueue);
+        NotificationsScreenAdapterController controller = new NotificationsScreenAdapterController(holder, i, this, notifications, images, currentTime, timeType);
         try {
             controller.displayNotifications();
         } catch (JSONException e) {
@@ -64,25 +64,15 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
         }
     }
 
-
     @Override
     public void setActionType(String actionType, NotificationViewHolder holder) {
         holder.actionType.setText(actionType);
     }
 
-
     @Override
     public void setActivityType(String activityType, NotificationViewHolder holder) {
         holder.activityType.setText(activityType);
     }
-
-    /**
-     * Description: sets time formatting for today notifications
-     * @param notification: the notification to set time format of
-     * @param holder: the holder for the row in recycler view
-     *
-     */
-
 
     @Override
     public void setTime(String time, NotificationViewHolder holder){
@@ -98,20 +88,13 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
     public void setFullName(String fullName, NotificationViewHolder holder) {
         holder.fullName.setText(fullName);
     }
-    /**
-     * Description: sets time formatting for recent notifications
-     * @param notification: the notification to set time format of
-     * @param holder: the holder for the row in recycler view
-     */
 
     @Override
     public void setImage(Bitmap bitmap, NotificationViewHolder holder){
         holder.profileImage.setImageBitmap(bitmap);
     }
 
-
     /**
-     *
      * @return how many rows there will be based on how many notifications there are
      */
     @Override
