@@ -167,7 +167,7 @@ public class mainScreen extends AppCompatActivity {
         adapter.addFragment(notificationFragment);
         adapter.addFragment(profileFragment);
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(1);
     }
 
 

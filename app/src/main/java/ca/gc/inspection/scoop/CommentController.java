@@ -55,7 +55,7 @@ public class CommentController {
                 params.put("userid", userId); // post test user
                 params.put("activitytype", Integer.toString(Config.commentType));
                 params.put("posttext", comment);
-                params.put("otheractivityid", otherPostActivity);
+                params.put("activityreference", otherPostActivity);
                 return params;
             }
         };
