@@ -32,87 +32,41 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="51dp"
-        android:layout_height="53dp"
-        android:layout_below="@+id/backButton"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="35dp"
-        app:srcCompat="@drawable/ic_account_circle_black_24dp"
-        android:contentDescription="TODO" />
-
-    <EditText
-        android:id="@+id/titleEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/createAPost"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="58dp"
-        android:layout_marginEnd="19dp"
-        android:layout_toEndOf="@+id/profileImage"
-        android:background="@android:color/transparent"
-        android:ems="10"
-        android:fontFamily="@font/open_sans_bold"
-        android:hint="@string/title"
-        android:importantForAutofill="no"
-        android:inputType="textCapSentences|textAutoCorrect|text"
-        android:maxLines="1" />
-
-    <EditText
-        android:id="@+id/postEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_below="@+id/profileImage"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="29dp"
-        android:background="@android:color/transparent"
-        android:ems="10"
-        android:fontFamily="@font/open_sans"
-        android:hint="@string/post_template"
-        android:importantForAutofill="no"
-        android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-        android:textSize="14sp"
-        android:gravity="top"/>
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/postEditText"
+        android:layout_above="@+id/imageButton"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginBottom="5dp"
         android:background="?android:attr/listDivider" />
 
-    <ImageView
+    <Button
         android:id="@+id/cameraButton"
-        android:layout_width="35dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/divider"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="15dp"
-        app:srcCompat="@drawable/ic_menu_camera"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/ic_menu_camera"
         android:contentDescription="TODO" />
 
-    <ImageView
+    <Button
         android:id="@+id/imageButton"
-        android:layout_width="43dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/divider"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="15dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_toEndOf="@+id/cameraButton"
-        app:srcCompat="@drawable/ic_menu_gallery" />
+        android:background="@drawable/ic_menu_gallery"
+        />
 
     <Button
-        android:id="@+id/postButton"
+        android:id="@+id/postSend"
         android:layout_width="66dp"
         android:layout_height="28dp"
         android:layout_alignParentTop="true"
@@ -127,5 +81,93 @@
         android:onClick="returnToPrevious"
         android:text="@string/post"
         android:textColor="@color/white" />
+
+
+    <ScrollView
+        android:id="@+id/createPostScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/divider"
+        android:layout_below="@+id/createAPost"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="51dp"
+                android:layout_height="53dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:contentDescription="TODO"
+                app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+            <EditText
+                android:id="@+id/postTitle"
+                android:layout_width="252dp"
+                android:layout_height="29dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:layout_toEndOf="@+id/profileImage"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/open_sans_bold"
+                android:hint="@string/title"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/postImage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_below="@+id/postText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/postText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profileImage"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:fontFamily="@font/open_sans"
+                android:gravity="top"
+                android:hint="@string/post_template"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+                android:maxLength="255"
+                android:maxLines="50"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profileImage"
+                android:layout_alignEnd="@+id/postText"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:text="0/255"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
