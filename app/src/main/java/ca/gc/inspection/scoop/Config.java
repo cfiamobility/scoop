@@ -15,4 +15,8 @@ class Config {
     //For likes activity
     static int upvoteType = 1;
     static int downvoteType = 2;
+
+    // token
+    static String token = "";
+
 }

@@ -14,6 +14,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.auth0.android.jwt.Claim;
+import com.auth0.android.jwt.JWT;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,22 +32,30 @@ class RegisterController {
 		StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
-				if (response.contains("Success")) {
-					// Split the string to get userID - response in form of "Success <USERID>"
-					String[] c = response.split(" ");
 
-					// c[1] is then userID which is stored in shared preferences
-					SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-					sharedPreferences.edit().putString("userId", c[1]).apply();
-					Config.currentUser = c[1];
+				// grabbing the user id from the jwt token
+				JWT parsedJWT = new JWT(response);
+				Claim userIdMetaData = parsedJWT.getClaim("userid");
+				String userid = userIdMetaData.asString();
 
+				Log.i("TOKEN", String.valueOf(parsedJWT));
+				Log.i("USER ID", userid);
 
-					// Toast to show that the user has successfully signed in
-					Toast.makeText(context, "You have successfully signed up!", Toast.LENGTH_SHORT).show();
-					context.startActivity(new Intent(context, mainScreen.class));
-					activity.finish();
+				// storing the token into shared preferences
+				SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
+				sharedPreferences.edit().putString("token", response).apply();
+				Config.token = response;
+
+				// storing the user id into shared preferences
+				sharedPreferences.edit().putString("userid", userid).apply();
+				Config.currentUser = userid;
+
+				// change activities once register is successful
+				Intent intent = new Intent(context, mainScreen.class);
+				context.startActivity(intent);
+				activity.finish();
+
 				}
-			}
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {

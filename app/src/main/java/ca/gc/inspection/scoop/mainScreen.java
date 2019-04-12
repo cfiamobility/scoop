@@ -1,6 +1,8 @@
 package ca.gc.inspection.scoop;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -68,7 +70,18 @@ public class mainScreen extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), infoScreen.class));
                         break;
                     case R.id.logout:
-                        Toast.makeText(mainScreen.this, "LOGOUT", Toast.LENGTH_SHORT).show();
+                        // clear the shared preferences
+                        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
+                        sharedPreferences.edit().clear().apply();
+
+                        // clearing the config variables
+                        Config.token = "";
+                        Config.currentUser = "";
+
+                        // bring the user back to the splash screen page
+                        startActivity(new Intent(getApplicationContext(), splashScreen.class));
+                        finish();
+                        break;
                 }
                 drawerLayout.closeDrawers();
                 return false;

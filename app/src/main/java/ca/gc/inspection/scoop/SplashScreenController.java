@@ -9,10 +9,12 @@ public class SplashScreenController {
 
     public static void goToMainScreen(Context context, Activity activity){
         SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-        if(!sharedPreferences.getString("userId", "nothing").equals("nothing")){
+        if(!sharedPreferences.getString("userid", "nothing").equals("nothing")){
             String userId = sharedPreferences.getString("userId", "nothing");
+            String token = sharedPreferences.getString("token", "nothing");
             Intent intent = new Intent(context, mainScreen.class);
             Config.currentUser = userId;
+            Config.token = token;
             context.startActivity(intent);
             activity.finish();
         }

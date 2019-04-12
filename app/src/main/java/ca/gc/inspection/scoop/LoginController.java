@@ -14,6 +14,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.auth0.android.jwt.Claim;
+import com.auth0.android.jwt.JWT;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,21 +36,27 @@ public class LoginController {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //setting up the request as a post request
             @Override
             public void onResponse(String response) {
-                Log.i("response", response); //gets the response sent back by the Node.js code
+                // to grab the user id from the jwt token
+                JWT parsedJWT = new JWT(response); // convert the response string into a JWT token
+                Claim userIdMetaData = parsedJWT.getClaim("userid"); // to get the user id claim from the token
+                String userid = userIdMetaData.asString(); // converting the claim into a string
 
-                if(response.contains("Success")){ //if login was successful it will go through this if statement
-                    String[] c = response.split(" ");
-                    Toast.makeText(context, c[0], Toast.LENGTH_SHORT).show(); //toast appears depending on the response message
-                    SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-                    sharedPreferences.edit().putString("userId", c[1]).apply();//store user id into application
-                    Config.currentUser = c[1];
-                    Intent intent = new Intent(context, mainScreen.class); //changes activities once login is successful
-                    context.startActivity(intent);
-                    activity.finish();
-                }else{
-                    Toast.makeText(context, response, Toast.LENGTH_SHORT).show(); //toast appears depending on the response message
-                }
+                Log.i("TOKEN", String.valueOf(parsedJWT)); // token
+                Log.i("USER ID", userid); // user id
 
+                // storing the token into shared preferences
+                SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
+                sharedPreferences.edit().putString("token", response).apply();
+                Config.token = response;
+
+                // storing the user id into shared preferences
+                sharedPreferences.edit().putString("userid", userid).apply();
+                Config.currentUser = userid;
+
+                // changes activities once login is successful
+                Intent intent = new Intent(context, mainScreen.class);
+                context.startActivity(intent);
+                activity.finish();
             }
         }, new Response.ErrorListener() {
 
