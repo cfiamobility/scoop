@@ -3,12 +3,12 @@ package ca.gc.inspection.scoop;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class officialFeedScreen extends Fragment {
 
+    Button button;
 
     // recycler view widget
     private RecyclerView mRecyclerView;
@@ -58,6 +59,15 @@ public class officialFeedScreen extends Fragment {
         // setting up the custom adapter for the recycler view
         mAdpater = new feedAdapter(test);
         mRecyclerView.setAdapter(mAdpater);
+
+        button = view.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainScreen.otherUserClicked(getFragmentManager(), "e577a74a-0da0-47c8-981a-2b93a7747d4e");
+            }
+        });
+
 
         return view;
     }

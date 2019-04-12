@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".officialFeedScreen">
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="401dp"
+        android:layout_height="365dp"
+        android:text="Button" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
