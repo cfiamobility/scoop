@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop;
 
 import android.content.Context;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -10,6 +11,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 class ProfileScreenController {
 
@@ -28,7 +32,15 @@ class ProfileScreenController {
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {}
-		});
+		}) {
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				// inserting the token into the response header that will be sent to the server
+				Map<String, String> header = new HashMap<>();
+				header.put("authorization", Config.token);
+				return header;
+			}
+		};
 		// submitting the request
 		requestQueue.add(jsonObjectRequest);
 	}
@@ -48,7 +60,15 @@ class ProfileScreenController {
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {}
-		});
+		}) {
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				// inserting the token into the response header that will be sent to the server
+				Map<String, String> header = new HashMap<>();
+				header.put("authorization", Config.token);
+				return header;
+			}
+		};
 		// submitting the request
 		requestQueue.add(jsonObjectRequest);
 	}
