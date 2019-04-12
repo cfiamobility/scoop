@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 class ProfileScreenController {
 
-
+	// Request to get the current user's profile information
 	public static void getUserInfo(Context context) {
 		RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -22,17 +22,18 @@ class ProfileScreenController {
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
+				// Sending the response back to be decomposed
 				profileScreen.informationRespone(response);
 			}
 		}, new Response.ErrorListener() {
 			@Override
-			public void onErrorResponse(VolleyError error) {
-
-			}
+			public void onErrorResponse(VolleyError error) {}
 		});
+		// submitting the request
 		requestQueue.add(jsonObjectRequest);
 	}
 
+	// Request to get the clicked on user's profile information
 	public static void getOtherUserInfo(Context context, String userid) {
 		RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -41,14 +42,14 @@ class ProfileScreenController {
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
+				// Sending the response back to be decomposed
 				OtherUserFragment.otherInformationRespone(response);
 			}
 		}, new Response.ErrorListener() {
 			@Override
-			public void onErrorResponse(VolleyError error) {
-
-			}
+			public void onErrorResponse(VolleyError error) {}
 		});
+		// submitting the request
 		requestQueue.add(jsonObjectRequest);
 	}
 }

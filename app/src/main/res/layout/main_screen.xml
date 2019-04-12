@@ -41,16 +41,5 @@
         android:background="@color/medium_blue"
         app:menu="@menu/bottom_navigation" />
 
-    <Button
-        android:id="@+id/createPost"
-        android:layout_width="61dp"
-        android:layout_height="60dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="83dp"
-        android:background="@drawable/ic_add_circle_outline_dark_blue_24dp"
-        android:onClick="createPost" />
-
 </RelativeLayout>
 

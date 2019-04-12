@@ -16,25 +16,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 public class mainScreen extends AppCompatActivity {
 
-    static Button createPost;
-
+    // UI Declarations
+    public static Button createPost;
     private DrawerLayout drawerLayout;
     static BottomNavigationView bottomNavigationView;
     MenuItem previousMenuItem;
 
+    // Fragment Manager declaration
     static FragmentManager manager;
 
-    public void createPost (View view) {
-        startActivity(new Intent(view.getContext(), CreatePostScreen.class));
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Defining the fragment manager
         manager = getSupportFragmentManager();
 
         super.onCreate(savedInstanceState);
@@ -55,6 +53,7 @@ public class mainScreen extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                // Setting the on clicks for the menu bar.
                 switch (menuItem.getItemId()) {
                     case R.id.saved_posts:
                         startActivity(new Intent(getApplicationContext(), savedPostScreen.class));
@@ -86,8 +85,12 @@ public class mainScreen extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                // Method that handles whenever you pressed one of the four tabs on the bottom nav bar
+
+                // Goes to TabFragment to handle which fragment shows up
                 int returned = TabFragment.setNavigation(menuItem.getItemId());
 
+                // Setting the title of the action bar and changing which tab shows up as highlighted
                 if (previousMenuItem != null) {
                     previousMenuItem.setChecked(false);
                 } else {
@@ -95,7 +98,9 @@ public class mainScreen extends AppCompatActivity {
                 }
                 switch (returned) {
                     case 0:
+                        // Highlight tab
                         bottomNavigationView.getMenu().getItem(returned).setChecked(true);
+                        // Sets title
                         getSupportActionBar().setTitle("Community");
                         break;
                     case 1:
@@ -111,36 +116,37 @@ public class mainScreen extends AppCompatActivity {
                         getSupportActionBar().setTitle("Profile");
                         break;
                 }
-                manager.popBackStack();
+
+                // Pops the entire fragment stack to return you to tab fragment
+                for (int i = 0; i < manager.getBackStackEntryCount(); ++i) {
+                    manager.popBackStack();
+                }
+
+                // Setting the variable for next click
                 previousMenuItem = bottomNavigationView.getMenu().getItem(returned);
                 return false;
             }
         });
     }
 
-	@Override
-	public void onBackPressed() {
-    	if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-    		getSupportFragmentManager().popBackStack();
-	    } else {
-		    super.onBackPressed();
-	    }
-	}
-
-	public static void otherUserClicked(FragmentManager fragmentManager, String userid) {
+    /**
+     * Method called when another user is pressed
+     * @param userid
+     */
+	public static void otherUserClicked(String userid) {
         if (userid != null) {
+            // Initializing the other user's fragment
             Fragment otherUserFragment = new OtherUserFragment();
-            Fragment tabFragment = fragmentManager.findFragmentById(R.id.tabFragment);
 
+            // Passing the userid to the other user fragment using bundles
             Bundle bundle = new Bundle();
             bundle.putString("userid", userid);
             otherUserFragment.setArguments(bundle);
 
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.detach(tabFragment);
-            fragmentTransaction.replace(R.id.main, otherUserFragment);
-            fragmentTransaction.addToBackStack("tag");
-            createPost.setVisibility(View.INVISIBLE);
+            // Fragment transaction, adds the other user's profile fragment onto the framelayout
+            FragmentTransaction fragmentTransaction = manager.beginTransaction();
+            fragmentTransaction.add(R.id.main, otherUserFragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     }

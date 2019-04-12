@@ -1,7 +1,6 @@
 package ca.gc.inspection.scoop;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -10,17 +9,22 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 public class TabFragment extends Fragment {
 
+	// UI Declarations
 	static ViewPager viewPager;
+	static Button createPost;
 
+	// Application support declaration
 	MenuItem previousMenuItem;
 
+	// Fragment Declarations
 	communityFeedScreen communityFragment;
 	officialFeedScreen officialFragment;
-	notificationScreen notificationFragment;
+	NotificationsScreen notificationFragment;
 	profileScreen profileFragment;
 
 	public TabFragment() {
@@ -31,11 +35,24 @@ public class TabFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View view = inflater.inflate(R.layout.fragment_tab, container, false);
+		final View view = inflater.inflate(R.layout.fragment_tab, container, false);
 
+		// UI Definitions
 		viewPager = view.findViewById(R.id.tabFrameLayout);
+		createPost = view.findViewById(R.id.createPost);
+
+		// When + button is pressed and create post activity is opened
+		createPost.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(view.getContext(), CreatePostScreen.class));
+			}
+		});
+
+		// Setting up the view pager with all the neccessary fragments
 		setupViewPager(viewPager);
 
+		// Swipe change listener - used to change the bottom navigation highlight
 		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
 			@Override
@@ -43,27 +60,33 @@ public class TabFragment extends Fragment {
 
 			@Override
 			public void onPageSelected(int i) {
+
+				// Initial run
 				if (previousMenuItem != null) {
 					previousMenuItem.setChecked(false);
 				} else {
 					mainScreen.bottomNavigationView.getMenu().getItem(0).setChecked(true);
 				}
+
+				// Setting the highlight for swipe
 				mainScreen.bottomNavigationView.getMenu().getItem(i).setChecked(true);
 				previousMenuItem = mainScreen.bottomNavigationView.getMenu().getItem(i);
 
-				// setting the title of the page every time you switch tabs
+				// setting the title of the page every time you switch tabs and whether or not the create post button shows
 				if (i == 0) {
+					// Sets Title
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Community");
-					mainScreen.createPost.setVisibility(View.VISIBLE);
+					// Sets + button visibility
+					createPost.setVisibility(View.VISIBLE);
 				} else if (i == 1) {
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Official");
-					mainScreen.createPost.setVisibility(View.VISIBLE);
+					createPost.setVisibility(View.VISIBLE);
 				} else if (i == 2) {
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Notifications");
-					mainScreen.createPost.setVisibility(View.INVISIBLE);
+					createPost.setVisibility(View.INVISIBLE);
 				} else {
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Profile");
-					mainScreen.createPost.setVisibility(View.INVISIBLE);
+					createPost.setVisibility(View.INVISIBLE);
 				}
 			}
 
@@ -71,43 +94,60 @@ public class TabFragment extends Fragment {
 			public void onPageScrollStateChanged(int i) {}
 		});
 
+		// Initial page set
 		viewPager.setCurrentItem(0);
+
 		return view;
 	}
 
+	/**
+	 * Method to set up the onclicks for the bottom nav bar - communicates with bottomnavigation item selected
+	 * @param menuItemID
+	 * @return
+	 */
 	public static int setNavigation(int menuItemID) {
+		// Bad menuItem id
 		int returnedValue = -1;
+
 		switch (menuItemID) {
+			// If community is pressed
 			case R.id.community:
+				// Set the page
 				viewPager.setCurrentItem(0);
-				mainScreen.createPost.setVisibility(View.VISIBLE);
+				// Sets button visibility
+				createPost.setVisibility(View.VISIBLE);
+				// Sets return value
 				returnedValue = 0;
 				break;
 			case R.id.official:
 				viewPager.setCurrentItem(1);
-				mainScreen.createPost.setVisibility(View.VISIBLE);
+				createPost.setVisibility(View.VISIBLE);
 				returnedValue = 1;
 				break;
 			case R.id.notifications:
 				viewPager.setCurrentItem(2);
-				mainScreen.createPost.setVisibility(View.INVISIBLE);
+				createPost.setVisibility(View.INVISIBLE);
 				returnedValue = 2;
 				break;
 			case R.id.profile:
 				viewPager.setCurrentItem(3);
-				mainScreen.createPost.setVisibility(View.INVISIBLE);
+				createPost.setVisibility(View.INVISIBLE);
 				returnedValue = 3;
 				break;
 		}
 		return returnedValue;
 	}
 
+	/**
+	 * Setting up the viewPager with all the fragments
+	 * @param viewPager
+	 */
 	private void setupViewPager(ViewPager viewPager) {
-		viewPagerAdapter adapter = new viewPagerAdapter(getFragmentManager());
+		viewPagerAdapter adapter = new viewPagerAdapter(mainScreen.manager);
 
 		communityFragment = new communityFeedScreen();
 		officialFragment = new officialFeedScreen();
-		notificationFragment = new notificationScreen();
+		notificationFragment = new NotificationsScreen();
 		profileFragment =  new profileScreen();
 
 		adapter.addFragment(communityFragment);

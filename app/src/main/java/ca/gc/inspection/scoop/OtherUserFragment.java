@@ -1,7 +1,6 @@
 package ca.gc.inspection.scoop;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +22,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OtherUserFragment extends Fragment {
 
-
+	// UI Declarations
 	static CircleImageView profileImageIV;
 	static ImageView facebookIV, instagramIV, twitterIV, locationLogo, linkedinIV;
 	static TextView fullNameTV, roleTV, locationTV;
@@ -36,9 +35,11 @@ public class OtherUserFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_other_user, container, false);
 
+		// Getting the activity from the view
 		activity = (Activity) view.getContext();
 
 		// ImageView Definitions
@@ -75,26 +76,29 @@ public class OtherUserFragment extends Fragment {
 			}
 
 			@Override
-			public void onTabUnselected(TabLayout.Tab tab) {
-
-			}
+			public void onTabUnselected(TabLayout.Tab tab) {}
 
 			@Override
-			public void onTabReselected(TabLayout.Tab tab) {
-
-			}
+			public void onTabReselected(TabLayout.Tab tab) {}
 		});
 
+		// Getting the clicked on user's userid from the bundle set in mainscreen
 		Bundle bundle = getArguments();
 		String userid = bundle.getString("userid");
 		Log.i("userid", userid);
 
+		// Getting the information from the database - ProfileScreenController
 		ProfileScreenController.getOtherUserInfo(getContext(), userid);
 
 		return view;
 	}
 
+	/**
+	 * Dealing with the response
+	 * @param response
+	 */
 	public static void otherInformationRespone(JSONObject response) {
+		// Declaring the strings needed
 		String fullname, role, location, position, division, city, province, twitterURL, linkedinURL, facebookURL, instagramURL, imageEncoded;
 		try {
 			// Full Name
@@ -105,67 +109,82 @@ public class OtherUserFragment extends Fragment {
 			imageEncoded = response.getString("profileimage");
 			profileImageIV.setImageBitmap(MyCamera.stringToBitmap(imageEncoded));
 
+			// Position string set
 			if (!response.get("position").toString().equals("null")) {
 				position = response.getString("position");
 			} else {
 				position = null;
 			}
 
+			// Division string set
 			if (!response.get("division").toString().equals("null")) {
 				division = response.getString("division");
 			} else {
 				division = null;
 			}
 
+			// City string set
 			if (!response.get("city").toString().equals("null")) {
 				city = response.getString("city");
 			} else {
 				city = null;
 			}
 
+			// Province string set
 			if (!response.get("province").toString().equals("null")) {
 				province = response.getString("province");
 			} else {
 				province = null;
 			}
 
+			// Twitter string set
 			if (!response.get("twitter").toString().equals("null")) {
 				twitterURL = "http://" + response.getString("twitter");
+				// Setting the onclick listener for the imageview
 				SocialClicked(twitterURL, twitterIV);
 			} else {
 				twitterIV.setVisibility(View.GONE);
 			}
 
+			// Linkedin string set
 			if (!response.get("linkedin").toString().equals("null")) {
 				linkedinURL = "http://" + response.getString("linkedin");
+				// Setting the onclick listener for the imageview
 				SocialClicked(linkedinURL, linkedinIV);
 			} else {
 				linkedinIV.setVisibility(View.GONE);
 			}
 
+			// Facebook String set
 			if (!response.get("facebook").toString().equals("null")) {
 				facebookURL = "http://" + response.getString("facebook");
+				// Setting the onclick listener for the imageview
 				SocialClicked(facebookURL, facebookIV);
 			} else {
 				facebookIV.setVisibility(View.GONE);
 			}
 
+			// Instagram String set
 			if (!response.get("instagram").toString().equals("null")) {
 				instagramURL = "http://" + response.getString("instagram");
+				// Setting the onclick listener for the imageview
 				SocialClicked(instagramURL, instagramIV);
 			} else {
 				instagramIV.setVisibility(View.GONE);
 			}
 
+			// Combining positions and division to fit into textview
 			role = concatTwoWords(position, division);
+
+			// Combining city and province to fit into textview
 			location = concatTwoWords(city, province);
 
+			// Dealing with null or empty textviews
 			if (role.equals("")) {
 				roleTV.setVisibility(View.GONE);
 			} else {
 				roleTV.setText(role);
 			}
-
 			if (location.equals("")) {
 				locationTV.setVisibility(View.GONE);
 				locationLogo.setVisibility(View.GONE);
@@ -173,18 +192,22 @@ public class OtherUserFragment extends Fragment {
 				locationTV.setText(location);
 			}
 
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Setting onclick listeners for the social media text views
+	 * @param url
+	 * @param imageView
+	 */
 	private static void SocialClicked(final String url, final ImageView imageView) {
-		Log.i("url", url);
 		if (url != null) {
 			imageView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					// Opens social media on chosen application
 					Intent intent = new Intent();
 					intent.setAction(Intent.ACTION_VIEW);
 					intent.addCategory(Intent.CATEGORY_BROWSABLE);
@@ -195,6 +218,12 @@ public class OtherUserFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * Method to concatenate two words based on their validity (null or not null)
+	 * @param first
+	 * @param second
+	 * @return
+	 */
 	private static String concatTwoWords(String first, String second) {
 		if (first != null && second != null) {
 			return (first + ", " + second);

@@ -37,7 +37,5 @@ public class splashScreen extends AppCompatActivity {
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.medium_blue));
 
-        SplashScreenController.goToMainScreen(getApplicationContext(), this);
-
     }
 }

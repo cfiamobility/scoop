@@ -28,6 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class profileScreen extends Fragment {
 
+    // UI Declarations
     static CircleImageView profileImageIV;
     static ImageView facebookIV, instagramIV, twitterIV, locationLogo, linkedinIV;
     static TextView fullNameTV, roleTV, locationTV;
@@ -44,6 +45,7 @@ public class profileScreen extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_screen, container, false);
 
+        // Getting the activity from the view
         activity = (Activity) view.getContext();
 
         // ImageView Definitions
@@ -59,8 +61,6 @@ public class profileScreen extends Fragment {
         roleTV = view.findViewById(R.id.positionName);
         locationTV = view.findViewById(R.id.locationText);
 
-        Log.i("userid", Config.currentUser);
-
         // initializing the tab layout for profile -> posts, likes, comments
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.addTab(tabLayout.newTab().setText("POSTS"));
@@ -70,35 +70,34 @@ public class profileScreen extends Fragment {
 
         // initiailizing the view pager and page adapter for it
         final ViewPager viewPager = view.findViewById(R.id.viewPager);
-        final PagerAdapter adapter = new profilePageAdapter
-                (getChildFragmentManager(), tabLayout.getTabCount());
+        final PagerAdapter adapter = new profilePageAdapter(getChildFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
 
         // a select listener to display the right tab fragment
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
+            public void onTabSelected(TabLayout.Tab tab) {viewPager.setCurrentItem(tab.getPosition());}
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabUnselected(TabLayout.Tab tab) {}
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
 
+        //Getting the user's information
         ProfileScreenController.getUserInfo(getContext());
 
         return view;
     }
 
+    /**
+     * Dealing with the users information
+     * @param response
+     */
     public static void informationRespone(JSONObject response) {
+        // Declaring the strings needed
         String fullname, role, location, position, division, city, province, twitterURL, linkedinURL, facebookURL, instagramURL, imageEncoded;
         try {
             // Full Name
@@ -109,67 +108,82 @@ public class profileScreen extends Fragment {
             imageEncoded = response.getString("profileimage");
             profileImageIV.setImageBitmap(MyCamera.stringToBitmap(imageEncoded));
 
+            // Position string set
             if (!response.get("position").toString().equals("null")) {
                 position = response.getString("position");
             } else {
                 position = null;
             }
 
+            // Division string set
             if (!response.get("division").toString().equals("null")) {
                 division = response.getString("division");
             } else {
                 division = null;
             }
 
+            // City string set
             if (!response.get("city").toString().equals("null")) {
                 city = response.getString("city");
             } else {
                 city = null;
             }
 
+            // Province string set
             if (!response.get("province").toString().equals("null")) {
                 province = response.getString("province");
             } else {
                 province = null;
             }
 
+            // Twitter string set
             if (!response.get("twitter").toString().equals("null")) {
                 twitterURL = "http://" + response.getString("twitter");
+                // Setting the onclick listener for the imageview
                 SocialClicked(twitterURL, twitterIV);
             } else {
                 twitterIV.setVisibility(View.GONE);
             }
 
+            // Linkedin string set
             if (!response.get("linkedin").toString().equals("null")) {
                 linkedinURL = "http://" + response.getString("linkedin");
+                // Setting the onclick listener for the imageview
                 SocialClicked(linkedinURL, linkedinIV);
             } else {
                 linkedinIV.setVisibility(View.GONE);
             }
 
+            // Facebook String set
             if (!response.get("facebook").toString().equals("null")) {
                 facebookURL = "http://" + response.getString("facebook");
+                // Setting the onclick listener for the imageview
                 SocialClicked(facebookURL, facebookIV);
             } else {
                 facebookIV.setVisibility(View.GONE);
             }
 
+            // Instagram String set
             if (!response.get("instagram").toString().equals("null")) {
                 instagramURL = "http://" + response.getString("instagram");
+                // Setting the onclick listener for the imageview
                 SocialClicked(instagramURL, instagramIV);
             } else {
                 instagramIV.setVisibility(View.GONE);
             }
 
+            // Combining positions and division to fit into textview
             role = concatTwoWords(position, division);
+
+            // Combining city and province to fit into textview
             location = concatTwoWords(city, province);
 
+            // Dealing with null or empty textviews
             if (role.equals("")) {
                 roleTV.setVisibility(View.GONE);
             } else {
                 roleTV.setText(role);
             }
-
             if (location.equals("")) {
                 locationTV.setVisibility(View.GONE);
                 locationLogo.setVisibility(View.GONE);
@@ -177,18 +191,22 @@ public class profileScreen extends Fragment {
                 locationTV.setText(location);
             }
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Setting onclick listeners for the social media text views
+     * @param url
+     * @param imageView
+     */
     private static void SocialClicked(final String url, final ImageView imageView) {
-        Log.i("url", url);
         if (url != null) {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Opens social media on chosen application
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.addCategory(Intent.CATEGORY_BROWSABLE);
@@ -199,6 +217,12 @@ public class profileScreen extends Fragment {
         }
     }
 
+    /**
+     *
+     * @param first
+     * @param second
+     * @return
+     */
     private static String concatTwoWords(String first, String second) {
         if (first != null && second != null) {
             return (first + ", " + second);

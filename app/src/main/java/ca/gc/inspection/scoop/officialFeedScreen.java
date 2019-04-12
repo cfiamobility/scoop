@@ -19,8 +19,6 @@ import java.util.List;
  */
 public class officialFeedScreen extends Fragment {
 
-    Button button;
-
     // recycler view widget
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdpater;
@@ -43,7 +41,6 @@ public class officialFeedScreen extends Fragment {
 
         // initializing test array list
         test = new ArrayList<>();
-
         test.add("OFFICIAL 1");
         test.add("OFFICIAL 2");
         test.add("OFFICIAL 3");
@@ -59,15 +56,6 @@ public class officialFeedScreen extends Fragment {
         // setting up the custom adapter for the recycler view
         mAdpater = new feedAdapter(test);
         mRecyclerView.setAdapter(mAdpater);
-
-        button = view.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainScreen.otherUserClicked(getFragmentManager(), "e577a74a-0da0-47c8-981a-2b93a7747d4e");
-            }
-        });
-
 
         return view;
     }
