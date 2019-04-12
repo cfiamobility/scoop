@@ -1,18 +1,17 @@
 package ca.gc.inspection.scoop;
 
 import android.app.Application;
-import android.content.Context;
 
 public class MyApplication extends Application {
+    private static MyApplication mContext;
 
-	private static Context context;
+    @Override
+    public void onCreate(){
+        super.onCreate();
+        mContext = this;
+    }
 
-	public void onCreate() {
-		super.onCreate();
-		MyApplication.context = getApplicationContext();
-	}
-
-	public static Context getAppContext() {
-		return MyApplication.context;
-	}
+    public static MyApplication getContext(){
+        return mContext;
+    }
 }
