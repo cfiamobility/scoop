@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewTreeObserver;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -16,6 +17,8 @@ import org.json.JSONArray;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NotificationsScreenController {
     private RequestQueue requestQueue;
@@ -52,7 +55,15 @@ public class NotificationsScreenController {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                     }
-                });
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        // inserting the token into the response header that will be sent to the server
+                        Map<String, String> header = new HashMap<>();
+                        header.put("authorization", Config.token);
+                        return header;
+                    }
+                };
                 requestQueue.add(todayImageRequest); //adds image request to request queue
             }
         }, new Response.ErrorListener() {
@@ -60,7 +71,15 @@ public class NotificationsScreenController {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
         requestQueue.add(todayRequest); //adds today request to request queue
     }
 
@@ -83,7 +102,15 @@ public class NotificationsScreenController {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                     }
-                });
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        // inserting the token into the response header that will be sent to the server
+                        Map<String, String> header = new HashMap<>();
+                        header.put("authorization", Config.token);
+                        return header;
+                    }
+                };
                 requestQueue.add(recentImageRequest); //adds image request to request queue
             }
         }, new Response.ErrorListener() {
@@ -91,7 +118,15 @@ public class NotificationsScreenController {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
         requestQueue.add(recentRequest); //adds recent request to request queue
     }
 

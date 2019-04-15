@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -15,6 +16,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 class EditUserController {
@@ -39,7 +41,15 @@ class EditUserController {
 			public void onErrorResponse(VolleyError error) {
 				Log.i("error", error.toString());
 			}
-		});
+		}) {
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				// inserting the token into the response header that will be sent to the server
+				Map<String, String> header = new HashMap<>();
+				header.put("authorization", Config.token);
+				return header;
+			}
+		};
 		// Request submitted
 		requestQueue.add(getRequest);
 	}
@@ -61,7 +71,15 @@ class EditUserController {
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {}
-		});
+		}) {
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				// inserting the token into the response header that will be sent to the server
+				Map<String, String> header = new HashMap<>();
+				header.put("authorization", Config.token);
+				return header;
+			}
+		};
 		requestQueue.add(getRequest);
 	}
 
@@ -82,7 +100,15 @@ class EditUserController {
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {}
-		});
+		}) {
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				// inserting the token into the response header that will be sent to the server
+				Map<String, String> header = new HashMap<>();
+				header.put("authorization", Config.token);
+				return header;
+			}
+		};
 		// Submitting the request
 		requestQueue.add(getRequest);
 	}
@@ -104,7 +130,15 @@ class EditUserController {
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {}
-		});
+		}) {
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				// inserting the token into the response header that will be sent to the server
+				Map<String, String> header = new HashMap<>();
+				header.put("authorization", Config.token);
+				return header;
+			}
+		};
 		// submitting the request
 		requestQueue.add(jsonArrayRequest);
 	}
@@ -130,6 +164,14 @@ class EditUserController {
 			@Override
 			protected Map<String, String> getParams() {
 				return params;
+			}
+
+			@Override
+			public Map<String, String> getHeaders() throws AuthFailureError {
+				// inserting the token into the response header that will be sent to the server
+				Map<String, String> header = new HashMap<>();
+				header.put("authorization", Config.token);
+				return header;
 			}
 		};
 
