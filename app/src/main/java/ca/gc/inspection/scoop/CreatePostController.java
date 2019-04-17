@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -59,6 +60,14 @@ public class CreatePostController {
                 params.put("posttext", text);
                 params.put("postimage", imageBitmap);
                 return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
             }
         };
         requestQueue.add(postRequest);

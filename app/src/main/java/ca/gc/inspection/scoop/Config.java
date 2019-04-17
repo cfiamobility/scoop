@@ -21,4 +21,7 @@ class Config {
 
     static RequestQueue requestQueue =  Volley.newRequestQueue(MyApplication.getContext());
 
+    // token
+    static String token = "";
+
 }
