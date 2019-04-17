@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ public class officialFeedScreen extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdpater;
     private RecyclerView.LayoutManager mLayoutManager;
-    Button button;
     // arryalist test
     private List<String> test;
 
@@ -39,13 +37,6 @@ public class officialFeedScreen extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_official_feed_screen, container, false);
 
-        button = view.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainScreen.otherUserClicked("b0ed7476-7428-4fa1-bc35-226bff7238e4");
-            }
-        });
 
         // initializing test array list
         test = new ArrayList<>();

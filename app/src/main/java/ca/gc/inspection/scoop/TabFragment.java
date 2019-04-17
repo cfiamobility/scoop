@@ -3,8 +3,10 @@ package ca.gc.inspection.scoop;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,7 @@ public class TabFragment extends Fragment {
 	// UI Declarations
 	static ViewPager viewPager;
 	static Button createPost;
+	static viewPagerAdapter adapter;
 
 	// Application support declaration
 	MenuItem previousMenuItem;
@@ -25,7 +28,7 @@ public class TabFragment extends Fragment {
 	communityFeedScreen communityFragment;
 	officialFeedScreen officialFragment;
 	NotificationsScreen notificationFragment;
-	profileScreen profileFragment;
+	static profileScreen profileFragment;
 
 	public TabFragment() {
 		// Required empty public constructor
@@ -37,6 +40,7 @@ public class TabFragment extends Fragment {
 		// Inflate the layout for this fragment
 		final View view = inflater.inflate(R.layout.fragment_tab, container, false);
 
+		Log.i("recreated", "recreated");
 		// UI Definitions
 		viewPager = view.findViewById(R.id.tabFrameLayout);
 		createPost = view.findViewById(R.id.createPost);
@@ -143,7 +147,7 @@ public class TabFragment extends Fragment {
 	 * @param viewPager
 	 */
 	private void setupViewPager(ViewPager viewPager) {
-		viewPagerAdapter adapter = new viewPagerAdapter(mainScreen.manager);
+		adapter = new viewPagerAdapter(mainScreen.manager);
 
 		communityFragment = new communityFeedScreen();
 		officialFragment = new officialFeedScreen();
@@ -156,6 +160,12 @@ public class TabFragment extends Fragment {
 		adapter.addFragment(profileFragment);
 
 		viewPager.setAdapter(adapter);
+	}
+
+	public static void refresh() {
+		int currentItem = viewPager.getCurrentItem();
+		viewPager.setAdapter(adapter);
+		viewPager.setCurrentItem(currentItem);
 	}
 
 

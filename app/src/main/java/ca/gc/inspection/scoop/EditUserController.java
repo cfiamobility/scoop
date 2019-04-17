@@ -177,6 +177,5 @@ class EditUserController {
 
 		// submitting the request
 		requestQueue.add(stringRequest);
-
 	}
 }
