@@ -51,7 +51,7 @@ public class ImageController extends GenericPostController{
     private void formatImage(String image, String type){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
         if(type.equals("post")) {
-            if(!image.equals("null")) {
+            if(!image.equals("")) {
                imageInterface.setPostImage(bitmap, holder);
             } else{
                 imageInterface.hidePostImage(holder);

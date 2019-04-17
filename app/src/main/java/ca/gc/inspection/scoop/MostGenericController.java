@@ -88,14 +88,14 @@ public class MostGenericController {
         holder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainScreen.viewPager.setCurrentItem(3);
+                TabFragment.viewPager.setCurrentItem(3);
             }
         });
 
         holder.username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainScreen.viewPager.setCurrentItem(3);
+                TabFragment.viewPager.setCurrentItem(3);
             }
         });
     }
