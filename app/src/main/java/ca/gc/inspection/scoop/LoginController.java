@@ -36,27 +36,37 @@ public class LoginController {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //setting up the request as a post request
             @Override
             public void onResponse(String response) {
-                // to grab the user id from the jwt token
-                JWT parsedJWT = new JWT(response); // convert the response string into a JWT token
-                Claim userIdMetaData = parsedJWT.getClaim("userid"); // to get the user id claim from the token
-                String userid = userIdMetaData.asString(); // converting the claim into a string
 
-                Log.i("TOKEN", String.valueOf(parsedJWT)); // token
-                Log.i("USER ID", userid); // user id
+                Log.i("RESPONSE", response);
 
-                // storing the token into shared preferences
-                SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-                sharedPreferences.edit().putString("token", response).apply();
-                Config.token = response;
+                if (response.contains("Incorrect Password")) { // if the user entered an incorrect password
+                    Toast.makeText(context, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                } else if (response.contains("Invalid Email")) { // if the user entered an invalid email
+                    Toast.makeText(context, "Invalid Email", Toast.LENGTH_SHORT).show();
+                } else {
 
-                // storing the user id into shared preferences
-                sharedPreferences.edit().putString("userid", userid).apply();
-                Config.currentUser = userid;
+                    // to grab the user id from the jwt token
+                    JWT parsedJWT = new JWT(response); // convert the response string into a JWT token
+                    Claim userIdMetaData = parsedJWT.getClaim("userid"); // to get the user id claim from the token
+                    String userid = userIdMetaData.asString(); // converting the claim into a string
 
-                // changes activities once login is successful
-                Intent intent = new Intent(context, mainScreen.class);
-                context.startActivity(intent);
-                activity.finish();
+                    Log.i("TOKEN", String.valueOf(parsedJWT)); // token
+                    Log.i("USER ID", userid); // user id
+
+                    // storing the token into shared preferences
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString("token", response).apply();
+                    Config.token = response;
+
+                    // storing the user id into shared preferences
+                    sharedPreferences.edit().putString("userid", userid).apply();
+                    Config.currentUser = userid;
+
+                    // changes activities once login is successful
+                    Intent intent = new Intent(context, mainScreen.class);
+                    context.startActivity(intent);
+                    activity.finish();
+                }
             }
         }, new Response.ErrorListener() {
 
