@@ -3,7 +3,6 @@ package ca.gc.inspection.scoop;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,12 +18,10 @@ import java.util.List;
  */
 public class officialFeedScreen extends Fragment {
 
-
     // recycler view widget
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdpater;
     private RecyclerView.LayoutManager mLayoutManager;
-
     // arryalist test
     private List<String> test;
 
@@ -40,9 +37,9 @@ public class officialFeedScreen extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_official_feed_screen, container, false);
 
+
         // initializing test array list
         test = new ArrayList<>();
-
         test.add("OFFICIAL 1");
         test.add("OFFICIAL 2");
         test.add("OFFICIAL 3");

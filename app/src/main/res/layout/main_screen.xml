@@ -6,14 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/frame_layout"
+    <FrameLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="623dp"
+        android:layout_height="match_parent"
         android:layout_above="@+id/navigation"
-        android:layout_marginTop="56dp"
-        android:layout_marginBottom="0dp"
-        android:animateLayoutChanges="true" />
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp">
+        <fragment
+            android:id="@+id/tabFragment"
+            android:name="ca.gc.inspection.scoop.TabFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
 
     <include
         android:id="@+id/toolbar"
@@ -30,17 +40,6 @@
         app:itemTextColor="@color/white"
         android:background="@color/medium_blue"
         app:menu="@menu/bottom_navigation" />
-
-    <Button
-        android:id="@+id/createPost"
-        android:layout_width="61dp"
-        android:layout_height="60dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="83dp"
-        android:background="@drawable/ic_add_circle_outline_dark_blue_24dp"
-        android:onClick="createPost" />
 
 </RelativeLayout>
 

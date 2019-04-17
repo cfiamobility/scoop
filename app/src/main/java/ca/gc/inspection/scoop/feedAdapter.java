@@ -59,14 +59,14 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.myViewHolder> 
         myViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainScreen.viewPager.setCurrentItem(3);
+                TabFragment.viewPager.setCurrentItem(3);
             }
         });
 
         myViewHolder.textName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainScreen.viewPager.setCurrentItem(3);
+                TabFragment.viewPager.setCurrentItem(3);
             }
         });
 
