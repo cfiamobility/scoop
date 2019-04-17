@@ -25,9 +25,9 @@ public class TabFragment extends Fragment {
 	MenuItem previousMenuItem;
 
 	// Fragment Declarations
-	communityFeedScreen communityFragment;
-	officialFeedScreen officialFragment;
-	NotificationsScreen notificationFragment;
+	static communityFeedScreen communityFragment;
+	static officialFeedScreen officialFragment;
+	static NotificationsScreen notificationFragment;
 	static profileScreen profileFragment;
 
 	public TabFragment() {
@@ -146,7 +146,7 @@ public class TabFragment extends Fragment {
 	 * Setting up the viewPager with all the fragments
 	 * @param viewPager
 	 */
-	private void setupViewPager(ViewPager viewPager) {
+	private static void setupViewPager(ViewPager viewPager) {
 		adapter = new viewPagerAdapter(mainScreen.manager);
 
 		communityFragment = new communityFeedScreen();
@@ -163,9 +163,10 @@ public class TabFragment extends Fragment {
 	}
 
 	public static void refresh() {
-		int currentItem = viewPager.getCurrentItem();
-		viewPager.setAdapter(adapter);
-		viewPager.setCurrentItem(currentItem);
+		int currentitem = viewPager.getCurrentItem();
+		setupViewPager(viewPager);
+		viewPager.setCurrentItem(currentitem);
+
 	}
 
 
