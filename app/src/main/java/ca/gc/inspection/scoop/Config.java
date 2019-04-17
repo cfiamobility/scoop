@@ -2,6 +2,9 @@ package ca.gc.inspection.scoop;
 
 import android.content.SharedPreferences;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 class Config {
     static String baseIP = "http://10.0.2.2:3000/";
 
@@ -14,6 +17,8 @@ class Config {
 
     //For likes activity
     static int upvoteType = 1;
-    static int downvoteType = 2;
+    static int downvoteType = -1;
+
+    static RequestQueue requestQueue =  Volley.newRequestQueue(MyApplication.getContext());
 
 }

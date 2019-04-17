@@ -51,7 +51,7 @@ public class NotificationsScreenAdapterController {
             setActivity(); //sets activity notification
 
             if(image != null) {
-                setProfileImage(image.getString("activityprofileimage"), holder); //sets profile image
+                setProfileImage(image.getString("activityprofileimage")); //sets profile image
             }else{
                 notificationAdapterInterface.hideImage(holder);
             }
@@ -59,7 +59,7 @@ public class NotificationsScreenAdapterController {
             setLikes(); //sets like notification
 
             if(image !=null) {
-                setProfileImage(image.getString("likesprofileimage"), holder); //sets profile image
+                setProfileImage(image.getString("likesprofileimage")); //sets profile image
             }else{
                 notificationAdapterInterface.hideImage(holder);
             }
@@ -144,9 +144,9 @@ public class NotificationsScreenAdapterController {
      * Description: sets the profile image for corresponding notification
      *
      * @param image:  the string representation of the image
-     * @param holder: the holder for the item in recycler view
+     *
      */
-    private void setProfileImage(String image, NotificationViewHolder holder) {
+    private void setProfileImage(String image) {
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
         notificationAdapterInterface.setImage(bitmap, holder); //sets image for the holder
         holder.profileImage.setOnClickListener(new View.OnClickListener() { //on click for the image

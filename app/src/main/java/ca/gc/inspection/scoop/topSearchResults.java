@@ -52,7 +52,7 @@ public class topSearchResults extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // setting the adapter of the recycler view to the custom feed adapter
-        adapter = new feedAdapter(test);
+        adapter = new ProfileAdapter();
         recyclerView.setAdapter(adapter);
 
         return view;
