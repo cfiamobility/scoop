@@ -37,6 +37,7 @@ public class LoginController {
             @Override
             public void onResponse(String response) {
                 // to grab the user id from the jwt token
+                Log.i("Response", response);
                 JWT parsedJWT = new JWT(response); // convert the response string into a JWT token
                 Claim userIdMetaData = parsedJWT.getClaim("userid"); // to get the user id claim from the token
                 String userid = userIdMetaData.asString(); // converting the claim into a string

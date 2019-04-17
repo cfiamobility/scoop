@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -357,6 +358,13 @@ public class FeedAdapterController {
                 params.put("posterid", posterid);
                 return params;
             }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
         };
         request.setRetryPolicy(new DefaultRetryPolicy(
                 30000,
@@ -395,6 +403,13 @@ public class FeedAdapterController {
                 params.put("posterid", posterid);
                 params.put("userid", Config.currentUser);
                 return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
             }
         };
         Config.requestQueue.add(request);

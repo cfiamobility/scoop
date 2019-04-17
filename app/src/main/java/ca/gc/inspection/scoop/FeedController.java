@@ -1,11 +1,15 @@
 package ca.gc.inspection.scoop;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FeedController {
     private FeedInterface feedInterface;
@@ -33,7 +37,15 @@ public class FeedController {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                     }
-                });
+                })
+                { @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    // inserting the token into the response header that will be sent to the server
+                    Map<String, String> header = new HashMap<>();
+                    header.put("authorization", Config.token);
+                    return header;
+                }};
+
                 Config.requestQueue.add(imageRequest);
             }
         }, new Response.ErrorListener() {
@@ -41,7 +53,14 @@ public class FeedController {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
             }
-        });
+        })
+        { @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            // inserting the token into the response header that will be sent to the server
+            Map<String, String> header = new HashMap<>();
+            header.put("authorization", Config.token);
+            return header;
+        }};
         Config.requestQueue.add(postRequest);
     }
 
