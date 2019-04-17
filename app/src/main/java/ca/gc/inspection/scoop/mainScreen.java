@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class mainScreen extends AppCompatActivity {
 
@@ -165,6 +164,12 @@ public class mainScreen extends AppCompatActivity {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+	    getSupportActionBar().setTitle(OtherUserFragment.title);
+        super.onBackPressed();
     }
 
     // inflate the search action on the toolbar

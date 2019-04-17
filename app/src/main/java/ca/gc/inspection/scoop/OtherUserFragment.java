@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ public class OtherUserFragment extends Fragment {
 	static TextView fullNameTV, roleTV, locationTV;
 	static Activity activity;
 
+	static String title;
 
 	public OtherUserFragment() {
 		// Required empty public constructor
@@ -38,6 +40,10 @@ public class OtherUserFragment extends Fragment {
 
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_other_user, container, false);
+
+		title = (String) ((AppCompatActivity) getActivity()).getSupportActionBar().getTitle();
+
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
 
 		// Getting the activity from the view
 		activity = (Activity) view.getContext();
