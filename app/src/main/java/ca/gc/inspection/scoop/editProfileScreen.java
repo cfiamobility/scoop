@@ -678,12 +678,10 @@ public class editProfileScreen extends AppCompatActivity implements AdapterView.
 				params.put("city", cityET.getText().toString());
 				params.put("province", provinceSpinner.getSelectedItem().toString());
 				params.put("image", image);
-				EditUserController.updateUserInfo(getApplicationContext(), params);
+				EditUserController.updateUserInfo(editProfileScreen.this, params);
 			} else {
 				Toast.makeText(editProfileScreen.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
 			}
-			TabFragment.refresh();
-			finish();
 		}
 	};
 }

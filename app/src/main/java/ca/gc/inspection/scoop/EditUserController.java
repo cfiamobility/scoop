@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -144,7 +145,7 @@ class EditUserController {
 	}
 
 	// Takes care of the request when the save button is pressed
-	static void updateUserInfo(Context context, final Map<String, String> params) {
+	static void updateUserInfo(final Context context, final Map<String, String> params) {
 
 		// Request url
 		String URL = Config.baseIP + "edituser/updatedatabase";
@@ -155,7 +156,12 @@ class EditUserController {
 		// Asking for a string back
 		StringRequest stringRequest = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() {
 			@Override
-			public void onResponse(String response) {}
+			public void onResponse(String response) {
+				if (response.equals("success")) {
+					TabFragment.refresh();
+					((Activity) context).finish();
+				}
+			}
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {}
