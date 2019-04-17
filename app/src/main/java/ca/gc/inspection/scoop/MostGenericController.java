@@ -2,19 +2,17 @@ package ca.gc.inspection.scoop;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.RetryPolicy;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,20 +24,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * performs all logic and HTTP requests for the FeedAdapter
- */
-public class FeedAdapterController {
-    private JSONObject post, images;
-    private FeedViewHolder holder;
-    private FeedAdapterInterface feedAdapterInterface;
+public class MostGenericController {
+    private JSONObject post;
+    private MostGenericViewHolder holder;
+    private MostGenericInterface mostGenericInterface;
     private Map<String, String> likeProperties;
 
-    public FeedAdapterController(FeedAdapterInterface feedAdapterInterface, JSONArray posts, JSONArray images, int i, FeedViewHolder holder){
-        this.feedAdapterInterface = feedAdapterInterface;
+    public MostGenericController(MostGenericInterface mostGenericInterface, JSONArray posts, int i, MostGenericViewHolder holder){
+        this.mostGenericInterface = mostGenericInterface;
         try {
             this.post = posts.getJSONObject(i);
-            this.images = images.getJSONObject(i);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -56,16 +50,8 @@ public class FeedAdapterController {
         final String posterid = post.getString("userid");
         likeProperties.put("liketype", post.getString("liketype")); //puts liketype into properties map
         likeProperties.put("likecount", checkLikeCount(post.getString("likecount"))); //puts likecount into properties map
-        feedAdapterInterface.setPostText(post.getString("posttext"), holder);
-        feedAdapterInterface.setPostTitle(post.getString("posttitle"), holder);
-        checkCommentCount(post.getString("commentcount")); //checks the number of comments for a single post
+        mostGenericInterface.setPostText(post.getString("posttext"), holder);
         formatDate(post.getString("createddate"));
-        if(images != null) { // null check to see if there are images
-            formatImage(images.getString("postimagepath"), "post"); //formats post image
-            formatImage(images.getString("profileimage"), "user"); //formats profile image
-        }else{
-            feedAdapterInterface.hidePostImage(holder); //hides post image
-        }
         checkFullName();
         checkLikeState(likeProperties.get("liketype"));
         holder.upvote.setOnClickListener(new View.OnClickListener() {
@@ -87,17 +73,6 @@ public class FeedAdapterController {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
-        });
-
-        // to get the options menu to appear
-        holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog bottomSheetDialog = new bottomSheetDialog();
-                final Context context = v.getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                bottomSheetDialog.show(fragmentManager, "bottomSheet");
             }
         });
 
@@ -125,13 +100,17 @@ public class FeedAdapterController {
         });
     }
 
+    public void formPostTitle() throws JSONException {
+        mostGenericInterface.setPostTitle(post.getString("posttitle"), holder);
+    }
+
     /**
      * Description: checks to see if full name is valid before setting name
      * @throws JSONException
      */
     private void checkFullName() throws JSONException {
         String fullName = checkFirstName(post.getString("firstname")) + checkLastName(post.getString("lastname"));
-        feedAdapterInterface.setUserName(fullName, holder);
+        mostGenericInterface.setUserName(fullName, holder);
     }
 
     /**
@@ -171,30 +150,13 @@ public class FeedAdapterController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(time); //parses the created date to be in specified date format
             DateFormat properDateFormat = new SimpleDateFormat("MM-dd-yy"); //formats the date to be how we want it to output
-            feedAdapterInterface.setDate(properDateFormat.format(parsedDate),holder);
+            mostGenericInterface.setDate(properDateFormat.format(parsedDate),holder);
         }catch(Exception e){
             e.printStackTrace();
-            feedAdapterInterface.hideDate(holder);
+            mostGenericInterface.hideDate(holder);
         }
     }
 
-    /**
-     * Description: changes image from a string to a bitmap, then setting image
-     * @param image: image to convert
-     * @param type: type of image
-     */
-    private void formatImage(String image, String type){
-        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        if(type.equals("post")) {
-            if(!image.equals("null")) {
-                feedAdapterInterface.setPostImage(bitmap, holder);
-            } else{
-                feedAdapterInterface.hidePostImage(holder);
-            }
-        }else{
-            feedAdapterInterface.setUserImage(bitmap, holder);
-        }
-    }
 
     /**
      * Description: initial setting of likeCount and checks if likeCount is null
@@ -204,10 +166,10 @@ public class FeedAdapterController {
     private String checkLikeCount(String likeCount){
         String defaultCount = "0";
         if(likeCount.equals("null")){
-            feedAdapterInterface.setLikeCount(defaultCount, holder);
+            mostGenericInterface.setLikeCount(defaultCount, holder);
             return defaultCount;
         }else{
-            feedAdapterInterface.setLikeCount(likeCount, holder);
+            mostGenericInterface.setLikeCount(likeCount, holder);
             return likeCount;
         }
     }
@@ -218,13 +180,13 @@ public class FeedAdapterController {
      */
     private void checkLikeState(String likeState){
         switch(likeState){
-            case "1": feedAdapterInterface.setLikeUpvoteState(holder);
+            case "1": mostGenericInterface.setLikeUpvoteState(holder);
                 break;
-            case "-1": feedAdapterInterface.setLikeDownvoteState(holder);
+            case "-1": mostGenericInterface.setLikeDownvoteState(holder);
                 break;
-            case "0": feedAdapterInterface.setLikeNeutralState(holder);
+            case "0": mostGenericInterface.setLikeNeutralState(holder);
                 break;
-            default: feedAdapterInterface.setLikeNeutralState(holder);
+            default: mostGenericInterface.setLikeNeutralState(holder);
                 break;
         }
     }
@@ -242,23 +204,23 @@ public class FeedAdapterController {
         switch(likeType){
             case "1": //if it's already liked, it'll be set to neutral if pressed
                 likeCount -= 1;
-                feedAdapterInterface.setLikeNeutralState(holder);
+                mostGenericInterface.setLikeNeutralState(holder);
                 updateLikes("0", activityid, posterid);
                 break;
             case "-1": //if it's downvoted, it'll be set to upvote state
                 likeCount += 2;
-                feedAdapterInterface.setLikeUpvoteState(holder);
+                mostGenericInterface.setLikeUpvoteState(holder);
                 updateLikes("1", activityid, posterid);
                 break;
             case "0": //if it's neutral, it'll be set to upvote state
                 likeCount += 1;
-                feedAdapterInterface.setLikeUpvoteState(holder);
+                mostGenericInterface.setLikeUpvoteState(holder);
                 updateLikes("1", activityid, posterid);
                 break;
             default: //default will be upvote state, if liketype is null
                 likeCount += 1;
                 insertLikes("1", activityid, posterid); //will insert the like for the first time
-                feedAdapterInterface.setLikeUpvoteState(holder);
+                mostGenericInterface.setLikeUpvoteState(holder);
                 break;
         }
         Log.i("likecount1", String.valueOf(likeCount));
@@ -278,23 +240,23 @@ public class FeedAdapterController {
         switch(likeType){
             case "1": //if it's liked, it'll be set to downvote state
                 likeCount -= 2;
-                feedAdapterInterface.setLikeDownvoteState(holder);
+                mostGenericInterface.setLikeDownvoteState(holder);
                 updateLikes("-1", activityid, posterid);
                 break;
             case "-1": //if it's downvoted, it'll be set to neutral state
                 likeCount += 1;
-                feedAdapterInterface.setLikeNeutralState(holder);
+                mostGenericInterface.setLikeNeutralState(holder);
                 updateLikes("0", activityid, posterid);
                 break;
             case "0": //if it's netural state, it'll be set to downvote state
                 likeCount -= 1;
-                feedAdapterInterface.setLikeDownvoteState(holder);
+                mostGenericInterface.setLikeDownvoteState(holder);
                 updateLikes("-1", activityid, posterid);
                 break;
             default: //default will be downvote state, if liketype is null
                 likeCount -= 1;
                 insertLikes("-1", activityid, posterid); //will insert the downvote for the first time
-                feedAdapterInterface.setLikeDownvoteState(holder);
+                mostGenericInterface.setLikeDownvoteState(holder);
                 break;
         }
         Log.i("likecount2", String.valueOf(likeCount));
@@ -309,21 +271,9 @@ public class FeedAdapterController {
     private void updateLikeCount(String likeCount) throws JSONException {
         likeProperties.put("likecount", likeCount); //updates in map
         post.put("likecount", likeCount); //updates in post object
-        feedAdapterInterface.setLikeCount(likeCount,holder); //sets like count to new total
+        mostGenericInterface.setLikeCount(likeCount,holder); //sets like count to new total
     }
 
-    /**
-     * Description: checks current comment count and sets item accordingly
-     * @param commentCount: current comment count
-     */
-    private void checkCommentCount(String commentCount){
-        String defaultCount = "0";
-        if(!commentCount.equals("null")){
-            feedAdapterInterface.setCommentCount(commentCount, holder);
-        }else{
-            feedAdapterInterface.setCommentCount(defaultCount, holder);
-        }
-    }
 
     /**
      * Description: updates likes in table and adds notifications if like type is 1
@@ -415,21 +365,15 @@ public class FeedAdapterController {
         Config.requestQueue.add(request);
     }
 
-
-
-    public interface FeedAdapterInterface{
-        void setPostText(String postText, FeedViewHolder holder);
-        void setPostTitle(String postTitle, FeedViewHolder holder);
-        void setPostImage(Bitmap image, FeedViewHolder holder);
-        void setUserImage(Bitmap image, FeedViewHolder holder);
-        void setUserName(String userName, FeedViewHolder holder);
-        void setLikeCount(String likeCount, FeedViewHolder holder);
-        void setDate(String date, FeedViewHolder holder);
-        void setLikeNeutralState(FeedViewHolder holder);
-        void setLikeUpvoteState(FeedViewHolder holder);
-        void setLikeDownvoteState(FeedViewHolder holder);
-        void setCommentCount(String commentCount, FeedViewHolder holder);
-        void hidePostImage(FeedViewHolder holder);
-        void hideDate(FeedViewHolder holder);
+    public interface MostGenericInterface{
+        void setPostText(String postText, MostGenericViewHolder holder);
+        void setPostTitle(String postTitle, MostGenericViewHolder holder);
+        void setUserName(String userName, MostGenericViewHolder holder);
+        void setLikeCount(String likeCount, MostGenericViewHolder holder);
+        void setDate(String date, MostGenericViewHolder holder);
+        void setLikeNeutralState(MostGenericViewHolder holder);
+        void setLikeUpvoteState(MostGenericViewHolder holder);
+        void setLikeDownvoteState(MostGenericViewHolder holder);
+        void hideDate(MostGenericViewHolder holder);
     }
 }

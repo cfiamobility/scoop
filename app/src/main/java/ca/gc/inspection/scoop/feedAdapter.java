@@ -4,9 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +12,7 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements FeedAdapterController.FeedAdapterInterface{
+public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > implements ImageController.ImageInterface{
     private JSONArray posts, images;
 
     public feedAdapter(JSONArray posts, JSONArray images) {
@@ -26,17 +23,20 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
 
     @NonNull
     @Override
-    public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public FeedPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_row_feed, viewGroup, false);
-        FeedViewHolder vh = new FeedViewHolder(view);
+        FeedPostViewHolder vh = new FeedPostViewHolder(view);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FeedViewHolder holder, int i) {
-       FeedAdapterController adapterController = new FeedAdapterController(this, posts, images, i, holder);
+    public void onBindViewHolder(@NonNull FeedPostViewHolder holder, int i) {
+
+       ImageController imageController = new ImageController(this, posts, images, i, holder);
         try {
-            adapterController.displayPost();
+            imageController.displayPost();
+            imageController.displayImages();
+            imageController.formPostTitle();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setPostText(String postText, FeedViewHolder holder) {
+    public void setPostText(String postText, MostGenericViewHolder holder) {
         holder.postText.setText(postText);
     }
 
@@ -63,7 +63,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setPostTitle(String postTitle, FeedViewHolder holder) {
+    public void setPostTitle(String postTitle, MostGenericViewHolder holder) {
         holder.postTitle.setText(postTitle);
     }
 
@@ -73,7 +73,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setPostImage(Bitmap image, FeedViewHolder holder) {
+    public void setPostImage(Bitmap image, FeedPostViewHolder  holder) {
         holder.postImage.setImageBitmap(image);
     }
 
@@ -83,7 +83,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setUserImage(Bitmap image, FeedViewHolder holder) {
+    public void setUserImage(Bitmap image, FeedPostViewHolder  holder) {
         holder.profileImage.setImageBitmap(image);
     }
 
@@ -93,7 +93,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setUserName(String userName, FeedViewHolder holder) {
+    public void setUserName(String userName, MostGenericViewHolder holder) {
         holder.username.setText(userName);
     }
 
@@ -103,7 +103,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setLikeCount(String likeCount, FeedViewHolder holder) {
+    public void setLikeCount(String likeCount, MostGenericViewHolder holder) {
         holder.likeCount.setText(likeCount);
     }
 
@@ -113,7 +113,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setDate(String date, FeedViewHolder holder) {
+    public void setDate(String date, MostGenericViewHolder holder) {
         holder.date.setText(date);
     }
 
@@ -122,7 +122,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setLikeNeutralState(FeedViewHolder holder) {
+    public void setLikeNeutralState(MostGenericViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
@@ -132,7 +132,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setLikeUpvoteState(FeedViewHolder holder) {
+    public void setLikeUpvoteState(MostGenericViewHolder holder) {
        holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
@@ -142,7 +142,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setLikeDownvoteState(FeedViewHolder holder) {
+    public void setLikeDownvoteState(MostGenericViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
     }
@@ -153,7 +153,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setCommentCount(String commentCount, FeedViewHolder holder) {
+    public void setCommentCount(String commentCount, GenericPostViewHolder holder) {
         holder.commentCount.setText(commentCount);
     }
 
@@ -162,7 +162,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void hidePostImage(FeedViewHolder holder) {
+    public void hidePostImage(FeedPostViewHolder  holder) {
         holder.postImage.setVisibility(View.GONE);
     }
 
@@ -171,7 +171,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void hideDate(FeedViewHolder holder) {
+    public void hideDate(MostGenericViewHolder holder) {
         holder.date.setVisibility(View.GONE);
     }
 }
