@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profileScreen"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".profileScreen">
 
     <View
-        android:id="@+id/dividerSqure"
+        android:id="@+id/otherDividerSqure"
         android:layout_width="match_parent"
         android:layout_height="147dp"
         android:layout_alignParentStart="true"
@@ -20,7 +20,7 @@
         android:background="@color/light_grey" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profileImage"
+        android:id="@+id/otherProfileImage"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentTop="true"
@@ -29,48 +29,48 @@
         android:src="@drawable/ic_account_circle_black_24dp" />
 
     <TextView
-        android:id="@+id/profileName"
+        android:id="@+id/otherProfileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profileImage"
+        android:layout_below="@+id/otherProfileImage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/open_sans_bold" />
 
     <TextView
-        android:id="@+id/positionName"
+        android:id="@+id/otherPositionName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profileName"
+        android:layout_below="@+id/otherProfileName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
         android:fontFamily="@font/open_sans" />
 
     <TextView
-        android:id="@+id/locationText"
+        android:id="@+id/otherLocationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/positionName"
-        android:layout_alignStart="@+id/profileImage"
+        android:layout_below="@+id/otherPositionName"
+        android:layout_alignStart="@+id/otherProfileImage"
         android:layout_marginStart="1dp"
         android:layout_marginTop="0dp"
         android:fontFamily="@font/open_sans" />
 
     <ImageView
-        android:id="@+id/locationLogo"
+        android:id="@+id/otherLocationLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/positionName"
+        android:layout_below="@+id/otherPositionName"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="2dp"
-        android:layout_toStartOf="@+id/locationText"
+        android:layout_toStartOf="@+id/otherLocationText"
         android:src="@drawable/ic_location_on_black_24dp" />
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/otherTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dividerSqure"
+        android:layout_below="@+id/otherDividerSqure"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
@@ -79,11 +79,12 @@
     </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
+        android:id="@+id/otherViewPager"
+        android:background="@color/white"
+
         android:layout_width="match_parent"
         android:layout_height="477dp"
-        android:background="@color/white"
-        android:layout_below="@+id/tabLayout"
+        android:layout_below="@+id/otherTabLayout"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="2dp"
@@ -91,16 +92,16 @@
         android:layout_marginBottom="0dp" />
 
     <LinearLayout
-        android:id="@+id/socialMediaIcons"
+        android:id="@+id/otherSocialMediaIcons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/locationText"
+        android:layout_below="@+id/otherLocationText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/facebookLogo"
+            android:id="@+id/otherFacebookLogo"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginRight="3dp"
@@ -108,7 +109,7 @@
             android:src="@drawable/facebook" />
 
         <ImageView
-            android:id="@+id/instagramLogo"
+            android:id="@+id/otherInstagramLogo"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginRight="3dp"
@@ -116,7 +117,7 @@
             android:src="@drawable/instagram" />
 
         <ImageView
-            android:id="@+id/linkedinLogo"
+            android:id="@+id/otherLinkedinLogo"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginRight="3dp"
@@ -124,7 +125,7 @@
             android:src="@drawable/linkedin" />
 
         <ImageView
-            android:id="@+id/twitterLogo"
+            android:id="@+id/otherTwitterLogo"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginRight="3dp"

@@ -87,6 +87,13 @@ public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > imple
         holder.profileImage.setImageBitmap(image);
     }
 
+        // tapping on profile picture will bring user to poster's profile page
+        myViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TabFragment.viewPager.setCurrentItem(3);
+            }
+        });
     /**
      * Description: sets name of user
      * @param userName: name of user
@@ -96,6 +103,13 @@ public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > imple
     public void setUserName(String userName, MostGenericViewHolder holder) {
         holder.username.setText(userName);
     }
+
+        myViewHolder.textName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TabFragment.viewPager.setCurrentItem(3);
+            }
+        });
 
     /**
      * Description: sets like count on post

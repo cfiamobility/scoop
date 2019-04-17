@@ -152,20 +152,9 @@ public class NotificationsScreenAdapterController {
         holder.profileImage.setOnClickListener(new View.OnClickListener() { //on click for the image
             @Override
             public void onClick(View view) {
-                goToProfile(ids); //goes to the profile on click
+                mainScreen.otherUserClicked(ids.get("userid"));
             }
         });
-    }
-
-    /**
-     * Description: goes to the user profile indicated
-     *
-     * @param ids: representing the user id and the activity id
-     */
-    private void goToProfile(Map<String, String> ids) {
-        Intent intent = new Intent(MyApplication.getContext(), userprofile.class);
-        intent.putExtra("userid", ids.get("userid")); //puts the user id into the intent
-        MyApplication.getContext().startActivity(intent); //changes to the user profile activity
     }
 
     /**
@@ -305,7 +294,7 @@ public class NotificationsScreenAdapterController {
             holder.fullName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goToProfile(ids); //goes to profile on click
+                    mainScreen.otherUserClicked(ids.get("userid"));
                 }
             });
         }
