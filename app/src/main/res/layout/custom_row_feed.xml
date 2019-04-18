@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
             android:layout_width="41dp"
             android:layout_height="43dp"
@@ -29,7 +29,7 @@
             android:layout_marginEnd="15dp"
             android:layout_toStartOf="@+id/date"
             android:layout_toEndOf="@+id/profile_image"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/roboto"
             android:text="NAME"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -42,7 +42,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="5dp"
             android:layout_toStartOf="@+id/options_menu"
-            android:fontFamily="@font/open_sans_light"
+            android:fontFamily="@font/roboto"
             android:text="01-01-2019"
             android:textSize="12sp" />
 
@@ -64,7 +64,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/roboto"
             android:text="TITLE"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -79,7 +79,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:fontFamily="@font/open_sans"
+            android:fontFamily="@font/roboto"
             android:text="TextView"
             android:textSize="14sp" />
 
@@ -111,7 +111,7 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="26dp"
             android:layout_toEndOf="@+id/down_vote"
-            android:fontFamily="@font/open_sans_light"
+            android:fontFamily="@font/roboto"
             android:text="2"
             android:textSize="12sp" />
 

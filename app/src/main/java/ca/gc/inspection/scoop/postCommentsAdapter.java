@@ -25,7 +25,7 @@ public class postCommentsAdapter extends ArrayAdapter<Comments> {
     @Override
     public View getView (int position, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = layoutInflater.inflate(R.layout.custom_viewing_post_comments, parent, false);
+        View rowView = layoutInflater.inflate(R.layout.item_display_post_comments, parent, false);
 
         TextView commentName = rowView.findViewById(R.id.commentName);
         TextView commentText = rowView.findViewById(R.id.commentText);

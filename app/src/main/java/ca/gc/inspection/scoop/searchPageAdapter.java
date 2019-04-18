@@ -16,10 +16,10 @@ public class searchPageAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         switch (i) {
             case 0:
-                topSearchResults tab1 = new topSearchResults();
+                TopSearchResultsFragment tab1 = new TopSearchResultsFragment();
                 return tab1;
             case 1:
-                peopleSearchResults tab2 = new peopleSearchResults();
+                PeopleSearchResultsFragment tab2 = new PeopleSearchResultsFragment();
                 return tab2;
             default:
                 return null;

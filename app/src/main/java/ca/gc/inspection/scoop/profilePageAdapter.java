@@ -16,13 +16,13 @@ public class profilePageAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         switch(i) {
             case 0:
-                profilePostsFragment tab1 = new profilePostsFragment();
+                ProfilePostsFragment tab1 = new ProfilePostsFragment();
                 return tab1;
             case 1:
-                profileLikesFragment tab2 = new profileLikesFragment();
+                ProfileLikesFragment tab2 = new ProfileLikesFragment();
                 return tab2;
             case 2:
-                profileCommentsFragment tab3 = new profileCommentsFragment();
+                ProfileCommentsFragment tab3 = new ProfileCommentsFragment();
                 return tab3;
             default:
                 return null;

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -37,12 +36,14 @@ public class LoginController {
             @Override
             public void onResponse(String response) {
 
-                Log.i("RESPONSE", response);
+                Log.i("RESPONSE", response); // the response string that is received from the user
 
+
+                // checking to see if the server responded with error messages
                 if (response.contains("Incorrect Password")) { // if the user entered an incorrect password
-                    Toast.makeText(context, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                    SplashScreenActivity.passwordLayout.setError("Incorrect Password");
                 } else if (response.contains("Invalid Email")) { // if the user entered an invalid email
-                    Toast.makeText(context, "Invalid Email", Toast.LENGTH_SHORT).show();
+                    SplashScreenActivity.emailLayout.setError("Invalid Email");
                 } else {
 
                     // to grab the user id from the jwt token
@@ -63,7 +64,7 @@ public class LoginController {
                     Config.currentUser = userid;
 
                     // changes activities once login is successful
-                    Intent intent = new Intent(context, mainScreen.class);
+                    Intent intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
                     activity.finish();
                 }

@@ -21,7 +21,7 @@ public class profileCommentsAdapter extends RecyclerView.Adapter<profileComments
     @NonNull
     @Override
     public likesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_row_comments, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_profile_comments, viewGroup, false);
         likesViewHolder vh = new likesViewHolder(view);
         return vh;
     }

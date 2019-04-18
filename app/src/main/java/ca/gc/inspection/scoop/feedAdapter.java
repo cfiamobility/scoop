@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +38,7 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.myViewHolder> 
         myViewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetDialog bottomSheetDialog = new bottomSheetDialog();
+                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");
@@ -51,7 +49,7 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.myViewHolder> 
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), displayPost.class));
+                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
             }
         });
 
@@ -59,14 +57,14 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.myViewHolder> 
         myViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainScreen.viewPager.setCurrentItem(3);
+                MainActivity.viewPager.setCurrentItem(3);
             }
         });
 
         myViewHolder.textName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainScreen.viewPager.setCurrentItem(3);
+                MainActivity.viewPager.setCurrentItem(3);
             }
         });
 

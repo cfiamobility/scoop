@@ -21,7 +21,7 @@ public class peopleResultsAdapter extends RecyclerView.Adapter<peopleResultsAdap
     @NonNull
     @Override
     public peopleResultsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_row_people_search_results, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_people_search_results, viewGroup, false);
         peopleResultsViewHolder vh = new peopleResultsViewHolder(view);
         return vh;
     }

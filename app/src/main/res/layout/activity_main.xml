@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="623dp"
+        android:layout_above="@+id/navigation"
+        android:layout_marginTop="56dp"
+        android:layout_marginBottom="0dp"
+        android:animateLayoutChanges="true" />
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:background="@color/primary"
+        app:menu="@menu/menu_bottom_navigation_toolbar"
+        android:translationZ="-10dp"
+        app:labelVisibilityMode="unlabeled"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/createPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/secondary"
+        android:scaleType="center"
+        android:src="@drawable/ic_add_black_24dp"
+        app:fabSize="mini" />
+
+    <View
+        android:id="@+id/divider22"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/frame_layout"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="-56dp"
+        android:background="?android:attr/listDivider" />
+
+    <View
+        android:id="@+id/divider24"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/navigation"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:background="?android:attr/listDivider" />
+
+</RelativeLayout>
+
