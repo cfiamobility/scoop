@@ -388,7 +388,7 @@ public class MostGenericController {
     /**
      * Description: changes image from a string to a bitmap, then setting image
      * @param image: image to convert
-     * @param type: type of image
+     *
      */
     private void formatImage(String image){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
