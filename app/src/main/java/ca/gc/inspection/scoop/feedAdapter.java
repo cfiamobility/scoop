@@ -153,7 +153,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > imple
      * @param holder: viewholder of item
      */
     @Override
-    public void setCommentCount(String commentCount, GenericPostViewHolder holder) {
+    public void setCommentCount(String commentCount, ProfileFeedViewHolder holder) {
         holder.commentCount.setText(commentCount);
     }
 

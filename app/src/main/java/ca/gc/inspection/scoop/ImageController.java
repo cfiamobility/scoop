@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class ImageController extends GenericPostController{
+public class ImageController extends ProfileFeedController {
     private JSONObject images;
     private FeedPostViewHolder holder;
     private ImageInterface imageInterface;
@@ -61,7 +61,7 @@ public class ImageController extends GenericPostController{
         }
     }
 
-    public interface ImageInterface extends GenericPostInterface {
+    public interface ImageInterface extends ProfileFeedInterface {
         void setPostImage(Bitmap image, FeedPostViewHolder  holder);
         void setUserImage(Bitmap image, FeedPostViewHolder  holder);
         void hidePostImage(FeedPostViewHolder  holder);

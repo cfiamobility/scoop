@@ -1,41 +1,29 @@
 package ca.gc.inspection.scoop;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.DefaultRetryPolicy;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * performs all logic and HTTP requests for the FeedAdapter
  */
-public class GenericPostController extends MostGenericController{
+public class ProfileFeedController extends MostGenericController{
     private JSONObject post;
-    private GenericPostViewHolder holder;
-    private GenericPostInterface genericPostInterface;
+    private ProfileFeedViewHolder holder;
+    private ProfileFeedInterface profileFeedInterface;
     private Map<String, String> likeProperties;
 
-    public GenericPostController(GenericPostInterface genericPostInterface, JSONArray posts, int i, GenericPostViewHolder holder){
-        super(genericPostInterface, posts, i, holder);
-        this.genericPostInterface = genericPostInterface;
+    public ProfileFeedController(ProfileFeedInterface profileFeedInterface, JSONArray posts, int i, ProfileFeedViewHolder holder){
+        super(profileFeedInterface, posts, i, holder);
+        this.profileFeedInterface = profileFeedInterface;
         try {
             this.post = posts.getJSONObject(i);
         } catch (JSONException e) {
@@ -64,7 +52,7 @@ public class GenericPostController extends MostGenericController{
 
     @Override
     public void formPostTitle() throws JSONException {
-        genericPostInterface.setPostTitle(post.getString("posttitle"), holder);
+        profileFeedInterface.setPostTitle(post.getString("posttitle"), holder);
     }
 
     /**
@@ -74,14 +62,14 @@ public class GenericPostController extends MostGenericController{
     private void checkCommentCount(String commentCount){
         String defaultCount = "0";
         if(!commentCount.equals("null")){
-            genericPostInterface.setCommentCount(commentCount, holder);
+            profileFeedInterface.setCommentCount(commentCount, holder);
         }else{
-            genericPostInterface.setCommentCount(defaultCount, holder);
+            profileFeedInterface.setCommentCount(defaultCount, holder);
         }
     }
 
 
-    public interface GenericPostInterface extends MostGenericController.MostGenericInterface{
-        void setCommentCount(String commentCount, GenericPostViewHolder holder);
+    public interface ProfileFeedInterface extends MostGenericController.MostGenericInterface{
+        void setCommentCount(String commentCount, ProfileFeedViewHolder holder);
     }
 }
