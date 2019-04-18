@@ -26,6 +26,7 @@ public class ImageController extends ProfileFeedController {
         this.holder = holder;
     }
 
+    @Override
     public void displayImages() throws JSONException {
         if(images != null) { // null check to see if there are images
             formatImage(images.getString("postimagepath"), "post"); //formats post image
@@ -51,7 +52,7 @@ public class ImageController extends ProfileFeedController {
     private void formatImage(String image, String type){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
         if(type.equals("post")) {
-            if(!image.equals("")) {
+            if(!image.equals("") && !image.equals("null")) {
                imageInterface.setPostImage(bitmap, holder);
             } else{
                 imageInterface.hidePostImage(holder);
@@ -63,7 +64,6 @@ public class ImageController extends ProfileFeedController {
 
     public interface ImageInterface extends ProfileFeedInterface {
         void setPostImage(Bitmap image, FeedPostViewHolder  holder);
-        void setUserImage(Bitmap image, FeedPostViewHolder  holder);
         void hidePostImage(FeedPostViewHolder  holder);
     }
 }

@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONArray;
@@ -84,7 +85,10 @@ public class NotificationsScreenAdapterController {
             String createdDate = notification.getString("createddate"); //gets when the notification was created
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(createdDate); //parses the created date to be in specified date format
+            Log.i("postdate", parsedDate.toString());
             Timestamp timestamp = new Timestamp(parsedDate.getTime()); //creates a timestamp from the date
+            Log.i("time", String.valueOf(timestamp.getTime()));
+            Log.i("hello", String.valueOf(currentTime.getTime()));
             long diff = currentTime.getTime() - timestamp.getTime(); //gets the difference between the two timestamps
             String diffHours = String.valueOf((int) ((diff / (1000 * 60 * 60)))); //stores it in a string representing hours
             return diffHours + " hours ago";

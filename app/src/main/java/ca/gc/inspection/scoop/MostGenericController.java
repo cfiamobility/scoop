@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,15 +26,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MostGenericController {
-    private JSONObject post;
+    private JSONObject post, profileImage;
     private MostGenericViewHolder holder;
     private MostGenericInterface mostGenericInterface;
     private Map<String, String> likeProperties;
 
-    public MostGenericController(MostGenericInterface mostGenericInterface, JSONArray posts, int i, MostGenericViewHolder holder){
+    public MostGenericController(MostGenericInterface mostGenericInterface, JSONArray posts, JSONArray profileImages, int i, MostGenericViewHolder holder){
         this.mostGenericInterface = mostGenericInterface;
         try {
             this.post = posts.getJSONObject(i);
+            this.profileImage = profileImages.getJSONObject(i);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -362,7 +364,36 @@ public class MostGenericController {
                 return header;
             }
         };
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Config.requestQueue.add(request);
+    }
+
+    public void displayImages() throws JSONException {
+        if(profileImage != null) { // null check to see if there are images
+            formatImage(profileImage.getString("profileimage")); //formats profile image
+        }
+        // tapping on any item from the view holder will go to the display post activity
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.getContext().startActivity(new Intent(v.getContext(), displayPost.class));
+            }
+        });
+    }
+
+
+    /**
+     * Description: changes image from a string to a bitmap, then setting image
+     * @param image: image to convert
+     *
+     */
+    private void formatImage(String image){
+        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
+        mostGenericInterface.setUserImage(bitmap, holder);
+
     }
 
     public interface MostGenericInterface{
@@ -375,5 +406,6 @@ public class MostGenericController {
         void setLikeUpvoteState(MostGenericViewHolder holder);
         void setLikeDownvoteState(MostGenericViewHolder holder);
         void hideDate(MostGenericViewHolder holder);
+        void setUserImage(Bitmap image, MostGenericViewHolder  holder);
     }
 }
