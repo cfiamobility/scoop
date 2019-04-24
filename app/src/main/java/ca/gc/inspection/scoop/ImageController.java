@@ -15,7 +15,7 @@ public class ImageController extends GenericPostController{
     private ImageInterface imageInterface;
 
     public ImageController(ImageInterface imageInterface, JSONArray posts, JSONArray images, int i, FeedPostViewHolder holder){
-        super(imageInterface, posts, i, holder);
+        super(imageInterface, posts, images, i, holder);
 
         this.imageInterface = imageInterface;
         try {

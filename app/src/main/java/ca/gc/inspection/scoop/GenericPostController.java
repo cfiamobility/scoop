@@ -33,8 +33,8 @@ public class GenericPostController extends MostGenericController{
     private GenericPostInterface genericPostInterface;
     private Map<String, String> likeProperties;
 
-    public GenericPostController(GenericPostInterface genericPostInterface, JSONArray posts, int i, GenericPostViewHolder holder){
-        super(genericPostInterface, posts, i, holder);
+    public GenericPostController(GenericPostInterface genericPostInterface, JSONArray posts, JSONArray images, int i, GenericPostViewHolder holder){
+        super(genericPostInterface, posts, images, i, holder);
         this.genericPostInterface = genericPostInterface;
         try {
             this.post = posts.getJSONObject(i);

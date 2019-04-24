@@ -83,7 +83,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > imple
      * @param holder: viewholder of item
      */
     @Override
-    public void setUserImage(Bitmap image, FeedPostViewHolder  holder) {
+    public void setUserImage(Bitmap image, MostGenericViewHolder  holder) {
         holder.profileImage.setImageBitmap(image);
     }
 
