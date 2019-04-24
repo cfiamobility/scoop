@@ -14,7 +14,7 @@ import org.json.JSONException;
 
 import java.sql.Timestamp;
 
-public class NotificationsScreenAdapter extends RecyclerView.Adapter<NotificationViewHolder> implements NotificationsScreenAdapterController.NotificationAdapterInterface{
+public class NotificationsAdapter extends RecyclerView.Adapter<NotificationViewHolder> implements NotificationsAdapterController.NotificationAdapterInterface{
     private JSONArray notifications, images;
     private RequestQueue requestQueue;
 
@@ -27,7 +27,7 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
      * @param requestQueue: represents the requestQueue used for adding future requests to
      * @param timeType: represents whether the type of time which should be displayed is for today or for recent notifications
      */
-    NotificationsScreenAdapter(JSONArray notifs, JSONArray images,  RequestQueue requestQueue, String timeType, Timestamp currentTime){
+    NotificationsAdapter(JSONArray notifs, JSONArray images, RequestQueue requestQueue, String timeType, Timestamp currentTime){
         this.notifications = notifs;
         this.images = images;
         this.requestQueue = requestQueue;
@@ -56,7 +56,7 @@ public class NotificationsScreenAdapter extends RecyclerView.Adapter<Notificatio
      */
     @Override
     public void onBindViewHolder(@NonNull final NotificationViewHolder holder, int i) {
-        NotificationsScreenAdapterController controller = new NotificationsScreenAdapterController(holder, i, this, notifications, images, currentTime, timeType);
+        NotificationsAdapterController controller = new NotificationsAdapterController(holder, i, this, notifications, images, currentTime, timeType);
         try {
             controller.displayNotifications();
         } catch (JSONException e) {

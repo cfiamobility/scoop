@@ -23,10 +23,10 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         // set the system status bar color
-        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.medium_blue));
+        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
         // when the soft keyboard is open tapping anywhere will close the keyboard
-        findViewById(R.id.search_layout).setOnTouchListener(new View.OnTouchListener() {
+        findViewById(R.id.activity_search_layout).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -36,19 +36,19 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         // setting up the custom toolbar in the activity
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_search_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // setting up the tab layout
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("TOP"));
-        tabLayout.addTab(tabLayout.newTab().setText("PEOPLE"));
+        TabLayout tabLayout = findViewById(R.id.activity_search_tl_search);
+        tabLayout.addTab(tabLayout.newTab().setText("Top"));
+        tabLayout.addTab(tabLayout.newTab().setText("People"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         // setting up the viewpager for the tab layout
-        final ViewPager viewPager = findViewById(R.id.searchViewPager);
-        PagerAdapter adapter = new searchPageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        final ViewPager viewPager = findViewById(R.id.activity_search_vp_search);
+        PagerAdapter adapter = new SearchAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

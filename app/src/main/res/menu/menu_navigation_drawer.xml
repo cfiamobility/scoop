@@ -8,9 +8,6 @@
             android:id="@+id/saved_posts"
             android:title="Saved Posts" />
         <item
-            android:id="@+id/edit_profile"
-            android:title="Edit Profile" />
-        <item
             android:title="Settings"
             android:id="@+id/settings"/>
     </group>

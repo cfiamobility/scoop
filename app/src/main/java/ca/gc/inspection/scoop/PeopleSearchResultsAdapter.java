@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class peopleResultsAdapter extends RecyclerView.Adapter<peopleResultsAdapter.peopleResultsViewHolder> {
+public class PeopleSearchResultsAdapter extends RecyclerView.Adapter<PeopleSearchResultsAdapter.peopleResultsViewHolder> {
     List<String> name;
 
-    public peopleResultsAdapter(List<String> name) {
+    public PeopleSearchResultsAdapter(List<String> name) {
         this.name = name;
 
     }
@@ -43,8 +43,8 @@ public class peopleResultsAdapter extends RecyclerView.Adapter<peopleResultsAdap
 
         public peopleResultsViewHolder(@NonNull View itemView) {
             super(itemView);
-            peopleSearchResultsName = itemView.findViewById(R.id.searchResultsName);
-            peopleSearchResultsProfileImage = itemView.findViewById(R.id.searchResultsProfileImage);
+            peopleSearchResultsName = itemView.findViewById(R.id.item_people_search_results_txt_name);
+            peopleSearchResultsProfileImage = itemView.findViewById(R.id.item_people_search_results_img_profile);
         }
     }
 }

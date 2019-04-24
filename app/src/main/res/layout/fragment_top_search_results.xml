@@ -6,7 +6,7 @@
     tools:context=".TopSearchResultsFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/topSearchRecyclerView"
+        android:id="@+id/fragment_top_search_results_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

@@ -20,14 +20,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NotificationsScreenController {
+public class NotificationsController {
     private RequestQueue requestQueue;
     private Timestamp currentTime;
     private NotificationInterface notificationInterface;
     private SharedPreferences sharedPreferences;
 
 
-    public NotificationsScreenController(NotificationInterface notificationInterface){
+    public NotificationsController(NotificationInterface notificationInterface){
         this.notificationInterface = notificationInterface;
         this.requestQueue = Volley.newRequestQueue(MyApplication.getContext()); //instantiating the request queue for volley
         sharedPreferences = MyApplication.getContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE); //instantiates shared preferences within package

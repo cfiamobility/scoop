@@ -7,27 +7,27 @@
     tools:context=".CreatePostActivity">
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/activity_create_post_btn_back"
         android:layout_width="29dp"
         android:layout_height="32dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="13dp"
         android:background="?attr/actionModeCloseDrawable"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="@color/secondary"
         android:onClick="returnToPrevious" />
 
     <TextView
-        android:id="@+id/createAPost"
+        android:id="@+id/activity_create_post_txt_create_post_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:fontFamily="@font/open_sans_bold"
+        android:fontFamily="@font/roboto"
         android:text="@string/create_a_post"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -37,80 +37,87 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@+id/imageButton"
+        android:layout_above="@+id/activity_create_post_btn_image"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="0dp"
+        android:elevation="5dp"
         android:layout_marginBottom="5dp"
         android:background="?android:attr/listDivider" />
 
     <Button
-        android:id="@+id/cameraButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/activity_create_post_btn_camera"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="15dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto"
         android:background="@drawable/ic_menu_camera"
+        android:backgroundTint="@color/secondary"
         android:contentDescription="TODO" />
 
     <Button
-        android:id="@+id/imageButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/activity_create_post_btn_image"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_toEndOf="@+id/cameraButton"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="10dp"
+        android:layout_toEndOf="@+id/activity_create_post_btn_camera"
         android:background="@drawable/ic_menu_gallery"
-        />
+        android:backgroundTint="@color/secondary"
+        android:fontFamily="@font/roboto"/>
 
     <Button
-        android:id="@+id/postSend"
-        android:layout_width="66dp"
+        android:id="@+id/activity_create_post_btn_post"
+        android:layout_width="wrap_content"
         android:layout_height="28dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="13dp"
-        android:layout_toEndOf="@+id/createAPost"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@+id/activity_create_post_txt_create_post_title"
         android:background="@drawable/button_shape"
-        android:backgroundTint="@color/medium_blue"
-        android:fontFamily="@font/open_sans_bold"
+        android:backgroundTint="@color/secondary"
+        android:fontFamily="@font/roboto"
         android:onClick="returnToPrevious"
         android:text="@string/post"
-        android:textColor="@color/white" />
+        android:textAllCaps="false"
+        android:textColor="@color/primary"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
 
     <ScrollView
-        android:id="@+id/createPostScrollView"
+        android:id="@+id/activity_create_post_sv_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/divider"
-        android:layout_below="@+id/createAPost"
+        android:layout_below="@+id/activity_create_post_txt_create_post_title"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/profileImage"
-                android:layout_width="51dp"
-                android:layout_height="53dp"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/activity_create_post_img_profile"
+                android:layout_width="52dp"
+                android:layout_height="49dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:contentDescription="TODO"
                 app:srcCompat="@drawable/ic_account_circle_black_24dp" />
 
             <EditText
-                android:id="@+id/postTitle"
+                android:id="@+id/activity_create_post_et_title"
                 android:layout_width="252dp"
                 android:layout_height="29dp"
                 android:layout_alignParentTop="true"
@@ -118,35 +125,39 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
-                android:layout_toEndOf="@+id/profileImage"
+                android:layout_toEndOf="@+id/activity_create_post_img_profile"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans_bold"
+                android:inputType="text"
+                android:fontFamily="@font/roboto"
+                android:textAllCaps="false"
+                android:maxLines="1"
+                android:textStyle="bold"
                 android:hint="@string/title"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <ImageView
-                android:id="@+id/postImage"
+                android:id="@+id/activity_create_post_img_post"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_below="@+id/postText"
+                android:layout_below="@+id/activity_create_post_et_post_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
                 android:padding="10dp" />
 
             <EditText
-                android:id="@+id/postText"
+                android:id="@+id/activity_create_post_et_post_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/profileImage"
+                android:layout_below="@+id/activity_create_post_img_profile"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="25dp"
                 android:background="@android:color/transparent"
                 android:ems="10"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:gravity="top"
                 android:hint="@string/post_template"
                 android:importantForAutofill="no"
@@ -156,18 +167,30 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/counter"
+                android:id="@+id/activity_create_post_txt_word_counter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/profileImage"
-                android:layout_alignEnd="@+id/postText"
+                android:layout_below="@+id/activity_create_post_img_profile"
+                android:layout_alignEnd="@+id/activity_create_post_et_post_content"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
+                android:fontFamily="@font/roboto"
                 android:text="0/255"
                 android:textSize="12sp" />
 
         </RelativeLayout>
 
     </ScrollView>
+
+    <View
+        android:id="@+id/divider25"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/activity_create_post_txt_create_post_title"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/listDivider"
+        android:elevation="5dp" />
 
 </RelativeLayout>

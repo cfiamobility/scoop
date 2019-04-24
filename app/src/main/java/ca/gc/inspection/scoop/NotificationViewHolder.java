@@ -3,7 +3,6 @@ package ca.gc.inspection.scoop;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class NotificationViewHolder extends RecyclerView.ViewHolder{
@@ -18,7 +17,7 @@ public class NotificationViewHolder extends RecyclerView.ViewHolder{
      */
     NotificationViewHolder(View v) {
         super(v);
-        profileImage = (ImageView) v.findViewById(R.id.profile_image); //instantiating the profile image imageview
+        profileImage = (ImageView) v.findViewById(R.id.item_post_img_profile); //instantiating the profile image imageview
         actionType = (TextView) v.findViewById(R.id.actiontype); //instantiating the action type textview
         activityType = (TextView) v.findViewById(R.id.activitytype); //instantiating the activity type textview
         time = (TextView) v.findViewById(R.id.time); //instantiating the time textview

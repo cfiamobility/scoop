@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class postCommentsAdapter extends ArrayAdapter<Comments> {
+public class DisplayPostCommentsAdapter extends ArrayAdapter<Comments> {
 
     private Context context;
     private List<Comments> comments;
 
-    public postCommentsAdapter(@NonNull  Context context, @LayoutRes int resource, @NonNull List<Comments> objects) {
+    public DisplayPostCommentsAdapter(@NonNull  Context context, @LayoutRes int resource, @NonNull List<Comments> objects) {
         super(context, resource, objects);
         this.comments = objects;
         this.context = context;
@@ -29,7 +29,7 @@ public class postCommentsAdapter extends ArrayAdapter<Comments> {
 
         TextView commentName = rowView.findViewById(R.id.commentName);
         TextView commentText = rowView.findViewById(R.id.commentText);
-        TextView timeStamp = rowView.findViewById(R.id.timeStamp);
+        TextView timeStamp = rowView.findViewById(R.id.activity_display_post_txt_time);
 
         commentName.setText(comments.get(position).getCommenterName());
         commentText.setText(comments.get(position).getCommentText());

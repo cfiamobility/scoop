@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -86,34 +87,37 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 		setContentView(R.layout.activity_edit_profile);
 
 		// EditText Definitions
-		firstNameET = findViewById(R.id.firstNameEditText);
-		lastNameET = findViewById(R.id.lastNameEditText);
-		positionET = findViewById(R.id.positionEditText);
-		divisionET = findViewById(R.id.divisionEditText);
-		buildingET = findViewById(R.id.buildingEditText);
-		cityET = findViewById(R.id.citEditText);
-		provinceSpinner = findViewById(R.id.provincesSpinner);
-		linkedinET = findViewById(R.id.linkedinEditText);
-		twitterET = findViewById(R.id.twitterEditText);
-		facebookET = findViewById(R.id.facebookEditText);
-		instagramET = findViewById(R.id.instagramEditText);
-		profilePreview = findViewById(R.id.profileImage);
+		firstNameET = findViewById(R.id.activity_edit_profile_et_first_name);
+		lastNameET = findViewById(R.id.activity_edit_profile_et_last_name);
+		positionET = findViewById(R.id.activity_edit_profile_et_position);
+		divisionET = findViewById(R.id.activity_edit_profile_et_division);
+		buildingET = findViewById(R.id.activity_edit_profile_et_building);
+		cityET = findViewById(R.id.activity_edit_profile_et_city);
+		provinceSpinner = findViewById(R.id.activity_edit_profile_spinner_provinces);
+		linkedinET = findViewById(R.id.activity_edit_profile_et_linkedin);
+		twitterET = findViewById(R.id.activity_edit_profile_et_twitter);
+		facebookET = findViewById(R.id.activity_edit_profile_et_facebook);
+		instagramET = findViewById(R.id.activity_edit_profile_et_instagram);
+		profilePreview = findViewById(R.id.activity_create_post_img_profile);
 
 		// Button Definition
-		saveBTN = findViewById(R.id.saveButton);
+		saveBTN = findViewById(R.id.activity_edit_profile_btn_save);
 		saveBTN.setOnClickListener(save);
 
 		// TextView Definition
-		changeProfilePicBTN = findViewById(R.id.changeProfilePicture);
+		changeProfilePicBTN = findViewById(R.id.activity_edit_profile_txt_change_profile_picture);
 
 		// ImageView Definition
-		previewProfilePic = findViewById(R.id.imageView);
+		previewProfilePic = findViewById(R.id.activity_edit_profile_img_profile);
 
 		// Province Spinner Definition
 		spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.provinces_array, android.R.layout.simple_spinner_item);
 		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		provinceSpinner.setAdapter(spinnerAdapter);
 		provinceSpinner.setOnItemSelectedListener(this);
+
+		// set the system status bar color
+		getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
 		//Getting the userID
 		SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
@@ -135,7 +139,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 		autoComplete();
 
 		// when the soft keyboard is open tapping anywhere else will close the keyboard
-		findViewById(R.id.edit_profile_layout).setOnTouchListener(new View.OnTouchListener() {
+		findViewById(R.id.activity_edit_profile_layout).setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -438,11 +442,11 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 		dialog.setContentView(R.layout.dialog_change_profile_picture);
 
 		// Imageview inside the dialog box
-		CircleImageView previewImage = dialog.findViewById(R.id.profileImage);
+		CircleImageView previewImage = dialog.findViewById(R.id.dialog_change_profile_picture_img_profile);
 		previewImage.setImageBitmap(bitmap);
 
 		// Button to take a picture
-		Button takePhotoButton = dialog.findViewById(R.id.takePhotoButton);
+		Button takePhotoButton = dialog.findViewById(R.id.dialog_change_profile_picture_btn_photo);
 		takePhotoButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -460,7 +464,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 		});
 
 		// Button to open gallery and choose a picture
-		Button photoGalleryButton = dialog.findViewById(R.id.photoGalleryButton);
+		Button photoGalleryButton = dialog.findViewById(R.id.dialog_change_profile_picture_btn_gallery);
 		photoGalleryButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

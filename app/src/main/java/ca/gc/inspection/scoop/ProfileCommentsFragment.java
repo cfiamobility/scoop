@@ -46,7 +46,7 @@ public class ProfileCommentsFragment extends Fragment {
 
 
         // initializing recycler view
-        mRecyclerView = view.findViewById(R.id.recycler_view);
+        mRecyclerView = view.findViewById(R.id.fragment_profile_comments_rv);
         mRecyclerView.setHasFixedSize(true);
 
         // setting up the layout manager for the recycler view
@@ -54,7 +54,7 @@ public class ProfileCommentsFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting up the custom adapter for the recycler view
-        mAdapter = new profileCommentsAdapter(test);
+        mAdapter = new ProfileCommentsAdapter(test);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;

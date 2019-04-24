@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +27,7 @@ public class DisplayPostActivity extends AppCompatActivity {
     private ListView listView;
     private ImageView optionsMenu;
     private EditText addComment;
-    private static postCommentsAdapter adapter;
+    private static DisplayPostCommentsAdapter adapter;
 
 
     /** add post/comment ticket AMD-96
@@ -54,11 +55,14 @@ public class DisplayPostActivity extends AppCompatActivity {
         // to prevent the soft keyboard from opening when the activity starts
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        addComment = findViewById(R.id.addComment);
+        addComment = findViewById(R.id.activity_display_post_et_add_comment);
 
-        listView = findViewById(R.id.commentListView);
+        listView = findViewById(R.id.activity_display_post_lv_comments);
 
-        optionsMenu = findViewById(R.id.optionsMenu);
+        optionsMenu = findViewById(R.id.activity_display_post_img_options);
+
+        // set the system status bar color
+        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
         List<Comments> commentsList = new ArrayList<>();
 
@@ -75,12 +79,12 @@ public class DisplayPostActivity extends AppCompatActivity {
         comment1.setTimeStamp("15min");
         commentsList.add(comment1);
 
-        adapter = new postCommentsAdapter(this, R.layout.item_display_post_comments, commentsList);
+        adapter = new DisplayPostCommentsAdapter(this, R.layout.item_display_post_comments, commentsList);
         listView.setAdapter(adapter);
         setListViewHeightBasedOnChildren(listView); // this must be run after setting the adapter
 
         // when the soft keyboard is open tapping anywhere else will close the keyboard
-        findViewById(R.id.viewingPostLayout).setOnTouchListener(new View.OnTouchListener() {
+        findViewById(R.id.activity_display_post_layout).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -105,7 +109,7 @@ public class DisplayPostActivity extends AppCompatActivity {
          * this will initiate this code and will add the comment to the database. Upon succession, the comment box will be reset to empty
          * and the comment list will be updated to show the new comment that was just added
          */
-        Button sendComment = findViewById(R.id.sendCommentButton);
+        Button sendComment = findViewById(R.id.activity_display_post_btn_add_comment);
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

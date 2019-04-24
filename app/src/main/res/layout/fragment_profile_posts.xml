@@ -6,7 +6,7 @@
     tools:context=".ProfilePostsFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/fragment_profile_posts_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

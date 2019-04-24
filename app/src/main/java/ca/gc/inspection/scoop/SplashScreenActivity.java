@@ -32,11 +32,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        email = findViewById(R.id.email_edit_text); // instantiating email
-        password = findViewById(R.id.password_edit_text); // instantiating password
+        email = findViewById(R.id.activity_splash_screen_et_email); // instantiating email
+        password = findViewById(R.id.activity_splash_screen_et_password); // instantiating password
 
-        emailLayout = findViewById(R.id.email_edit_text_layout); // instantiating email text field layout
-        passwordLayout = findViewById(R.id.password_edit_text_layout); // instantiating password text field layout
+        emailLayout = findViewById(R.id.activity_splash_screen_etl_email); // instantiating email text field layout
+        passwordLayout = findViewById(R.id.activity_splash_screen_etl_password); // instantiating password text field layout
 
         // text listeners for the edit text fields
         email.addTextChangedListener(new TextWatcher() {

@@ -32,17 +32,17 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         // text layout variables
-        firstNameLayout = findViewById(R.id.first_name_edit_layout);
-        lastNameLayout = findViewById(R.id.last_name_edit_layout);
-        emailLayout = findViewById(R.id.email_edit_text_layout);
-        passwordLayout = findViewById(R.id.password_edit_text_layout);
+        firstNameLayout = findViewById(R.id.activity_sign_up_etl_first_name);
+        lastNameLayout = findViewById(R.id.activity_sign_up_etl_last_name);
+        emailLayout = findViewById(R.id.activity_sign_up_etl_email);
+        passwordLayout = findViewById(R.id.activity_sign_up_etl_password);
 
         // Assigning front end ids to variables
-        firstNameET = findViewById(R.id.first_name_edit_text);
-        lastNameET = findViewById(R.id.last_name_edit_text);
-        emailET = findViewById(R.id.email_edit_text);
-        passwordET = findViewById(R.id.password_edit_text);
-        registerBTN = findViewById(R.id.sign_up_button);
+        firstNameET = findViewById(R.id.activity_sign_up_et_first_name);
+        lastNameET = findViewById(R.id.activity_sign_up_et_last_name);
+        emailET = findViewById(R.id.activity_sign_up_et_email);
+        passwordET = findViewById(R.id.activity_sign_up_et_password);
+        registerBTN = findViewById(R.id.activity_sign_up_btn_sign_up);
 
         // Setting the onclick method for the register button
         registerBTN.setOnClickListener(new View.OnClickListener() {

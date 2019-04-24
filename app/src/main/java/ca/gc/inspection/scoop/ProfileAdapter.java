@@ -4,23 +4,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class searchPageAdapter extends FragmentStatePagerAdapter {
+public class ProfileAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
 
-    public searchPageAdapter(FragmentManager fm, int NumOfTabs) {
+    public ProfileAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
     }
 
     @Override
     public Fragment getItem(int i) {
-        switch (i) {
+        switch(i) {
             case 0:
-                TopSearchResultsFragment tab1 = new TopSearchResultsFragment();
+                ProfilePostsFragment tab1 = new ProfilePostsFragment();
                 return tab1;
             case 1:
-                PeopleSearchResultsFragment tab2 = new PeopleSearchResultsFragment();
+                ProfileLikesFragment tab2 = new ProfileLikesFragment();
                 return tab2;
+            case 2:
+                ProfileCommentsFragment tab3 = new ProfileCommentsFragment();
+                return tab3;
             default:
                 return null;
         }

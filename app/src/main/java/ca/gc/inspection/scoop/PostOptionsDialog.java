@@ -19,12 +19,12 @@ public class PostOptionsDialog extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.dialog_post_options, container, false);
 
         // initializing all of the buttons
-        Button saveButton = view.findViewById(R.id.saveButton);
-        Button shareButton = view.findViewById(R.id.shareButton);
-        Button deleteButton = view.findViewById(R.id.deleteButton);
-        Button reportButton = view.findViewById(R.id.reportButton);
+        Button saveButton = view.findViewById(R.id.dialog_post_options_btn_save);
+        Button shareButton = view.findViewById(R.id.dialog_post_options_btn_share);
+        Button deleteButton = view.findViewById(R.id.dialog_post_options_btn_delete);
+        Button reportButton = view.findViewById(R.id.dialog_post_options_btn_report);
 
-        ImageView share = view.findViewById(R.id.shareImage);
+        ImageView share = view.findViewById(R.id.dialog_post_options_img_share);
         share.setVisibility(View.VISIBLE);
 
         // onClick listeners for all the buttons

@@ -1,11 +1,11 @@
 package ca.gc.inspection.scoop;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,9 @@ public class SavedPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_post);
 
+        // set the system status bar color
+        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
+
         // initializing test array
         test = new ArrayList<>();
 
@@ -38,7 +41,7 @@ public class SavedPostActivity extends AppCompatActivity {
         test.add("POST 4");
 
         // initializing the recycler view
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.activity_saved_post_rv);
         recyclerView.setHasFixedSize(true);
 
         // setting up the layout manager for the recycler view
@@ -46,7 +49,7 @@ public class SavedPostActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // setting up the custom adapter for the recycler view
-        adapter = new feedAdapter(test);
+        adapter = new PostFeedAdapter(test);
         recyclerView.setAdapter(adapter);
 
     }

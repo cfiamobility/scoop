@@ -2,25 +2,25 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_screen"
+    android:id="@+id/activity_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/frame_layout"
+        android:id="@+id/activity_main_vp_feed"
         android:layout_width="match_parent"
         android:layout_height="623dp"
-        android:layout_above="@+id/navigation"
+        android:layout_above="@+id/activity_main_bottom_navigation"
         android:layout_marginTop="56dp"
         android:layout_marginBottom="0dp"
         android:animateLayoutChanges="true" />
 
     <include
-        android:id="@+id/toolbar"
+        android:id="@+id/activity_main_toolbar"
         layout="@layout/toolbar" />
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
+        android:id="@+id/activity_main_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentStart="true"
@@ -32,7 +32,7 @@
         app:labelVisibilityMode="unlabeled"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/createPost"
+        android:id="@+id/activity_main_fbtn_create_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -47,7 +47,7 @@
         android:id="@+id/divider22"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@+id/frame_layout"
+        android:layout_above="@+id/activity_main_vp_feed"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="-56dp"
         android:background="?android:attr/listDivider" />
@@ -56,7 +56,7 @@
         android:id="@+id/divider24"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@+id/navigation"
+        android:layout_above="@+id/activity_main_bottom_navigation"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:background="?android:attr/listDivider" />

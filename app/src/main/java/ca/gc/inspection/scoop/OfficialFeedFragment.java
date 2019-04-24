@@ -47,7 +47,7 @@ public class OfficialFeedFragment extends Fragment {
         test.add("OFFICIAL 3");
 
         // initializing the recycler view
-        mRecyclerView = view.findViewById(R.id.recycler_view);
+        mRecyclerView = view.findViewById(R.id.fragment_official_feed_rv);
         mRecyclerView.setHasFixedSize(true);
 
         // setting up the layout manager for the recycler view
@@ -55,7 +55,7 @@ public class OfficialFeedFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting up the custom adapter for the recycler view
-        mAdpater = new feedAdapter(test);
+        mAdpater = new PostFeedAdapter(test);
         mRecyclerView.setAdapter(mAdpater);
 
         return view;

@@ -46,7 +46,7 @@ public class CommunityFeedFragment extends Fragment {
         test.add("ITEM 3");
 
         // setting up the recycler view
-        mRecyclerView = view.findViewById(R.id.recycler_view);
+        mRecyclerView = view.findViewById(R.id.fragment_community_feed_rv);
         mRecyclerView.setHasFixedSize(true);
 
         // setting the layout manager to the recycler view
@@ -54,7 +54,7 @@ public class CommunityFeedFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // using the custom adapter for the recycler view
-        mAdapter = new feedAdapter(test);
+        mAdapter = new PostFeedAdapter(test);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;

@@ -14,24 +14,24 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class feedAdapter extends RecyclerView.Adapter<feedAdapter.myViewHolder> {
+public class PostFeedAdapter extends RecyclerView.Adapter<PostFeedAdapter.myViewHolder> {
     List<String> testName;
 
-    public feedAdapter(List<String> name) {
+    public PostFeedAdapter(List<String> name) {
         this.testName = name;
     }
 
 
     @NonNull
     @Override
-    public feedAdapter.myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_row_feed, viewGroup, false);
+    public PostFeedAdapter.myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_post, viewGroup, false);
         myViewHolder vh = new myViewHolder(view);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull feedAdapter.myViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull PostFeedAdapter.myViewHolder myViewHolder, int i) {
         myViewHolder.textName.setText(testName.get(i));
 
         // to get the options menu to appear
@@ -83,9 +83,9 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.myViewHolder> 
 
         public myViewHolder(View itemView) {
             super(itemView);
-            textName = itemView.findViewById(R.id.name);
-            optionsMenu = itemView.findViewById(R.id.options_menu);
-            profileImage = itemView.findViewById(R.id.profile_image);
+            textName = itemView.findViewById(R.id.item_post_txt_name);
+            optionsMenu = itemView.findViewById(R.id.item_post_img_options);
+            profileImage = itemView.findViewById(R.id.item_post_img_profile);
         }
     }
 }

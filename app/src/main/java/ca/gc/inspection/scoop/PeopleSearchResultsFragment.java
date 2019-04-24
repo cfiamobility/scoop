@@ -44,7 +44,7 @@ public class PeopleSearchResultsFragment extends Fragment {
         test.add("PERSON 4");
 
         // initializing the recycler view
-        recyclerView = view.findViewById(R.id.peopleSearchRecyclerView);
+        recyclerView = view.findViewById(R.id.fragment_people_search_results_rv);
         recyclerView.setHasFixedSize(true);
 
         // setting up the layout manager for the recycler view
@@ -52,7 +52,7 @@ public class PeopleSearchResultsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // setting up the adapter of the recycler view to the custom people search results adapter
-        adapter = new peopleResultsAdapter(test);
+        adapter = new PeopleSearchResultsAdapter(test);
         recyclerView.setAdapter(adapter);
 
         return view;

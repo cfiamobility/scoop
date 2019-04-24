@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CreatePostActivity extends AppCompatActivity {
 
@@ -64,19 +67,22 @@ public class CreatePostActivity extends AppCompatActivity {
          *  counter: character counter for postText
          *
          */
-        postTitle = findViewById(R.id.postTitle);
+        postTitle = findViewById(R.id.activity_create_post_et_title);
 
-        postText = findViewById(R.id.postText);
+        postText = findViewById(R.id.activity_create_post_et_post_content);
         postText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(255) });
         postText.addTextChangedListener(mTextEditorWatcher);
 
-        postImage = findViewById(R.id.postImage);
+        postImage = findViewById(R.id.activity_create_post_img_post);
 
-        counter = findViewById(R.id.counter);
+        counter = findViewById(R.id.activity_create_post_txt_word_counter);
 
-        Button camera = findViewById(R.id.cameraButton);
-        Button cameraRoll = findViewById(R.id.imageButton);
-        Button send = findViewById(R.id.postSend);
+        Button camera = findViewById(R.id.activity_create_post_btn_camera);
+        Button cameraRoll = findViewById(R.id.activity_create_post_btn_image);
+        Button send = findViewById(R.id.activity_create_post_btn_post);
+
+        // set the system status bar color
+        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
 
         /** OnClickListener for the camera button that launches the native camera app.
@@ -222,7 +228,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 Bitmap newBitmap = MyCamera.imageOrientationValidator(bitmap, path);
 
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.addRule(RelativeLayout.BELOW, R.id.postText);
+                layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
                 postImage.setLayoutParams(layoutParams);
                 postImage.setImageBitmap(newBitmap);
             } else {

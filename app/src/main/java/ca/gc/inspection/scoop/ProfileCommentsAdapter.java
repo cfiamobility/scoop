@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class profileCommentsAdapter extends RecyclerView.Adapter<profileCommentsAdapter.likesViewHolder> {
+public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileCommentsAdapter.likesViewHolder> {
 
     // test array list
     List<String> testLikes;
 
-    public profileCommentsAdapter(List<String> test) {
+    public ProfileCommentsAdapter(List<String> test) {
         this.testLikes = test;
     }
 
@@ -41,7 +41,7 @@ public class profileCommentsAdapter extends RecyclerView.Adapter<profileComments
 
         public likesViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameText = itemView.findViewById(R.id.name);
+            nameText = itemView.findViewById(R.id.item_profile_comments_txt_name);
         }
     }
 }

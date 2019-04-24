@@ -29,15 +29,15 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // initializing the tab layout for profile -> posts, likes, comments
-        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+        TabLayout tabLayout = view.findViewById(R.id.fragment_profile_tl_profile);
         tabLayout.addTab(tabLayout.newTab().setText("POSTS"));
         tabLayout.addTab(tabLayout.newTab().setText("LIKES"));
         tabLayout.addTab(tabLayout.newTab().setText("COMMENTS"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         // initiailizing the view pager and page adapter for it
-        final ViewPager viewPager = view.findViewById(R.id.viewPager);
-        final PagerAdapter adapter = new profilePageAdapter
+        final ViewPager viewPager = view.findViewById(R.id.fragment_profile_vp);
+        final PagerAdapter adapter = new ProfileAdapter
                 (getChildFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
 

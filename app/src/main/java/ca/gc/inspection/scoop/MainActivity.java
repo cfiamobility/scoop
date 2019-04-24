@@ -45,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
         // set out custom menu_action_bar as the default action bar
-        final Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
 
         // initializing create post button
-        createPost = findViewById(R.id.createPost);
+        createPost = findViewById(R.id.activity_main_fbtn_create_post);
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // initializing viewPage
-        viewPager = findViewById(R.id.frame_layout);
+        viewPager = findViewById(R.id.activity_main_vp_feed);
 
         // initializing drawerLayout
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -71,9 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.saved_posts:
                         startActivity(new Intent(getApplicationContext(), SavedPostActivity.class));
-                        break;
-                    case R.id.edit_profile:
-                        startActivity(new Intent(getApplicationContext(), EditProfileActivity.class));
                         break;
                     case R.id.settings:
                         startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
@@ -107,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_account_circle_blue_24dp);
 
         // inflating the bottom navigation bar
-        final BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -202,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.search:
-                startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                startActivity(new Intent(getApplicationContext(), SearchActivity.class)); // when the search icon is tapped
                 finish();
                 break;
         }

@@ -3,21 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
-    >
+    android:layout_height="90dp">
 
-
-        <ImageView
-            android:id="@+id/profile_image"
-            android:layout_width="50dp"
-            android:layout_height="43dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="26dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp" />
-
+    <ImageView
+        android:id="@+id/item_post_img_profile"
+        android:layout_width="50dp"
+        android:layout_height="43dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="26dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp" />
 
     <TextView
         android:id="@+id/fullname"
@@ -29,7 +26,7 @@
         android:layout_marginEnd="2.5dp"
         android:layout_marginStart="27dp"
         android:layout_marginTop="24dp"
-        android:layout_toEndOf="@+id/profile_image"
+        android:layout_toEndOf="@+id/item_post_img_profile"
         android:onClick="goToProfile"
         android:textStyle="bold" />
 
@@ -42,8 +39,7 @@
         android:layout_marginStart="2.5dp"
         android:layout_marginEnd="2.5dp"
         android:layout_marginTop="24dp"
-        android:layout_toEndOf="@+id/fullname"
-        />
+        android:layout_toEndOf="@+id/fullname" />
 
     <TextView
         android:id="@+id/activitytype"
@@ -67,24 +63,24 @@
             android:layout_marginStart="27dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
-            android:layout_toEndOf="@+id/profile_image"
+            android:layout_toEndOf="@+id/item_post_img_profile"
             android:text="1 hour ago"
             android:textSize="12sp" />
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="1dp"
-            android:background="?android:attr/listDivider" />
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="?android:attr/listDivider" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/profile_image"
+        android:layout_alignStart="@+id/item_post_img_profile"
         android:layout_alignTop="@+id/fullname" />
 
 </RelativeLayout>

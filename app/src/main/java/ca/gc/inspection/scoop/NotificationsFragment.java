@@ -16,14 +16,14 @@ import org.json.JSONArray;
 
 import java.sql.Timestamp;
 
-public class NotificationsFragment extends Fragment implements NotificationsScreenController.NotificationInterface{
+public class NotificationsFragment extends Fragment implements NotificationsController.NotificationInterface{
 
 
     private RecyclerView todayRecyclerView, recentRecyclerView;
     private RecyclerView.Adapter todayAdapter, recentAdapter;
     private RecyclerView.LayoutManager todayLayoutManager, recentLayoutManager;
     private TextView today, recent;
-    private NotificationsScreenController notificationsScreenController;
+    private NotificationsController notificationsScreenController;
     private View view;
 
 
@@ -39,14 +39,14 @@ public class NotificationsFragment extends Fragment implements NotificationsScre
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        notificationsScreenController = new NotificationsScreenController(this); //instantiates controller for notifications screen
+        notificationsScreenController = new NotificationsController(this); //instantiates controller for notifications screen
 
         new TodayTask().execute(); //executes async task for today notifications
         new RecentTask().execute(); //executes async task for recent notifications
 
 
-        today = (TextView) view.findViewById(R.id.today); //instantiating the today textview
-        recent = (TextView) view.findViewById(R.id.recent); //instantiating the recent textview
+        today = (TextView) view.findViewById(R.id.fragment_notifications_txt_today); //instantiating the today textview
+        recent = (TextView) view.findViewById(R.id.fragment_notifications_txt_recent); //instantiating the recent textview
     }
 
 
@@ -59,11 +59,11 @@ public class NotificationsFragment extends Fragment implements NotificationsScre
      */
     @Override
     public void setRecentRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notificationResponse, JSONArray imageResponse) {
-        recentRecyclerView = (RecyclerView) view.findViewById(R.id.recentrecyclerview); //instantiating the recyclerview
+        recentRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_notifications_rv_recent); //instantiating the recyclerview
         recentRecyclerView.setHasFixedSize(true);
         recentLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
         recentRecyclerView.setLayoutManager(recentLayoutManager); //sets the layout manager to one chosen
-        recentAdapter = new NotificationsScreenAdapter(notificationResponse, imageResponse, requestQueue, "recent", currentTime); //instantiates the adapter
+        recentAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "recent", currentTime); //instantiates the adapter
         recentRecyclerView.setAdapter(recentAdapter); //sets the adapter
         notificationsScreenController.listenRecentRecyclerView(recentRecyclerView);
 
@@ -78,11 +78,11 @@ public class NotificationsFragment extends Fragment implements NotificationsScre
      */
     @Override
     public void setTodayRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notificationResponse, JSONArray imageResponse) {
-        todayRecyclerView = (RecyclerView) view.findViewById(R.id.todayrecyclerview); //instantiating the recyclerview
+        todayRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_notifications_rv_today); //instantiating the recyclerview
         todayRecyclerView.setHasFixedSize(true); //
         todayLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
         todayRecyclerView.setLayoutManager(todayLayoutManager); //sets the layout manager to one chosen
-        todayAdapter = new NotificationsScreenAdapter(notificationResponse, imageResponse, requestQueue, "today", currentTime); //instantiates the adapter
+        todayAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "today", currentTime); //instantiates the adapter
         todayRecyclerView.setAdapter(todayAdapter); //sets the adapter
         notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
 
@@ -126,7 +126,7 @@ public class NotificationsFragment extends Fragment implements NotificationsScre
      */
     @Override
     public void hideLoadingPanel(){
-        view.findViewById(R.id.loadingPanel).setVisibility(View.GONE); //sets the loading screen to gone
+        view.findViewById(R.id.fragment_notifications_rl_loading_panel).setVisibility(View.GONE); //sets the loading screen to gone
     }
 
     /**
@@ -134,7 +134,7 @@ public class NotificationsFragment extends Fragment implements NotificationsScre
      */
     @Override
     public void requestTodayFocus(){
-        view.findViewById(R.id.todayrecyclerview).setFocusable(false);
+        view.findViewById(R.id.fragment_notifications_rv_today).setFocusable(false);
         view.findViewById(R.id.view1).requestFocus();
     }
 
@@ -143,7 +143,7 @@ public class NotificationsFragment extends Fragment implements NotificationsScre
      */
     @Override
     public void requestRecentFocus(){
-        view.findViewById(R.id.recentrecyclerview).setFocusable(false);
+        view.findViewById(R.id.fragment_notifications_rv_recent).setFocusable(false);
         view.findViewById(R.id.view3).requestFocus();
     }
 

@@ -46,7 +46,7 @@ public class ProfilePostsFragment extends Fragment {
         test.add("POST 3");
 
         // initializing the recycler view
-        mRecyclerView = view.findViewById(R.id.recycler_view);
+        mRecyclerView = view.findViewById(R.id.fragment_profile_posts_rv);
         mRecyclerView.setHasFixedSize(true);
 
         // setting the layout manager for the recycler view
@@ -54,7 +54,7 @@ public class ProfilePostsFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting the custom adapter for the recycler view
-        mAdapter = new feedAdapter(test);
+        mAdapter = new PostFeedAdapter(test);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;

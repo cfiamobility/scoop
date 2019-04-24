@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NotificationsScreenAdapterController {
+public class NotificationsAdapterController {
     private JSONObject notification, image;
     private NotificationViewHolder holder;
     private NotificationAdapterInterface notificationAdapterInterface;
@@ -24,7 +24,7 @@ public class NotificationsScreenAdapterController {
     private Timestamp currentTime;
     private String timeType;
 
-    public NotificationsScreenAdapterController(NotificationViewHolder holder, int i, NotificationAdapterInterface notificationAdapterInterface, JSONArray notifications, JSONArray images, Timestamp currentTime, String timeType) {
+    public NotificationsAdapterController(NotificationViewHolder holder, int i, NotificationAdapterInterface notificationAdapterInterface, JSONArray notifications, JSONArray images, Timestamp currentTime, String timeType) {
         this.holder = holder;
         this.notificationAdapterInterface = notificationAdapterInterface;
         try {

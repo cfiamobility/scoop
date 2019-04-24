@@ -44,7 +44,7 @@ public class TopSearchResultsFragment extends Fragment {
         test.add("TOP 3");
 
         // initializing the recycler view
-        recyclerView = view.findViewById(R.id.topSearchRecyclerView);
+        recyclerView = view.findViewById(R.id.fragment_top_search_results_rv);
         recyclerView.setHasFixedSize(true);
 
         // setting up the layout manager for the recycler view
@@ -52,7 +52,7 @@ public class TopSearchResultsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // setting the adapter of the recycler view to the custom feed adapter
-        adapter = new feedAdapter(test);
+        adapter = new PostFeedAdapter(test);
         recyclerView.setAdapter(adapter);
 
         return view;
