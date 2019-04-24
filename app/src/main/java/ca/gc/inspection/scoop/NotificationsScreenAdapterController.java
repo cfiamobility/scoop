@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class NotificationsScreenAdapterController {
     private JSONObject notification, image;
@@ -85,11 +86,19 @@ public class NotificationsScreenAdapterController {
             String createdDate = notification.getString("createddate"); //gets when the notification was created
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(createdDate); //parses the created date to be in specified date format
-            Log.i("postdate", parsedDate.toString());
+            SimpleDateFormat currentTimeFormat = new SimpleDateFormat();
+            TimeZone gmtTime = TimeZone.getTimeZone("GMT");
+            currentTimeFormat.setTimeZone(gmtTime);
+            String date = currentTimeFormat.format(new Date());
+            Date currentTime = currentTimeFormat.parse(date);
+            Timestamp currentTimestamp = new Timestamp(currentTime.getTime());
+            Log.i("postdate", date);
+            Log.i("realpostdate", parsedDate.toString());
             Timestamp timestamp = new Timestamp(parsedDate.getTime()); //creates a timestamp from the date
             Log.i("time", String.valueOf(timestamp.getTime()));
-            Log.i("hello", String.valueOf(currentTime.getTime()));
-            long diff = currentTime.getTime() - timestamp.getTime(); //gets the difference between the two timestamps
+            Log.i("hello", String.valueOf(currentTimestamp.getTime()));
+            long diff = currentTimestamp.getTime() - timestamp.getTime(); //gets the difference between the two timestamps
+            Log.i("helloo", String.valueOf(((diff/(1000*60*60)))));
             String diffHours = String.valueOf((int) ((diff / (1000 * 60 * 60)))); //stores it in a string representing hours
             return diffHours + " hours ago";
         } catch (Exception e) {
