@@ -47,6 +47,7 @@ public class NotificationsScreen extends Fragment implements NotificationsScreen
 
         today = (TextView) view.findViewById(R.id.today); //instantiating the today textview
         recent = (TextView) view.findViewById(R.id.recent); //instantiating the recent textview
+        
     }
 
 

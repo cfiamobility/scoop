@@ -46,7 +46,7 @@ public class savedPostScreen extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // setting up the custom adapter for the recycler view
-        adapter = new feedAdapter(test);
+        adapter = new ProfileAdapter();
         recyclerView.setAdapter(adapter);
 
     }
