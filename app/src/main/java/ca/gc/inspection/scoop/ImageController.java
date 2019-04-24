@@ -9,13 +9,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class ImageController extends ProfileFeedController {
+public class ImageController extends ProfilePostsFeedController {
     private JSONObject images;
-    private FeedPostViewHolder holder;
+    private FeedViewHolder holder;
     private ImageInterface imageInterface;
 
-    public ImageController(ImageInterface imageInterface, JSONArray posts, JSONArray images, int i, FeedPostViewHolder holder){
-        super(imageInterface, posts, i, holder);
+    public ImageController(ImageInterface imageInterface, JSONArray posts, JSONArray images, int i, FeedViewHolder holder){
+        super(imageInterface, posts, images, i, holder);
 
         this.imageInterface = imageInterface;
         try {
@@ -63,7 +63,7 @@ public class ImageController extends ProfileFeedController {
     }
 
     public interface ImageInterface extends ProfileFeedInterface {
-        void setPostImage(Bitmap image, FeedPostViewHolder  holder);
-        void hidePostImage(FeedPostViewHolder  holder);
+        void setPostImage(Bitmap image, FeedViewHolder holder);
+        void hidePostImage(FeedViewHolder holder);
     }
 }

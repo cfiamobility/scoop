@@ -1,10 +1,7 @@
 package ca.gc.inspection.scoop;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -181,6 +178,7 @@ public class MostGenericController {
      * @param likeState: like type of post
      */
     private void checkLikeState(String likeState){
+        Log.i("likestate", likeState);
         switch(likeState){
             case "1": mostGenericInterface.setLikeUpvoteState(holder);
                 break;

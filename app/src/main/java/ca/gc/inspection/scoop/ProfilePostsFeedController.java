@@ -15,14 +15,21 @@ import java.util.Map;
 /**
  * performs all logic and HTTP requests for the FeedAdapter
  */
-public class ProfileFeedController extends MostGenericController{
+public class ProfilePostsFeedController extends MostGenericController{
     private JSONObject post;
-    private ProfileFeedViewHolder holder;
+    private ProfilePostsFeedViewHolder holder;
     private ProfileFeedInterface profileFeedInterface;
     private Map<String, String> likeProperties;
 
-    public ProfileFeedController(ProfileFeedInterface profileFeedInterface, JSONArray posts, int i, ProfileFeedViewHolder holder){
-        super(profileFeedInterface, posts, i, holder);
+    /**
+     * @param profileFeedInterface: inherits from MostGenericInterface and declares all its methods
+     * @param posts: JSONArray of posts from the database
+     * @param images: JSONArray of profile images from the database
+     * @param i: counter for the array adapter
+     * @param holder: view holder that contains all the front end declarations
+     */
+    public ProfilePostsFeedController(ProfileFeedInterface profileFeedInterface, JSONArray posts, JSONArray images, int i, ProfilePostsFeedViewHolder holder){
+        super(profileFeedInterface, posts, images, i, holder);
         this.profileFeedInterface = profileFeedInterface;
         try {
             this.post = posts.getJSONObject(i);
@@ -33,6 +40,11 @@ public class ProfileFeedController extends MostGenericController{
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
     }
 
+    /**
+     * Super runs the display post in MostGeneric
+     * Displays the posts in the profile
+     * @throws JSONException
+     */
     @Override
     public void displayPost() throws JSONException{
         super.displayPost();
@@ -50,6 +62,10 @@ public class ProfileFeedController extends MostGenericController{
         });
     }
 
+    /**
+     * Sets the post title
+     * @throws JSONException
+     */
     @Override
     public void formPostTitle() throws JSONException {
         profileFeedInterface.setPostTitle(post.getString("posttitle"), holder);
@@ -68,8 +84,10 @@ public class ProfileFeedController extends MostGenericController{
         }
     }
 
-
+    /**
+     * Interface that inherits from mostgeneric interface
+     */
     public interface ProfileFeedInterface extends MostGenericController.MostGenericInterface{
-        void setCommentCount(String commentCount, ProfileFeedViewHolder holder);
+        void setCommentCount(String commentCount, ProfilePostsFeedViewHolder holder);
     }
 }

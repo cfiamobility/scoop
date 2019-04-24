@@ -1,7 +1,6 @@
 package ca.gc.inspection.scoop;
 
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,13 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.RequestQueue;
-
 import org.json.JSONArray;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -38,7 +31,13 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostsContro
         // Required empty public constructor
     }
 
-
+    /**
+     *
+     * @param inflater: inflates the layout
+     * @param container: contains the layout
+     * @param savedInstanceState: ??
+     * @return - returns the view created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,6 +48,11 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostsContro
         return view;
     }
 
+    /**
+     * See - Fragment Lifecycle
+     * @param view: the view
+     * @param savedInstanceState: ??
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -56,6 +60,11 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostsContro
         profilePostsController.getUserPosts(userid);
     }
 
+    /**
+     * Sets the recycler view with the adapter created
+     * @param posts: JSONArray of posts from db
+     * @param images: JSONArray of profile pictures from db
+     */
     @Override
     public void setPostRecyclerView(JSONArray posts, JSONArray images) {
         // initializing the recycler view

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > implements ImageController.ImageInterface{
+public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements ImageController.ImageInterface{
     private JSONArray posts, images;
 
     public feedAdapter(JSONArray posts, JSONArray images) {
@@ -23,14 +23,14 @@ public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > imple
 
     @NonNull
     @Override
-    public FeedPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_row_feed, viewGroup, false);
-        FeedPostViewHolder vh = new FeedPostViewHolder(view);
+        FeedViewHolder vh = new FeedViewHolder(view);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FeedPostViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull FeedViewHolder holder, int i) {
 
        ImageController imageController = new ImageController(this, posts, images, i, holder);
         try {
@@ -73,7 +73,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > imple
      * @param holder: viewholder of item
      */
     @Override
-    public void setPostImage(Bitmap image, FeedPostViewHolder  holder) {
+    public void setPostImage(Bitmap image, FeedViewHolder holder) {
         holder.postImage.setImageBitmap(image);
     }
 
@@ -83,7 +83,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > imple
      * @param holder: viewholder of item
      */
     @Override
-    public void setUserImage(Bitmap image, FeedPostViewHolder  holder) {
+    public void setUserImage(Bitmap image, MostGenericViewHolder  holder) {
         holder.profileImage.setImageBitmap(image);
     }
 
@@ -153,7 +153,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > imple
      * @param holder: viewholder of item
      */
     @Override
-    public void setCommentCount(String commentCount, ProfileFeedViewHolder holder) {
+    public void setCommentCount(String commentCount, ProfilePostsFeedViewHolder holder) {
         holder.commentCount.setText(commentCount);
     }
 
@@ -162,7 +162,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > imple
      * @param holder: viewholder of item
      */
     @Override
-    public void hidePostImage(FeedPostViewHolder  holder) {
+    public void hidePostImage(FeedViewHolder holder) {
         holder.postImage.setVisibility(View.GONE);
     }
 

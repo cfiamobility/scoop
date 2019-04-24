@@ -3,10 +3,10 @@ package ca.gc.inspection.scoop;
 import android.view.View;
 import android.widget.ImageView;
 
-public class FeedPostViewHolder extends ProfileFeedViewHolder {
+public class FeedViewHolder extends ProfilePostsFeedViewHolder {
     ImageView postImage;
 
-    public FeedPostViewHolder(View v) {
+    public FeedViewHolder(View v) {
         super(v);
         postImage = v.findViewById(R.id.post_image);
     }

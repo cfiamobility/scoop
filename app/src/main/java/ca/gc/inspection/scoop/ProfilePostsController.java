@@ -14,16 +14,24 @@ import java.util.Map;
 public class ProfilePostsController {
 	private ProfilePostsInterface profilePostsInterface;
 
+	/**
+	 * Contructor
+	 * @param profilePostsInterface: interface at the bottom of this class
+	 */
 	public ProfilePostsController(ProfilePostsInterface profilePostsInterface) {
 		this.profilePostsInterface = profilePostsInterface;
 	}
 
+	/**
+	 * HTTP Requests to get all the user posts infos
+	 * @param userid: passes the userid of the profile clicked on
+	 */
 	public void getUserPosts(final String userid) {
-		String url = Config.baseIP + "/profile/posttextfill/" + userid;
+		String url = Config.baseIP + "profile/posttextfill/" + userid + "/" + Config.currentUser;
 		JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 			@Override
 			public void onResponse(final JSONArray postsResponse) {
-				String url = Config.baseIP + "/profile/postimagefill/" + userid;
+				String url = Config.baseIP + "profile/postimagefill/"  + userid;
 				final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 					@Override
 					public void onResponse(JSONArray imagesResponse) {
@@ -60,6 +68,9 @@ public class ProfilePostsController {
 		Config.requestQueue.add(postRequest);
 	}
 
+	/**
+	 * Interface that sets the recycler view
+	 */
 	public interface ProfilePostsInterface {
 		void setPostRecyclerView(JSONArray posts, JSONArray images);
 	}
