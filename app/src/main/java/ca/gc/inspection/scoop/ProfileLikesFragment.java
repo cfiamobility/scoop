@@ -38,13 +38,6 @@ public class ProfileLikesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_likes, container, false);
 
-        // initiailizng test array
-        test = new ArrayList<>();
-
-        test.add("LIKE 1");
-        test.add("LIKE 2");
-        test.add("LIKE 3");
-
         // initializing recycler view
         mRecyclerView = view.findViewById(R.id.fragment_profile_likes_rv);
         mRecyclerView.setHasFixedSize(true);

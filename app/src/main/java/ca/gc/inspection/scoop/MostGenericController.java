@@ -101,7 +101,7 @@ public class MostGenericController {
     }
 
     public void formPostTitle() throws JSONException {
-        mostGenericInterface.setPostTitle(post.getString("posttitle"), holder);
+        mostGenericInterface.setPostTitle("Replying to " + post.getString("postfirstname") + " " + post.getString("postlastname") + "'s post", holder);
     }
 
     /**
@@ -392,7 +392,6 @@ public class MostGenericController {
     private void formatImage(String image){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
         mostGenericInterface.setUserImage(bitmap, holder);
-
     }
 
     public interface MostGenericInterface{
