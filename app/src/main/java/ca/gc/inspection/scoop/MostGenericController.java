@@ -1,10 +1,7 @@
 package ca.gc.inspection.scoop;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -91,14 +88,14 @@ public class MostGenericController {
         holder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TabFragment.viewPager.setCurrentItem(3);
+                mainScreen.otherUserClicked(posterid);
             }
         });
 
         holder.username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TabFragment.viewPager.setCurrentItem(3);
+                mainScreen.otherUserClicked(posterid);
             }
         });
     }
@@ -182,6 +179,7 @@ public class MostGenericController {
      * @param likeState: like type of post
      */
     private void checkLikeState(String likeState){
+        Log.i("likestate", likeState);
         switch(likeState){
             case "1": mostGenericInterface.setLikeUpvoteState(holder);
                 break;

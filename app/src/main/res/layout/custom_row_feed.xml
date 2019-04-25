@@ -88,10 +88,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/post_text"
-            android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="54dp"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/up_vote"

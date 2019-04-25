@@ -48,6 +48,11 @@ public class OtherUserFragment extends Fragment {
 		// Getting the activity from the view
 		activity = (Activity) view.getContext();
 
+		// Getting the clicked on user's userid from the bundle set in mainscreen
+		Bundle bundle = getArguments();
+		String userid = bundle.getString("userid");
+		Log.i("userid", userid);
+
 		// ImageView Definitions
 		profileImageIV = view.findViewById(R.id.otherProfileImage);
 		facebookIV = view.findViewById(R.id.otherFacebookLogo);
@@ -70,7 +75,7 @@ public class OtherUserFragment extends Fragment {
 
 		// initiailizing the view pager and page adapter for it
 		final ViewPager viewPager = view.findViewById(R.id.otherViewPager);
-		final PagerAdapter adapter = new profilePageAdapter(getChildFragmentManager(), tabLayout.getTabCount());
+		final PagerAdapter adapter = new profilePageAdapter(getChildFragmentManager(), tabLayout.getTabCount(), userid);
 		viewPager.setAdapter(adapter);
 
 		// a select listener to display the right tab fragment
@@ -87,11 +92,6 @@ public class OtherUserFragment extends Fragment {
 			@Override
 			public void onTabReselected(TabLayout.Tab tab) {}
 		});
-
-		// Getting the clicked on user's userid from the bundle set in mainscreen
-		Bundle bundle = getArguments();
-		String userid = bundle.getString("userid");
-		Log.i("userid", userid);
 
 		// Getting the information from the database - ProfileScreenController
 		ProfileScreenController.getOtherUserInfo(getContext(), userid);
