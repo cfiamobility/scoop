@@ -70,7 +70,7 @@ public class OtherUserFragment extends Fragment {
 
 		// initiailizing the view pager and page adapter for it
 		final ViewPager viewPager = view.findViewById(R.id.otherViewPager);
-		final PagerAdapter adapter = new profilePageAdapter(getChildFragmentManager(), tabLayout.getTabCount());
+		final PagerAdapter adapter = new ProfileFragmentPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount());
 		viewPager.setAdapter(adapter);
 
 		// a select listener to display the right tab fragment

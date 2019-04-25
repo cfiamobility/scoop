@@ -1,36 +1,23 @@
 package ca.gc.inspection.scoop;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.ViewGroup;
 
-public class ProfileAdapter extends FragmentStatePagerAdapter {
-    int mNumOfTabs;
-
-    public ProfileAdapter(FragmentManager fm, int NumOfTabs) {
-        super(fm);
-        this.mNumOfTabs = NumOfTabs;
+public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
+    @NonNull
+    @Override
+    public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        return null;
     }
 
     @Override
-    public Fragment getItem(int i) {
-        switch(i) {
-            case 0:
-                ProfilePostsFragment tab1 = new ProfilePostsFragment();
-                return tab1;
-            case 1:
-                ProfileLikesFragment tab2 = new ProfileLikesFragment();
-                return tab2;
-            case 2:
-                ProfileCommentsFragment tab3 = new ProfileCommentsFragment();
-                return tab3;
-            default:
-                return null;
-        }
+    public void onBindViewHolder(@NonNull ProfileViewHolder profileViewHolder, int i) {
+
     }
 
     @Override
-    public int getCount() {
-        return mNumOfTabs;
+    public int getItemCount() {
+        return 0;
     }
 }

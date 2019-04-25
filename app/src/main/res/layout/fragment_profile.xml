@@ -191,15 +191,14 @@
         android:id="@+id/fragment_profile_btn_edit_profile"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:layout_below="@+id/fragment_profile_tl_social_media"
+        android:layout_below="@+id/fragment_profile_img_profile"
         android:layout_marginStart="-85dp"
-        android:layout_marginTop="-20dp"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/fragment_profile_img_profile"
         android:background="@drawable/btn_border"
         android:text="Edit"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="12sp"
-        android:visibility="gone"/>
+        android:textSize="12sp" />
 
 </RelativeLayout>

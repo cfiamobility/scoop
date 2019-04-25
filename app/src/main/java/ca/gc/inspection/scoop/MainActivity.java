@@ -27,7 +27,7 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
     // UI Declarations
-    public static Button createPost;
+    public static FloatingActionButton createPost;
     private DrawerLayout drawerLayout;
     static BottomNavigationView bottomNavigationView;
     MenuItem previousMenuItem;
@@ -60,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(v.getContext(), CreatePostActivity.class));
             }
         });
-
-        // initializing viewPage
-        viewPager = findViewById(R.id.activity_main_vp_feed);
 
         // initializing drawerLayout
         drawerLayout = findViewById(R.id.drawer_layout);

@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -18,17 +19,17 @@ public class TabFragment extends Fragment {
 
 	// UI Declarations
 	static ViewPager viewPager;
-	static Button createPost;
-	static viewPagerAdapter adapter;
+	static FloatingActionButton createPost;
+	static MainViewPagerAdapter adapter;
 
 	// Application support declaration
 	MenuItem previousMenuItem;
 
 	// Fragment Declarations
-	static communityFeedScreen communityFragment;
-	static officialFeedScreen officialFragment;
-	static NotificationsScreen notificationFragment;
-	static profileScreen profileFragment;
+	static CommunityFeedFragment communityFragment;
+	static OfficialFeedFragment officialFragment;
+	static NotificationsFragment notificationFragment;
+	static ProfileFragment profileFragment;
 
 	public TabFragment() {
 		// Required empty public constructor
@@ -43,15 +44,6 @@ public class TabFragment extends Fragment {
 		Log.i("recreated", "recreated");
 		// UI Definitions
 		viewPager = view.findViewById(R.id.tabFrameLayout);
-		createPost = view.findViewById(R.id.createPost);
-
-		// When + button is pressed and create post activity is opened
-		createPost.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(view.getContext(), CreatePostScreen.class));
-			}
-		});
 
 		// Setting up the view pager with all the neccessary fragments
 		setupViewPager(viewPager);
@@ -69,28 +61,27 @@ public class TabFragment extends Fragment {
 				if (previousMenuItem != null) {
 					previousMenuItem.setChecked(false);
 				} else {
-					mainScreen.bottomNavigationView.getMenu().getItem(0).setChecked(true);
+					MainActivity.bottomNavigationView.getMenu().getItem(0).setChecked(true);
+
 				}
 
 				// Setting the highlight for swipe
-				mainScreen.bottomNavigationView.getMenu().getItem(i).setChecked(true);
-				previousMenuItem = mainScreen.bottomNavigationView.getMenu().getItem(i);
+				MainActivity.bottomNavigationView.getMenu().getItem(i).setChecked(true);
+				previousMenuItem = MainActivity.bottomNavigationView.getMenu().getItem(i);
 
 				// setting the title of the page every time you switch tabs and whether or not the create post button shows
 				if (i == 0) {
 					// Sets Title
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Community");
-					// Sets + button visibility
-					createPost.setVisibility(View.VISIBLE);
 				} else if (i == 1) {
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Official");
-					createPost.setVisibility(View.VISIBLE);
+
 				} else if (i == 2) {
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Notifications");
-					createPost.setVisibility(View.INVISIBLE);
+
 				} else {
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Profile");
-					createPost.setVisibility(View.INVISIBLE);
+
 				}
 			}
 
@@ -118,24 +109,19 @@ public class TabFragment extends Fragment {
 			case R.id.community:
 				// Set the page
 				viewPager.setCurrentItem(0);
-				// Sets button visibility
-				createPost.setVisibility(View.VISIBLE);
 				// Sets return value
 				returnedValue = 0;
 				break;
 			case R.id.official:
 				viewPager.setCurrentItem(1);
-				createPost.setVisibility(View.VISIBLE);
 				returnedValue = 1;
 				break;
 			case R.id.notifications:
 				viewPager.setCurrentItem(2);
-				createPost.setVisibility(View.INVISIBLE);
 				returnedValue = 2;
 				break;
 			case R.id.profile:
 				viewPager.setCurrentItem(3);
-				createPost.setVisibility(View.INVISIBLE);
 				returnedValue = 3;
 				break;
 		}
@@ -147,12 +133,12 @@ public class TabFragment extends Fragment {
 	 * @param viewPager
 	 */
 	private static void setupViewPager(ViewPager viewPager) {
-		adapter = new viewPagerAdapter(mainScreen.manager);
+		adapter = new MainViewPagerAdapter(MainActivity.manager);
 
-		communityFragment = new communityFeedScreen();
-		officialFragment = new officialFeedScreen();
-		notificationFragment = new NotificationsScreen();
-		profileFragment =  new profileScreen();
+		communityFragment = new CommunityFeedFragment();
+		officialFragment = new OfficialFeedFragment();
+		notificationFragment = new NotificationsFragment();
+		profileFragment =  new ProfileFragment();
 
 		adapter.addFragment(communityFragment);
 		adapter.addFragment(officialFragment);

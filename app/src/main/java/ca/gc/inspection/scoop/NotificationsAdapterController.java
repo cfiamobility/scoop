@@ -165,7 +165,7 @@ public class NotificationsAdapterController {
         holder.profileImage.setOnClickListener(new View.OnClickListener() { //on click for the image
             @Override
             public void onClick(View view) {
-                mainScreen.otherUserClicked(ids.get("userid"));
+                MainActivity.otherUserClicked(ids.get("userid"));
             }
         });
     }
@@ -307,7 +307,7 @@ public class NotificationsAdapterController {
             holder.fullName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainScreen.otherUserClicked(ids.get("userid"));
+                    MainActivity.otherUserClicked(ids.get("userid"));
                 }
             });
         }

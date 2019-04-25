@@ -682,7 +682,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 				params.put("city", cityET.getText().toString());
 				params.put("province", provinceSpinner.getSelectedItem().toString());
 				params.put("image", image);
-				EditUserController.updateUserInfo(editProfileScreen.this, params);
+				EditUserController.updateUserInfo(EditProfileActivity.this, params);
 			} else {
 				Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
 			}

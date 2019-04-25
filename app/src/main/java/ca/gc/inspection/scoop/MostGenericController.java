@@ -83,7 +83,7 @@ public class MostGenericController {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), displayPost.class));
+                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
             }
         });
 
@@ -380,7 +380,7 @@ public class MostGenericController {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), displayPost.class));
+                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
             }
         });
     }

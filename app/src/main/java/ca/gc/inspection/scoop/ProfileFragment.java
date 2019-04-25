@@ -12,7 +12,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -27,9 +29,12 @@ public class ProfileFragment extends Fragment {
 
     // UI Declarations
     static CircleImageView profileImageIV;
-    static ImageView facebookIV, instagramIV, twitterIV, locationLogo, linkedinIV;
+    static ImageView facebookIV, instagramIV, twitterIV, linkedinIV;
     static TextView fullNameTV, roleTV, locationTV;
     static Activity activity;
+    static TableRow facebookTR, instagramTR, twitterTR, linkedinTR;
+    static Button editProfile;
+    static TextView facebookUrl, instagramUrl, twitterUrl, linkedinUrl;
 
 
     public ProfileFragment() {
@@ -46,17 +51,37 @@ public class ProfileFragment extends Fragment {
         activity = (Activity) view.getContext();
 
         // ImageView Definitions
-        profileImageIV = view.findViewById(R.id.profileImage);
-        facebookIV = view.findViewById(R.id.facebookLogo);
-        instagramIV = view.findViewById(R.id.instagramLogo);
-        twitterIV = view.findViewById(R.id.twitterLogo);
-        linkedinIV = view.findViewById(R.id.linkedinLogo);
-        locationLogo = view.findViewById(R.id.locationLogo);
+        profileImageIV = view.findViewById(R.id.fragment_profile_img_profile);
+        facebookIV = view.findViewById(R.id.fragment_profile_img_facebook);
+        instagramIV = view.findViewById(R.id.fragment_profile_img_instagram);
+        twitterIV = view.findViewById(R.id.fragment_profile_img_twitter);
+        linkedinIV = view.findViewById(R.id.fragment_profile_img_linkedin);
 
         // Textview Definitions
-        fullNameTV = view.findViewById(R.id.profileName);
-        roleTV = view.findViewById(R.id.positionName);
-        locationTV = view.findViewById(R.id.locationText);
+        fullNameTV = view.findViewById(R.id.fragment_profile_txt_name);
+        roleTV = view.findViewById(R.id.fragment_profile_txt_position);
+        locationTV = view.findViewById(R.id.fragment_profile_txt_location);
+        facebookUrl = view.findViewById(R.id.fragment_profile_txt_facebook);
+        instagramUrl = view.findViewById(R.id.fragment_profile_txt_instagram);
+        twitterUrl = view.findViewById(R.id.fragment_profile_txt_twitter);
+        linkedinUrl = view.findViewById(R.id.fragment_profile_txt_linkedin);
+
+        // Table Row Definitions
+        facebookTR = view.findViewById(R.id.fragment_profile_tr_facebook);
+        instagramTR = view.findViewById(R.id.fragment_profile_tr_instagram);
+        twitterTR = view.findViewById(R.id.fragment_profile_tr_twitter);
+        linkedinTR = view.findViewById(R.id.fragment_profile_tr_linkedin);
+
+        // Button Definition
+        editProfile = view.findViewById(R.id.fragment_profile_btn_edit_profile);
+
+        // onClick Listener for Edit Button
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), EditProfileActivity.class));
+            }
+        });
 
         // initializing the tab layout for profile -> posts, likes, comments
         TabLayout tabLayout = view.findViewById(R.id.fragment_profile_tl_profile);
@@ -67,7 +92,7 @@ public class ProfileFragment extends Fragment {
 
         // initiailizing the view pager and page adapter for it
         final ViewPager viewPager = view.findViewById(R.id.fragment_profile_vp);
-        final PagerAdapter adapter = new ProfileAdapter(getChildFragmentManager(), tabLayout.getTabCount());
+        final PagerAdapter adapter = new ProfileFragmentPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
 
         // a select listener to display the right tab fragment
@@ -136,37 +161,41 @@ public class ProfileFragment extends Fragment {
             // Twitter string set
             if (!response.get("twitter").toString().equals("null")) {
                 twitterURL = "http://" + response.getString("twitter");
-                // Setting the onclick listener for the imageview
-                SocialClicked(twitterURL, twitterIV);
+                twitterUrl.setText(twitterURL); // changing the textview to show the url
+                // Setting the onclick listener for the table row
+                SocialClicked(twitterURL, twitterTR);
             } else {
-                twitterIV.setVisibility(View.GONE);
+                twitterTR.setVisibility(View.GONE);
             }
 
             // Linkedin string set
             if (!response.get("linkedin").toString().equals("null")) {
                 linkedinURL = "http://" + response.getString("linkedin");
-                // Setting the onclick listener for the imageview
-                SocialClicked(linkedinURL, linkedinIV);
+                linkedinUrl.setText(linkedinURL); // changing the textview to show the url
+                // Setting the onclick listener for the table row
+                SocialClicked(linkedinURL, linkedinTR);
             } else {
-                linkedinIV.setVisibility(View.GONE);
+                linkedinTR.setVisibility(View.GONE);
             }
 
             // Facebook String set
             if (!response.get("facebook").toString().equals("null")) {
                 facebookURL = "http://" + response.getString("facebook");
-                // Setting the onclick listener for the imageview
-                SocialClicked(facebookURL, facebookIV);
+                facebookUrl.setText(facebookURL); // changing the textview to show the url
+                // Setting the onclick listener for the table row
+                SocialClicked(facebookURL, facebookTR);
             } else {
-                facebookIV.setVisibility(View.GONE);
+                facebookTR.setVisibility(View.GONE);
             }
 
             // Instagram String set
             if (!response.get("instagram").toString().equals("null")) {
                 instagramURL = "http://" + response.getString("instagram");
-                // Setting the onclick listener for the imageview
-                SocialClicked(instagramURL, instagramIV);
+                instagramUrl.setText(instagramURL); // changing the textview to show the url
+                // Setting the onclick listener for the table row
+                SocialClicked(instagramURL, instagramTR);
             } else {
-                instagramIV.setVisibility(View.GONE);
+                instagramTR.setVisibility(View.GONE);
             }
 
             // Combining positions and division to fit into textview
@@ -183,7 +212,6 @@ public class ProfileFragment extends Fragment {
             }
             if (location.equals("")) {
                 locationTV.setVisibility(View.GONE);
-                locationLogo.setVisibility(View.GONE);
             } else {
                 locationTV.setText(location);
             }
@@ -196,11 +224,11 @@ public class ProfileFragment extends Fragment {
     /**
      * Setting onclick listeners for the social media text views
      * @param url
-     * @param imageView
+     * @param tableRow
      */
-    private static void SocialClicked(final String url, final ImageView imageView) {
+    private static void SocialClicked(final String url, final TableRow tableRow) {
         if (url != null) {
-            imageView.setOnClickListener(new View.OnClickListener() {
+            tableRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Opens social media on chosen application
