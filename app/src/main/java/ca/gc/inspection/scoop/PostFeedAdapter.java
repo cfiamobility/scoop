@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > implements ImageController.ImageInterface{
+public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> implements ImageController.ImageInterface{
     private JSONArray posts, images;
 
     public PostFeedAdapter(JSONArray posts, JSONArray images) {
@@ -73,7 +73,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > i
      * @param holder: viewholder of item
      */
     @Override
-    public void setPostImage(Bitmap image, FeedPostViewHolder  holder) {
+    public void setPostImage(Bitmap image, FeedPostViewHolder holder) {
         holder.postImage.setImageBitmap(image);
     }
 
@@ -153,7 +153,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > i
      * @param holder: viewholder of item
      */
     @Override
-    public void setCommentCount(String commentCount, GenericPostViewHolder holder) {
+    public void setCommentCount(String commentCount, ProfilePostsFeedViewHolder holder) {
         holder.commentCount.setText(commentCount);
     }
 
@@ -162,7 +162,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > i
      * @param holder: viewholder of item
      */
     @Override
-    public void hidePostImage(FeedPostViewHolder  holder) {
+    public void hidePostImage(FeedPostViewHolder holder) {
         holder.postImage.setVisibility(View.GONE);
     }
 

@@ -92,7 +92,7 @@ public class ProfileFragment extends Fragment {
 
         // initiailizing the view pager and page adapter for it
         final ViewPager viewPager = view.findViewById(R.id.fragment_profile_vp);
-        final PagerAdapter adapter = new ProfileFragmentPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount());
+        final PagerAdapter adapter = new ProfileFragmentPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), Config.currentUser);
         viewPager.setAdapter(adapter);
 
         // a select listener to display the right tab fragment

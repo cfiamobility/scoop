@@ -1,41 +1,36 @@
 package ca.gc.inspection.scoop;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.DefaultRetryPolicy;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * performs all logic and HTTP requests for the FeedAdapter
  */
-public class GenericPostController extends MostGenericController{
+public class ProfilePostsFeedController extends MostGenericController{
     private JSONObject post;
-    private GenericPostViewHolder holder;
-    private GenericPostInterface genericPostInterface;
+    private ProfilePostsFeedViewHolder holder;
+    private ProfileFeedInterface profileFeedInterface;
     private Map<String, String> likeProperties;
 
-    public GenericPostController(GenericPostInterface genericPostInterface, JSONArray posts, JSONArray images, int i, GenericPostViewHolder holder){
-        super(genericPostInterface, posts, images, i, holder);
-        this.genericPostInterface = genericPostInterface;
+    /**
+     * @param profileFeedInterface: inherits from MostGenericInterface and declares all its methods
+     * @param posts: JSONArray of posts from the database
+     * @param images: JSONArray of profile images from the database
+     * @param i: counter for the array adapter
+     * @param holder: view holder that contains all the front end declarations
+     */
+    public ProfilePostsFeedController(ProfileFeedInterface profileFeedInterface, JSONArray posts, JSONArray images, int i, ProfilePostsFeedViewHolder holder){
+        super(profileFeedInterface, posts, images, i, holder);
+        this.profileFeedInterface = profileFeedInterface;
         try {
             this.post = posts.getJSONObject(i);
         } catch (JSONException e) {
@@ -45,6 +40,11 @@ public class GenericPostController extends MostGenericController{
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
     }
 
+    /**
+     * Super runs the display post in MostGeneric
+     * Displays the posts in the profile
+     * @throws JSONException
+     */
     @Override
     public void displayPost() throws JSONException{
         super.displayPost();
@@ -62,9 +62,13 @@ public class GenericPostController extends MostGenericController{
         });
     }
 
+    /**
+     * Sets the post title
+     * @throws JSONException
+     */
     @Override
     public void formPostTitle() throws JSONException {
-        genericPostInterface.setPostTitle(post.getString("posttitle"), holder);
+        profileFeedInterface.setPostTitle(post.getString("posttitle"), holder);
     }
 
     /**
@@ -74,14 +78,16 @@ public class GenericPostController extends MostGenericController{
     private void checkCommentCount(String commentCount){
         String defaultCount = "0";
         if(!commentCount.equals("null")){
-            genericPostInterface.setCommentCount(commentCount, holder);
+            profileFeedInterface.setCommentCount(commentCount, holder);
         }else{
-            genericPostInterface.setCommentCount(defaultCount, holder);
+            profileFeedInterface.setCommentCount(defaultCount, holder);
         }
     }
 
-
-    public interface GenericPostInterface extends MostGenericController.MostGenericInterface{
-        void setCommentCount(String commentCount, GenericPostViewHolder holder);
+    /**
+     * Interface that inherits from mostgeneric interface
+     */
+    public interface ProfileFeedInterface extends MostGenericController.MostGenericInterface{
+        void setCommentCount(String commentCount, ProfilePostsFeedViewHolder holder);
     }
 }
