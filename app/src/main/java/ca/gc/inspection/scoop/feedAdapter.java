@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements ImageController.ImageInterface{
+public class feedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> implements ImageController.ImageInterface{
     private JSONArray posts, images;
 
     public feedAdapter(JSONArray posts, JSONArray images) {
@@ -23,14 +23,14 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
 
     @NonNull
     @Override
-    public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public FeedPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_row_feed, viewGroup, false);
-        FeedViewHolder vh = new FeedViewHolder(view);
+        FeedPostViewHolder vh = new FeedPostViewHolder(view);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FeedViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull FeedPostViewHolder holder, int i) {
 
        ImageController imageController = new ImageController(this, posts, images, i, holder);
         try {
@@ -73,7 +73,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void setPostImage(Bitmap image, FeedViewHolder holder) {
+    public void setPostImage(Bitmap image, FeedPostViewHolder holder) {
         holder.postImage.setImageBitmap(image);
     }
 
@@ -162,7 +162,7 @@ public class feedAdapter extends RecyclerView.Adapter<FeedViewHolder> implements
      * @param holder: viewholder of item
      */
     @Override
-    public void hidePostImage(FeedViewHolder holder) {
+    public void hidePostImage(FeedPostViewHolder holder) {
         holder.postImage.setVisibility(View.GONE);
     }
 
