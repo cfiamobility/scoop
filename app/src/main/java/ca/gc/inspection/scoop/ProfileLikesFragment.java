@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class profileLikesFragment extends Fragment {
+public class ProfileLikesFragment extends Fragment {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -27,7 +27,7 @@ public class profileLikesFragment extends Fragment {
     private List<String> test;
 
 
-    public profileLikesFragment() {
+    public ProfileLikesFragment() {
         // Required empty public constructor
     }
 
@@ -37,13 +37,6 @@ public class profileLikesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_likes, container, false);
-
-        // initiailizng test array
-        test = new ArrayList<>();
-
-        test.add("LIKE 1");
-        test.add("LIKE 2");
-        test.add("LIKE 3");
 
         // initializing recycler view
         mRecyclerView = view.findViewById(R.id.recycler_view);

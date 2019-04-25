@@ -25,11 +25,11 @@ public class profilePageAdapter extends FragmentStatePagerAdapter {
                 tab1.setArguments(bundle);
                 return tab1;
             case 1:
-                profileLikesFragment tab2 = new profileLikesFragment();
+                ProfileLikesFragment tab2 = new ProfileLikesFragment();
                 tab2.setArguments(bundle);
                 return tab2;
             case 2:
-                profileCommentsFragment tab3 = new profileCommentsFragment();
+                ProfileCommentsFragment tab3 = new ProfileCommentsFragment();
                 tab3.setArguments(bundle);
                 return tab3;
             default:
