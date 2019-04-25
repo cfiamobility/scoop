@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -25,9 +26,11 @@ public class OtherUserFragment extends Fragment {
 
 	// UI Declarations
 	static CircleImageView profileImageIV;
-	static ImageView facebookIV, instagramIV, twitterIV, locationLogo, linkedinIV;
+	static ImageView facebookIV, instagramIV, twitterIV, linkedinIV;
 	static TextView fullNameTV, roleTV, locationTV;
 	static Activity activity;
+	static TableRow facebookTR, instagramTR, twitterTR, linkedinTR;
+	static TextView facebookTV, instagramTV, twitterTV, linkedinTV;
 
 	static String title;
 
@@ -54,27 +57,38 @@ public class OtherUserFragment extends Fragment {
 		Log.i("userid", userid);
 
 		// ImageView Definitions
-		profileImageIV = view.findViewById(R.id.otherProfileImage);
-		facebookIV = view.findViewById(R.id.otherFacebookLogo);
-		instagramIV = view.findViewById(R.id.otherInstagramLogo);
-		twitterIV = view.findViewById(R.id.otherTwitterLogo);
-		linkedinIV = view.findViewById(R.id.otherLinkedinLogo);
-		locationLogo = view.findViewById(R.id.otherLocationLogo);
+		profileImageIV = view.findViewById(R.id.fragment_other_user_img_profile);
+		facebookIV = view.findViewById(R.id.fragment_other_user_img_facebook);
+		instagramIV = view.findViewById(R.id.fragment_other_user_img_instagram);
+		twitterIV = view.findViewById(R.id.fragment_other_user_img_twitter);
+		linkedinIV = view.findViewById(R.id.fragment_other_user_img_linkedin);
 
 		// Textview Definitions
-		fullNameTV = view.findViewById(R.id.otherProfileName);
-		roleTV = view.findViewById(R.id.otherPositionName);
-		locationTV = view.findViewById(R.id.otherLocationText);
+		fullNameTV = view.findViewById(R.id.fragment_other_user_txt_name);
+		roleTV = view.findViewById(R.id.fragment_other_user_txt_position);
+		locationTV = view.findViewById(R.id.fragment_other_user_txt_location);
+
+		// Table Row Definitions
+		facebookTR = view.findViewById(R.id.fragment_other_user_tr_facebook);
+		instagramTR = view.findViewById(R.id.fragment_other_user_tr_instagram);
+		twitterTR = view.findViewById(R.id.fragment_other_user_tr_twitter);
+		linkedinTR = view.findViewById(R.id.fragment_other_user_tr_linkedin);
+
+		// Table Row Text View Definitions
+		facebookTV = view.findViewById(R.id.fragment_other_user_txt_facebook);
+		instagramTV = view.findViewById(R.id.fragment_other_user_txt_instagram);
+		twitterTV = view.findViewById(R.id.fragment_other_user_txt_twitter);
+		linkedinTV = view.findViewById(R.id.fragment_other_user_txt_linkedin);
 
 		// initializing the tab layout for profile -> posts, likes, comments
-		TabLayout tabLayout = view.findViewById(R.id.otherTabLayout);
+		TabLayout tabLayout = view.findViewById(R.id.fragment_other_user_tl);
 		tabLayout.addTab(tabLayout.newTab().setText("POSTS"));
 		tabLayout.addTab(tabLayout.newTab().setText("LIKES"));
 		tabLayout.addTab(tabLayout.newTab().setText("COMMENTS"));
 		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
 		// initiailizing the view pager and page adapter for it
-		final ViewPager viewPager = view.findViewById(R.id.otherViewPager);
+		final ViewPager viewPager = view.findViewById(R.id.fragment_other_user_vp);
 		final PagerAdapter adapter = new ProfileFragmentPagerAdapter(getChildFragmentManager(), tabLayout.getTabCount(), userid);
 		viewPager.setAdapter(adapter);
 
@@ -146,37 +160,41 @@ public class OtherUserFragment extends Fragment {
 			// Twitter string set
 			if (!response.get("twitter").toString().equals("null")) {
 				twitterURL = "http://" + response.getString("twitter");
+				twitterTV.setText(twitterURL);
 				// Setting the onclick listener for the imageview
-				SocialClicked(twitterURL, twitterIV);
+				SocialClicked(twitterURL, twitterTR);
 			} else {
-				twitterIV.setVisibility(View.GONE);
+				twitterTR.setVisibility(View.GONE);
 			}
 
 			// Linkedin string set
 			if (!response.get("linkedin").toString().equals("null")) {
 				linkedinURL = "http://" + response.getString("linkedin");
+				linkedinTV.setText(linkedinURL);
 				// Setting the onclick listener for the imageview
-				SocialClicked(linkedinURL, linkedinIV);
+				SocialClicked(linkedinURL, linkedinTR);
 			} else {
-				linkedinIV.setVisibility(View.GONE);
+				linkedinTR.setVisibility(View.GONE);
 			}
 
 			// Facebook String set
 			if (!response.get("facebook").toString().equals("null")) {
 				facebookURL = "http://" + response.getString("facebook");
+				facebookTV.setText(facebookURL);
 				// Setting the onclick listener for the imageview
-				SocialClicked(facebookURL, facebookIV);
+				SocialClicked(facebookURL, facebookTR);
 			} else {
-				facebookIV.setVisibility(View.GONE);
+				facebookTR.setVisibility(View.GONE);
 			}
 
 			// Instagram String set
 			if (!response.get("instagram").toString().equals("null")) {
 				instagramURL = "http://" + response.getString("instagram");
+				instagramTV.setText(instagramURL);
 				// Setting the onclick listener for the imageview
-				SocialClicked(instagramURL, instagramIV);
+				SocialClicked(instagramURL, instagramTR);
 			} else {
-				instagramIV.setVisibility(View.GONE);
+				instagramTR.setVisibility(View.GONE);
 			}
 
 			// Combining positions and division to fit into textview
@@ -193,7 +211,6 @@ public class OtherUserFragment extends Fragment {
 			}
 			if (location.equals("")) {
 				locationTV.setVisibility(View.GONE);
-				locationLogo.setVisibility(View.GONE);
 			} else {
 				locationTV.setText(location);
 			}
@@ -206,11 +223,11 @@ public class OtherUserFragment extends Fragment {
 	/**
 	 * Setting onclick listeners for the social media text views
 	 * @param url
-	 * @param imageView
+	 * @param tableRow
 	 */
-	private static void SocialClicked(final String url, final ImageView imageView) {
+	private static void SocialClicked(final String url, final TableRow tableRow) {
 		if (url != null) {
-			imageView.setOnClickListener(new View.OnClickListener() {
+			tableRow.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// Opens social media on chosen application
