@@ -11,10 +11,10 @@ import org.json.JSONObject;
 
 public class ImageController extends ProfilePostsFeedController {
     private JSONObject images;
-    private FeedViewHolder holder;
+    private FeedPostViewHolder holder;
     private ImageInterface imageInterface;
 
-    public ImageController(ImageInterface imageInterface, JSONArray posts, JSONArray images, int i, FeedViewHolder holder){
+    public ImageController(ImageInterface imageInterface, JSONArray posts, JSONArray images, int i, FeedPostViewHolder holder){
         super(imageInterface, posts, images, i, holder);
 
         this.imageInterface = imageInterface;
@@ -63,7 +63,7 @@ public class ImageController extends ProfilePostsFeedController {
     }
 
     public interface ImageInterface extends ProfileFeedInterface {
-        void setPostImage(Bitmap image, FeedViewHolder holder);
-        void hidePostImage(FeedViewHolder holder);
+        void setPostImage(Bitmap image, FeedPostViewHolder holder);
+        void hidePostImage(FeedPostViewHolder holder);
     }
 }
