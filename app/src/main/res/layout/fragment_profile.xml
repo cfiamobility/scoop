@@ -125,8 +125,7 @@
 
         <TableRow
             android:id="@+id/fragment_profile_tr_instagram"
-            android:layout_margin="2dp"
-            android:visibility="gone">
+            android:layout_margin="2dp">
 
             <ImageView
                 android:id="@+id/fragment_profile_img_instagram"

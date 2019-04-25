@@ -96,8 +96,8 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
     public void showTodaySection() {
         today.setVisibility(View.VISIBLE);
         todayRecyclerView.setVisibility(View.VISIBLE);
-        view.findViewById(R.id.view1).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.view2).setVisibility(View.VISIBLE);
+//        view.findViewById(R.id.view1).setVisibility(View.VISIBLE);
+//        view.findViewById(R.id.view2).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -107,8 +107,8 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
     public void hideTodaySection() {
         todayRecyclerView.setVisibility(View.GONE);
         today.setVisibility(View.GONE);
-        view.findViewById(R.id.view1).setVisibility(View.GONE);
-        view.findViewById(R.id.view2).setVisibility(View.GONE);
+//        view.findViewById(R.id.view1).setVisibility(View.GONE);
+//        view.findViewById(R.id.view2).setVisibility(View.GONE);
     }
 
     /**
@@ -116,8 +116,8 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
      */
     @Override
     public void showRecentSection() {
-        view.findViewById(R.id.view3).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.view4).setVisibility(View.VISIBLE);
+//        view.findViewById(R.id.view3).setVisibility(View.VISIBLE);
+//        view.findViewById(R.id.view4).setVisibility(View.VISIBLE);
         recent.setVisibility(View.VISIBLE);
         recentRecyclerView.setVisibility(View.VISIBLE);
     }
@@ -136,7 +136,7 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
     @Override
     public void requestTodayFocus(){
         view.findViewById(R.id.fragment_notifications_rv_today).setFocusable(false);
-        view.findViewById(R.id.view1).requestFocus();
+//        view.findViewById(R.id.view1).requestFocus();
     }
 
     /**
@@ -145,7 +145,7 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
     @Override
     public void requestRecentFocus(){
         view.findViewById(R.id.fragment_notifications_rv_recent).setFocusable(false);
-        view.findViewById(R.id.view3).requestFocus();
+//        view.findViewById(R.id.view3).requestFocus();
     }
 
     /**
