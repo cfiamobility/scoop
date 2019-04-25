@@ -1,8 +1,7 @@
 package ca.gc.inspection.scoop;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ViewTreeObserver;
 
 import com.android.volley.AuthFailureError;
@@ -24,14 +23,13 @@ public class NotificationsController {
     private RequestQueue requestQueue;
     private Timestamp currentTime;
     private NotificationInterface notificationInterface;
-    private SharedPreferences sharedPreferences;
 
 
     public NotificationsController(NotificationInterface notificationInterface){
         this.notificationInterface = notificationInterface;
         this.requestQueue = Volley.newRequestQueue(MyApplication.getContext()); //instantiating the request queue for volley
-        sharedPreferences = MyApplication.getContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE); //instantiates shared preferences within package
         Date date = new Date(); //getting the current date
+        Log.i("date", date.toString());
         long time = date.getTime(); //getting the current time from the date
         currentTime = new Timestamp(time); //converting the time to a timestamp object
     }

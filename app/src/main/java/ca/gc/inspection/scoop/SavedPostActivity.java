@@ -49,7 +49,7 @@ public class SavedPostActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // setting up the custom adapter for the recycler view
-        adapter = new PostFeedAdapter(test);
+        adapter = new ProfileAdapter();
         recyclerView.setAdapter(adapter);
 
     }

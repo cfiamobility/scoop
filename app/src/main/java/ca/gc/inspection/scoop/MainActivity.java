@@ -3,41 +3,45 @@ package ca.gc.inspection.scoop;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FloatingActionButton createPost;
-
-    static ViewPager viewPager;
-
-    // fragments
-    CommunityFeedFragment communityFragment;
-    OfficialFeedFragment officialFragment;
-    NotificationsFragment notificationFragment;
-    ProfileFragment profileFragment;
-
+    // UI Declarations
+    public static Button createPost;
+    private DrawerLayout drawerLayout;
+    static BottomNavigationView bottomNavigationView;
     MenuItem previousMenuItem;
 
-    private DrawerLayout drawerLayout;
+    // Fragment Manager declaration
+    static FragmentManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("userid", Config.currentUser);
+
+        // Defining the fragment manager
+        manager = getSupportFragmentManager();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
 
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                // Setting the on clicks for the menu bar.
                 switch (menuItem.getItemId()) {
                     case R.id.saved_posts:
                         startActivity(new Intent(getApplicationContext(), SavedPostActivity.class));
@@ -97,91 +102,87 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // enabling the app bar's home button for navigation drawer
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_account_circle_blue_24dp);
 
         // inflating the bottom navigation bar
-        final BottomNavigationView bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation);
+        bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.community:
-                        viewPager.setCurrentItem(0);
-                        getSupportActionBar().setTitle("Community");
-                        break;
-                    case R.id.official:
-                        viewPager.setCurrentItem(1);
-                        getSupportActionBar().setTitle("Official");
-                        break;
-                    case R.id.notifications:
-                        viewPager.setCurrentItem(2);
-                        getSupportActionBar().setTitle("Notifications");
-                        break;
-                    case R.id.profile:
-                        viewPager.setCurrentItem(3);
-                        getSupportActionBar().setTitle("Profile");
-                        break;
-                }
-                return false;
-            }
-        });
+                // Method that handles whenever you pressed one of the four tabs on the bottom nav bar
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                // Goes to TabFragment to handle which fragment shows up
+                int returned = TabFragment.setNavigation(menuItem.getItemId());
 
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
+                // Setting the title of the action bar and changing which tab shows up as highlighted
                 if (previousMenuItem != null) {
                     previousMenuItem.setChecked(false);
                 } else {
-                    bottomNavigationView.getMenu().getItem(0).setChecked(false);
+                    bottomNavigationView.getMenu().getItem(0).setChecked(true);
                 }
-                bottomNavigationView.getMenu().getItem(i).setChecked(true);
-                previousMenuItem = bottomNavigationView.getMenu().getItem(i);
-
-                // setting the title of the page every time you switch tabs
-                if (i == 0) {
-                    getSupportActionBar().setTitle("Community");
-                } else if (i == 1) {
-                    getSupportActionBar().setTitle("Official");
-                } else if (i == 2) {
-                    getSupportActionBar().setTitle("Notifications");
-                } else {
-                    getSupportActionBar().setTitle("Profile");
+                switch (returned) {
+                    case 0:
+                        // Highlight tab
+                        bottomNavigationView.getMenu().getItem(returned).setChecked(true);
+                        // Sets title
+                        getSupportActionBar().setTitle("Community");
+                        break;
+                    case 1:
+                        bottomNavigationView.getMenu().getItem(returned).setChecked(true);
+                        getSupportActionBar().setTitle("Official");
+                        break;
+                    case 2:
+                        bottomNavigationView.getMenu().getItem(returned).setChecked(true);
+                        getSupportActionBar().setTitle("Notifications");
+                        break;
+                    case 3:
+                        bottomNavigationView.getMenu().getItem(returned).setChecked(true);
+                        getSupportActionBar().setTitle("Profile");
+                        break;
                 }
-            }
 
-            @Override
-            public void onPageScrollStateChanged(int i) {
+                // Pops the entire fragment stack to return you to tab fragment
+                for (int i = 0; i < manager.getBackStackEntryCount(); ++i) {
+                    manager.popBackStack();
+                }
 
+                // Setting the variable for next click
+                previousMenuItem = bottomNavigationView.getMenu().getItem(returned);
+                return false;
             }
         });
-
-        setupViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
-        communityFragment =new CommunityFeedFragment();
-        officialFragment = new OfficialFeedFragment();
-        notificationFragment = new NotificationsFragment();
-        profileFragment =  new ProfileFragment();
-        adapter.addFragment(communityFragment);
-        adapter.addFragment(officialFragment);
-        adapter.addFragment(notificationFragment);
-        adapter.addFragment(profileFragment);
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(1);
+    /**
+     * Method called when another user is pressed
+     * @param userid
+     */
+	public static void otherUserClicked(String userid) {
+        if (userid != null) {
+            // Initializing the other user's fragment
+            Fragment otherUserFragment = new OtherUserFragment();
+
+            // Passing the userid to the other user fragment using bundles
+            Bundle bundle = new Bundle();
+            bundle.putString("userid", userid);
+            otherUserFragment.setArguments(bundle);
+
+            // Fragment transaction, adds the other user's profile fragment onto the framelayout
+            FragmentTransaction fragmentTransaction = manager.beginTransaction();
+            fragmentTransaction.add(R.id.main, otherUserFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 
+    @Override
+    public void onBackPressed() {
+	    getSupportActionBar().setTitle(OtherUserFragment.title);
+        super.onBackPressed();
+    }
 
     // inflate the search action on the toolbar
     @Override

@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +28,6 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
     private View view;
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
 
         today = (TextView) view.findViewById(R.id.fragment_notifications_txt_today); //instantiating the today textview
         recent = (TextView) view.findViewById(R.id.fragment_notifications_txt_recent); //instantiating the recent textview
+
     }
 
 

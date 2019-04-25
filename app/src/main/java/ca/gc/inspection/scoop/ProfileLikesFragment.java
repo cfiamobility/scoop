@@ -54,7 +54,7 @@ public class ProfileLikesFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting up the custom adapter for the recycler view
-        mAdapter = new PostFeedAdapter(test);
+        mAdapter = new ProfileAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
         return view;

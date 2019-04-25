@@ -9,42 +9,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+
 import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OfficialFeedFragment extends Fragment {
+public class OfficialFeedFragment extends Fragment implements FeedController.FeedInterface {
 
 
     // recycler view widget
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdpater;
+    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    // arryalist test
-    private List<String> test;
-
-
-    public OfficialFeedFragment() {
-        // Required empty public constructor
-    }
-
+    private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_official_feed, container, false);
+        view = inflater.inflate(R.layout.fragment_official_feed, container, false);
 
-        // initializing test array list
-        test = new ArrayList<>();
+        return view;
+    }
 
-        test.add("OFFICIAL 1");
-        test.add("OFFICIAL 2");
-        test.add("OFFICIAL 3");
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+
+        FeedController controller = new FeedController(this);
+        controller.getPosts();
+    }
+
+
+    @Override
+    public void setRecyclerView(JSONArray posts, JSONArray images){
 
         // initializing the recycler view
         mRecyclerView = view.findViewById(R.id.fragment_official_feed_rv);
@@ -55,9 +56,12 @@ public class OfficialFeedFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting up the custom adapter for the recycler view
-        mAdpater = new PostFeedAdapter(test);
-        mRecyclerView.setAdapter(mAdpater);
+        mAdapter = new PostFeedAdapter(posts, images);
+        mRecyclerView.setAdapter(mAdapter);
+    }
 
-        return view;
+    @Override
+    public String getFeedType(){
+        return "official";
     }
 }

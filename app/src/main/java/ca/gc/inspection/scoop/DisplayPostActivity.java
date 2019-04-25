@@ -118,7 +118,7 @@ public class DisplayPostActivity extends AppCompatActivity {
                     Toast.makeText(DisplayPostActivity.this, "Please add comment message", Toast.LENGTH_SHORT).show();
                     Log.i("comment", comment);
                 } else {
-                    String tempOtherPostActivityId = "61b515be-3aa2-405f-a0cb-2de8d5b29634"; //TODO send real post activityID when doing viewPost ticket
+                    String tempOtherPostActivityId = "e6a40eb0-bd3f-42ec-8b8d-dd28112260be"; //TODO send real post activityID when doing viewPost ticket
                     CommentController.sendCommentToDatabase(getApplicationContext(), Config.currentUser, comment, tempOtherPostActivityId);
 
                     //clear comment box

@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONArray;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class NotificationsAdapterController {
     private JSONObject notification, image;
@@ -51,7 +53,7 @@ public class NotificationsAdapterController {
             setActivity(); //sets activity notification
 
             if(image != null) {
-                setProfileImage(image.getString("activityprofileimage"), holder); //sets profile image
+                setProfileImage(image.getString("activityprofileimage")); //sets profile image
             }else{
                 notificationAdapterInterface.hideImage(holder);
             }
@@ -59,7 +61,7 @@ public class NotificationsAdapterController {
             setLikes(); //sets like notification
 
             if(image !=null) {
-                setProfileImage(image.getString("likesprofileimage"), holder); //sets profile image
+                setProfileImage(image.getString("likesprofileimage")); //sets profile image
             }else{
                 notificationAdapterInterface.hideImage(holder);
             }
@@ -84,8 +86,19 @@ public class NotificationsAdapterController {
             String createdDate = notification.getString("createddate"); //gets when the notification was created
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(createdDate); //parses the created date to be in specified date format
+            SimpleDateFormat currentTimeFormat = new SimpleDateFormat();
+            TimeZone gmtTime = TimeZone.getTimeZone("GMT");
+            currentTimeFormat.setTimeZone(gmtTime);
+            String date = currentTimeFormat.format(new Date());
+            Date currentTime = currentTimeFormat.parse(date);
+            Timestamp currentTimestamp = new Timestamp(currentTime.getTime());
+            Log.i("postdate", date);
+            Log.i("realpostdate", parsedDate.toString());
             Timestamp timestamp = new Timestamp(parsedDate.getTime()); //creates a timestamp from the date
-            long diff = currentTime.getTime() - timestamp.getTime(); //gets the difference between the two timestamps
+            Log.i("time", String.valueOf(timestamp.getTime()));
+            Log.i("hello", String.valueOf(currentTimestamp.getTime()));
+            long diff = currentTimestamp.getTime() - timestamp.getTime(); //gets the difference between the two timestamps
+            Log.i("helloo", String.valueOf(((diff/(1000*60*60)))));
             String diffHours = String.valueOf((int) ((diff / (1000 * 60 * 60)))); //stores it in a string representing hours
             return diffHours + " hours ago";
         } catch (Exception e) {
@@ -144,28 +157,17 @@ public class NotificationsAdapterController {
      * Description: sets the profile image for corresponding notification
      *
      * @param image:  the string representation of the image
-     * @param holder: the holder for the item in recycler view
+     *
      */
-    private void setProfileImage(String image, NotificationViewHolder holder) {
+    private void setProfileImage(String image) {
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
         notificationAdapterInterface.setImage(bitmap, holder); //sets image for the holder
         holder.profileImage.setOnClickListener(new View.OnClickListener() { //on click for the image
             @Override
             public void onClick(View view) {
-                goToProfile(ids); //goes to the profile on click
+                mainScreen.otherUserClicked(ids.get("userid"));
             }
         });
-    }
-
-    /**
-     * Description: goes to the user profile indicated
-     *
-     * @param ids: representing the user id and the activity id
-     */
-    private void goToProfile(Map<String, String> ids) {
-        Intent intent = new Intent(MyApplication.getContext(), userprofile.class);
-        intent.putExtra("userid", ids.get("userid")); //puts the user id into the intent
-        MyApplication.getContext().startActivity(intent); //changes to the user profile activity
     }
 
     /**
@@ -305,7 +307,7 @@ public class NotificationsAdapterController {
             holder.fullName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goToProfile(ids); //goes to profile on click
+                    mainScreen.otherUserClicked(ids.get("userid"));
                 }
             });
         }

@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CommunityFeedFragment extends Fragment {
+public class CommunityFeedFragment extends Fragment implements FeedController.FeedInterface {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -25,6 +27,7 @@ public class CommunityFeedFragment extends Fragment {
 
     // array list to test the custom recycler view
     private List<String> test;
+    private View view;
 
     public CommunityFeedFragment() {
         // Required empty public constructor
@@ -36,15 +39,21 @@ public class CommunityFeedFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_community_feed, container, false);
+        view = inflater.inflate(R.layout.fragment_community_feed, container, false);
 
-        // initializing the test array
-        test = new ArrayList<>();
+        return view;
+    }
 
-        test.add("ITEM 1");
-        test.add("ITEM 2");
-        test.add("ITEM 3");
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
 
+        FeedController controller = new FeedController(this);
+        controller.getPosts();
+    }
+
+    @Override
+    public void setRecyclerView(JSONArray posts, JSONArray images) {
         // setting up the recycler view
         mRecyclerView = view.findViewById(R.id.fragment_community_feed_rv);
         mRecyclerView.setHasFixedSize(true);
@@ -54,10 +63,12 @@ public class CommunityFeedFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // using the custom adapter for the recycler view
-        mAdapter = new PostFeedAdapter(test);
+        mAdapter = new PostFeedAdapter(posts, images);
         mRecyclerView.setAdapter(mAdapter);
-
-        return view;
     }
 
+    @Override
+    public String getFeedType(){
+        return "community";
+    }
 }

@@ -1,91 +1,177 @@
 package ca.gc.inspection.scoop;
 
-import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
 
-public class PostFeedAdapter extends RecyclerView.Adapter<PostFeedAdapter.myViewHolder> {
-    List<String> testName;
+public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder > implements ImageController.ImageInterface{
+    private JSONArray posts, images;
 
-    public PostFeedAdapter(List<String> name) {
-        this.testName = name;
+    public PostFeedAdapter(JSONArray posts, JSONArray images) {
+        this.posts = posts;
+        this.images = images;
     }
 
 
     @NonNull
     @Override
-    public PostFeedAdapter.myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_post, viewGroup, false);
-        myViewHolder vh = new myViewHolder(view);
+    public FeedPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_row_feed, viewGroup, false);
+        FeedPostViewHolder vh = new FeedPostViewHolder(view);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostFeedAdapter.myViewHolder myViewHolder, int i) {
-        myViewHolder.textName.setText(testName.get(i));
+    public void onBindViewHolder(@NonNull FeedPostViewHolder holder, int i) {
 
-        // to get the options menu to appear
-        myViewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
-                final Context context = v.getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                bottomSheetDialog.show(fragmentManager, "bottomSheet");
-            }
-        });
-
-        // tapping on any item from the view holder will go to the display post activity
-        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
-            }
-        });
-
-        // tapping on profile picture will bring user to poster's profile page
-        myViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.viewPager.setCurrentItem(3);
-            }
-        });
-
-        myViewHolder.textName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.viewPager.setCurrentItem(3);
-            }
-        });
-
-
+       ImageController imageController = new ImageController(this, posts, images, i, holder);
+        try {
+            imageController.displayPost();
+            imageController.displayImages();
+            imageController.formPostTitle();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return testName.size();
+        return posts.length();
     }
 
-    public class myViewHolder extends RecyclerView.ViewHolder{
-        TextView textName;
-        ImageView optionsMenu;
-        ImageView profileImage;
+    /**
+     * Description: sets text of post
+     * @param postText: text of post
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setPostText(String postText, MostGenericViewHolder holder) {
+        holder.postText.setText(postText);
+    }
 
-        public myViewHolder(View itemView) {
-            super(itemView);
-            textName = itemView.findViewById(R.id.item_post_txt_name);
-            optionsMenu = itemView.findViewById(R.id.item_post_img_options);
-            profileImage = itemView.findViewById(R.id.item_post_img_profile);
-        }
+    /**
+     * Description: sets title of post
+     * @param postTitle: title of post
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setPostTitle(String postTitle, MostGenericViewHolder holder) {
+        holder.postTitle.setText(postTitle);
+    }
+
+    /**
+     * Description: sets image of post
+     * @param image: image of post
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setPostImage(Bitmap image, FeedPostViewHolder  holder) {
+        holder.postImage.setImageBitmap(image);
+    }
+
+    /**
+     * Description: sets image of user
+     * @param image: image of user
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setUserImage(Bitmap image, MostGenericViewHolder  holder) {
+        holder.profileImage.setImageBitmap(image);
+    }
+
+    /**
+     * Description: sets name of user
+     * @param userName: name of user
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setUserName(String userName, MostGenericViewHolder holder) {
+        holder.username.setText(userName);
+    }
+
+    /**
+     * Description: sets like count on post
+     * @param likeCount: like count on post
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setLikeCount(String likeCount, MostGenericViewHolder holder) {
+        holder.likeCount.setText(likeCount);
+    }
+
+    /**
+     * Description: sets date of post
+     * @param date: date of post
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setDate(String date, MostGenericViewHolder holder) {
+        holder.date.setText(date);
+    }
+
+    /**
+     * Description: sets neutral state of likes
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setLikeNeutralState(MostGenericViewHolder holder) {
+        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
+        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
+    }
+
+    /**
+     * Description: sets upvote state of likes
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setLikeUpvoteState(MostGenericViewHolder holder) {
+       holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
+       holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
+    }
+
+    /**
+     * Description: sets downvote state of likes
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setLikeDownvoteState(MostGenericViewHolder holder) {
+        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
+        holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
+    }
+
+    /**
+     * Description: sets comment count of post
+     * @param commentCount: comment count of post
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void setCommentCount(String commentCount, GenericPostViewHolder holder) {
+        holder.commentCount.setText(commentCount);
+    }
+
+    /**
+     * Description: hides post image if there is none
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void hidePostImage(FeedPostViewHolder  holder) {
+        holder.postImage.setVisibility(View.GONE);
+    }
+
+    /**
+     * Description: hides date if there is an error
+     * @param holder: viewholder of item
+     */
+    @Override
+    public void hideDate(MostGenericViewHolder holder) {
+        holder.date.setVisibility(View.GONE);
     }
 }

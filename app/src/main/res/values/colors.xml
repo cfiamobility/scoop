@@ -19,4 +19,5 @@
     <color name="secondary">#05486c</color>
     <color name="secondary_light">#43739a</color>
     <color name="secondary_dark">#002141</color>
+    <color name="lighter_blue">#0000FF</color>
 </resources>

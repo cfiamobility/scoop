@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import androidx.exifinterface.media.ExifInterface;
 
 import android.net.Uri;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -85,6 +87,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_profile);
+
 
 		// EditText Definitions
 		firstNameET = findViewById(R.id.activity_edit_profile_et_first_name);
@@ -679,13 +682,10 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 				params.put("city", cityET.getText().toString());
 				params.put("province", provinceSpinner.getSelectedItem().toString());
 				params.put("image", image);
-
-				EditUserController.updateUserInfo(getApplicationContext(), params);
-				finish();
+				EditUserController.updateUserInfo(editProfileScreen.this, params);
 			} else {
 				Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
-
 }
