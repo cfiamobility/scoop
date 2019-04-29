@@ -68,7 +68,7 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostsContro
     @Override
     public void setPostRecyclerView(JSONArray posts, JSONArray images) {
         // initializing the recycler view
-        postRecyclerView = view.findViewById(R.id.recycler_view);
+        postRecyclerView = view.findViewById(R.id.fragment_profile_posts_rv);
         postRecyclerView.setHasFixedSize(true);
 
         // setting the layout manager for the recycler view

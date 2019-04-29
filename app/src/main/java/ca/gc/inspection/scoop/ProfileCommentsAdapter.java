@@ -38,7 +38,7 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<MostGenericView
     @NonNull
     @Override
     public MostGenericViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_row_comments, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_profile_comments, viewGroup, false);
         return new MostGenericViewHolder(v);
     }
 

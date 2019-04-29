@@ -18,7 +18,7 @@ import java.util.Map;
 public class CommentController {
     /** simple post command
      *
-     * @param context context of displayPost.java
+     * @param context context of DisplayPostActivity.java
      * @param userId current userID
      * @param comment user inputted comment
      * @param otherPostActivity the post the current user is commenting to
@@ -37,7 +37,7 @@ public class CommentController {
                         Log.d("Response", response);
                         if (response.contains("Success")){
                             Log.i("Info", "We good");
-                            displayPost.updateCommentList();
+                            DisplayPostActivity.updateCommentList();
                         }
                     }
                 },

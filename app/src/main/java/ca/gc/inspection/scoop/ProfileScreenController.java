@@ -27,7 +27,7 @@ class ProfileScreenController {
 			@Override
 			public void onResponse(JSONObject response) {
 				// Sending the response back to be decomposed
-				profileScreen.informationRespone(response);
+				ProfileFragment.informationRespone(response);
 			}
 		}, new Response.ErrorListener() {
 			@Override

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -36,28 +35,39 @@ public class LoginController {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //setting up the request as a post request
             @Override
             public void onResponse(String response) {
-                // to grab the user id from the jwt token
-                Log.i("Response", response);
-                JWT parsedJWT = new JWT(response); // convert the response string into a JWT token
-                Claim userIdMetaData = parsedJWT.getClaim("userid"); // to get the user id claim from the token
-                String userid = userIdMetaData.asString(); // converting the claim into a string
 
-                Log.i("TOKEN", String.valueOf(parsedJWT)); // token
-                Log.i("USER ID", userid); // user id
+                Log.i("RESPONSE", response); // the response string that is received from the user
 
-                // storing the token into shared preferences
-                SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-                sharedPreferences.edit().putString("token", response).apply();
-                Config.token = response;
 
-                // storing the user id into shared preferences
-                sharedPreferences.edit().putString("userid", userid).apply();
-                Config.currentUser = userid;
+                // checking to see if the server responded with error messages
+                if (response.contains("Incorrect Password")) { // if the user entered an incorrect password
+                    SplashScreenActivity.passwordLayout.setError("Incorrect Password");
+                } else if (response.contains("Invalid Email")) { // if the user entered an invalid email
+                    SplashScreenActivity.emailLayout.setError("Invalid Email");
+                } else {
 
-                // changes activities once login is successful
-                Intent intent = new Intent(context, mainScreen.class);
-                context.startActivity(intent);
-                activity.finish();
+                    // to grab the user id from the jwt token
+                    Log.i("Response", response);JWT parsedJWT = new JWT(response); // convert the response string into a JWT token
+                    Claim userIdMetaData = parsedJWT.getClaim("userid"); // to get the user id claim from the token
+                    String userid = userIdMetaData.asString(); // converting the claim into a string
+
+                    Log.i("TOKEN", String.valueOf(parsedJWT)); // token
+                    Log.i("USER ID", userid); // user id
+
+                    // storing the token into shared preferences
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString("token", response).apply();
+                    Config.token = response;
+
+                    // storing the user id into shared preferences
+                    sharedPreferences.edit().putString("userid", userid).apply();
+                    Config.currentUser = userid;
+
+                    // changes activities once login is successful
+                    Intent intent = new Intent(context, MainActivity.class);
+                    context.startActivity(intent);
+                    activity.finish();
+                }
             }
         }, new Response.ErrorListener() {
 

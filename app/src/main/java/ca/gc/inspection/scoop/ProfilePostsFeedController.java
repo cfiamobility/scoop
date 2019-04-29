@@ -54,7 +54,7 @@ public class ProfilePostsFeedController extends MostGenericController{
         holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetDialog bottomSheetDialog = new bottomSheetDialog();
+                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");

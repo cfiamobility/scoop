@@ -75,7 +75,7 @@ public class ProfileCommentsFragment extends Fragment implements ProfileComments
     @Override
     public void setCommentsRecylerView(JSONArray comments, JSONArray images) {
         // Initializing the recycler view
-        commentsRecyclerView = view.findViewById(R.id.recycler_view);
+        commentsRecyclerView = view.findViewById(R.id.fragment_profile_comments_rv);
         commentsRecyclerView.setHasFixedSize(true);
 
         // Setting the layout manager for the recycler view

@@ -39,7 +39,7 @@ public class ProfileLikesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_likes, container, false);
 
         // initializing recycler view
-        mRecyclerView = view.findViewById(R.id.recycler_view);
+        mRecyclerView = view.findViewById(R.id.fragment_profile_likes_rv);
         mRecyclerView.setHasFixedSize(true);
 
         // setting up the layout manager for the recycler view

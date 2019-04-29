@@ -6,13 +6,14 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:id="@+id/search_layout">
+    android:id="@+id/activity_search_layout">
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/searchViewPager"
+        android:id="@+id/activity_search_vp_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tabLayout"
+        android:layout_below="@+id/activity_search_tl_search"
+        android:background="@color/primary"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
@@ -20,19 +21,20 @@
         android:layout_marginEnd="0dp" />
 
     <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
+        android:id="@+id/activity_search_toolbar"
+        layout="@layout/toolbar_search"
         />
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/activity_search_tl_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/activity_search_toolbar"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="-2dp"
+        android:background="@color/primary"
         android:layout_marginEnd="0dp"
-        app:tabIndicatorColor="@color/medium_blue">
+        app:tabIndicatorColor="@color/secondary">
     </android.support.design.widget.TabLayout>
 
 

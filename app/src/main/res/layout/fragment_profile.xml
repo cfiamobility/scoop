@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    tools:context=".ProfileFragment">
+
+    <View
+        android:id="@+id/fragment_profile_divider"
+        android:layout_width="match_parent"
+        android:layout_height="157dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/fragment_profile_img_profile"
+        android:layout_width="84dp"
+        android:layout_height="83dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="26dp"
+        android:src="@drawable/ic_account_circle_black_24dp" />
+
+    <TextView
+        android:id="@+id/fragment_profile_txt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/fragment_profile_img_profile"
+        android:fontFamily="@font/roboto"
+        android:text="Edison Mendoza"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/fragment_profile_txt_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragment_profile_txt_name"
+        android:layout_marginStart="33dp"
+
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/fragment_profile_img_profile"
+        android:fontFamily="@font/roboto"
+        android:text="CFIA Mobility" />
+
+    <TextView
+        android:id="@+id/fragment_profile_txt_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragment_profile_txt_position"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@+id/fragment_profile_img_profile"
+        android:fontFamily="@font/roboto"
+        android:text="Ottawa, ON" />
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/fragment_profile_tl_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragment_profile_divider"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        app:tabTextColor="@color/black"
+        app:tabIndicatorColor="@color/medium_blue"
+        app:tabIndicatorHeight="3dp"
+        app:tabSelectedTextColor="@color/secondary">
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fragment_profile_vp"
+        android:layout_width="match_parent"
+        android:layout_height="477dp"
+        android:layout_below="@+id/fragment_profile_tl_profile"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp" />
+
+    <TableLayout
+        android:id="@+id/fragment_profile_tl_social_media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragment_profile_txt_location"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toEndOf="@+id/fragment_profile_img_profile"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <TableRow
+            android:id="@+id/fragment_profile_tr_facebook"
+            android:layout_margin="2dp">
+
+            <ImageView
+                android:id="@+id/fragment_profile_img_facebook"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/facebook" />
+
+            <TextView
+                android:id="@+id/fragment_profile_txt_facebook"
+                android:layout_marginStart="2dp"
+                android:fontFamily="@font/roboto"
+                android:text="https://www.facebook.com"
+                android:textSize="10sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/fragment_profile_tr_instagram"
+            android:layout_margin="2dp">
+
+            <ImageView
+                android:id="@+id/fragment_profile_img_instagram"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/instagram" />
+
+            <TextView
+                android:id="@+id/fragment_profile_txt_instagram"
+                android:layout_marginStart="2dp"
+                android:fontFamily="@font/roboto"
+                android:text="https://www.instagram.com"
+                android:textSize="10sp" />
+        </TableRow>
+
+
+        <TableRow
+            android:id="@+id/fragment_profile_tr_linkedin"
+            android:layout_margin="2dp">
+
+            <ImageView
+                android:id="@+id/fragment_profile_img_linkedin"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/linkedin" />
+
+            <TextView
+                android:id="@+id/fragment_profile_txt_linkedin"
+                android:layout_marginStart="2dp"
+                android:fontFamily="@font/roboto"
+                android:text="https://www.linkedin.com"
+                android:textSize="10sp" />
+        </TableRow>
+
+
+        <TableRow
+            android:id="@+id/fragment_profile_tr_twitter"
+            android:layout_margin="2dp">
+
+            <ImageView
+                android:id="@+id/fragment_profile_img_twitter"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/twitter" />
+
+            <TextView
+                android:id="@+id/fragment_profile_txt_twitter"
+                android:layout_marginStart="2dp"
+                android:fontFamily="@font/roboto"
+                android:text="https://www.twitter.com"
+                android:textSize="10sp" />
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:id="@+id/fragment_profile_btn_edit_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_below="@+id/fragment_profile_img_profile"
+        android:layout_marginStart="-85dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/fragment_profile_img_profile"
+        android:background="@drawable/btn_border"
+        android:text="Edit"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+</RelativeLayout>

@@ -80,7 +80,7 @@ public class MostGenericController {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), displayPost.class));
+                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
             }
         });
 
@@ -88,14 +88,14 @@ public class MostGenericController {
         holder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainScreen.otherUserClicked(posterid);
+                MainActivity.otherUserClicked(posterid);
             }
         });
 
         holder.username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainScreen.otherUserClicked(posterid);
+                MainActivity.otherUserClicked(posterid);
             }
         });
     }
@@ -378,7 +378,7 @@ public class MostGenericController {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), displayPost.class));
+                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
             }
         });
     }

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/activity_main_bottom_navigation"
+        android:layout_below="@+id/activity_main_toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp">
+        <fragment
+            android:id="@+id/tabFragment"
+            android:name="ca.gc.inspection.scoop.TabFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
+    <include
+    android:id="@+id/activity_main_toolbar"
+    layout="@layout/toolbar" />
+
+    <android.support.design.widget.BottomNavigationView
+    android:id="@+id/activity_main_bottom_navigation"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="0dp"
+    android:background="@color/primary"
+    app:menu="@menu/menu_bottom_navigation_toolbar"
+    android:translationZ="-10dp"
+    app:labelVisibilityMode="unlabeled"/>
+
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/activity_main_vp_feed"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="623dp"-->
+        <!--android:layout_above="@+id/activity_main_bottom_navigation"-->
+        <!--android:layout_marginTop="56dp"-->
+        <!--android:layout_marginBottom="0dp"-->
+        <!--android:animateLayoutChanges="true" />-->
+
+    <!--<include-->
+        <!--android:id="@+id/activity_main_toolbar"-->
+        <!--layout="@layout/toolbar" />-->
+
+    <!--<android.support.design.widget.BottomNavigationView-->
+        <!--android:id="@+id/activity_main_bottom_navigation"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginStart="0dp"-->
+        <!--android:background="@color/primary"-->
+        <!--app:menu="@menu/menu_bottom_navigation_toolbar"-->
+        <!--android:translationZ="-10dp"-->
+        <!--app:labelVisibilityMode="unlabeled"/>-->
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/activity_main_fbtn_create_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/secondary"
+        android:scaleType="center"
+        android:src="@drawable/ic_add_black_24dp"
+        app:fabSize="mini" />
+
+    <View
+        android:id="@+id/divider22"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@+id/activity_main_toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        android:background="?android:attr/listDivider" />
+
+    <View
+        android:id="@+id/divider24"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/activity_main_bottom_navigation"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:background="?android:attr/listDivider" />
+
+</RelativeLayout>
+

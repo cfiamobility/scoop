@@ -1,8 +1,6 @@
 <resources>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
-
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,11 +12,13 @@
     <string name="create_a_post">Create A Post</string>
     <string name="post">Post</string>
 
+    <!-- Navigation Drawer -->
     <string name="saved">Saved Posts</string>
     <string name="settings">Settings</string>
     <string name="edit_profle">Edit Profile</string>
     <string name="info">Info</string>
 
+    <!-- Edit Profile-->
     <string name="position">Position</string>
     <string name="division">Division</string>
     <string name="address">Address</string>
@@ -32,9 +32,11 @@
     <string name="save">Save</string>
     <string name="change_profile_image">Change Profile Picture</string>
 
+
     <string name="title">TITLE</string>
     <string name="post_template">Write something...</string>
 
+    <!-- Post Options -->
     <string name="share">Share</string>
     <string name="delete">Delete</string>
     <string name="report">Report</string>
@@ -44,10 +46,11 @@
 
     <string name="name">NAME</string>
 
+    <!-- Splash Screen/Sign Up-->
     <string name="view_post">Viewing Post</string>
     <string name="sign_up">Sign Up</string>
     <string name="app">Scoop</string>
-    <string name="login_sentence">Already have an account? <b>Log In</b></string>
+    <string name="login_sentence">Don\'t have an account? <b>Sign Up Now</b></string>
     <string name="login_page">Login</string>
     <string name="create_account">Create Account</string>
     <string name="first_name">First Name</string>
@@ -61,13 +64,11 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <!-- Action Bar Titles-->
     <string name="navigation_community">Community</string>
     <string name="navigation_official">Official</string>
     <string name="navigation_notifications">Notifications</string>
     <string name="navigation_profile">Profile</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Edit Profile Screen -->
     <string name="firstNameET">First Name</string>

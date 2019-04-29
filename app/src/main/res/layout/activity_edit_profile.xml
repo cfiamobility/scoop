@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".editProfileScreen"
+    tools:context=".EditProfileActivity"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:id="@+id/edit_profile_layout">
+    android:id="@+id/activity_edit_profile_layout">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,31 +15,31 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/backButton"
+                android:id="@+id/activity_edit_profile_btn_back"
                 android:layout_width="29dp"
                 android:layout_height="32dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="13dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:background="?attr/actionModeCloseDrawable"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="@color/secondary"
                 android:onClick="finishActivity" />
 
             <TextView
-                android:id="@+id/titleText"
+                android:id="@+id/activity_edit_profile_txt_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/roboto"
                 android:text="@string/edit_profle"
-                android:textAllCaps="true"
+                android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -49,14 +48,14 @@
                 android:id="@+id/divider6"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_alignTop="@+id/changeProfilePicture"
+                android:layout_alignTop="@+id/activity_edit_profile_txt_change_profile_picture"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="39dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <EditText
-                android:id="@+id/firstNameEditText"
+                android:id="@+id/activity_edit_profile_et_first_name"
                 android:layout_width="241dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider6"
@@ -64,16 +63,16 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="23dp"
-                android:layout_toEndOf="@+id/textView2"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_first_name"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/first_name"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
                 android:textCursorDrawable="@color/medium_blue" />
 
             <EditText
-                android:id="@+id/lastNameEditText"
+                android:id="@+id/activity_edit_profile_et_last_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider8"
@@ -81,9 +80,9 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="23dp"
-                android:layout_toEndOf="@+id/textView3"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_last_name"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/last_name"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
@@ -93,7 +92,7 @@
                 android:id="@+id/divider8"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/firstNameEditText"
+                android:layout_below="@+id/activity_edit_profile_et_first_name"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
@@ -103,14 +102,14 @@
                 android:id="@+id/divider9"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/lastNameEditText"
+                android:layout_below="@+id/activity_edit_profile_et_last_name"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <AutoCompleteTextView
-                android:id="@+id/positionEditText"
+                android:id="@+id/activity_edit_profile_et_position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider9"
@@ -118,9 +117,9 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="23dp"
-                android:layout_toEndOf="@+id/textView4"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_position"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/position"
                 android:textCursorDrawable="@color/medium_blue" />
 
@@ -128,14 +127,14 @@
                 android:id="@+id/divider10"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/positionEditText"
+                android:layout_below="@+id/activity_edit_profile_et_position"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <AutoCompleteTextView
-                android:id="@+id/divisionEditText"
+                android:id="@+id/activity_edit_profile_et_division"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider10"
@@ -143,9 +142,9 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="9dp"
                 android:layout_marginEnd="23dp"
-                android:layout_toEndOf="@+id/textView5"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_division"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/division"
                 android:textCursorDrawable="@color/medium_blue" />
 
@@ -153,14 +152,14 @@
                 android:id="@+id/divider11"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/divisionEditText"
+                android:layout_below="@+id/activity_edit_profile_et_division"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <AutoCompleteTextView
-                android:id="@+id/buildingEditText"
+                android:id="@+id/activity_edit_profile_et_building"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider11"
@@ -168,9 +167,9 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="23dp"
-                android:layout_toEndOf="@+id/textView6"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_address"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/work_address"
                 android:textCursorDrawable="@color/medium_blue" />
 
@@ -178,14 +177,14 @@
                 android:id="@+id/divider12"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/buildingEditText"
+                android:layout_below="@+id/activity_edit_profile_et_building"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <EditText
-                android:id="@+id/linkedinEditText"
+                android:id="@+id/activity_edit_profile_et_linkedin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider12"
@@ -193,9 +192,9 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="23dp"
-                android:layout_toEndOf="@+id/textView7"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_linkedin"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/linkedin"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
@@ -205,14 +204,14 @@
                 android:id="@+id/divider13"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/linkedinEditText"
+                android:layout_below="@+id/activity_edit_profile_et_linkedin"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <EditText
-                android:id="@+id/twitterEditText"
+                android:id="@+id/activity_edit_profile_et_twitter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider13"
@@ -220,9 +219,9 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/textView8"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_twitter"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/twitter"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
@@ -232,14 +231,14 @@
                 android:id="@+id/divider14"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/twitterEditText"
+                android:layout_below="@+id/activity_edit_profile_et_twitter"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <EditText
-                android:id="@+id/facebookEditText"
+                android:id="@+id/activity_edit_profile_et_facebook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider14"
@@ -247,9 +246,9 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/textView9"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_facebook"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/facebook"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
@@ -259,14 +258,14 @@
                 android:id="@+id/divider15"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/textView12"
+                android:layout_below="@+id/activity_edit_profile_txt_instagram"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="9dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <EditText
-                android:id="@+id/citEditText"
+                android:id="@+id/activity_edit_profile_et_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider15"
@@ -274,9 +273,9 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/textView10"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_city"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/city"
                 android:inputType="textPersonName"
                 android:textCursorDrawable="@color/medium_blue"
@@ -286,14 +285,14 @@
                 android:id="@+id/divider16"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/citEditText"
+                android:layout_below="@+id/activity_edit_profile_et_city"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <Spinner
-                android:id="@+id/provincesSpinner"
+                android:id="@+id/activity_edit_profile_spinner_provinces"
                 style="?android:attr/textViewStyle"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
@@ -302,176 +301,191 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="9dp"
                 android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/textView11"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_province"
                 android:spinnerMode="dropdown"
-                android:textAlignment="inherit"
-                />
+                android:textAlignment="inherit" />
 
             <Button
-                android:id="@+id/saveButton"
-                android:layout_width="54dp"
+                android:id="@+id/activity_edit_profile_btn_save"
+                android:layout_width="wrap_content"
                 android:layout_height="29dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="43dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="13dp"
-                android:layout_toEndOf="@+id/titleText"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_title"
                 android:background="@drawable/button_shape"
-                android:backgroundTint="@color/medium_blue"
+                android:backgroundTint="@color/secondary"
                 android:text="@string/save"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
+                android:textAllCaps="false"/>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/activity_edit_profile_txt_first_name"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/divider6"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/first_name"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/activity_edit_profile_txt_last_name"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider8"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/last_name"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/activity_edit_profile_txt_position"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider9"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/position"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/activity_edit_profile_txt_division"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider10"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="9dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/division"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/activity_edit_profile_txt_address"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider11"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/address"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/activity_edit_profile_txt_linkedin"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider12"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/linkedin"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/activity_edit_profile_txt_twitter"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider13"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="9dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/twitter"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/activity_edit_profile_txt_facebook"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider14"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/facebook"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/activity_edit_profile_txt_city"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider15"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/city"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/activity_edit_profile_txt_province"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider16"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="9dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/province"
                 android:textSize="18sp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView"
+                android:id="@+id/activity_edit_profile_img_profile"
                 android:layout_width="113dp"
                 android:layout_height="89dp"
-                android:layout_below="@+id/titleText"
+                android:layout_below="@+id/divider26"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="11dp"
+                android:layout_marginTop="24dp"
                 android:contentDescription="TODO" />
 
             <TextView
-                android:id="@+id/changeProfilePicture"
+                android:id="@+id/activity_edit_profile_txt_change_profile_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/imageView"
+                android:layout_below="@+id/activity_edit_profile_img_profile"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="14dp"
                 android:clickable="true"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:onClick="changeProfilePicture"
                 android:text="@string/change_profile_image" />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/activity_edit_profile_txt_instagram"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider23"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="9dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/instagram"
                 android:textSize="18sp" />
 
@@ -479,14 +493,14 @@
                 android:id="@+id/divider23"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/textView9"
+                android:layout_below="@+id/activity_edit_profile_txt_facebook"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="9dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
             <EditText
-                android:id="@+id/instagramEditText"
+                android:id="@+id/activity_edit_profile_et_instagram"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider23"
@@ -494,13 +508,23 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="9dp"
                 android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/textView12"
-                android:singleLine="true"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_instagram"
                 android:textCursorDrawable="@color/medium_blue"
                 android:background="@android:color/transparent"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/roboto"
                 android:hint="@string/instagram"
                 android:textSize="18sp"/>
+
+            <View
+                android:id="@+id/divider26"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/activity_edit_profile_txt_title"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="17dp"
+                android:layout_marginEnd="0dp"
+                android:elevation="5dp"
+                android:background="?android:attr/listDivider" />
 
         </RelativeLayout>
     </ScrollView>
