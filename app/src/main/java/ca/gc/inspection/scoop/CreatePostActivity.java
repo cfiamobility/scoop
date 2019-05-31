@@ -29,8 +29,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class CreatePostActivity extends AppCompatActivity {
 
     public void returnToPrevious (View view) {
@@ -118,7 +116,7 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         });
 
-        /** OnClickListenger for the send button that will grab all the user inputs and send everthing to the CreatePostController
+        /** OnClickListenger for the send button that will grab all the user inputs and send everthing to the CreatePostPresenter
          *
          */
         send.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +134,7 @@ public class CreatePostActivity extends AppCompatActivity {
                         imageBitmap = MyCamera.bitmapToString(((BitmapDrawable)postImage.getDrawable()).getBitmap());
                         Log.i("bitmap", imageBitmap);
                     }
-                    CreatePostController.sendPostToDatabase(CreatePostActivity.this, Config.currentUser, title, text, imageBitmap);
+                    CreatePostContract.Presenter.sendPostToDatabase(CreatePostActivity.this, Config.currentUser, title, text, imageBitmap);
 
                     finish();
                 }
