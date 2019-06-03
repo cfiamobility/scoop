@@ -51,12 +51,11 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+import static ca.gc.inspection.scoop.MyCamera.CHOOSE_PIC_REQUEST_CODE;
+import static ca.gc.inspection.scoop.MyCamera.MY_CAMERA_PERMISSION_CODE;
+import static ca.gc.inspection.scoop.MyCamera.TAKE_PIC_REQUEST_CODE;
 
-	// Request codes for intents
-	public static final int TAKE_PIC_REQUEST_CODE = 0;
-	public static final int CHOOSE_PIC_REQUEST_CODE = 1;
-	private static final int MY_CAMERA_PERMISSION_CODE = 100;
+public class EditProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 	// UI Declarations
 	static AutoCompleteTextView positionET, buildingET, divisionET;
@@ -75,7 +74,6 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 	static String firstNameText, lastNameText, positionText, divisionText, buildingText, cityText, provinceText, linkedinText, twitterText, facebookText, instagramText, userID, currentPhotoPath;
 	static ArrayList<String> positionAutoComplete, buildingsAutoComplete, cityAL, provinceAL, divisionsAutoComplete;
 	static HashMap<String, String> positionObjects, buildingsObjects, divisionsObjects;
-	static Uri mMediaUri;
 	static Bitmap bitmap;
 
 	// method for the back button
@@ -489,28 +487,8 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 		dialog.show();
 	}
 
-
-	// Method thats runs when the user selects take a picture when changing profile picture
-	public void takePicture() {
-		// Intent to run
-		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-			// writing a new file
-			File photoFile = null;
-			try {
-				photoFile = createImageFile();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			// When the file is created, this runs
-			if (photoFile != null) {
-				// Gets the reference for the photo that is taken and sends it to the intent
-				mMediaUri = FileProvider.getUriForFile(EditProfileActivity.this, "com.example.android.fileprovider", photoFile);
-				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-				startActivityForResult(takePictureIntent, TAKE_PIC_REQUEST_CODE);
-			}
-		}
+	private void takePicture() {
+		MyCamera.takePicture(this);
 	}
 
 	@Override
@@ -584,22 +562,6 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 		}
 	}
 
-	// Method that creates the temp file for the media scanner to find... stack overflow, i have no idea whats going on in this method.. but it works
-	private File createImageFile() throws IOException {
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String imageFileName = "IMG_" + timeStamp;
-		File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-		File image = File.createTempFile(
-				imageFileName,  /* prefix */
-				".jpg",         /* suffix */
-				storageDir      /* directory */
-		);
-		// Gets the photo path which is really important
-		currentPhotoPath = image.getAbsolutePath();
-		return image;
-	}
-
 	// General permissions request
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -607,7 +569,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 		if (requestCode == MY_CAMERA_PERMISSION_CODE) {
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 				Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
-				takePicture();
+				MyCamera.takePicture(this);
 			} else {
 				Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
 			}

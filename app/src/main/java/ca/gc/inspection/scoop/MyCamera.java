@@ -1,12 +1,18 @@
 package ca.gc.inspection.scoop;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import androidx.exifinterface.media.ExifInterface;
+
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.util.Log;
 
@@ -18,6 +24,7 @@ import java.util.Date;
 
 class MyCamera {
 
+    // Request codes for intents
     static final int TAKE_PIC_REQUEST_CODE = 0;
     static final int CHOOSE_PIC_REQUEST_CODE = 1;
     static final int MY_CAMERA_PERMISSION_CODE = 100;
@@ -37,6 +44,23 @@ class MyCamera {
         );
         currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    public static void takePicture(Activity activity) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = MyCamera.createImageFile(activity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri mediaUri = FileProvider.getUriForFile(activity.getApplicationContext(), "com.example.android.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mediaUri);
+                activity.startActivityForResult(takePictureIntent, TAKE_PIC_REQUEST_CODE);
+            }
+        }
     }
 
     static int orientation;
