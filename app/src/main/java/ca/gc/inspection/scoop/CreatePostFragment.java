@@ -120,11 +120,11 @@ public class CreatePostFragment extends Fragment implements CreatePostContract.V
             @Override
             public void onClick(View v) {
                 if (createPostActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE);
+                    createPostActivity.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE);
                 } else {
                     Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     choosePictureIntent.setType("image/*");
-                    startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
+                    createPostActivity.startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
                 }
 
             }
