@@ -157,57 +157,8 @@ public class CreatePostFragment extends Fragment implements CreatePostContract.V
         return root;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            String path = null;
-            Uri uri = null;
-            if (requestCode == MyCamera.CHOOSE_PIC_REQUEST_CODE) {
-                if (data == null) {
-                    Toast.makeText(createPostActivity.getApplicationContext(), "Image cannot be null!", Toast.LENGTH_LONG).show();
-                } else {
-                    try {
-                        uri = data.getData();
-                        path = ImageFilePath.getPath(createPostActivity.getBaseContext(), data.getData());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                File f = new File(MyCamera.currentPhotoPath);
-                uri = Uri.fromFile(f);
-                mediaScanIntent.setData(uri);
-                createPostActivity.sendBroadcast(mediaScanIntent);
-                path = MyCamera.currentPhotoPath;
-            }
-
-            if (path != null || uri != null) {
-                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                bmOptions.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(path, bmOptions);
-                bmOptions.inJustDecodeBounds = false;
-
-
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(createPostActivity.getContentResolver(), uri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Bitmap newBitmap = MyCamera.imageOrientationValidator(bitmap, path);
-
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
-                postImage.setLayoutParams(layoutParams);
-                postImage.setImageBitmap(newBitmap);
-            } else {
-                createPostActivity.makeToast("Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT);
-            }
-
-        } else if (resultCode != RESULT_CANCELED) {
-            Toast.makeText(createPostActivity.getApplicationContext(), "Cancelled!", Toast.LENGTH_LONG).show();
-        }
+    public void setBitmapWithLayout(ViewGroup.LayoutParams layoutParams, Bitmap newBitmap) {
+        postImage.setLayoutParams(layoutParams);
+        postImage.setImageBitmap(newBitmap);
     }
 }

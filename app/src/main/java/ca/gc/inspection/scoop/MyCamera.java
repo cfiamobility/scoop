@@ -24,7 +24,6 @@ import java.util.Date;
 
 class MyCamera {
 
-    // Request codes for intents
     static final int TAKE_PIC_REQUEST_CODE = 0;
     static final int CHOOSE_PIC_REQUEST_CODE = 1;
     static final int MY_CAMERA_PERMISSION_CODE = 100;
