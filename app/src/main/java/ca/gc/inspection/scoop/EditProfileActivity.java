@@ -53,7 +53,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static ca.gc.inspection.scoop.MyCamera.CHOOSE_PIC_REQUEST_CODE;
 import static ca.gc.inspection.scoop.MyCamera.MY_CAMERA_PERMISSION_CODE;
-import static ca.gc.inspection.scoop.MyCamera.TAKE_PIC_REQUEST_CODE;
 
 public class EditProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -569,7 +568,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 		if (requestCode == MY_CAMERA_PERMISSION_CODE) {
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 				Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
-				MyCamera.takePicture(this);
+				takePicture();
 			} else {
 				Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
 			}
