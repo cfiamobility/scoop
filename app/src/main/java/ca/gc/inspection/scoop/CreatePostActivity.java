@@ -1,9 +1,12 @@
 package ca.gc.inspection.scoop;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -12,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -58,19 +62,19 @@ public class CreatePostActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MyCamera.MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
+                makeToast("Permission Granted", Toast.LENGTH_LONG);
                 takePicture();
             } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
+                makeToast( "Permission Denied", Toast.LENGTH_LONG);
             }
         } else if (requestCode == MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
+                makeToast("Permission Granted", Toast.LENGTH_LONG);
                 Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 choosePictureIntent.setType("image/*");
                 startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
             } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
+                makeToast("Permission Denied", Toast.LENGTH_LONG);
             }
         }
     }
@@ -128,7 +132,34 @@ public class CreatePostActivity extends AppCompatActivity {
         }
     }
 
-    public void makeToast(String s, int lengthShort) {
-        Toast.makeText(this, "Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT).show();
+    public void selectImageFromCameraRoll() {
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE);
+        } else {
+            Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            choosePictureIntent.setType("image/*");
+            startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
+        }
+    }
+
+    public void createPost(String postTitle, String postText, Drawable postImage) {
+        if (postTitle.isEmpty()) {
+            makeToast("Add a title to continue", Toast.LENGTH_SHORT);
+        } else if (postText.isEmpty()) {
+            makeToast("Add a message to continue", Toast.LENGTH_SHORT);
+        } else {
+            String imageBitmap = "";
+            if (postImage != null) {
+                imageBitmap = MyCamera.bitmapToString(((BitmapDrawable) postImage).getBitmap());
+                Log.i("bitmap", imageBitmap);
+            }
+            CreatePostContract.Presenter.sendPostToDatabase(getBaseContext(), Config.currentUser, postTitle, postText, imageBitmap);
+
+            finish();
+        }
+    }
+
+    public void makeToast(String text, final int length) {
+        Toast.makeText(this, text, length).show();
     }
 }

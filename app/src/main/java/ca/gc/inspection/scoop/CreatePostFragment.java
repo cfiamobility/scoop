@@ -119,14 +119,7 @@ public class CreatePostFragment extends Fragment implements CreatePostContract.V
         cameraRoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (createPostActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    createPostActivity.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE);
-                } else {
-                    Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    choosePictureIntent.setType("image/*");
-                    createPostActivity.startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
-                }
-
+                createPostActivity.selectImageFromCameraRoll();
             }
         });
 
@@ -136,22 +129,10 @@ public class CreatePostFragment extends Fragment implements CreatePostContract.V
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (postTitle.getText().toString().isEmpty()) {
-                    createPostActivity.makeToast("Add a title to continue", Toast.LENGTH_SHORT);
-                } else if (postText.getText().toString().isEmpty()) {
-                    createPostActivity.makeToast("Add a message to continue", Toast.LENGTH_SHORT);
-                } else {
-                    String title = postTitle.getText().toString();
-                    String text = postText.getText().toString();
-                    String imageBitmap = "";
-                    if (postImage.getDrawable() != null) {
-                        imageBitmap = MyCamera.bitmapToString(((BitmapDrawable) postImage.getDrawable()).getBitmap());
-                        Log.i("bitmap", imageBitmap);
-                    }
-                    CreatePostContract.Presenter.sendPostToDatabase(createPostActivity.getBaseContext(), Config.currentUser, title, text, imageBitmap);
-
-                    createPostActivity.finish();
-                }
+                createPostActivity.createPost(
+                        postTitle.getText().toString(),
+                        postText.getText().toString(),
+                        postImage.getDrawable());
             }
         });
         return root;
