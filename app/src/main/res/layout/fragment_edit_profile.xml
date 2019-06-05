@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:id="@+id/fragment_edit_profile_layout">
+    android:id="@+id/fragment_edit_profile">
 
         <RelativeLayout
             android:layout_width="match_parent"

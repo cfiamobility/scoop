@@ -50,6 +50,12 @@ public class EditProfileFragment extends Fragment implements EditProfileContract
     static ArrayAdapter<CharSequence> spinnerAdapter;
     static ArrayAdapter<String> buildingAdapter, positionAdapter, divisionAdapter;
 
+    // Application Side Variable Declarations
+    static String firstNameText, lastNameText, positionText, divisionText, buildingText, cityText, provinceText, linkedinText, twitterText, facebookText, instagramText, userID, currentPhotoPath;
+    static ArrayList<String> positionAutoComplete, buildingsAutoComplete, cityAL, provinceAL, divisionsAutoComplete;
+    static HashMap<String, String> positionObjects, buildingsObjects, divisionsObjects;
+    static Bitmap bitmap;
+
     @Override
     public void setPresenter(EditProfileContract.Presenter presenter) {
         mPresenter = presenter;
@@ -57,6 +63,10 @@ public class EditProfileFragment extends Fragment implements EditProfileContract
 
     public static EditProfileFragment newInstance() {
         return new EditProfileFragment();
+    }
+
+    public void setUserId(String id) {
+        userID = id;
     }
 
     @Override
@@ -92,16 +102,31 @@ public class EditProfileFragment extends Fragment implements EditProfileContract
         previewProfilePic = root.findViewById(R.id.activity_edit_profile_img_profile);
 
         // Province Spinner Definition
-        spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.provinces_array, android.R.layout.simple_spinner_item);
+        spinnerAdapter = ArrayAdapter.createFromResource(editProfileActivity.getBaseContext(), R.array.provinces_array, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         provinceSpinner.setAdapter(spinnerAdapter);
         provinceSpinner.setOnItemSelectedListener(this);
 
+        // Searches for user's info to autofill the edittext
+        EditUserController.initialFill(editProfileActivity.getApplicationContext());
+
+        // Sets up the Position, Office Address and Division AutoCompletes
+        autoComplete();
+
         return root;
     }
 
-    public void setImageBitmap(Bitmap bitmap) {
+    public void setProfilePicBitmap(Bitmap bitmap) {
         previewProfilePic.setImageBitmap(bitmap);
+        this.bitmap = bitmap;
+    }
+
+    public int getProfilePicWidth() {
+        return previewProfilePic.getWidth();
+    }
+
+    public int getProfilePicHeight() {
+        return previewProfilePic.getHeight();
     }
 
     // Mandatory Methods for AdapterView.OnItemSelected - OnNothingSelected is Default Spinner Selection set to AB
@@ -335,7 +360,7 @@ public class EditProfileFragment extends Fragment implements EditProfileContract
                     // Text inputted converted to have a cap letter to start ie. "start" -> "Start"
                     String positionChanged = positionET.getText().toString();
                     String positionChangedCapped = capFirstLetter(positionChanged);
-                    EditUserController.positionAutoComplete(getApplicationContext(), positionChangedCapped);
+                    EditUserController.positionAutoComplete(editProfileActivity.getApplicationContext(), positionChangedCapped);
                 }
             }
 
@@ -363,7 +388,7 @@ public class EditProfileFragment extends Fragment implements EditProfileContract
                     // Text inputted converted to have a cap letter to start ie. "start" -> "Start"
                     String addressChanged = buildingET.getText().toString();
                     String addressChangedCapped = capFirstLetter(addressChanged);
-                    EditUserController.addressAutoComplete(getApplicationContext(), addressChangedCapped);
+                    EditUserController.addressAutoComplete(editProfileActivity.getApplicationContext(), addressChangedCapped);
                 }
             }
 
@@ -391,7 +416,7 @@ public class EditProfileFragment extends Fragment implements EditProfileContract
                     // Text inputted converted to have a cap letter to start ie. "start" -> "Start"
                     String divisionChanged = divisionET.getText().toString();
                     String divisionChangedCapped = capFirstLetter(divisionChanged);
-                    EditUserController.divisionAutoComplete(getApplicationContext(), divisionChangedCapped);
+                    EditUserController.divisionAutoComplete(editProfileActivity.getApplicationContext(), divisionChangedCapped);
                 }
             }
 

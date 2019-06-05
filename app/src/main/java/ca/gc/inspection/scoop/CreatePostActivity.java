@@ -27,7 +27,7 @@ import ca.gc.inspection.scoop.util.ActivityUtils;
 
 public class CreatePostActivity extends AppCompatActivity {
 
-    private CreatePostPresenter mPresenter;
+    private CreatePostContract.Presenter mPresenter;
     private CreatePostFragment mView;
 
     public void returnToPrevious (View view) {
