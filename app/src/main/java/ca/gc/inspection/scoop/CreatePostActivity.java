@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +20,18 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import ca.gc.inspection.scoop.util.ActivityUtils;
 
@@ -153,10 +163,58 @@ public class CreatePostActivity extends AppCompatActivity {
                 imageBitmap = MyCamera.bitmapToString(((BitmapDrawable) postImage).getBitmap());
                 Log.i("bitmap", imageBitmap);
             }
-            CreatePostContract.Presenter.sendPostToDatabase(getBaseContext(), Config.currentUser, postTitle, postText, imageBitmap);
+            sendPostToDatabase(getBaseContext(), Config.currentUser, postTitle, postText, imageBitmap);
 
             finish();
         }
+    }
+
+    /** SendPostToDatabase
+     * Simple post request to store the newly created post to the postcomment table
+     * @param context Context of CreatePostPresenter.java
+     * @param userId current user's userid
+     * @param title userinputted title (Mandatory)
+     * @param text userinputted test (Mandatory)
+     * @param imageBitmap userinputted image (Optional)
+     */
+    static void sendPostToDatabase(Context context, final String userId, final String title, final String text, final String imageBitmap) {
+        String URL = Config.baseIP + "add-post";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        if (response.contains("Success")){
+                            Log.i("Info", "We good");
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", String.valueOf(error));
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return CreatePostContract.Presenter.getPostParams(userId, title, text, imageBitmap);
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return CreatePostContract.Presenter.getPostHeaders();
+            }
+        };
+        requestQueue.add(postRequest);
     }
 
     public void makeToast(String text, final int length) {
