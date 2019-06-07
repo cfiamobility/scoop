@@ -1,7 +1,6 @@
 package ca.gc.inspection.scoop;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -28,23 +27,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import ca.gc.inspection.scoop.util.ActivityUtils;
 
 public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.View {
 
+    private static final int TEXT_CHAR_LIMIT = 255;
     private CreatePostContract.Presenter mPresenter;
     private EditText postTitle, postText;
     private ImageView postImage;
@@ -92,7 +80,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         postTitle = findViewById(R.id.activity_create_post_et_title);
 
         postText = findViewById(R.id.activity_create_post_et_post_content);
-        postText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
+        postText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(TEXT_CHAR_LIMIT)});
         postText.addTextChangedListener(mTextEditorWatcher);
 
         postImage = findViewById(R.id.activity_create_post_img_post);
@@ -152,19 +140,19 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MyCamera.MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                makeToast("Permission Granted", Toast.LENGTH_LONG);
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
                 takePicture();
             } else {
-                makeToast( "Permission Denied", Toast.LENGTH_LONG);
+                Toast.makeText(this,  "Permission Denied", Toast.LENGTH_LONG).show();
             }
         } else if (requestCode == MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                makeToast("Permission Granted", Toast.LENGTH_LONG);
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
                 Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 choosePictureIntent.setType("image/*");
                 startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
             } else {
-                makeToast("Permission Denied", Toast.LENGTH_LONG);
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -214,7 +202,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                 layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
                 setBitmapWithLayout(layoutParams, newBitmap);
             } else {
-                makeToast("Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT).show();
             }
 
         } else if (resultCode != RESULT_CANCELED) {
@@ -234,71 +222,19 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
     public void createPost(String postTitle, String postText, Drawable postImage) {
         if (postTitle.isEmpty()) {
-            makeToast("Add a title to continue", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Add a title to continue", Toast.LENGTH_SHORT).show();
         } else if (postText.isEmpty()) {
-            makeToast("Add a message to continue", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Add a message to continue", Toast.LENGTH_SHORT).show();
         } else {
             String imageBitmap = "";
             if (postImage != null) {
                 imageBitmap = MyCamera.bitmapToString(((BitmapDrawable) postImage).getBitmap());
                 Log.i("bitmap", imageBitmap);
             }
-            sendPostToDatabase(getBaseContext(), Config.currentUser, postTitle, postText, imageBitmap);
+            mPresenter.sendPostToDatabase(MySingleton.getInstance(this), Config.currentUser, postTitle, postText, imageBitmap);
 
             finish();
         }
-    }
-
-    /** SendPostToDatabase
-     * Simple post request to store the newly created post to the postcomment table
-     * @param context Context of CreatePostPresenter.java
-     * @param userId current user's userid
-     * @param title userinputted title (Mandatory)
-     * @param text userinputted test (Mandatory)
-     * @param imageBitmap userinputted image (Optional)
-     */
-    static void sendPostToDatabase(Context context, final String userId, final String title, final String text, final String imageBitmap) {
-        String URL = Config.baseIP + "add-post";
-
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-
-        StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
-                new Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response);
-                        if (response.contains("Success")){
-                            Log.i("Info", "We good");
-                        }
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", String.valueOf(error));
-                    }
-                }
-        ) {
-            @Override
-            protected Map<String, String> getParams()
-            {
-                return CreatePostContract.Presenter.getPostParams(userId, title, text, imageBitmap);
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return CreatePostContract.Presenter.getPostHeaders();
-            }
-        };
-        requestQueue.add(postRequest);
-    }
-
-    public void makeToast(String text, final int length) {
-        Toast.makeText(this, text, length).show();
     }
 
     public void setBitmapWithLayout(ViewGroup.LayoutParams layoutParams, Bitmap newBitmap) {
