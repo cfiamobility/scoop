@@ -15,9 +15,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -35,13 +43,33 @@ import java.util.Map;
 
 import ca.gc.inspection.scoop.util.ActivityUtils;
 
-public class CreatePostActivity extends AppCompatActivity {
+public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.View {
 
     private CreatePostContract.Presenter mPresenter;
-    private CreatePostFragment mView;
+    private EditText postTitle, postText;
+    private ImageView postImage;
+
+    private TextView counter;
+    private final TextWatcher mTextEditorWatcher = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //This sets a textview to the current length
+            counter.setText(String.valueOf(s.length()) + "/255");
+        }
+
+        public void afterTextChanged(Editable s) {
+        }
+    };
 
     public void returnToPrevious (View view) {
         finish();
+    }
+
+    @Override
+    public void setPresenter(CreatePostContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 
     @Override
@@ -52,15 +80,67 @@ public class CreatePostActivity extends AppCompatActivity {
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
-        mView = (CreatePostFragment) getSupportFragmentManager().findFragmentById(R.id.activity_create_post);
-        if (mView == null) {
-            // Create the fragment
-            mView = CreatePostFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(
-                    getSupportFragmentManager(), mView, R.id.activity_create_post);
-        }
+        setPresenter(new CreatePostPresenter());
 
-        mPresenter = new CreatePostPresenter();
+        /** Initialize edit texts, image view, and buttons for create post xml
+         *  postTitle: title of the post
+         *  postText: message or description of the post (set to have a character limit of 255)
+         *  postImage: (OPTIONAL) user can choose to add a picture to their post from either the camera, or the camera roll
+         *  counter: character counter for postText
+         *
+         */
+        postTitle = findViewById(R.id.activity_create_post_et_title);
+
+        postText = findViewById(R.id.activity_create_post_et_post_content);
+        postText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
+        postText.addTextChangedListener(mTextEditorWatcher);
+
+        postImage = findViewById(R.id.activity_create_post_img_post);
+
+        counter = findViewById(R.id.activity_create_post_txt_word_counter);
+
+        Button camera = findViewById(R.id.activity_create_post_btn_camera);
+        Button cameraRoll = findViewById(R.id.activity_create_post_btn_image);
+        Button send = findViewById(R.id.activity_create_post_btn_post);
+
+        /** OnClickListener for the camera button that launches the native camera app.
+         *  Deals with permission checks for Camera
+         */
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, MyCamera.MY_CAMERA_PERMISSION_CODE);
+                } else {
+                    takePicture();
+                }
+            }
+        });
+
+
+        /** OnClickListenger for the camera roll button that launches the native photo app of the phone which
+         *  allows users to select an image from the camera roll
+         *  deals with permission checks for read external storage
+         */
+        cameraRoll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImageFromCameraRoll();
+            }
+        });
+
+        /** OnClickListenger for the send button that will grab all the user inputs and send everthing to the CreatePostPresenter
+         *
+         */
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createPost(
+                        postTitle.getText().toString(),
+                        postText.getText().toString(),
+                        postImage.getDrawable());
+            }
+        });
     }
 
     public void takePicture() {
@@ -132,7 +212,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
-                mView.setBitmapWithLayout(layoutParams, newBitmap);
+                setBitmapWithLayout(layoutParams, newBitmap);
             } else {
                 makeToast("Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT);
             }
@@ -219,5 +299,10 @@ public class CreatePostActivity extends AppCompatActivity {
 
     public void makeToast(String text, final int length) {
         Toast.makeText(this, text, length).show();
+    }
+
+    public void setBitmapWithLayout(ViewGroup.LayoutParams layoutParams, Bitmap newBitmap) {
+        postImage.setLayoutParams(layoutParams);
+        postImage.setImageBitmap(newBitmap);
     }
 }
