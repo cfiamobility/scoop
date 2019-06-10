@@ -26,7 +26,7 @@ class EditUserController {
 	static void initialFill(Context context) {
 
 		// URL TO BE CHANGED - userID passed as a parameter to NodeJS
-		String URL = Config.baseIP + "edituser/getinitial/" + EditProfileActivity.userID;
+		String URL = Config.baseIP + "edituser/getinitial/" + EditProfileFragment.userID;
 
 		// Request to set up Volley.Method.GET
 		final RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -35,7 +35,7 @@ class EditUserController {
 		JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, URL, null,  new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
-				EditProfileActivity.initialFill(response);
+				EditProfileFragment.initialFill(response);
 			}
 		}, new Response.ErrorListener() {
 			@Override
@@ -67,7 +67,7 @@ class EditUserController {
 		JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
 			@Override
 			public void onResponse(JSONArray response) {
-				EditProfileActivity.positionAutoSetup(response, context);
+				EditProfileFragment.positionAutoSetup(response, context);
 			}
 		}, new Response.ErrorListener() {
 			@Override
@@ -96,7 +96,7 @@ class EditUserController {
 		JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
 			@Override
 			public void onResponse(JSONArray response) {
-				EditProfileActivity.addressAutoSetup(response, context);
+				EditProfileFragment.addressAutoSetup(response, context);
 			}
 		}, new Response.ErrorListener() {
 			@Override
@@ -126,7 +126,7 @@ class EditUserController {
 		JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
 			@Override
 			public void onResponse(JSONArray response) {
-				EditProfileActivity.divisionAutoSetup(response, context);
+				EditProfileFragment.divisionAutoSetup(response, context);
 			}
 		}, new Response.ErrorListener() {
 			@Override

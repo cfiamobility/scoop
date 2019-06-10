@@ -1,12 +1,18 @@
 package ca.gc.inspection.scoop;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import androidx.exifinterface.media.ExifInterface;
+
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.util.Log;
 
@@ -16,14 +22,18 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class MyCamera {
+public class MyCamera {
 
     static final int TAKE_PIC_REQUEST_CODE = 0;
-    static final int CHOOSE_PIC_REQUEST_CODE = 1;
-    static final int MY_CAMERA_PERMISSION_CODE = 100;
-    static final int MY_CAMERA_ROLL_PERMISSION_CODE = 101;
+    public static final int CHOOSE_PIC_REQUEST_CODE = 1;
+    public static final int MY_CAMERA_PERMISSION_CODE = 100;
+    public static final int MY_CAMERA_ROLL_PERMISSION_CODE = 101;
 
-    static String currentPhotoPath;
+    public static String currentPhotoPath;
+
+    private MyCamera() {
+         // singleton object
+    }
 
     static File createImageFile(Context context) throws IOException {
         // Create an image file name
@@ -39,8 +49,25 @@ class MyCamera {
         return image;
     }
 
+    public static void takePicture(Activity activity) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = MyCamera.createImageFile(activity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri mediaUri = FileProvider.getUriForFile(activity.getApplicationContext(), "com.example.android.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mediaUri);
+                activity.startActivityForResult(takePictureIntent, TAKE_PIC_REQUEST_CODE);
+            }
+        }
+    }
+
     static int orientation;
-    static Bitmap imageOrientationValidator(Bitmap bitmap, String path) {
+    public static Bitmap imageOrientationValidator(Bitmap bitmap, String path) {
         ExifInterface ei;
         try {
             ei = new ExifInterface(path);
@@ -85,14 +112,14 @@ class MyCamera {
         return bitmap;
     }
 
-    static String bitmapToString(Bitmap bitmap) {
+    public static String bitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
         byte[] imageBytes = baos.toByteArray();
         return Base64.encodeToString(imageBytes, Base64.DEFAULT);
     }
 
-    static Bitmap stringToBitmap(String string) {
+    public static Bitmap stringToBitmap(String string) {
         byte[] decodedImage = Base64.decode(string, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
     }

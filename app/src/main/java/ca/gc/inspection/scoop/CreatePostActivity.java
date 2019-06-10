@@ -6,12 +6,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +19,7 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,14 +30,10 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.View {
 
-public class CreatePostActivity extends AppCompatActivity {
-
-    public void returnToPrevious (View view) {
-        finish();
-    }
-
+    private static final int TEXT_CHAR_LIMIT = 255;
+    private CreatePostContract.Presenter mPresenter;
     private EditText postTitle, postText;
     private ImageView postImage;
 
@@ -54,11 +51,24 @@ public class CreatePostActivity extends AppCompatActivity {
         }
     };
 
+    public void returnToPrevious (View view) {
+        finish();
+    }
+
+    @Override
+    public void setPresenter(CreatePostContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
+        // set the system status bar color
+        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
+
+        setPresenter(new CreatePostPresenter());
 
         /** Initialize edit texts, image view, and buttons for create post xml
          *  postTitle: title of the post
@@ -70,7 +80,7 @@ public class CreatePostActivity extends AppCompatActivity {
         postTitle = findViewById(R.id.activity_create_post_et_title);
 
         postText = findViewById(R.id.activity_create_post_et_post_content);
-        postText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(255) });
+        postText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(TEXT_CHAR_LIMIT)});
         postText.addTextChangedListener(mTextEditorWatcher);
 
         postImage = findViewById(R.id.activity_create_post_img_post);
@@ -81,17 +91,13 @@ public class CreatePostActivity extends AppCompatActivity {
         Button cameraRoll = findViewById(R.id.activity_create_post_btn_image);
         Button send = findViewById(R.id.activity_create_post_btn_post);
 
-        // set the system status bar color
-        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
-
-
         /** OnClickListener for the camera button that launches the native camera app.
          *  Deals with permission checks for Camera
          */
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.CAMERA}, MyCamera.MY_CAMERA_PERMISSION_CODE);
                 } else {
                     takePicture();
@@ -103,64 +109,30 @@ public class CreatePostActivity extends AppCompatActivity {
         /** OnClickListenger for the camera roll button that launches the native photo app of the phone which
          *  allows users to select an image from the camera roll
          *  deals with permission checks for read external storage
-          */
+         */
         cameraRoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE);
-                } else {
-                    Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    choosePictureIntent.setType("image/*");
-                    startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
-                }
-
+                selectImageFromCameraRoll();
             }
         });
 
-        /** OnClickListenger for the send button that will grab all the user inputs and send everthing to the CreatePostController
+        /** OnClickListenger for the send button that will grab all the user inputs and send everthing to the CreatePostPresenter
          *
          */
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (postTitle.getText().toString().isEmpty()){
-                    Toast.makeText(CreatePostActivity.this, "Add a title to continue", Toast.LENGTH_SHORT).show();
-                } else if (postText.getText().toString().isEmpty()) {
-                    Toast.makeText(CreatePostActivity.this, "Add a message to continue", Toast.LENGTH_SHORT).show();
-                } else {
-                    String title = postTitle.getText().toString();
-                    String text = postText.getText().toString();
-                    String imageBitmap = "";
-                    if (postImage.getDrawable() != null){
-                        imageBitmap = MyCamera.bitmapToString(((BitmapDrawable)postImage.getDrawable()).getBitmap());
-                        Log.i("bitmap", imageBitmap);
-                    }
-                    CreatePostController.sendPostToDatabase(CreatePostActivity.this, Config.currentUser, title, text, imageBitmap);
-
-                    finish();
-                }
+                createPost(
+                        postTitle.getText().toString(),
+                        postText.getText().toString(),
+                        postImage.getDrawable());
             }
         });
     }
 
-
-    public static Uri mMediaUri;
     public void takePicture() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = MyCamera.createImageFile(this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (photoFile != null) {
-                mMediaUri = FileProvider.getUriForFile(getApplicationContext(), "com.example.android.fileprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                startActivityForResult(takePictureIntent, MyCamera.TAKE_PIC_REQUEST_CODE);
-            }
-        }
+        MyCamera.takePicture(this);
     }
 
     @Override
@@ -171,7 +143,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
                 takePicture();
             } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,  "Permission Denied", Toast.LENGTH_LONG).show();
             }
         } else if (requestCode == MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -185,9 +157,8 @@ public class CreatePostActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             String path = null;
@@ -198,7 +169,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 } else {
                     try {
                         uri = data.getData();
-                        path = ImageFilePath.getPath(CreatePostActivity.this, data.getData());
+                        path = ImageFilePath.getPath(getBaseContext(), data.getData());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -208,7 +179,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 File f = new File(MyCamera.currentPhotoPath);
                 uri = Uri.fromFile(f);
                 mediaScanIntent.setData(uri);
-                this.sendBroadcast(mediaScanIntent);
+                sendBroadcast(mediaScanIntent);
                 path = MyCamera.currentPhotoPath;
             }
 
@@ -229,8 +200,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
-                postImage.setLayoutParams(layoutParams);
-                postImage.setImageBitmap(newBitmap);
+                setBitmapWithLayout(layoutParams, newBitmap);
             } else {
                 Toast.makeText(this, "Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT).show();
             }
@@ -238,5 +208,37 @@ public class CreatePostActivity extends AppCompatActivity {
         } else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(getApplicationContext(), "Cancelled!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void selectImageFromCameraRoll() {
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MyCamera.MY_CAMERA_ROLL_PERMISSION_CODE);
+        } else {
+            Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            choosePictureIntent.setType("image/*");
+            startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), MyCamera.CHOOSE_PIC_REQUEST_CODE);
+        }
+    }
+
+    public void createPost(String postTitle, String postText, Drawable postImage) {
+        if (postTitle.isEmpty()) {
+            Toast.makeText(this, "Add a title to continue", Toast.LENGTH_SHORT).show();
+        } else if (postText.isEmpty()) {
+            Toast.makeText(this, "Add a message to continue", Toast.LENGTH_SHORT).show();
+        } else {
+            String imageBitmap = "";
+            if (postImage != null) {
+                imageBitmap = MyCamera.bitmapToString(((BitmapDrawable) postImage).getBitmap());
+                Log.i("bitmap", imageBitmap);
+            }
+            mPresenter.sendPostToDatabase(MySingleton.getInstance(this), Config.currentUser, postTitle, postText, imageBitmap);
+
+            finish();
+        }
+    }
+
+    public void setBitmapWithLayout(ViewGroup.LayoutParams layoutParams, Bitmap newBitmap) {
+        postImage.setLayoutParams(layoutParams);
+        postImage.setImageBitmap(newBitmap);
     }
 }
