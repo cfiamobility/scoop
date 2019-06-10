@@ -10,10 +10,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
+import ca.gc.inspection.scoop.SplashScreen.SplashScreenContract;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     // text fields
     TextInputEditText email, password;
+    private SplashScreenContract.Presenter mSplashScreenPresenter;
+
 
     // text field layouts - needed to set the error messages if the user input is invalid
     static TextInputLayout emailLayout, passwordLayout;
@@ -21,6 +25,10 @@ public class SplashScreenActivity extends AppCompatActivity {
     public void createAccount (View view) {
         startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
         finish();
+    }
+
+    public void setPresenter(SplashScreenContract.Presenter presenter){
+        mSplashScreenPresenter = presenter;
     }
 
     public void logIn (View view) {

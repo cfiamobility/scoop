@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.ProfilePost;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -12,7 +12,12 @@ import android.view.ViewGroup;
 
 import org.json.JSONArray;
 
-public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsFeedViewHolder> implements ProfilePostsFeedController.ProfileFeedInterface {
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostsFeedController;
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostsFeedPostViewHolder;
+import ca.gc.inspection.scoop.PostReply.ReplyPostViewHolder;
+import ca.gc.inspection.scoop.R;
+
+public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsFeedPostViewHolder> implements ProfilePostsFeedController.ProfileFeedInterface {
 	private JSONArray posts, images;
 
 	public ProfilePostsAdapter(JSONArray posts, JSONArray images) {
@@ -22,13 +27,13 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsFeedVi
 
 	@NonNull
 	@Override
-	public ProfilePostsFeedViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+	public ProfilePostsFeedPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 		View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_profile_layout, viewGroup, false);
-		return new ProfilePostsFeedViewHolder(v);
+		return new ProfilePostsFeedPostViewHolder(v);
 	}
 
 	@Override
-	public void onBindViewHolder(@NonNull ProfilePostsFeedViewHolder profilePostsFeedViewHolder, int i) {
+	public void onBindViewHolder(@NonNull ProfilePostsFeedPostViewHolder profilePostsFeedViewHolder, int i) {
 		ProfilePostsFeedController controller = new ProfilePostsFeedController(this, posts, images, i, profilePostsFeedViewHolder);
 		try {
 			controller.displayPost();
@@ -45,61 +50,61 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsFeedVi
 	}
 
 	@Override
-	public void setPostText(String postText, MostGenericViewHolder holder) {
+	public void setPostText(String postText, ReplyPostViewHolder holder) {
 		holder.postText.setText(postText);
 	}
 
 	@Override
-	public void setPostTitle(String postTitle, MostGenericViewHolder holder) {
+	public void setPostTitle(String postTitle, ReplyPostViewHolder holder) {
 		holder.postTitle.setText(postTitle);
 	}
 
 	@Override
-	public void setUserImage(Bitmap image, MostGenericViewHolder holder) {
+	public void setUserImage(Bitmap image, ReplyPostViewHolder holder) {
 		Log.i("image", image.toString());
 		holder.profileImage.setImageBitmap(image);
 	}
 
 	@Override
-	public void setUserName(String userName, MostGenericViewHolder holder) {
+	public void setUserName(String userName, ReplyPostViewHolder holder) {
 		holder.username.setText(userName);
 	}
 
 	@Override
-	public void setLikeCount(String likeCount, MostGenericViewHolder holder) {
+	public void setLikeCount(String likeCount, ReplyPostViewHolder holder) {
 		holder.likeCount.setText(likeCount);
 	}
 
 	@Override
-	public void setDate(String date, MostGenericViewHolder holder) {
+	public void setDate(String date, ReplyPostViewHolder holder) {
 		holder.date.setText(date);
 	}
 
 	@Override
-	public void setLikeDownvoteState(MostGenericViewHolder holder) {
+	public void setLikeDownvoteState(ReplyPostViewHolder holder) {
 		holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
 		holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
 	}
 
 	@Override
-	public void setLikeNeutralState(MostGenericViewHolder holder) {
+	public void setLikeNeutralState(ReplyPostViewHolder holder) {
 		holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
 		holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
 	}
 
 	@Override
-	public void setLikeUpvoteState(MostGenericViewHolder holder) {
+	public void setLikeUpvoteState(ReplyPostViewHolder holder) {
 		holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
 		holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
 	}
 
 	@Override
-	public void setCommentCount(String commentCount, ProfilePostsFeedViewHolder holder) {
+	public void setCommentCount(String commentCount, ProfilePostsFeedPostViewHolder holder) {
 		holder.commentCount.setText(commentCount);
 	}
 
 	@Override
-	public void hideDate(MostGenericViewHolder holder) {
+	public void hideDate(ReplyPostViewHolder holder) {
 		holder.date.setVisibility(View.GONE);
 	}
 

@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.ProfilePost;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
@@ -12,25 +12,28 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.gc.inspection.scoop.PostOptionsDialog;
+import ca.gc.inspection.scoop.PostReply.ReplyPostPresenter;
+
 /**
  * performs all logic and HTTP requests for the FeedAdapter
  */
-public class ProfilePostsFeedController extends MostGenericController{
+public class ProfilePostsFeedController extends ReplyPostPresenter {
     private JSONObject post;
-    private ProfilePostsFeedViewHolder holder;
-    private ProfileFeedInterface profileFeedInterface;
+    private ProfilePostsFeedPostViewHolder holder;
+    private ProfilePostContract profilePostContract;
     private Map<String, String> likeProperties;
 
     /**
-     * @param profileFeedInterface: inherits from MostGenericInterface and declares all its methods
+     * @param profilePostContract: inherits from MostGenericInterface and declares all its methods
      * @param posts: JSONArray of posts from the database
      * @param images: JSONArray of profile images from the database
      * @param i: counter for the array adapter
      * @param holder: view holder that contains all the front end declarations
      */
-    public ProfilePostsFeedController(ProfileFeedInterface profileFeedInterface, JSONArray posts, JSONArray images, int i, ProfilePostsFeedViewHolder holder){
-        super(profileFeedInterface, posts, images, i, holder);
-        this.profileFeedInterface = profileFeedInterface;
+    public ProfilePostsFeedController(ProfilePostContract profilePostContract, JSONArray posts, JSONArray images, int i, ProfilePostsFeedPostViewHolder holder){
+        super(profilePostContract, posts, images, i, holder);
+        this.profilePostContract = profilePostContract;
         try {
             this.post = posts.getJSONObject(i);
         } catch (JSONException e) {
@@ -68,7 +71,7 @@ public class ProfilePostsFeedController extends MostGenericController{
      */
     @Override
     public void formPostTitle() throws JSONException {
-        profileFeedInterface.setPostTitle(post.getString("posttitle"), holder);
+        profilePostContract.setPostTitle(post.getString("posttitle"), holder);
     }
 
     /**
@@ -78,16 +81,11 @@ public class ProfilePostsFeedController extends MostGenericController{
     private void checkCommentCount(String commentCount){
         String defaultCount = "0";
         if(!commentCount.equals("null")){
-            profileFeedInterface.setCommentCount(commentCount, holder);
+            profilePostContract.setCommentCount(commentCount, holder);
         }else{
-            profileFeedInterface.setCommentCount(defaultCount, holder);
+            profilePostContract.setCommentCount(defaultCount, holder);
         }
     }
 
-    /**
-     * Interface that inherits from mostgeneric interface
-     */
-    public interface ProfileFeedInterface extends MostGenericController.MostGenericInterface{
-        void setCommentCount(String commentCount, ProfilePostsFeedViewHolder holder);
-    }
+
 }

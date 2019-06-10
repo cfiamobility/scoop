@@ -8,8 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostPresenter;
 
-public class ImageController extends ProfilePostsFeedController {
+
+public class ImageController extends ProfilePostPresenter {
     private JSONObject images;
     private FeedPostViewHolder holder;
     private ImageInterface imageInterface;

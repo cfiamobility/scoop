@@ -1,18 +1,25 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.ReplyPost;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MostGenericViewHolder extends RecyclerView.ViewHolder {
+import ca.gc.inspection.scoop.R;
 
-    TextView username, date, postText, postTitle, likeCount;
-    ImageView profileImage, upvote, downvote;
+/**
+ * ViewHolder for replying to a post action; it is the most generic View Holder
+ * and contains the minimum views (no comment count, options menus, or images)
+ * related to "posting" actions. Parent View Holder for ProfilePostViewHolder.
+ */
+
+public class ReplyPostViewHolder extends RecyclerView.ViewHolder {
+
+    public TextView username, date, postText, postTitle, likeCount;
+    public ImageView profileImage, upvote, downvote;
 
 
-    public MostGenericViewHolder(View v) {
+    public ReplyPostViewHolder(View v) {
         super(v);
         username = v.findViewById(R.id.name);
         profileImage = v.findViewById(R.id.profile_image);

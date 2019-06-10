@@ -1,7 +1,8 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.ReplyPost;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
@@ -10,6 +11,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -21,16 +23,27 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
-public class MostGenericController {
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.DisplayPostActivity;
+import ca.gc.inspection.scoop.MainActivity;
+import ca.gc.inspection.scoop.MyCamera;
+
+/**
+ * Presenter for the replying to a post action; it is the most generic presenter
+ * related to "posting" actions. Parent presenter for ProfilePostPresenter.
+ */
+
+public class ReplyPostPresenter implements ReplyPostContract.Presenter {
     private JSONObject post, profileImage;
-    private MostGenericViewHolder holder;
-    private MostGenericInterface mostGenericInterface;
+    private ReplyPostViewHolder holder;
     private Map<String, String> likeProperties;
 
-    public MostGenericController(MostGenericInterface mostGenericInterface, JSONArray posts, JSONArray profileImages, int i, MostGenericViewHolder holder){
-        this.mostGenericInterface = mostGenericInterface;
+    @NonNull
+    private final ReplyPostContract.View mPostReplyView;
+
+    public ReplyPostPresenter(ReplyPostContract.View postReplyView, JSONArray posts, JSONArray profileImages, int i, ReplyPostViewHolder holder){
+        mPostReplyView = postReplyView;
         try {
             this.post = posts.getJSONObject(i);
             this.profileImage = profileImages.getJSONObject(i);
@@ -39,7 +52,10 @@ public class MostGenericController {
         }
         this.holder = holder;
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
+
+        mPostReplyView.setPresenter(this);
     }
+
 
     /**
      * Description: main method to display a single post
@@ -50,7 +66,7 @@ public class MostGenericController {
         final String posterid = post.getString("userid");
         likeProperties.put("liketype", post.getString("liketype")); //puts liketype into properties map
         likeProperties.put("likecount", checkLikeCount(post.getString("likecount"))); //puts likecount into properties map
-        mostGenericInterface.setPostText(post.getString("posttext"), holder);
+        mPostReplyView.setPostText(post.getString("posttext"), holder);
         formatDate(post.getString("createddate"));
         checkFullName();
         checkLikeState(likeProperties.get("liketype"));
@@ -101,16 +117,16 @@ public class MostGenericController {
     }
 
     public void formPostTitle() throws JSONException {
-        mostGenericInterface.setPostTitle("Replying to " + post.getString("postfirstname") + " " + post.getString("postlastname") + "'s post", holder);
+        mPostReplyView.setPostTitle("Replying to " + post.getString("postfirstname") + " " + post.getString("postlastname") + "'s post", holder);
     }
 
     /**
      * Description: checks to see if full name is valid before setting name
      * @throws JSONException
      */
-    private void checkFullName() throws JSONException {
+    public void checkFullName() throws JSONException {
         String fullName = checkFirstName(post.getString("firstname")) + checkLastName(post.getString("lastname"));
-        mostGenericInterface.setUserName(fullName, holder);
+        mPostReplyView.setUserName(fullName, holder);
     }
 
     /**
@@ -119,7 +135,7 @@ public class MostGenericController {
      * @param firstName: the first name of user
      * @return first name if not null
      */
-    private String checkFirstName(String firstName) {
+    public String checkFirstName(String firstName) {
         if (!firstName.equals("null")) { //if there is a first name returned
             return firstName;
         } else { //if the first name is not filled
@@ -133,7 +149,7 @@ public class MostGenericController {
      * @param lastName: the last name of user
      * @return last name if not null
      */
-    private String checkLastName(String lastName) {
+    public String checkLastName(String lastName) {
         if (!lastName.equals("null")) { //if there is a last name returned
             return " " + lastName;
         } else { //if the last name is not filled
@@ -145,15 +161,15 @@ public class MostGenericController {
      * Description: formats date accordingly
      * @param time
      */
-    private void formatDate(String time){
+    public void formatDate(String time){
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(time); //parses the created date to be in specified date format
             DateFormat properDateFormat = new SimpleDateFormat("MM-dd-yy"); //formats the date to be how we want it to output
-            mostGenericInterface.setDate(properDateFormat.format(parsedDate),holder);
+            mPostReplyView.setDate(properDateFormat.format(parsedDate),holder);
         }catch(Exception e){
             e.printStackTrace();
-            mostGenericInterface.hideDate(holder);
+            mPostReplyView.hideDate(holder);
         }
     }
 
@@ -163,13 +179,13 @@ public class MostGenericController {
      * @param likeCount: the number of likes on a post
      * @return the proper like count
      */
-    private String checkLikeCount(String likeCount){
+    public String checkLikeCount(String likeCount){
         String defaultCount = "0";
         if(likeCount.equals("null")){
-            mostGenericInterface.setLikeCount(defaultCount, holder);
+            mPostReplyView.setLikeCount(defaultCount, holder);
             return defaultCount;
         }else{
-            mostGenericInterface.setLikeCount(likeCount, holder);
+            mPostReplyView.setLikeCount(likeCount, holder);
             return likeCount;
         }
     }
@@ -178,16 +194,16 @@ public class MostGenericController {
      * Description: checks likeType currently on the post and sets upvote and downvote buttons accordingly
      * @param likeState: like type of post
      */
-    private void checkLikeState(String likeState){
+    public void checkLikeState(String likeState){
         Log.i("likestate", likeState);
         switch(likeState){
-            case "1": mostGenericInterface.setLikeUpvoteState(holder);
+            case "1": mPostReplyView.setLikeUpvoteState(holder);
                 break;
-            case "-1": mostGenericInterface.setLikeDownvoteState(holder);
+            case "-1": mPostReplyView.setLikeDownvoteState(holder);
                 break;
-            case "0": mostGenericInterface.setLikeNeutralState(holder);
+            case "0": mPostReplyView.setLikeNeutralState(holder);
                 break;
-            default: mostGenericInterface.setLikeNeutralState(holder);
+            default: mPostReplyView.setLikeNeutralState(holder);
                 break;
         }
     }
@@ -198,30 +214,30 @@ public class MostGenericController {
      * @param posterid: user who posted the post
      * @throws JSONException
      */
-    private void changeUpvoteLikeState(String activityid, String posterid) throws JSONException{
+    public void changeUpvoteLikeState(String activityid, String posterid) throws JSONException{
         String likeType = likeProperties.get("liketype"); //gets current like type
         int likeCount = Integer.parseInt(likeProperties.get("likecount")); //gets current like count
         Log.i("liketype1", String.valueOf(likeType));
         switch(likeType){
             case "1": //if it's already liked, it'll be set to neutral if pressed
                 likeCount -= 1;
-                mostGenericInterface.setLikeNeutralState(holder);
+                mPostReplyView.setLikeNeutralState(holder);
                 updateLikes("0", activityid, posterid);
                 break;
             case "-1": //if it's downvoted, it'll be set to upvote state
                 likeCount += 2;
-                mostGenericInterface.setLikeUpvoteState(holder);
+                mPostReplyView.setLikeUpvoteState(holder);
                 updateLikes("1", activityid, posterid);
                 break;
             case "0": //if it's neutral, it'll be set to upvote state
                 likeCount += 1;
-                mostGenericInterface.setLikeUpvoteState(holder);
+                mPostReplyView.setLikeUpvoteState(holder);
                 updateLikes("1", activityid, posterid);
                 break;
             default: //default will be upvote state, if liketype is null
                 likeCount += 1;
                 insertLikes("1", activityid, posterid); //will insert the like for the first time
-                mostGenericInterface.setLikeUpvoteState(holder);
+                mPostReplyView.setLikeUpvoteState(holder);
                 break;
         }
         Log.i("likecount1", String.valueOf(likeCount));
@@ -234,30 +250,30 @@ public class MostGenericController {
      * @param posterid: poster id of the post
      * @throws JSONException
      */
-    private void changeDownvoteLikeState(String activityid, String posterid) throws JSONException {
+    public void changeDownvoteLikeState(String activityid, String posterid) throws JSONException {
         String likeType = likeProperties.get("liketype"); //gets current like type
         int likeCount = Integer.parseInt(likeProperties.get("likecount")); //gets current like count
         Log.i("liketype2", String.valueOf(likeType));
         switch(likeType){
             case "1": //if it's liked, it'll be set to downvote state
                 likeCount -= 2;
-                mostGenericInterface.setLikeDownvoteState(holder);
+                mPostReplyView.setLikeDownvoteState(holder);
                 updateLikes("-1", activityid, posterid);
                 break;
             case "-1": //if it's downvoted, it'll be set to neutral state
                 likeCount += 1;
-                mostGenericInterface.setLikeNeutralState(holder);
+                mPostReplyView.setLikeNeutralState(holder);
                 updateLikes("0", activityid, posterid);
                 break;
             case "0": //if it's netural state, it'll be set to downvote state
                 likeCount -= 1;
-                mostGenericInterface.setLikeDownvoteState(holder);
+                mPostReplyView.setLikeDownvoteState(holder);
                 updateLikes("-1", activityid, posterid);
                 break;
             default: //default will be downvote state, if liketype is null
                 likeCount -= 1;
                 insertLikes("-1", activityid, posterid); //will insert the downvote for the first time
-                mostGenericInterface.setLikeDownvoteState(holder);
+                mPostReplyView.setLikeDownvoteState(holder);
                 break;
         }
         Log.i("likecount2", String.valueOf(likeCount));
@@ -269,10 +285,10 @@ public class MostGenericController {
      * @param likeCount
      * @throws JSONException
      */
-    private void updateLikeCount(String likeCount) throws JSONException {
+    public void updateLikeCount(String likeCount) throws JSONException {
         likeProperties.put("likecount", likeCount); //updates in map
         post.put("likecount", likeCount); //updates in post object
-        mostGenericInterface.setLikeCount(likeCount,holder); //sets like count to new total
+        mPostReplyView.setLikeCount(likeCount,holder); //sets like count to new total
     }
 
 
@@ -283,7 +299,7 @@ public class MostGenericController {
      * @param posterid: user id of poster of post
      * @throws JSONException
      */
-    private void updateLikes(final String likeType, final String activityid, final String posterid) throws JSONException {
+    public void updateLikes(final String likeType, final String activityid, final String posterid) throws JSONException {
         post.put("liketype", likeType); //updates post object
         likeProperties.put("liketype", likeType); //updates properties map
         Log.i("hello", "should be here");
@@ -302,7 +318,7 @@ public class MostGenericController {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                Log.i("hello", "cmon");
+                Log.i("hello", "cmoff");
                 params.put("liketype", likeProperties.get("liketype"));
                 params.put("userid", Config.currentUser);
                 params.put("activityid",activityid);
@@ -331,7 +347,7 @@ public class MostGenericController {
      * @param posterid: user id of poster of post
      * @throws JSONException
      */
-    private void insertLikes(final String likeType, final String activityid, final String posterid) throws JSONException {
+    public void insertLikes(final String likeType, final String activityid, final String posterid) throws JSONException {
         post.put("liketype", likeType); //updates post object
         likeProperties.put("liketype", likeType); //updates properties map
         String URL = Config.baseIP + "display-post/insertlikes";
@@ -389,21 +405,54 @@ public class MostGenericController {
      * @param image: image to convert
      *
      */
-    private void formatImage(String image){
+    public void formatImage(String image){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        mostGenericInterface.setUserImage(bitmap, holder);
+        mPostReplyView.setUserImage(bitmap, holder);
     }
 
-    public interface MostGenericInterface{
-        void setPostText(String postText, MostGenericViewHolder holder);
-        void setPostTitle(String postTitle, MostGenericViewHolder holder);
-        void setUserName(String userName, MostGenericViewHolder holder);
-        void setLikeCount(String likeCount, MostGenericViewHolder holder);
-        void setDate(String date, MostGenericViewHolder holder);
-        void setLikeNeutralState(MostGenericViewHolder holder);
-        void setLikeUpvoteState(MostGenericViewHolder holder);
-        void setLikeDownvoteState(MostGenericViewHolder holder);
-        void hideDate(MostGenericViewHolder holder);
-        void setUserImage(Bitmap image, MostGenericViewHolder  holder);
+    /**
+     * HTTPRequests for comments and images
+     * @param userid: userid
+     */
+    public void getUserComments(final String userid) {
+        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
+        JsonArrayRequest commentRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(final JSONArray commentsResponse) {
+                String url = Config.baseIP + "profile/commentimagefill/" + userid;
+                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray imagesResponse) {
+                        mPostReplyView.setRecyclerView(commentsResponse, imagesResponse);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        // inserting the token into the response header that will be sent to the server
+                        Map<String, String> header = new HashMap<>();
+                        header.put("authorization", Config.token);
+                        return header;
+                    }
+                };
+                Config.requestQueue.add(imageRequest);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+        Config.requestQueue.add(commentRequest);
     }
 }

@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.FeedPost;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -12,7 +12,13 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> implements ImageController.ImageInterface{
+import ca.gc.inspection.scoop.FeedPost.FeedPostViewHolder;
+import ca.gc.inspection.scoop.ImageController;
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostViewHolder;
+import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.ReplyPost.ReplyPostViewHolder;
+
+public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> implements ImageController.ImageInterface {
     private JSONArray posts, images;
 
     public PostFeedAdapter(JSONArray posts, JSONArray images) {
@@ -53,7 +59,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setPostText(String postText, MostGenericViewHolder holder) {
+    public void setPostText(String postText, ReplyPostViewHolder holder) {
         holder.postText.setText(postText);
     }
 
@@ -63,7 +69,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setPostTitle(String postTitle, MostGenericViewHolder holder) {
+    public void setPostTitle(String postTitle, ReplyPostViewHolder holder) {
         holder.postTitle.setText(postTitle);
     }
 
@@ -83,7 +89,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setUserImage(Bitmap image, MostGenericViewHolder  holder) {
+    public void setUserImage(Bitmap image, ReplyPostViewHolder holder) {
         holder.profileImage.setImageBitmap(image);
     }
 
@@ -93,7 +99,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setUserName(String userName, MostGenericViewHolder holder) {
+    public void setUserName(String userName, ReplyPostViewHolder holder) {
         holder.username.setText(userName);
     }
 
@@ -103,7 +109,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setLikeCount(String likeCount, MostGenericViewHolder holder) {
+    public void setLikeCount(String likeCount, ReplyPostViewHolder holder) {
         holder.likeCount.setText(likeCount);
     }
 
@@ -113,7 +119,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setDate(String date, MostGenericViewHolder holder) {
+    public void setDate(String date, ReplyPostViewHolder holder) {
         holder.date.setText(date);
     }
 
@@ -122,7 +128,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setLikeNeutralState(MostGenericViewHolder holder) {
+    public void setLikeNeutralState(ReplyPostViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
@@ -132,7 +138,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setLikeUpvoteState(MostGenericViewHolder holder) {
+    public void setLikeUpvoteState(ReplyPostViewHolder holder) {
        holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
@@ -142,7 +148,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setLikeDownvoteState(MostGenericViewHolder holder) {
+    public void setLikeDownvoteState(ReplyPostViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
     }
@@ -153,7 +159,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void setCommentCount(String commentCount, ProfilePostsFeedViewHolder holder) {
+    public void setCommentCount(String commentCount, ProfilePostViewHolder holder) {
         holder.commentCount.setText(commentCount);
     }
 
@@ -171,7 +177,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
      * @param holder: viewholder of item
      */
     @Override
-    public void hideDate(MostGenericViewHolder holder) {
+    public void hideDate(ReplyPostViewHolder holder) {
         holder.date.setVisibility(View.GONE);
     }
 }
