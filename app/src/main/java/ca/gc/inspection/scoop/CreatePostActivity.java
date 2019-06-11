@@ -30,6 +30,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+
 public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.View {
 
     private static final int TEXT_CHAR_LIMIT = 255;
@@ -56,8 +58,8 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     }
 
     @Override
-    public void setPresenter(CreatePostContract.Presenter presenter) {
-        mPresenter = presenter;
+    public void setPresenter(@NonNull CreatePostContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
-        setPresenter(new CreatePostPresenter());
+        setPresenter(new CreatePostPresenter(this));
 
         /** Initialize edit texts, image view, and buttons for create post xml
          *  postTitle: title of the post

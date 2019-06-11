@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -10,12 +11,16 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.util.Map;
 
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+
 public class CreatePostPresenter implements CreatePostContract.Presenter {
 
     private CreatePostInteractor mInteractor;
+    private CreatePostContract.View mView;
 
-    CreatePostPresenter() {
+    CreatePostPresenter(@NonNull CreatePostContract.View view) {
         mInteractor = new CreatePostInteractor(this);
+        mView = checkNotNull(view);
     }
 
     @Override
