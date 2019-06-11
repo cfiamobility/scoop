@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -36,7 +37,7 @@ public class EditProfileInteractor {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,  new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                EditProfileActivity.setInitialFill(response);
+                mPresenter.setInitialFill(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -56,16 +57,15 @@ public class EditProfileInteractor {
         singleton.addToRequestQueue(jsonObjectRequest);
     }
 
-
-    public void positionAutoComplete(MySingleton singleton, String positionChangedCapped) {
+    public void getPositionAutoCompleteFromDB(MySingleton singleton, String positionChangedCapitalized) {
         // URL TO BE CHANGED - position entered passed to NodeJS as a parameter
-        String URL = Config.baseIP + "edituser/positionchanged/" + positionChangedCapped;
+        String URL = Config.baseIP + "edituser/positionchanged/" + positionChangedCapitalized;
 
         // Asking for an array from response (will send back 3 objects in an array)
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                mPresenter.positionAutoSetup(response);
+                mPresenter.setPositionAutoCompleteFromDB(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -80,5 +80,59 @@ public class EditProfileInteractor {
             }
         };
         singleton.addToRequestQueue(getRequest);
+    }
+
+    // takes care of the requests when the text is changed in the building edittext
+    public void getAddressAutoCompleteFromDB(MySingleton singleton, String addressChangedCapitalized) {
+        // URL TO BE CHANGED - address passed as parameter to nodeJS
+        String URL = Config.baseIP + "edituser/addresschanged/" + addressChangedCapitalized;
+
+        // Asking for a JSONArray
+        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                mPresenter.setAddressAutoCompleteFromDB(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {}
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+        // Submitting the request
+        singleton.addToRequestQueue(getRequest);
+    }
+
+    // takes care of the requests when the text is changed in the divisions edittext
+    public void getDivisionAutoCompleteFromDB(MySingleton singleton, String divisionChangedCapitalized) {
+        // Inputted division is passed as a parameter to NodeJS
+        String URL = Config.baseIP + "edituser/divisionchanged/" + divisionChangedCapitalized;
+
+        // Asking for a JSONArray back
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                mPresenter.setDivisionAutoCompleteFromDB(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {}
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+        // submitting the request
+        singleton.addToRequestQueue(jsonArrayRequest);
     }
 }

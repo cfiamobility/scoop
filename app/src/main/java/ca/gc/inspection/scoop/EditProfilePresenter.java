@@ -47,12 +47,24 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
         mInteractor.initialFill(singleton);
 	}
 
+	public void setInitialFill(JSONObject response) {
+        mView.setInitialFill(response);
+    }
+
 	// takes care of the requests when the text is changed in the positions edittext
-	public void positionAutoComplete(MySingleton singleton, String positionChangedCapped) {
-		mInteractor.positionAutoComplete(singleton, positionChangedCapped);
+	public void getPositionAutoCompleteFromDB(MySingleton singleton, String positionChangedCapitalized) {
+		mInteractor.getPositionAutoCompleteFromDB(singleton, positionChangedCapitalized);
 	}
 
-    public void positionAutoSetup(JSONArray response) {
+	public void getAddressAutoCompleteFromDB(MySingleton singleton, String addressChangedCapitalized) {
+        mInteractor.getAddressAutoCompleteFromDB(singleton, addressChangedCapitalized);
+    }
+
+    public void getDivisionAutoCompleteFromDB(MySingleton singleton, String divisionChangedCapitalized) {
+        mInteractor.getDivisionAutoCompleteFromDB(singleton, divisionChangedCapitalized);
+    }
+
+    public void setPositionAutoCompleteFromDB(JSONArray response) {
         try {
             // Position map/arraylist redefined every time text is changed
             HashMap<String, String> positionObjects = new HashMap<>();
@@ -75,65 +87,56 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
         }
     }
 
-	// takes care of the requests when the text is changed in the building edittext
-	static void addressAutoComplete(final Context context, String addressChangedCapped) {
-		// URL TO BE CHANGED - address passed as parameter to nodeJS
-		String URL = Config.baseIP + "edituser/addresschanged/" + addressChangedCapped;
+    public void setAddressAutoCompleteFromDB(JSONArray response) {
+        try {
+            // map/arraylists redefined everytime to clear it
+            HashMap<String, String> buildingsObjects = new HashMap<>();
+            ArrayList<String> buildingsAutoComplete = new ArrayList<>();
+            ArrayList<String> cityAL = new ArrayList<>();
+            ArrayList<String> provinceAL = new ArrayList<>();
 
-		// Request for get method
-		RequestQueue requestQueue = Volley.newRequestQueue(context);
+            // loops through the object
+            for (int i = 0; i < response.length(); i++) {
+                // gathering info from the object
+                String buildingid = response.getJSONObject(i).getString("buildingid");
+                String buildingaddress = response.getJSONObject(i).getString("address");
+                String buildingcity = response.getJSONObject(i).getString("city");
+                String buildingprovince = response.getJSONObject(i).getString("province");
+                // placing the info into variables
+                buildingsObjects.put(buildingid, buildingaddress);
+                buildingsAutoComplete.add(buildingaddress);
+                cityAL.add(buildingcity);
+                provinceAL.add(buildingprovince);
+            }
+            mView.setAddressSuggestionList(cityAL, provinceAL);
+            mView.setBuildingETAdapter(buildingsAutoComplete);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		// Asking for a JSONArray
-		JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-			@Override
-			public void onResponse(JSONArray response) {
-				EditProfileActivity.addressAutoSetup(response, context);
-			}
-		}, new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError error) {}
-		}) {
-			@Override
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				// inserting the token into the response header that will be sent to the server
-				Map<String, String> header = new HashMap<>();
-				header.put("authorization", Config.token);
-				return header;
-			}
-		};
-		// Submitting the request
-		requestQueue.add(getRequest);
-	}
+    // Method for to setup the front end of autocomplete text view for divisions
+    public void setDivisionAutoCompleteFromDB(JSONArray response) {
+        try {
+            // map/arraylists redefined every time to clear it
+            HashMap<String, String> divisionsObjects = new HashMap<>();
+            ArrayList<String> divisionsAutoComplete = new ArrayList<>();
 
-	// takes care of the requests when the text is changed in the divisions edittext
-	static void divisionAutoComplete(final Context context, String divisionChangedCapped) {
-		// Inputted division is passed as a parameter to NodeJS
-		String URL = Config.baseIP + "edituser/divisionchanged/" + divisionChangedCapped;
+            // Loops throught the JSON Array
+            for (int i = 0; i < response.length(); i++) {
+                // getting the info from the array
+                String divisionid = response.getJSONObject(i).getString("divisionid");
+                String divisionname = response.getJSONObject(i).getString("division_en");
+                // setting the info into variables
+                divisionsObjects.put(divisionid, divisionname);
+                divisionsAutoComplete.add(divisionname);
+            }
 
-		// Request for the get method
-		RequestQueue requestQueue = Volley.newRequestQueue(context);
-
-		// Asking for a JSONArray back
-		JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-			@Override
-			public void onResponse(JSONArray response) {
-				EditProfileActivity.divisionAutoSetup(response, context);
-			}
-		}, new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError error) {}
-		}) {
-			@Override
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				// inserting the token into the response header that will be sent to the server
-				Map<String, String> header = new HashMap<>();
-				header.put("authorization", Config.token);
-				return header;
-			}
-		};
-		// submitting the request
-		requestQueue.add(jsonArrayRequest);
-	}
+            mView.setDivisionETAdapter(divisionsAutoComplete);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	// Takes care of the request when the save button is pressed
 	static void updateUserInfo(final Context context, final Map<String, String> params) {

@@ -68,24 +68,25 @@ public class EditProfileActivity extends AppCompatActivity implements
 	private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
 	// UI Declarations
-	static AutoCompleteTextView positionET, buildingET, divisionET;
-	static EditText firstNameET, lastNameET, cityET, linkedinET, twitterET, facebookET, instagramET;
-	static Spinner provinceSpinner;
-	static TextView changeProfilePicBTN;
-	static CircleImageView previewProfilePic;
-	static CircleImageView profilePreview;
+	AutoCompleteTextView positionET, buildingET, divisionET;
+	EditText firstNameET, lastNameET, cityET, linkedinET, twitterET, facebookET, instagramET;
+	Spinner provinceSpinner;
+	TextView changeProfilePicBTN;
+	CircleImageView previewProfilePic;
+	CircleImageView profilePreview;
 	Button saveBTN;
 
 	// UI Support Declarations
-	static ArrayAdapter<CharSequence> spinnerAdapter;
-	static ArrayAdapter<String> buildingAdapter, positionAdapter, divisionAdapter;
+	ArrayAdapter<CharSequence> spinnerAdapter;
+	// ArrayAdapter<String> buildingAdapter, positionAdapter, divisionAdapter;
 
 	// Application Side Variable Declarations
-    // firstNameText, lastNameText, linkedinText, twitterText, facebookText, instagramText,
-	static String positionText, divisionText, buildingText, cityText, provinceText, userID, currentPhotoPath;
-	static ArrayList<String> positionAutoComplete, buildingsAutoComplete, cityAL, provinceAL, divisionsAutoComplete;
-	static HashMap<String, String> positionObjects, buildingsObjects, divisionsObjects;
-	static Uri mMediaUri;
+    // String firstNameText, lastNameText, linkedinText, twitterText, facebookText, instagramText, positionText, divisionText, buildingText, cityText, provinceText,
+	static String userID, currentPhotoPath;
+	// ArrayList<String> positionAutoComplete, buildingsAutoComplete, divisionsAutoComplete,
+	ArrayList<String>  cityAL, provinceAL;
+	// HashMap<String, String> positionObjects, buildingsObjects, divisionsObjects;
+	Uri mMediaUri;
 	static Bitmap bitmap;
 
 	// The method that runs when save is pressed
@@ -122,10 +123,6 @@ public class EditProfileActivity extends AppCompatActivity implements
 	public void finishActivity(View view) {
 		finish();
 	}
-
-	public void onUpdateUserInfoSuccess() {
-	    finish();
-    }
 
     @Override
     public void setPresenter(@NonNull EditProfileContract.Presenter presenter) {
@@ -219,7 +216,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 	/**
 	 * @param response
 	 */
-	public static void setInitialFill(JSONObject response) {
+	public void setInitialFill(JSONObject response) {
 		try {
 			// If the user id was correct/matching
 			if (response.get("userid").toString().equals(userID)) {
@@ -311,62 +308,22 @@ public class EditProfileActivity extends AppCompatActivity implements
     }
 
     // Method to setup the front end of autocomplete text view for building / city / province
-    public static void addressAutoSetup(JSONArray response, Context context) {
+    public void setBuildingETAdapter(ArrayList<String> buildingsAutoComplete) {
+        // Setting the adapter
         try {
-            // map/arraylists redefined everytime to clear it
-            buildingsObjects = new HashMap<>();
-            buildingsAutoComplete = new ArrayList<>();
-            cityAL = new ArrayList<>();
-            provinceAL = new ArrayList<>();
-
-            // loops through the object
-            for (int i = 0; i < response.length(); i++) {
-                // gathering info from the object
-                String buildingid = response.getJSONObject(i).getString("buildingid");
-                String buildingaddress = response.getJSONObject(i).getString("address");
-                String buildingcity = response.getJSONObject(i).getString("city");
-                String buildingprovince = response.getJSONObject(i).getString("province");
-                // placing the info into variables
-                buildingsObjects.put(buildingid, buildingaddress);
-                buildingsAutoComplete.add(buildingaddress);
-                cityAL.add(buildingcity);
-                provinceAL.add(buildingprovince);
-            }
-
-            // Setting the adapter
-            buildingAdapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_dropdown_item_1line, buildingsAutoComplete);
+            ArrayAdapter buildingAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, buildingsAutoComplete);
             buildingET.setAdapter(buildingAdapter);
-            buildingText = buildingET.getText().toString();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-	// Method for to setup the front end of autocomplete text view for divisions
-	public static void divisionAutoSetup(JSONArray response, Context context) {
-		try {
-			// map/arraylists redefined every time to clear it
-			divisionsObjects = new HashMap<>();
-			divisionsAutoComplete = new ArrayList<>();
-
-			// Loops throught the JSON Array
-			for (int i = 0; i < response.length(); i++) {
-				// getting the info from the array
-				String divisionid = response.getJSONObject(i).getString("divisionid");
-				String divisionname = response.getJSONObject(i).getString("division_en");
-				// setting the info into variables
-				divisionsObjects.put(divisionid, divisionname);
-				divisionsAutoComplete.add(divisionname);
-			}
-
-			// Setting up the adapter
-			divisionAdapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_dropdown_item_1line, divisionsAutoComplete);
-			divisionET.setAdapter(divisionAdapter);
-			divisionText = divisionET.getText().toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public void setDivisionETAdapter(ArrayList<String> divisionsAutoComplete) {
+        // Setting up the adapter
+        ArrayAdapter divisionAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, divisionsAutoComplete);
+        divisionET.setAdapter(divisionAdapter);
+    }
 
 	// on item click listener for the office address edittext
 	private AdapterView.OnItemClickListener autoItemSelectedListener = new AdapterView.OnItemClickListener() {
@@ -383,6 +340,10 @@ public class EditProfileActivity extends AppCompatActivity implements
 		}
 	};
 
+	public void setAddressSuggestionList(ArrayList<String> city, ArrayList<String> province) {
+        cityAL = city;
+        provinceAL = province;
+    }
 
 	// when the change profile picture text is tapped
 	public void changeProfilePicture(View view) {
@@ -539,15 +500,13 @@ public class EditProfileActivity extends AppCompatActivity implements
         private void autoComplete(String textChangedCapitalized) {
 	        switch (mType) {
                 case POSITION:
-                    mPresenter.positionAutoComplete(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
+                    mPresenter.getPositionAutoCompleteFromDB(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
                     break;
                 case ADDRESS:
-                    // todo make method: mPresenter.addressAutoComplete
-                    mPresenter.positionAutoComplete(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
+                    mPresenter.getAddressAutoCompleteFromDB(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
                     break;
                 case DIVISION:
-                    // todo make method: mPresenter.divisionAutoComplete
-                    mPresenter.positionAutoComplete(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
+                    mPresenter.getDivisionAutoCompleteFromDB(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
                     break;
 	        }
         }
