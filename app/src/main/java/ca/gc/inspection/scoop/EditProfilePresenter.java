@@ -139,43 +139,11 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
     }
 
 	// Takes care of the request when the save button is pressed
-	static void updateUserInfo(final Context context, final Map<String, String> params) {
-
-		// Request url
-		String URL = Config.baseIP + "edituser/updatedatabase";
-
-		// Request for the put method
-		RequestQueue requestQueue = Volley.newRequestQueue(context);
-
-		// Asking for a string back
-		StringRequest stringRequest = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() {
-			@Override
-			public void onResponse(String response) {
-				if (response.equals("success")) {
-					TabFragment.refresh();
-					((Activity) context).finish();
-				}
-			}
-		}, new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError error) {}
-		}) {
-			// Inputting the hashmap into the get params method
-			@Override
-			protected Map<String, String> getParams() {
-				return params;
-			}
-
-			@Override
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				// inserting the token into the response header that will be sent to the server
-				Map<String, String> header = new HashMap<>();
-				header.put("authorization", Config.token);
-				return header;
-			}
-		};
-
-		// submitting the request
-		requestQueue.add(stringRequest);
+	public void updateUserInfo(MySingleton singleton, Map<String, String> params) {
+        mInteractor.updateUserInfo(singleton, params);
 	}
+
+    public void finishUpdateUserInfo() {
+        mView.finishUpdateUserInfo();
+    }
 }

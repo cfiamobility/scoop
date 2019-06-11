@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
@@ -20,6 +21,8 @@ public interface EditProfileContract {
         void setInitialFill(JSONObject response);
 
         void setAddressSuggestionList(ArrayList<String> cityAL, ArrayList<String> provinceAL);
+
+        void finishUpdateUserInfo();
     }
 
     interface Presenter extends BasePresenter {
@@ -31,5 +34,7 @@ public interface EditProfileContract {
         void getAddressAutoCompleteFromDB(MySingleton instance, String addressChangedCapitalized);
 
         void getDivisionAutoCompleteFromDB(MySingleton instance, String divisionChangedCapitalized);
+
+        void updateUserInfo(MySingleton singleton, Map<String, String> params);
     }
 }

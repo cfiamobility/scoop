@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -134,5 +136,41 @@ public class EditProfileInteractor {
         };
         // submitting the request
         singleton.addToRequestQueue(jsonArrayRequest);
+    }
+
+    public void updateUserInfo(MySingleton singleton, Map<String, String> params) {
+        // Request url
+        String URL = Config.baseIP + "edituser/updatedatabase";
+
+        // Asking for a string back
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("success")) {
+                    TabFragment.refresh();
+                    mPresenter.finishUpdateUserInfo();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {}
+        }) {
+            // Inputting the hashmap into the get params method
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+
+        // submitting the request
+        singleton.addToRequestQueue(stringRequest);
     }
 }

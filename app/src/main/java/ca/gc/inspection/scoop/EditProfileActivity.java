@@ -112,7 +112,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 				params.put("city", cityET.getText().toString());
 				params.put("province", provinceSpinner.getSelectedItem().toString());
 				params.put("image", image);
-				EditProfilePresenter.updateUserInfo(EditProfileActivity.this, params);
+				mPresenter.updateUserInfo(MySingleton.getInstance(getApplicationContext()), params);
 			} else {
 				Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
 			}
@@ -123,6 +123,10 @@ public class EditProfileActivity extends AppCompatActivity implements
 	public void finishActivity(View view) {
 		finish();
 	}
+
+	public void finishUpdateUserInfo() {
+	    finish();
+    }
 
     @Override
     public void setPresenter(@NonNull EditProfileContract.Presenter presenter) {
