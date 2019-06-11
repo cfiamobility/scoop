@@ -56,6 +56,10 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class EditProfileActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener, EditProfileContract.View {
 
+    private enum EditTextType {
+        POSITION, ADDRESS, DIVISION
+    }
+
     private EditProfileContract.Presenter mPresenter;
 
 	// Request codes for intents
@@ -284,114 +288,59 @@ public class EditProfileActivity extends AppCompatActivity implements
 	private void autoComplete() {
 
 		// Autocomplete for position edittext
-		addTextChangedListenerTo(positionET);
+		addTextChangedListenerTo(positionET, EditTextType.POSITION);
 
 		// Autocomplete for office address text
-		addTextChangedListenerTo(buildingET);
+		addTextChangedListenerTo(buildingET, EditTextType.ADDRESS);
 		// Setting the onitemclicklistener - if a suggestion is clicked, it fills in the city and province inputs
 		buildingET.setOnItemClickListener(autoItemSelectedListener);
 
 		// Autocomplete for the division edittext
-		addTextChangedListenerTo(divisionET);
+		addTextChangedListenerTo(divisionET, EditTextType.DIVISION);
 	}
 
-	private void addTextChangedListenerTo(AutoCompleteTextView textView) {
-        textView.addTextChangedListener(getTextWatcher(textView));
+	private void addTextChangedListenerTo(AutoCompleteTextView textView, EditTextType type) {
+        textView.addTextChangedListener(new EditProfileTextWatcher(textView, type));
     }
 
-    private TextWatcher getTextWatcher(AutoCompleteTextView textView) {
-        return new TextWatcher() {
-            // Mandatory Method
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            // Runs whenever the text is changed
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Only submits request if the entered text is >= 3 characters for specificity
-                if (textView.getText().length() >= 2) {
-                    // Text inputted converted to have a cap letter to start ie. "start" -> "Start"
-                    String positionChanged = textView.getText().toString();
-                    String positionChangedCapped = capitalizeFirstLetter(positionChanged);
-                    mPresenter.positionAutoComplete(MySingleton.getInstance(getApplicationContext()), positionChangedCapped);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // extra measure to ensure text variable is set when the user is done typing
-                // positionText = textView.getText().toString();
-            }
-        };
-    }
-
+    // Method to setup the front end of autocomplete text view for positions
     public void setPositionETAdapter(ArrayList<String> positionAutoComplete) {
         //array adapter to set the autocomplete menu
         ArrayAdapter positionAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, positionAutoComplete);
         positionET.setAdapter(positionAdapter);
     }
 
-//    // Method to setup the front end of autocomplete text view for positions
-//	public static void positionAutoSetup(JSONArray response, Context context) {
-//		try {
-//			// Position map/arraylist redefined every time text is changed
-//			positionObjects = new HashMap<>();
-//			positionAutoComplete = new ArrayList<>(); // Arraylist used for setting in the array adapter
-//
-//			// loops through every object
-//			for (int i = 0; i < response.length(); i++) {
-//				// Gathers info from the object - positionid and positionname
-//				String positionid = response.getJSONObject(i).getString("positionid");
-//				String positionname = response.getJSONObject(i).getString("positionname");
-//				Log.i("position", positionname);
-//				// places the objects into the map/arraylis
-//				positionObjects.put(positionid, positionname);
-//				positionAutoComplete.add(positionname);
-//			}
-//
-//			//array adapter to set the autocomplete menu
-//			positionAdapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_dropdown_item_1line, positionAutoComplete);
-//			positionET.setAdapter(positionAdapter);
-//			// Text changed when finished;
-//			positionText = positionET.getText().toString();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+    // Method to setup the front end of autocomplete text view for building / city / province
+    public static void addressAutoSetup(JSONArray response, Context context) {
+        try {
+            // map/arraylists redefined everytime to clear it
+            buildingsObjects = new HashMap<>();
+            buildingsAutoComplete = new ArrayList<>();
+            cityAL = new ArrayList<>();
+            provinceAL = new ArrayList<>();
 
+            // loops through the object
+            for (int i = 0; i < response.length(); i++) {
+                // gathering info from the object
+                String buildingid = response.getJSONObject(i).getString("buildingid");
+                String buildingaddress = response.getJSONObject(i).getString("address");
+                String buildingcity = response.getJSONObject(i).getString("city");
+                String buildingprovince = response.getJSONObject(i).getString("province");
+                // placing the info into variables
+                buildingsObjects.put(buildingid, buildingaddress);
+                buildingsAutoComplete.add(buildingaddress);
+                cityAL.add(buildingcity);
+                provinceAL.add(buildingprovince);
+            }
 
-	// Method to setup the front end of autocomplete text view for building / city / province
-	public static void addressAutoSetup(JSONArray response, Context context) {
-		try {
-			// map/arraylists redefined everytime to clear it
-			buildingsObjects = new HashMap<>();
-			buildingsAutoComplete = new ArrayList<>();
-			cityAL = new ArrayList<>();
-			provinceAL = new ArrayList<>();
-
-			// loops through the object
-			for (int i = 0; i < response.length(); i++) {
-				// gathering info from the object
-				String buildingid = response.getJSONObject(i).getString("buildingid");
-				String buildingaddress = response.getJSONObject(i).getString("address");
-				String buildingcity = response.getJSONObject(i).getString("city");
-				String buildingprovince = response.getJSONObject(i).getString("province");
-				// placing the info into variables
-				buildingsObjects.put(buildingid, buildingaddress);
-				buildingsAutoComplete.add(buildingaddress);
-				cityAL.add(buildingcity);
-				provinceAL.add(buildingprovince);
-			}
-
-			// Setting the adapter
-			buildingAdapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_dropdown_item_1line, buildingsAutoComplete);
-			buildingET.setAdapter(buildingAdapter);
-			buildingText = buildingET.getText().toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            // Setting the adapter
+            buildingAdapter = new ArrayAdapter<>(context.getApplicationContext(), android.R.layout.simple_dropdown_item_1line, buildingsAutoComplete);
+            buildingET.setAdapter(buildingAdapter);
+            buildingText = buildingET.getText().toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	// Method for to setup the front end of autocomplete text view for divisions
 	public static void divisionAutoSetup(JSONArray response, Context context) {
@@ -578,4 +527,52 @@ public class EditProfileActivity extends AppCompatActivity implements
 		}
 	}
 
+    private class EditProfileTextWatcher implements TextWatcher {
+	    private AutoCompleteTextView mTextView;
+	    private EditTextType mType;
+
+	    EditProfileTextWatcher(AutoCompleteTextView textView, EditTextType type) {
+	        mTextView = textView;
+            mType = type;
+        }
+
+        private void autoComplete(String textChangedCapitalized) {
+	        switch (mType) {
+                case POSITION:
+                    mPresenter.positionAutoComplete(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
+                    break;
+                case ADDRESS:
+                    // todo make method: mPresenter.addressAutoComplete
+                    mPresenter.positionAutoComplete(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
+                    break;
+                case DIVISION:
+                    // todo make method: mPresenter.divisionAutoComplete
+                    mPresenter.positionAutoComplete(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
+                    break;
+	        }
+        }
+
+        // Mandatory Method
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        // Runs whenever the text is changed
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // Only submits request if the entered text is >= 3 characters for specificity
+            if (mTextView.getText().length() >= 2) {
+                // Text inputted converted to have a cap letter to start ie. "start" -> "Start"
+                String textChanged = mTextView.getText().toString();
+                String textChangedCapitalized = capitalizeFirstLetter(textChanged);
+                autoComplete(textChangedCapitalized);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // extra measure to ensure text variable is set when the user is done typing
+            // positionText = textView.getText().toString();
+        }
+    }
 }

@@ -52,7 +52,6 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
 		mInteractor.positionAutoComplete(singleton, positionChangedCapped);
 	}
 
-    // Method to setup the front end of autocomplete text view for positions
     public void positionAutoSetup(JSONArray response) {
         try {
             // Position map/arraylist redefined every time text is changed
