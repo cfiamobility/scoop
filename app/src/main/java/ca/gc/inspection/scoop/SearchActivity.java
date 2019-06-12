@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -15,12 +16,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class SearchActivity extends AppCompatActivity {
+
+public class SearchActivity extends AppCompatActivity implements SearchContract.View {
+
+    private SearchContract.Presenter mPresenter;
+
+    @Override
+    public void setPresenter(@NonNull SearchContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        setPresenter(new SearchPresenter(this));
 
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
