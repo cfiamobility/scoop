@@ -171,14 +171,14 @@ public class NotificationsAdapterController {
     }
 
     /**
-     * Description: goes to the post indicated
+     * Description: goes to the Post indicated
      *
      * @param ids: representing the user id and the activity id
      */
     private void goToPost(Map<String, String> ids) {
-        Intent intent = new Intent(MyApplication.getContext(), post.class);
+        Intent intent = new Intent(MyApplication.getContext(), Post.class);
         intent.putExtra("activityid", ids.get("activityid")); //puts the activity id into the intent
-        MyApplication.getContext().startActivity(intent); //changes to the post activity
+        MyApplication.getContext().startActivity(intent); //changes to the Post activity
     }
 
     /**
@@ -189,12 +189,12 @@ public class NotificationsAdapterController {
      * @throws JSONException
      */
     private void checkReferenceActivityId(String referenceActivityId, JSONObject activityResponse) throws JSONException {
-        final String[] activityTypeResponses = new String[]{"your post", "a new post"}; //the possible activityType responses for activityid
-        if (!referenceActivityId.equals("null")) { //if there is a reference activity id (the activity is not a post)
+        final String[] activityTypeResponses = new String[]{"your Post", "a new Post"}; //the possible activityType responses for activityid
+        if (!referenceActivityId.equals("null")) { //if there is a reference activity id (the activity is not a Post)
             notificationAdapterInterface.setActivityType(activityTypeResponses[0], holder); //sets the activity type response
             ids.put("activityid", activityResponse.getString("activityactivityreference")); //puts the activity reference id into the ids map
 
-        } else { //if there is no reference activity id (the activity is a post)
+        } else { //if there is no reference activity id (the activity is a Post)
             notificationAdapterInterface.setActivityType(activityTypeResponses[1], holder); //sets the activity type response
             ids.put("activityid", activityResponse.getString("activityactivityid")); //puts the activity id into the ids map
 
@@ -204,16 +204,16 @@ public class NotificationsAdapterController {
     /**
      * Description: checks the activity type and sets activity type accordingly
      *
-     * @param activityType: the activity type of the post comment reply
+     * @param activityType: the activity type of the Post comment reply
      * @param likeResponse: response related to the like
      * @throws JSONException
      */
     private void checkActivityType(int activityType, JSONObject likeResponse) throws JSONException {
-        final String[] activityTypeResponse = new String[]{"X", "your post", "your comment"}; //the possible activityType responses for userid
-        if (activityType == 1) { //if the activity is a post
-            ids.put("activityid", likeResponse.getString("likesactivityid")); //enter the activity id of the post into ids
+        final String[] activityTypeResponse = new String[]{"X", "your Post", "your comment"}; //the possible activityType responses for userid
+        if (activityType == 1) { //if the activity is a Post
+            ids.put("activityid", likeResponse.getString("likesactivityid")); //enter the activity id of the Post into ids
         } else { //if the activity is a comment
-            ids.put("activityid", likeResponse.getString("likesactivityreference")); //putting the activity reference of the activity which is a post
+            ids.put("activityid", likeResponse.getString("likesactivityreference")); //putting the activity reference of the activity which is a Post
         }
         notificationAdapterInterface.setActivityType(activityTypeResponse[activityType], holder); //setting text based on activityTypeResponse
     }

@@ -30,14 +30,14 @@ public class DisplayPostActivity extends AppCompatActivity {
     private static DisplayPostCommentsAdapter adapter;
 
 
-    /** add post/comment ticket AMD-96
+    /** add Post/comment ticket AMD-96
      * helper function for adding a comment.
      * This function will clear the comment box, update the list view to load the new comment,
      * and close the keyboard if it is up.
      */
     public static void updateCommentList() {
         // update comments list
-        //TODO: add new comment to commentsList on view post ticket
+        //TODO: add new comment to commentsList on view Post ticket
         // possible logic: when a new comment is posted and is added to the database, reload the commentsList
         adapter.notifyDataSetChanged();
         Log.i("comment list", "updated");
@@ -103,9 +103,9 @@ public class DisplayPostActivity extends AppCompatActivity {
             }
         });
 
-        /** Add post/comment ticket AMD-96
-         * This code is part of the add post/comment ticket.
-         * while displaying a post, a user can add a comment by typing some text on the comment box and pressing the send button
+        /** Add Post/comment ticket AMD-96
+         * This code is part of the add Post/comment ticket.
+         * while displaying a Post, a user can add a comment by typing some text on the comment box and pressing the send button
          * this will initiate this code and will add the comment to the database. Upon succession, the comment box will be reset to empty
          * and the comment list will be updated to show the new comment that was just added
          */
@@ -118,7 +118,7 @@ public class DisplayPostActivity extends AppCompatActivity {
                     Toast.makeText(DisplayPostActivity.this, "Please add comment message", Toast.LENGTH_SHORT).show();
                     Log.i("comment", comment);
                 } else {
-                    String tempOtherPostActivityId = "e6a40eb0-bd3f-42ec-8b8d-dd28112260be"; //TODO send real post activityID when doing viewPost ticket
+                    String tempOtherPostActivityId = "e6a40eb0-bd3f-42ec-8b8d-dd28112260be"; //TODO send real Post activityID when doing viewPost ticket
                     CommentController.sendCommentToDatabase(getApplicationContext(), Config.currentUser, comment, tempOtherPostActivityId);
 
                     //clear comment box

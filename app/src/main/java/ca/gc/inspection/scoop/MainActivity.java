@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
 
-        // initializing create post button
+        // initializing create Post button
         createPost = findViewById(R.id.activity_main_fbtn_create_post);
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -38,11 +38,11 @@ public class MostGenericController {
             e.printStackTrace();
         }
         this.holder = holder;
-        likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
+        likeProperties = new HashMap<>(); //map of liketype and likecount of specified Post
     }
 
     /**
-     * Description: main method to display a single post
+     * Description: main method to display a single Post
      * @throws JSONException
      */
     public void displayPost() throws JSONException {
@@ -76,7 +76,7 @@ public class MostGenericController {
             }
         });
 
-        // tapping on any item from the view holder will go to the display post activity
+        // tapping on any item from the view holder will go to the display Post activity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +101,7 @@ public class MostGenericController {
     }
 
     public void formPostTitle() throws JSONException {
-        mostGenericInterface.setPostTitle("Replying to " + post.getString("postfirstname") + " " + post.getString("postlastname") + "'s post", holder);
+        mostGenericInterface.setPostTitle("Replying to " + post.getString("postfirstname") + " " + post.getString("postlastname") + "'s Post", holder);
     }
 
     /**
@@ -160,7 +160,7 @@ public class MostGenericController {
 
     /**
      * Description: initial setting of likeCount and checks if likeCount is null
-     * @param likeCount: the number of likes on a post
+     * @param likeCount: the number of likes on a Post
      * @return the proper like count
      */
     private String checkLikeCount(String likeCount){
@@ -175,8 +175,8 @@ public class MostGenericController {
     }
 
     /**
-     * Description: checks likeType currently on the post and sets upvote and downvote buttons accordingly
-     * @param likeState: like type of post
+     * Description: checks likeType currently on the Post and sets upvote and downvote buttons accordingly
+     * @param likeState: like type of Post
      */
     private void checkLikeState(String likeState){
         Log.i("likestate", likeState);
@@ -194,8 +194,8 @@ public class MostGenericController {
 
     /**
      * Description: changes upvote like state depending on the current state
-     * @param activityid: activity id of the post
-     * @param posterid: user who posted the post
+     * @param activityid: activity id of the Post
+     * @param posterid: user who posted the Post
      * @throws JSONException
      */
     private void changeUpvoteLikeState(String activityid, String posterid) throws JSONException{
@@ -230,8 +230,8 @@ public class MostGenericController {
 
     /**
      * Description: changes downvote like state depending on the current state
-     * @param activityid: activity id of the post
-     * @param posterid: poster id of the post
+     * @param activityid: activity id of the Post
+     * @param posterid: poster id of the Post
      * @throws JSONException
      */
     private void changeDownvoteLikeState(String activityid, String posterid) throws JSONException {
@@ -271,7 +271,7 @@ public class MostGenericController {
      */
     private void updateLikeCount(String likeCount) throws JSONException {
         likeProperties.put("likecount", likeCount); //updates in map
-        post.put("likecount", likeCount); //updates in post object
+        post.put("likecount", likeCount); //updates in Post object
         mostGenericInterface.setLikeCount(likeCount,holder); //sets like count to new total
     }
 
@@ -279,15 +279,15 @@ public class MostGenericController {
     /**
      * Description: updates likes in table and adds notifications if like type is 1
      * @param likeType: current like type
-     * @param activityid: activity id of post
-     * @param posterid: user id of poster of post
+     * @param activityid: activity id of Post
+     * @param posterid: user id of poster of Post
      * @throws JSONException
      */
     private void updateLikes(final String likeType, final String activityid, final String posterid) throws JSONException {
-        post.put("liketype", likeType); //updates post object
+        post.put("liketype", likeType); //updates Post object
         likeProperties.put("liketype", likeType); //updates properties map
         Log.i("hello", "should be here");
-        String URL = Config.baseIP + "display-post/updatelikes";
+        String URL = Config.baseIP + "display-Post/updatelikes";
         StringRequest request = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() { //sends a PUT request to update new likes
             @Override
             public void onResponse(String response) {
@@ -327,14 +327,14 @@ public class MostGenericController {
     /**
      * Description: inserts likes in table and adds notifications if like type is 1
      * @param likeType: current like type
-     * @param activityid: activity id of post
-     * @param posterid: user id of poster of post
+     * @param activityid: activity id of Post
+     * @param posterid: user id of poster of Post
      * @throws JSONException
      */
     private void insertLikes(final String likeType, final String activityid, final String posterid) throws JSONException {
-        post.put("liketype", likeType); //updates post object
+        post.put("liketype", likeType); //updates Post object
         likeProperties.put("liketype", likeType); //updates properties map
-        String URL = Config.baseIP + "display-post/insertlikes";
+        String URL = Config.baseIP + "display-Post/insertlikes";
         StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //sends a POST request to insert new like
             @Override
             public void onResponse(String response) {
@@ -374,7 +374,7 @@ public class MostGenericController {
         if(profileImage != null) { // null check to see if there are images
             formatImage(profileImage.getString("profileimage")); //formats profile image
         }
-        // tapping on any item from the view holder will go to the display post activity
+        // tapping on any item from the view holder will go to the display Post activity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

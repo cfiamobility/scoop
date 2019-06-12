@@ -19,7 +19,7 @@ public class CreatePostPresenter implements CreatePostContract.Presenter {
     }
 
     /*** sendPostToDatabase
-     * Simple post request to store the newly created post to the postcomment table
+     * Simple Post request to store the newly created Post to the postcomment table
      *
      * @param network NetworkUtils
      * @param userId    current user's userid

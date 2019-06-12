@@ -37,11 +37,11 @@ public class ProfilePostsFeedController extends MostGenericController{
             e.printStackTrace();
         }
         this.holder = holder;
-        likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
+        likeProperties = new HashMap<>(); //map of liketype and likecount of specified Post
     }
 
     /**
-     * Super runs the display post in MostGeneric
+     * Super runs the display Post in MostGeneric
      * Displays the posts in the profile
      * @throws JSONException
      */
@@ -63,7 +63,7 @@ public class ProfilePostsFeedController extends MostGenericController{
     }
 
     /**
-     * Sets the post title
+     * Sets the Post title
      * @throws JSONException
      */
     @Override

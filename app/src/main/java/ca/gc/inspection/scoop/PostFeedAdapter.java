@@ -48,8 +48,8 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
     }
 
     /**
-     * Description: sets text of post
-     * @param postText: text of post
+     * Description: sets text of Post
+     * @param postText: text of Post
      * @param holder: viewholder of item
      */
     @Override
@@ -58,8 +58,8 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
     }
 
     /**
-     * Description: sets title of post
-     * @param postTitle: title of post
+     * Description: sets title of Post
+     * @param postTitle: title of Post
      * @param holder: viewholder of item
      */
     @Override
@@ -68,8 +68,8 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
     }
 
     /**
-     * Description: sets image of post
-     * @param image: image of post
+     * Description: sets image of Post
+     * @param image: image of Post
      * @param holder: viewholder of item
      */
     @Override
@@ -98,8 +98,8 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
     }
 
     /**
-     * Description: sets like count on post
-     * @param likeCount: like count on post
+     * Description: sets like count on Post
+     * @param likeCount: like count on Post
      * @param holder: viewholder of item
      */
     @Override
@@ -108,8 +108,8 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
     }
 
     /**
-     * Description: sets date of post
-     * @param date: date of post
+     * Description: sets date of Post
+     * @param date: date of Post
      * @param holder: viewholder of item
      */
     @Override
@@ -148,8 +148,8 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
     }
 
     /**
-     * Description: sets comment count of post
-     * @param commentCount: comment count of post
+     * Description: sets comment count of Post
+     * @param commentCount: comment count of Post
      * @param holder: viewholder of item
      */
     @Override
@@ -158,7 +158,7 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
     }
 
     /**
-     * Description: hides post image if there is none
+     * Description: hides Post image if there is none
      * @param holder: viewholder of item
      */
     @Override

@@ -19,14 +19,14 @@ public class FeedController {
     }
 
     /**
-     * Description: gets post and images for the specified feed
+     * Description: gets Post and images for the specified feed
      */
     public void getPosts(){
-        String URL = Config.baseIP + "display-post/posts/" + feedInterface.getFeedType() + "/" + Config.currentUser;
+        String URL = Config.baseIP + "display-Post/posts/" + feedInterface.getFeedType() + "/" + Config.currentUser;
         JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() { //makes request for all posts for specific feed
             @Override
             public void onResponse(final JSONArray postResponse) {
-                String imageURL = Config.baseIP + "display-post/images/" + feedInterface.getFeedType() + "/" + Config.currentUser;
+                String imageURL = Config.baseIP + "display-Post/images/" + feedInterface.getFeedType() + "/" + Config.currentUser;
                 JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, imageURL, null, new Response.Listener<JSONArray>() { //makes request for all corresponding images
                     @Override
                     public void onResponse(JSONArray imageResponse) {

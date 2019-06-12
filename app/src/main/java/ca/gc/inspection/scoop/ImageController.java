@@ -29,13 +29,13 @@ public class ImageController extends ProfilePostsFeedController {
     @Override
     public void displayImages() throws JSONException {
         if(images != null) { // null check to see if there are images
-            formatImage(images.getString("postimagepath"), "post"); //formats post image
+            formatImage(images.getString("postimagepath"), "Post"); //formats Post image
             formatImage(images.getString("profileimage"), "user"); //formats profile image
         }else{
-            imageInterface.hidePostImage(holder); //hides post image
+            imageInterface.hidePostImage(holder); //hides Post image
         }
 
-        // tapping on any item from the view holder will go to the display post activity
+        // tapping on any item from the view holder will go to the display Post activity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +51,7 @@ public class ImageController extends ProfilePostsFeedController {
      */
     private void formatImage(String image, String type){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        if(type.equals("post")) {
+        if(type.equals("Post")) {
             if(!image.equals("") && !image.equals("null")) {
                imageInterface.setPostImage(bitmap, holder);
             } else{

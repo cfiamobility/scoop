@@ -69,7 +69,7 @@ public class TabFragment extends Fragment {
 				MainActivity.bottomNavigationView.getMenu().getItem(i).setChecked(true);
 				previousMenuItem = MainActivity.bottomNavigationView.getMenu().getItem(i);
 
-				// setting the title of the page every time you switch tabs and whether or not the create post button shows
+				// setting the title of the page every time you switch tabs and whether or not the create Post button shows
 				if (i == 0) {
 					// Sets Title
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Community");

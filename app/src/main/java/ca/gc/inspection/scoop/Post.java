@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -16,23 +17,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class userprofile extends AppCompatActivity{
+public class Post extends AppCompatActivity{
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.userprofile);
+        setContentView(R.layout.post);
 
-        final TextView userprofile = (TextView) findViewById(R.id.username);
+        final TextView userPost = (TextView) findViewById(R.id.post);
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         Intent intent = getIntent();
-        String userid = intent.getStringExtra("userid");
-        String URL = "http://10.0.2.2:3000/user/" + userid;
+        String activityId = intent.getStringExtra("activityid");
+        String URL = "http://10.0.2.2:3000/activity/" + activityId;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
                     JSONObject userRequest = response.getJSONObject(0);
-                    userprofile.setText(userRequest.getString("firstname"));
+                    userPost.setText(userRequest.getString("activitytype"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -44,6 +46,7 @@ public class userprofile extends AppCompatActivity{
             }
         });
         requestQueue.add(request);
+
 
     }
 }

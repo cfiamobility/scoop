@@ -32,7 +32,7 @@ public class LoginController {
     public static void loginUser(final String email, final String password, final Context context, final Activity activity){
         String URL = Config.baseIP + "signup/login"; //url for which the http request will be made, corresponding to Node.js code
         RequestQueue requestQueue = Volley.newRequestQueue(context); //setting up the request queue for volley
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //setting up the request as a post request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //setting up the request as a Post request
             @Override
             public void onResponse(String response) {
 

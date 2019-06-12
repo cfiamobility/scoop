@@ -69,8 +69,8 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<MostGenericView
     }
 
     /**
-     * Sets the post title ("Replying to ..." )
-     * @param postTitle: post title
+     * Sets the Post title ("Replying to ..." )
+     * @param postTitle: Post title
      * @param holder: the view holder created
      */
     @Override

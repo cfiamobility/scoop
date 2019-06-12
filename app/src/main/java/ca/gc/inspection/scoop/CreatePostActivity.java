@@ -72,10 +72,10 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
         setPresenter(new CreatePostPresenter(this));
 
-        /** Initialize edit texts, image view, and buttons for create post xml
-         *  postTitle: title of the post
-         *  postText: message or description of the post (set to have a character limit of 255)
-         *  postImage: (OPTIONAL) user can choose to add a picture to their post from either the camera, or the camera roll
+        /** Initialize edit texts, image view, and buttons for create Post xml
+         *  postTitle: title of the Post
+         *  postText: message or description of the Post (set to have a character limit of 255)
+         *  postImage: (OPTIONAL) user can choose to add a picture to their Post from either the camera, or the camera roll
          *  counter: character counter for postText
          *
          */
