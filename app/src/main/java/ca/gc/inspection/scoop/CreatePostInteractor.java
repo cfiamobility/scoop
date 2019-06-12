@@ -20,7 +20,7 @@ public class CreatePostInteractor {
         mPresenter = presenter;
     }
 
-    public void sendPostToDatabase(MySingleton singleton, final String userId, final String title, final String text, final String imageBitmap) {
+    public void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
         String url = Config.baseIP + "add-post";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -64,6 +64,6 @@ public class CreatePostInteractor {
                 return header;
             }
         };
-        singleton.addToRequestQueue(postRequest);
+        network.addToRequestQueue(postRequest);
     }
 }

@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -27,14 +26,14 @@ public interface EditProfileContract {
 
     interface Presenter extends BasePresenter {
 
-        void initialFill(MySingleton instance);
+        void initialFill(NetworkUtils instance);
 
-        void getPositionAutoCompleteFromDB(MySingleton instance, String positionChangedCapped);
+        void getPositionAutoCompleteFromDB(NetworkUtils instance, String positionChangedCapped);
 
-        void getAddressAutoCompleteFromDB(MySingleton instance, String addressChangedCapitalized);
+        void getAddressAutoCompleteFromDB(NetworkUtils instance, String addressChangedCapitalized);
 
-        void getDivisionAutoCompleteFromDB(MySingleton instance, String divisionChangedCapitalized);
+        void getDivisionAutoCompleteFromDB(NetworkUtils instance, String divisionChangedCapitalized);
 
-        void updateUserInfo(MySingleton singleton, Map<String, String> params);
+        void updateUserInfo(NetworkUtils network, Map<String, String> params);
     }
 }

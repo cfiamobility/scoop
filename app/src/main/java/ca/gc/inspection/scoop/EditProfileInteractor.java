@@ -1,19 +1,15 @@
 package ca.gc.inspection.scoop;
 
-import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,7 +27,7 @@ public class EditProfileInteractor {
         mPresenter = checkNotNull(presenter);
     }
 
-    public void initialFill(MySingleton singleton) {
+    public void initialFill(NetworkUtils network) {
         // URL TO BE CHANGED - userID passed as a parameter to NodeJS
         String URL = Config.baseIP + "edituser/getinitial/" + EditProfileActivity.userID;
 
@@ -56,10 +52,10 @@ public class EditProfileInteractor {
             }
         };
 
-        singleton.addToRequestQueue(jsonObjectRequest);
+        network.addToRequestQueue(jsonObjectRequest);
     }
 
-    public void getPositionAutoCompleteFromDB(MySingleton singleton, String positionChangedCapitalized) {
+    public void getPositionAutoCompleteFromDB(NetworkUtils network, String positionChangedCapitalized) {
         // URL TO BE CHANGED - position entered passed to NodeJS as a parameter
         String URL = Config.baseIP + "edituser/positionchanged/" + positionChangedCapitalized;
 
@@ -81,11 +77,11 @@ public class EditProfileInteractor {
                 return header;
             }
         };
-        singleton.addToRequestQueue(getRequest);
+        network.addToRequestQueue(getRequest);
     }
 
     // takes care of the requests when the text is changed in the building edittext
-    public void getAddressAutoCompleteFromDB(MySingleton singleton, String addressChangedCapitalized) {
+    public void getAddressAutoCompleteFromDB(NetworkUtils network, String addressChangedCapitalized) {
         // URL TO BE CHANGED - address passed as parameter to nodeJS
         String URL = Config.baseIP + "edituser/addresschanged/" + addressChangedCapitalized;
 
@@ -108,11 +104,11 @@ public class EditProfileInteractor {
             }
         };
         // Submitting the request
-        singleton.addToRequestQueue(getRequest);
+        network.addToRequestQueue(getRequest);
     }
 
     // takes care of the requests when the text is changed in the divisions edittext
-    public void getDivisionAutoCompleteFromDB(MySingleton singleton, String divisionChangedCapitalized) {
+    public void getDivisionAutoCompleteFromDB(NetworkUtils network, String divisionChangedCapitalized) {
         // Inputted division is passed as a parameter to NodeJS
         String URL = Config.baseIP + "edituser/divisionchanged/" + divisionChangedCapitalized;
 
@@ -135,10 +131,10 @@ public class EditProfileInteractor {
             }
         };
         // submitting the request
-        singleton.addToRequestQueue(jsonArrayRequest);
+        network.addToRequestQueue(jsonArrayRequest);
     }
 
-    public void updateUserInfo(MySingleton singleton, Map<String, String> params) {
+    public void updateUserInfo(NetworkUtils network, Map<String, String> params) {
         // Request url
         String URL = Config.baseIP + "edituser/updatedatabase";
 
@@ -171,6 +167,6 @@ public class EditProfileInteractor {
         };
 
         // submitting the request
-        singleton.addToRequestQueue(stringRequest);
+        network.addToRequestQueue(stringRequest);
     }
 }

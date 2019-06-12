@@ -8,17 +8,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-
-import androidx.exifinterface.media.ExifInterface;
 
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -36,14 +31,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -112,7 +103,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 				params.put("city", cityET.getText().toString());
 				params.put("province", provinceSpinner.getSelectedItem().toString());
 				params.put("image", image);
-				mPresenter.updateUserInfo(MySingleton.getInstance(getApplicationContext()), params);
+				mPresenter.updateUserInfo(NetworkUtils.getInstance(getApplicationContext()), params);
 			} else {
 				Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
 			}
@@ -187,7 +178,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 		}
 
 		// Searches for user's info to autofill the edittext
-		mPresenter.initialFill(MySingleton.getInstance(this));
+		mPresenter.initialFill(NetworkUtils.getInstance(this));
 
 		// Sets up the Position, Office Address and Division AutoCompletes
 		autoComplete();
@@ -504,13 +495,13 @@ public class EditProfileActivity extends AppCompatActivity implements
         private void autoComplete(String textChangedCapitalized) {
 	        switch (mType) {
                 case POSITION:
-                    mPresenter.getPositionAutoCompleteFromDB(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
+                    mPresenter.getPositionAutoCompleteFromDB(NetworkUtils.getInstance(getApplicationContext()), textChangedCapitalized);
                     break;
                 case ADDRESS:
-                    mPresenter.getAddressAutoCompleteFromDB(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
+                    mPresenter.getAddressAutoCompleteFromDB(NetworkUtils.getInstance(getApplicationContext()), textChangedCapitalized);
                     break;
                 case DIVISION:
-                    mPresenter.getDivisionAutoCompleteFromDB(MySingleton.getInstance(getApplicationContext()), textChangedCapitalized);
+                    mPresenter.getDivisionAutoCompleteFromDB(NetworkUtils.getInstance(getApplicationContext()), textChangedCapitalized);
                     break;
 	        }
         }

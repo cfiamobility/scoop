@@ -233,7 +233,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                 imageBitmap = MyCamera.bitmapToString(((BitmapDrawable) postImage).getBitmap());
                 Log.i("bitmap", imageBitmap);
             }
-            mPresenter.sendPostToDatabase(MySingleton.getInstance(this), Config.currentUser, postTitle, postText, imageBitmap);
+            mPresenter.sendPostToDatabase(NetworkUtils.getInstance(this), Config.currentUser, postTitle, postText, imageBitmap);
 
             finish();
         }

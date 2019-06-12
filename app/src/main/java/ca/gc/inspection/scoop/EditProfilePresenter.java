@@ -1,20 +1,7 @@
 package ca.gc.inspection.scoop;
 
-import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,9 +29,9 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
 
 	// Runs when the edit profile is pressed
     @Override
-	public void initialFill(MySingleton singleton) {
+	public void initialFill(NetworkUtils network) {
 		// Request submitted
-        mInteractor.initialFill(singleton);
+        mInteractor.initialFill(network);
 	}
 
 	public void setInitialFill(JSONObject response) {
@@ -52,16 +39,16 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
     }
 
 	// takes care of the requests when the text is changed in the positions edittext
-	public void getPositionAutoCompleteFromDB(MySingleton singleton, String positionChangedCapitalized) {
-		mInteractor.getPositionAutoCompleteFromDB(singleton, positionChangedCapitalized);
+	public void getPositionAutoCompleteFromDB(NetworkUtils network, String positionChangedCapitalized) {
+		mInteractor.getPositionAutoCompleteFromDB(network, positionChangedCapitalized);
 	}
 
-	public void getAddressAutoCompleteFromDB(MySingleton singleton, String addressChangedCapitalized) {
-        mInteractor.getAddressAutoCompleteFromDB(singleton, addressChangedCapitalized);
+	public void getAddressAutoCompleteFromDB(NetworkUtils network, String addressChangedCapitalized) {
+        mInteractor.getAddressAutoCompleteFromDB(network, addressChangedCapitalized);
     }
 
-    public void getDivisionAutoCompleteFromDB(MySingleton singleton, String divisionChangedCapitalized) {
-        mInteractor.getDivisionAutoCompleteFromDB(singleton, divisionChangedCapitalized);
+    public void getDivisionAutoCompleteFromDB(NetworkUtils network, String divisionChangedCapitalized) {
+        mInteractor.getDivisionAutoCompleteFromDB(network, divisionChangedCapitalized);
     }
 
     public void setPositionAutoCompleteFromDB(JSONArray response) {
@@ -139,8 +126,8 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
     }
 
 	// Takes care of the request when the save button is pressed
-	public void updateUserInfo(MySingleton singleton, Map<String, String> params) {
-        mInteractor.updateUserInfo(singleton, params);
+	public void updateUserInfo(NetworkUtils network, Map<String, String> params) {
+        mInteractor.updateUserInfo(network, params);
 	}
 
     public void finishUpdateUserInfo() {
