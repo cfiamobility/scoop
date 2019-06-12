@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop;
 
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -61,7 +62,7 @@ public class SavedPostActivity extends AppCompatActivity implements SavedPostCon
     }
 
     @Override
-    public void setPresenter(SavedPostContract.Presenter presenter) {
+    public void setPresenter(@NonNull SavedPostContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
     }
 }

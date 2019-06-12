@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,14 +22,17 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class DisplayPostActivity extends AppCompatActivity {
+
+public class DisplayPostActivity extends AppCompatActivity implements DisplayPostContract.View {
+
+    private DisplayPostContract.Presenter mPresenter;
 
     private ListView listView;
     private ImageView optionsMenu;
     private EditText addComment;
     private static DisplayPostCommentsAdapter adapter;
-
 
     /** add Post/comment ticket AMD-96
      * helper function for adding a comment.
@@ -48,9 +52,16 @@ public class DisplayPostActivity extends AppCompatActivity {
     }
 
     @Override
+    public void setPresenter(@NonNull DisplayPostContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_post);
+
+        setPresenter(new DisplayPostPresenter(this));
 
         // to prevent the soft keyboard from opening when the activity starts
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
