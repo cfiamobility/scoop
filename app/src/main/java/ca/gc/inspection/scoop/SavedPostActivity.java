@@ -10,7 +10,11 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SavedPostActivity extends AppCompatActivity {
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+
+public class SavedPostActivity extends AppCompatActivity implements SavedPostContract.View {
+
+    private SavedPostContract.Presenter mPresenter;
 
     // recycler view widgets
     private RecyclerView recyclerView;
@@ -32,6 +36,8 @@ public class SavedPostActivity extends AppCompatActivity {
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
+        setPresenter(new SavedPostPresenter(this));
+
         // initializing test array
         test = new ArrayList<>();
 
@@ -52,5 +58,10 @@ public class SavedPostActivity extends AppCompatActivity {
         adapter = new ProfileAdapter();
         recyclerView.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void setPresenter(SavedPostContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
     }
 }
