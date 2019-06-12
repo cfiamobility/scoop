@@ -24,7 +24,11 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+
+public class MainActivity extends AppCompatActivity implements MainContract.View {
+
+    private MainContract.Presenter mPresenter;
 
     // UI Declarations
     public static FloatingActionButton createPost;
@@ -36,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
     static FragmentManager manager;
 
     @Override
+    public void setPresenter(@NonNull MainContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("userid", Config.currentUser);
 
@@ -44,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
+
+        setPresenter(new MainPresenter(this));
 
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
