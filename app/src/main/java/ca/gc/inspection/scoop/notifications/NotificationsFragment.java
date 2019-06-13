@@ -19,6 +19,9 @@ import java.sql.Timestamp;
 import ca.gc.inspection.scoop.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
+/**
+ * View for the notifications controller
+ */
 public class NotificationsFragment extends Fragment implements NotificationsContract{
 
 

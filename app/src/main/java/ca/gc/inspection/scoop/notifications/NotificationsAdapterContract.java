@@ -2,6 +2,9 @@ package ca.gc.inspection.scoop.notifications;
 
 import android.graphics.Bitmap;
 
+/**
+ * Interface implemented by the NotificationsAdapter in order to conform to the MVP design pattern
+ */
 public interface NotificationsAdapterContract {
     void setActionType(String actionType, NotificationsAdapter.NotificationViewHolder holder);
 

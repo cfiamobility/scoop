@@ -18,6 +18,9 @@ import java.util.Map;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.NetworkUtils;
 
+/**
+ * Handles notification database request from the notifications controller
+ */
 public class NotificationsInteractor {
 
 

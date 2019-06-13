@@ -23,6 +23,9 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MyApplication;
 import ca.gc.inspection.scoop.NetworkUtils;
 
+/**
+ * Controller for the notifications view/fragment
+ */
 public class NotificationsController {
     private RequestQueue requestQueue;
     private Timestamp currentTime;
@@ -47,6 +50,12 @@ public class NotificationsController {
         NotificationsInteractor interactor = new NotificationsInteractor(this, networkUtils);
         interactor.getTodayNotifications();
     }
+
+    /**
+     * Invoked by the interactor after receiving response from a JSONArrayRequest to fetch today notifications from server
+     * @param notificationResponse
+     * @param imageResponse
+     */
     public void getTodayNotificationsCallBack(JSONArray notificationResponse, JSONArray imageResponse){
         notificationsContract.setTodayRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse);
     }
@@ -59,6 +68,12 @@ public class NotificationsController {
         NotificationsInteractor interactor = new NotificationsInteractor(this, networkUtils);
         interactor.getRecentNotifications();
     }
+
+    /**
+     * Invoked by the interactor after receiving response from a JSONArrayRequest to fetch recent notifications from server
+     * @param notificationResponse
+     * @param imageResponse
+     */
     public void getRecentNotificationsCallBack(JSONArray notificationResponse, JSONArray imageResponse){
         notificationsContract.setRecentRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse); //calls notificationInterface to set the recent recycler view
     }
@@ -129,23 +144,6 @@ public class NotificationsController {
                 });
     }
 
-/*
-    */
-/**
-     * Description: Notification Interface to implement to perform all required setting up tasks for layout
-     *//*
-
-    public interface NotificationInterface{
-        void setRecentRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notifications, JSONArray images);
-        void setTodayRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notifications, JSONArray images);
-        void showTodaySection();
-        void hideTodaySection();
-        void showRecentSection();
-        void hideLoadingPanel();
-        void requestTodayFocus();
-        void requestRecentFocus();
-    }
-*/
 
     /**
      * Description: Interface for when the layout is ready after recycler view is done setting up

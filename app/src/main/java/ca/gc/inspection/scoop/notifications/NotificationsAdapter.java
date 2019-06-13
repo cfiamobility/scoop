@@ -18,6 +18,9 @@ import java.sql.Timestamp;
 
 import ca.gc.inspection.scoop.R;
 
+/**
+ * Adapter used by the notifications recycler view
+ */
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> implements NotificationsAdapterContract{
     private JSONArray notifications, images;
     private RequestQueue requestQueue;

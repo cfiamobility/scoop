@@ -24,6 +24,9 @@ import ca.gc.inspection.scoop.MyCamera;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.post;
 
+/**
+ * Controls logic of notifications recyclerView items/view holders
+ */
 public class NotificationsAdapterController {
     private JSONObject notification, image;
     private NotificationsAdapter.NotificationViewHolder holder;
@@ -252,24 +255,6 @@ public class NotificationsAdapterController {
         }
     }
 
-/*    *//**
-     * Description: the notification adapter interface to set all the layouts properly
-     *//*
-    public interface NotificationAdapterInterface {
-        void setActionType(String actionType, NotificationsAdapter.NotificationViewHolder holder);
-
-        void setActivityType(String activityType, NotificationsAdapter.NotificationViewHolder holder);
-
-        void setTime(String time, NotificationsAdapter.NotificationViewHolder holder);
-
-        void hideTime(NotificationsAdapter.NotificationViewHolder holder);
-
-        void setFullName(String fullName, NotificationsAdapter.NotificationViewHolder holder);
-
-        void setImage(Bitmap bitmap, NotificationsAdapter.NotificationViewHolder holder);
-
-        void hideImage(NotificationsAdapter.NotificationViewHolder holder);
-    }*/
 
     /**
      * Description: the setting of the time to be performed in the background
