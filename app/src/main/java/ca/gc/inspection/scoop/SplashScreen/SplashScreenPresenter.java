@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.SplashScreen;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,10 +20,10 @@ import com.auth0.android.jwt.JWT;
 import java.util.HashMap;
 import java.util.Map;
 
-import ca.gc.inspection.scoop.SplashScreen.SplashScreenActivity;
-import ca.gc.inspection.scoop.SplashScreen.SplashScreenContract;
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MainActivity;
 
-public class SplashScreenActivityController {
+public class SplashScreenPresenter implements SplashScreenContract.Presenter {
 
     @NonNull
     private final SplashScreenContract.View mSplashScreenView;
@@ -33,9 +33,9 @@ public class SplashScreenActivityController {
         mSplashScreenView.setPresenter(this);
     }
 
-    public static void goToMainScreen(Context context, Activity activity) {
+    public static void goToMainScreen(Context context, Activity activity){
         SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-        if (!sharedPreferences.getString("userid", "nothing").equals("nothing")) {
+        if(!sharedPreferences.getString("userid", "nothing").equals("nothing")){
             String userId = sharedPreferences.getString("userid", "nothing");
             String token = sharedPreferences.getString("token", "nothing");
             Intent intent = new Intent(context, MainActivity.class);
@@ -46,7 +46,9 @@ public class SplashScreenActivityController {
         }
     }
 
-
+    /**
+     * Moved from LoginController
+     */
 
     /**
      *
@@ -55,7 +57,7 @@ public class SplashScreenActivityController {
      * @param context: context of activity
      * @param activity: activity
      */
-    public static void loginUser(final String email, final String password, final Context context, final Activity activity){
+    public void loginUser(final String email, final String password, final Context context, final Activity activity){
         String URL = Config.baseIP + "signup/login"; //url for which the http request will be made, corresponding to Node.js code
         RequestQueue requestQueue = Volley.newRequestQueue(context); //setting up the request queue for volley
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //setting up the request as a post request
@@ -121,4 +123,5 @@ public class SplashScreenActivityController {
         requestQueue.add(stringRequest); //adds the request to the request queue
 
     }
+
 }

@@ -1,4 +1,10 @@
 package ca.gc.inspection.scoop.base;
 
-public class BaseView {
+import android.support.annotation.Nullable;
+
+public interface BaseView<T extends BasePresenter> {
+
+    void setPresenter(T presenter);
+
 }
+

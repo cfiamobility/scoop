@@ -12,6 +12,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 
+import ca.gc.inspection.scoop.SplashScreen.SplashScreenActivity;
+
 public class SignUpActivity extends AppCompatActivity {
 
     // Initializing the buttons, edit texts, and string variables

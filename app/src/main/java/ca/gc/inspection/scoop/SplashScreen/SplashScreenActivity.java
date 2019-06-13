@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.SplashScreen;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
@@ -10,14 +10,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
-import ca.gc.inspection.scoop.SplashScreen.SplashScreenContract;
+import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.SignUp.SignUpActivity;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity implements SplashScreenContract.View{
 
     // text fields
-    TextInputEditText email, password;
+    private TextInputEditText email, password;
     private SplashScreenContract.Presenter mSplashScreenPresenter;
-
 
     // text field layouts - needed to set the error messages if the user input is invalid
     static TextInputLayout emailLayout, passwordLayout;
@@ -32,7 +32,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     public void logIn (View view) {
-        LoginController.loginUser(email.getText().toString(), password.getText().toString(), getApplicationContext(), this);
+        mSplashScreenPresenter.loginUser(email.getText().toString(), password.getText().toString(), getApplicationContext(), this);
     }
 
     @Override
@@ -85,7 +85,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.secondary));
 
         // to check if a current user is logged in
-        SplashScreenActivityController.goToMainScreen(getApplicationContext(), this);
+        SplashScreenPresenter.goToMainScreen(getApplicationContext(), this);
 
+        mSplashScreenPresenter = new SplashScreenPresenter(this);
     }
 }

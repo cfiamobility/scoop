@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostFragment;
+import ca.gc.inspection.scoop.ProfileComment.ProfileCommentFragment;
+
 public class ProfileFragmentPagerAdapter  extends FragmentStatePagerAdapter {
     int mNumOfTabs;
     String userid;
@@ -21,7 +24,7 @@ public class ProfileFragmentPagerAdapter  extends FragmentStatePagerAdapter {
         bundle.putString("userid", userid);
         switch (i) {
             case 0:
-                ProfilePostsFragment tab1 = new ProfilePostsFragment();
+                ProfilePostFragment tab1 = new ProfilePostFragment();
                 tab1.setArguments(bundle);
                 return tab1;
             case 1:
@@ -29,7 +32,7 @@ public class ProfileFragmentPagerAdapter  extends FragmentStatePagerAdapter {
                 tab2.setArguments(bundle);
                 return tab2;
             case 2:
-                ProfileCommentsFragment tab3 = new ProfileCommentsFragment();
+                ProfileCommentFragment tab3 = new ProfileCommentFragment();
                 tab3.setArguments(bundle);
                 return tab3;
             default:

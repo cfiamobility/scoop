@@ -21,8 +21,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.view.View;
+
+import ca.gc.inspection.scoop.SplashScreen.SplashScreenActivity;
 
 public class MainActivity extends AppCompatActivity {
 

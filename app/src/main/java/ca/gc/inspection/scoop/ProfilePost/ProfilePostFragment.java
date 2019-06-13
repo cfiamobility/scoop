@@ -17,16 +17,17 @@ import android.view.ViewGroup;
 
 import org.json.JSONArray;
 
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.ProfileComment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.ReplyPost.ReplyPostContract;
-import ca.gc.inspection.scoop.ReplyPost.ReplyPostPresenter;
-import ca.gc.inspection.scoop.ReplyPost.ReplyPostViewHolder;
+import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass that holds a recycler view of profile posts on the
+ * profile feed
  */
-public class ProfilePostsFragment extends Fragment implements ProfilePostContract.View {
+public class ProfilePostFragment extends Fragment implements ProfilePostContract.View {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -34,15 +35,14 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostContrac
     private RecyclerView.LayoutManager mLayoutManager;
     private String userid;
     private View view;
-    private ReplyPostContract.Presenter mProfilePostPresenter;
+    private ProfileCommentContract.Presenter mProfilePostPresenter;
 
-    public void setPresenter (ReplyPostContract.Presenter presenter){
+    public void setPresenter (ProfileCommentContract.Presenter presenter){
         mProfilePostPresenter = presenter;
     }
-
-    public String getUserId() {
-        return userid;
-    }
+//    public String getUserId() {
+//        return userid;
+//    }
 
     /**
      *
@@ -71,6 +71,10 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostContrac
         super.onViewCreated(view, savedInstanceState);
 //        ProfilePostContract.Presenter mProfilePostPresenter = new ProfilePostPresenter(this);
 //        mProfilePostPresenter.getUserPosts(userid);
+
+
+        mProfilePostPresenter.setPresenterView(this);
+
     }
 
     /**
@@ -79,7 +83,7 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostContrac
      * @param images: JSONArray of profile pictures from db
      */
 
-    public void setPostRecyclerView(JSONArray posts, JSONArray images) {
+    public void setRecyclerView(JSONArray posts, JSONArray images) {
         // initializing the recycler view
         postRecyclerView = view.findViewById(R.id.fragment_profile_posts_rv);
         postRecyclerView.setHasFixedSize(true);
@@ -89,7 +93,7 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostContrac
         postRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting the custom adapter for the recycler view
-        mAdapter = new ProfilePostAdapter(posts, images, userid);
+        mAdapter = new ProfilePostAdapter(posts, images);
         ((ProfilePostAdapter) mAdapter).setView(this);
         postRecyclerView.setAdapter(mAdapter);
     }
@@ -100,50 +104,50 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostContrac
      */
 
     @Override
-    public void setPostText(String postText, ReplyPostViewHolder holder) {
+    public void setPostText(String postText, ProfileCommentViewHolder holder) {
         holder.postText.setText(postText);
     }
 
     @Override
-    public void setPostTitle(String postTitle, ReplyPostViewHolder holder) {
+    public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
         holder.postTitle.setText(postTitle);
     }
 
     @Override
-    public void setUserImage(Bitmap image, ReplyPostViewHolder holder) {
+    public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
         Log.i("image", image.toString());
         holder.profileImage.setImageBitmap(image);
     }
 
     @Override
-    public void setUserName(String userName, ReplyPostViewHolder holder) {
+    public void setUserName(String userName, ProfileCommentViewHolder holder) {
         holder.username.setText(userName);
     }
 
     @Override
-    public void setLikeCount(String likeCount, ReplyPostViewHolder holder) {
+    public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
         holder.likeCount.setText(likeCount);
     }
 
     @Override
-    public void setDate(String date, ReplyPostViewHolder holder) {
+    public void setDate(String date, ProfileCommentViewHolder holder) {
         holder.date.setText(date);
     }
 
     @Override
-    public void setLikeDownvoteState(ReplyPostViewHolder holder) {
+    public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
     }
 
     @Override
-    public void setLikeNeutralState(ReplyPostViewHolder holder) {
+    public void setLikeNeutralState(ProfileCommentViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
 
     @Override
-    public void setLikeUpvoteState(ReplyPostViewHolder holder) {
+    public void setLikeUpvoteState(ProfileCommentViewHolder holder) {
         holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
         holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
@@ -154,7 +158,7 @@ public class ProfilePostsFragment extends Fragment implements ProfilePostContrac
     }
 
     @Override
-    public void hideDate(ReplyPostViewHolder holder) {
+    public void hideDate(ProfileCommentViewHolder holder) {
         holder.date.setVisibility(View.GONE);
     }
 

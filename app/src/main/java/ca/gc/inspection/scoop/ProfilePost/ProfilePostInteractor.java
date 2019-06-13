@@ -11,14 +11,15 @@ package ca.gc.inspection.scoop.ProfilePost;
         import java.util.Map;
 
         import ca.gc.inspection.scoop.Config;
-        import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
 
-public class Interactor {
-    ProfilePostContract.View mProfilePostView; // THIS ISNT RIGHT, INTERACTOR AND VIEW SHOULD NOT COMMUNICATE
+public class ProfilePostInteractor {
+    ProfilePostContract.Presenter mProfilePostPresenter;
+    ProfilePostContract.View mProfilePostView;
 
-    public Interactor (ProfilePostContract.View profilePostView){
-        mProfilePostView = profilePostView;
-    }
+//    public ProfilePostInteractor( ProfilePostContract.Presenter profilePostPresenter){
+//        mProfilePostPresenter = profilePostPresenter;
+//        mProfilePostView = mProfilePostPresenter.getPresenterView();
+//    }
 
     /**
      * FROM ProfilePostsController

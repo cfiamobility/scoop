@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.ReplyPost;
+package ca.gc.inspection.scoop.ProfileComment;
 
 
 import android.graphics.Bitmap;
@@ -17,13 +17,14 @@ import android.view.ViewGroup;
 
 import org.json.JSONArray;
 
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ReplyPostFragment extends Fragment implements ReplyPostContract.View {
+public class ProfileCommentFragment extends Fragment implements ProfileCommentContract.View {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
@@ -31,16 +32,16 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
     private RecyclerView.LayoutManager mLayoutManager;
     private String userid;
     private View view;
-    private ReplyPostContract.Presenter mReplyPostPresenter;
+    private ProfileCommentContract.Presenter mProfileCommentPresenter;
 
-    public void setPresenter (ReplyPostContract.Presenter presenter){
-        mReplyPostPresenter = presenter;
+    public void setPresenter (ProfileCommentContract.Presenter presenter){
+        mProfileCommentPresenter = presenter;
     }
 
     /**
      * Empty Constructor for fragments
      */
-    public ReplyPostFragment() {
+    public ProfileCommentFragment() {
         // Required empty public constructor
     }
 
@@ -75,6 +76,8 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
 //
 //        // After created, the first method is called
 //        profileCommentsController.getUserComments(userid);
+//        interactor.getUserComments(Config.currentUser);
+        mProfileCommentPresenter.setPresenterView(this);
     }
 
     /**
@@ -93,8 +96,8 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
         commentsRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setting the custom adapter for the recycler view
-        mAdapter = new ReplyPostAdapter(comments, images, userid);
-        ((ReplyPostAdapter) mAdapter).setView(this);
+        mAdapter = new ProfileCommentAdapter(comments, images);
+        ((ProfileCommentAdapter) mAdapter).setView(this);
         commentsRecyclerView.setAdapter(mAdapter);
     }
 
@@ -108,7 +111,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      * @param postTitle: post title
      * @param holder: the view holder created
      */
-    public void setPostTitle(String postTitle, ReplyPostViewHolder holder) {
+    public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
         holder.postTitle.setText(postTitle);
     }
 
@@ -117,7 +120,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      * @param postText
      * @param holder
      */
-    public void setPostText(String postText, ReplyPostViewHolder holder) {
+    public void setPostText(String postText, ProfileCommentViewHolder holder) {
         holder.postText.setText(postText);
     }
 
@@ -126,7 +129,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      * @param image
      * @param holder
      */
-    public void setUserImage(Bitmap image, ReplyPostViewHolder holder) {
+    public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
         Log.i("image", image.toString());
         holder.profileImage.setImageBitmap(image);
     }
@@ -136,7 +139,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      * @param userName
      * @param holder
      */
-    public void setUserName(String userName, ReplyPostViewHolder holder) {
+    public void setUserName(String userName, ProfileCommentViewHolder holder) {
         holder.username.setText(userName);
     }
 
@@ -145,7 +148,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      * @param likeCount
      * @param holder
      */
-    public void setLikeCount(String likeCount, ReplyPostViewHolder holder) {
+    public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
         holder.likeCount.setText(likeCount);
     }
 
@@ -154,7 +157,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      * @param date
      * @param holder
      */
-    public void setDate(String date, ReplyPostViewHolder holder) {
+    public void setDate(String date, ProfileCommentViewHolder holder) {
         holder.date.setText(date);
     }
 
@@ -162,7 +165,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      *
      * @param holder
      */
-    public void setLikeDownvoteState(ReplyPostViewHolder holder) {
+    public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
     }
@@ -171,7 +174,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      *
      * @param holder
      */
-    public void setLikeNeutralState(ReplyPostViewHolder holder) {
+    public void setLikeNeutralState(ProfileCommentViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
@@ -180,7 +183,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      *
      * @param holder
      */
-    public void setLikeUpvoteState(ReplyPostViewHolder holder) {
+    public void setLikeUpvoteState(ProfileCommentViewHolder holder) {
         holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
         holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
@@ -189,7 +192,7 @@ public class ReplyPostFragment extends Fragment implements ReplyPostContract.Vie
      *
      * @param holder
      */
-    public void hideDate(ReplyPostViewHolder holder) {
+    public void hideDate(ProfileCommentViewHolder holder) {
         holder.date.setVisibility(View.GONE);
     }
 }

@@ -14,10 +14,10 @@ import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
 
-public class Interactor {
+public class FeedPostInteractor {
     FeedPostContract.View mFeedPostView;
 
-    public Interactor (FeedPostContract.View feedPostView){
+    public FeedPostInteractor(FeedPostContract.View feedPostView){
         mFeedPostView = feedPostView;
     }
 

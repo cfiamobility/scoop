@@ -1,14 +1,10 @@
-package ca.gc.inspection.scoop.ReplyPost;
+package ca.gc.inspection.scoop.ProfileComment;
 
 
 import android.graphics.Bitmap;
 
-import com.android.volley.AuthFailureError;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.Map;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
@@ -19,19 +15,19 @@ import ca.gc.inspection.scoop.base.BaseView;
  * interact with each other.
  */
 
-public interface ReplyPostContract {
+public interface ProfileCommentContract {
 
     interface View extends BaseView<Presenter> {
-        void setPostText(String postText, ReplyPostViewHolder holder);
-        void setPostTitle(String postTitle, ReplyPostViewHolder holder);
-        void setUserName(String userName, ReplyPostViewHolder holder);
-        void setLikeCount(String likeCount, ReplyPostViewHolder holder);
-        void setDate(String date, ReplyPostViewHolder holder);
-        void setLikeNeutralState(ReplyPostViewHolder holder);
-        void setLikeUpvoteState(ReplyPostViewHolder holder);
-        void setLikeDownvoteState(ReplyPostViewHolder holder);
-        void hideDate(ReplyPostViewHolder holder);
-        void setUserImage(Bitmap image, ReplyPostViewHolder holder);
+        void setPostText(String postText, ProfileCommentViewHolder holder);
+        void setPostTitle(String postTitle, ProfileCommentViewHolder holder);
+        void setUserName(String userName, ProfileCommentViewHolder holder);
+        void setLikeCount(String likeCount, ProfileCommentViewHolder holder);
+        void setDate(String date, ProfileCommentViewHolder holder);
+        void setLikeNeutralState(ProfileCommentViewHolder holder);
+        void setLikeUpvoteState(ProfileCommentViewHolder holder);
+        void setLikeDownvoteState(ProfileCommentViewHolder holder);
+        void hideDate(ProfileCommentViewHolder holder);
+        void setUserImage(Bitmap image, ProfileCommentViewHolder holder);
 
         void setRecyclerView(JSONArray comments, JSONArray images);
     }
@@ -40,19 +36,24 @@ public interface ReplyPostContract {
         void displayPost() throws JSONException;
         void formPostTitle() throws JSONException;
         void checkFullName() throws JSONException;
+        void changeUpvoteLikeState(String activityid, String posterid) throws JSONException;
+        void changeDownvoteLikeState(String activityid, String posterid) throws JSONException;
+        void updateLikeCount(String likeCount) throws JSONException;
+//        void updateLikes(final String likeType, final String activityid, final String posterid) throws JSONException;
+//        void insertLikes(final String likeType, final String activityid, final String posterid) throws JSONException;
+        void displayImages() throws JSONException;
+
+
         String checkFirstName(String firstName);
         String checkLastName(String lastName);
         void formatDate(String time);
         String checkLikeCount(String likeCount);
         void checkLikeState(String likeState);
-        void changeUpvoteLikeState(String activityid, String posterid) throws JSONException;
-        void changeDownvoteLikeState(String activityid, String posterid) throws JSONException;
-        void updateLikeCount(String likeCount) throws JSONException;
-        void updateLikes(final String likeType, final String activityid, final String posterid) throws JSONException;
-        void insertLikes(final String likeType, final String activityid, final String posterid) throws JSONException;
-        void displayImages() throws JSONException;
         void formatImage(String image);
+//        void getUserComments(final String userid);
 
-        void getUserComments(final String userid);
+//        void setPresenterView (ProfileCommentContract.View profileCommentView);
+//        ProfileCommentContract.View getPresenterView ();
+//        void setPresenterInteractor (ProfileCommentInteractor profileCommentInteractor);
     }
 }

@@ -1,36 +1,30 @@
-package ca.gc.inspection.scoop.ReplyPost;
+package ca.gc.inspection.scoop.ProfileComment;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONArray;
 
-import ca.gc.inspection.scoop.ProfilePost.ProfilePostContract;
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
 
-public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> {
+public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder> {
 
     private JSONArray comments, images;
-    private ReplyPostPresenter mReplyPostPresenter;
-    private ReplyPostContract.View mReplyPostView;
-    private String mUserId;
+    private ProfileCommentPresenter mProfileCommentPresenter;
+    private ProfileCommentContract.View mProfileCommentView;
 
     /**
      * Constructor for the adapter
      * @param comments: JSONArray of comments
      * @param images: JSONArray of profile images
      */
-    public ReplyPostAdapter(JSONArray comments, JSONArray images, String userId) {
+    public ProfileCommentAdapter(JSONArray comments, JSONArray images) {
         this.comments = comments;
         this.images = images;
-        mUserId = userId;
     }
 
     /**
@@ -41,24 +35,24 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
      */
     @NonNull
     @Override
-    public ReplyPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ProfileCommentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_profile_comments, viewGroup, false);
-        return new ReplyPostViewHolder(v);
+        return new ProfileCommentViewHolder(v);
     }
 
     /**
      * Runs after the viewholder is created
-     * @param replyPostViewHolder:  newly created viewholder
+     * @param profileCommentViewHolder:  newly created viewholder
      * @param i: iterator for each row
      */
     @Override
-    public void onBindViewHolder(@NonNull ReplyPostViewHolder replyPostViewHolder, int i) {
-        mReplyPostPresenter = new ReplyPostPresenter(mReplyPostView, comments, images, i, replyPostViewHolder);
-        mReplyPostPresenter.getUserComments(mUserId);
+    public void onBindViewHolder(@NonNull ProfileCommentViewHolder profileCommentViewHolder, int i) {
+        mProfileCommentPresenter = new ProfileCommentPresenter(mProfileCommentView, comments, images, i, profileCommentViewHolder);
+//        mProfileCommentPresenter.getUserComments(Config.currentUser);
         try {
-            mReplyPostPresenter.displayPost();
-            mReplyPostPresenter.displayImages();
-            mReplyPostPresenter.formPostTitle();
+            mProfileCommentPresenter.displayPost();
+            mProfileCommentPresenter.displayImages();
+            mProfileCommentPresenter.formPostTitle();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,8 +68,8 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 
 
 
-    public void setView (ReplyPostContract.View profilePostView){
-        mReplyPostView = profilePostView;
+    public void setView (ProfileCommentContract.View profileCommentView){
+        mProfileCommentView = profileCommentView;
     }
 
 
@@ -84,7 +78,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     * @param postTitle: post title
 //     * @param holder: the view holder created
 //     */
-//    public void setPostTitle(String postTitle, ReplyPostViewHolder holder) {
+//    public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
 //        holder.postTitle.setText(postTitle);
 //    }
 //
@@ -93,7 +87,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     * @param postText
 //     * @param holder
 //     */
-//    public void setPostText(String postText, ReplyPostViewHolder holder) {
+//    public void setPostText(String postText, ProfileCommentViewHolder holder) {
 //        holder.postText.setText(postText);
 //    }
 //
@@ -102,7 +96,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     * @param image
 //     * @param holder
 //     */
-//    public void setUserImage(Bitmap image, ReplyPostViewHolder holder) {
+//    public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
 //        Log.i("image", image.toString());
 //        holder.profileImage.setImageBitmap(image);
 //    }
@@ -112,7 +106,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     * @param userName
 //     * @param holder
 //     */
-//    public void setUserName(String userName, ReplyPostViewHolder holder) {
+//    public void setUserName(String userName, ProfileCommentViewHolder holder) {
 //        holder.username.setText(userName);
 //    }
 //
@@ -121,7 +115,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     * @param likeCount
 //     * @param holder
 //     */
-//    public void setLikeCount(String likeCount, ReplyPostViewHolder holder) {
+//    public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
 //        holder.likeCount.setText(likeCount);
 //    }
 //
@@ -130,7 +124,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     * @param date
 //     * @param holder
 //     */
-//    public void setDate(String date, ReplyPostViewHolder holder) {
+//    public void setDate(String date, ProfileCommentViewHolder holder) {
 //        holder.date.setText(date);
 //    }
 //
@@ -138,7 +132,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     *
 //     * @param holder
 //     */
-//    public void setLikeDownvoteState(ReplyPostViewHolder holder) {
+//    public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
 //        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
 //        holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
 //    }
@@ -147,7 +141,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     *
 //     * @param holder
 //     */
-//    public void setLikeNeutralState(ReplyPostViewHolder holder) {
+//    public void setLikeNeutralState(ProfileCommentViewHolder holder) {
 //        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
 //        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
 //    }
@@ -156,7 +150,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     *
 //     * @param holder
 //     */
-//    public void setLikeUpvoteState(ReplyPostViewHolder holder) {
+//    public void setLikeUpvoteState(ProfileCommentViewHolder holder) {
 //        holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
 //        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
 //    }
@@ -165,7 +159,7 @@ public class ReplyPostAdapter extends RecyclerView.Adapter<ReplyPostViewHolder> 
 //     *
 //     * @param holder
 //     */
-//    public void hideDate(ReplyPostViewHolder holder) {
+//    public void hideDate(ProfileCommentViewHolder holder) {
 //        holder.date.setVisibility(View.GONE);
 //    }
 

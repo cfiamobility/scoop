@@ -1,8 +1,5 @@
 package ca.gc.inspection.scoop.FeedPost;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,20 +9,18 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import ca.gc.inspection.scoop.FeedPost.FeedPostViewHolder;
-import ca.gc.inspection.scoop.ImageController;
-import ca.gc.inspection.scoop.ProfilePost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.ReplyPost.ReplyPostViewHolder;
 
-public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> implements ImageController.ImageInterface {
+public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>  {
     private JSONArray posts, images;
+    private FeedPostPresenter mFeedPostPresenter;
+    private FeedPostContract.View mFeedPostView;
 
-    public PostFeedAdapter(JSONArray posts, JSONArray images) {
+
+    public FeedPostAdapter(JSONArray posts, JSONArray images) {
         this.posts = posts;
         this.images = images;
     }
-
 
     @NonNull
     @Override
@@ -38,11 +33,12 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
     @Override
     public void onBindViewHolder(@NonNull FeedPostViewHolder holder, int i) {
 
-       ImageController imageController = new ImageController(this, posts, images, i, holder);
+        mFeedPostPresenter = new FeedPostPresenter(mFeedPostView, posts, images, i, holder);
+//        mFeedPostPresenter.getPosts();
         try {
-            imageController.displayPost();
-            imageController.displayImages();
-            imageController.formPostTitle();
+            mFeedPostPresenter.displayPost();
+            mFeedPostPresenter.displayImages();
+            mFeedPostPresenter.formPostTitle();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -53,131 +49,130 @@ public class PostFeedAdapter extends RecyclerView.Adapter<FeedPostViewHolder> im
         return posts.length();
     }
 
-    /**
-     * Description: sets text of post
-     * @param postText: text of post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setPostText(String postText, ReplyPostViewHolder holder) {
-        holder.postText.setText(postText);
-    }
 
-    /**
-     * Description: sets title of post
-     * @param postTitle: title of post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setPostTitle(String postTitle, ReplyPostViewHolder holder) {
-        holder.postTitle.setText(postTitle);
+    public void setView (FeedPostContract.View feedPostView){
+        mFeedPostView = feedPostView;
     }
-
-    /**
-     * Description: sets image of post
-     * @param image: image of post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setPostImage(Bitmap image, FeedPostViewHolder holder) {
-        holder.postImage.setImageBitmap(image);
-    }
-
-    /**
-     * Description: sets image of user
-     * @param image: image of user
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setUserImage(Bitmap image, ReplyPostViewHolder holder) {
-        holder.profileImage.setImageBitmap(image);
-    }
-
-    /**
-     * Description: sets name of user
-     * @param userName: name of user
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setUserName(String userName, ReplyPostViewHolder holder) {
-        holder.username.setText(userName);
-    }
-
-    /**
-     * Description: sets like count on post
-     * @param likeCount: like count on post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setLikeCount(String likeCount, ReplyPostViewHolder holder) {
-        holder.likeCount.setText(likeCount);
-    }
-
-    /**
-     * Description: sets date of post
-     * @param date: date of post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setDate(String date, ReplyPostViewHolder holder) {
-        holder.date.setText(date);
-    }
-
-    /**
-     * Description: sets neutral state of likes
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setLikeNeutralState(ReplyPostViewHolder holder) {
-        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
-    }
-
-    /**
-     * Description: sets upvote state of likes
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setLikeUpvoteState(ReplyPostViewHolder holder) {
-       holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
-       holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
-    }
-
-    /**
-     * Description: sets downvote state of likes
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setLikeDownvoteState(ReplyPostViewHolder holder) {
-        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-        holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
-    }
-
-    /**
-     * Description: sets comment count of post
-     * @param commentCount: comment count of post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setCommentCount(String commentCount, ProfilePostViewHolder holder) {
-        holder.commentCount.setText(commentCount);
-    }
-
-    /**
-     * Description: hides post image if there is none
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void hidePostImage(FeedPostViewHolder holder) {
-        holder.postImage.setVisibility(View.GONE);
-    }
-
-    /**
-     * Description: hides date if there is an error
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void hideDate(ReplyPostViewHolder holder) {
-        holder.date.setVisibility(View.GONE);
-    }
+//    @Override
+//    public void setPostText(String postText, ProfileCommentViewHolder holder) {
+//        holder.postText.setText(postText);
+//    }
+//
+//    /**
+//     * Description: sets title of post
+//     * @param postTitle: title of post
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
+//        holder.postTitle.setText(postTitle);
+//    }
+//
+//    /**
+//     * Description: sets image of post
+//     * @param image: image of post
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setPostImage(Bitmap image, FeedPostViewHolder holder) {
+//        holder.postImage.setImageBitmap(image);
+//    }
+//
+//    /**
+//     * Description: sets image of user
+//     * @param image: image of user
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
+//        holder.profileImage.setImageBitmap(image);
+//    }
+//
+//    /**
+//     * Description: sets name of user
+//     * @param userName: name of user
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setUserName(String userName, ProfileCommentViewHolder holder) {
+//        holder.username.setText(userName);
+//    }
+//
+//    /**
+//     * Description: sets like count on post
+//     * @param likeCount: like count on post
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
+//        holder.likeCount.setText(likeCount);
+//    }
+//
+//    /**
+//     * Description: sets date of post
+//     * @param date: date of post
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setDate(String date, ProfileCommentViewHolder holder) {
+//        holder.date.setText(date);
+//    }
+//
+//    /**
+//     * Description: sets neutral state of likes
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setLikeNeutralState(ProfileCommentViewHolder holder) {
+//        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
+//        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
+//    }
+//
+//    /**
+//     * Description: sets upvote state of likes
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setLikeUpvoteState(ProfileCommentViewHolder holder) {
+//       holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
+//       holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
+//    }
+//
+//    /**
+//     * Description: sets downvote state of likes
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
+//        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
+//        holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
+//    }
+//
+//    /**
+//     * Description: sets comment count of post
+//     * @param commentCount: comment count of post
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void setCommentCount(String commentCount, ProfilePostViewHolder holder) {
+//        holder.commentCount.setText(commentCount);
+//    }
+//
+//    /**
+//     * Description: hides post image if there is none
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void hidePostImage(FeedPostViewHolder holder) {
+//        holder.postImage.setVisibility(View.GONE);
+//    }
+//
+//    /**
+//     * Description: hides date if there is an error
+//     * @param holder: viewholder of item
+//     */
+//    @Override
+//    public void hideDate(ProfileCommentViewHolder holder) {
+//        holder.date.setVisibility(View.GONE);
+//    }
 }

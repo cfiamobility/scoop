@@ -1,9 +1,16 @@
 package ca.gc.inspection.scoop.ProfilePost;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,28 +19,34 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.PostOptionsDialog;
-import ca.gc.inspection.scoop.PostReply.ReplyPostPresenter;
+import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
+import ca.gc.inspection.scoop.ProfileComment.ProfileCommentPresenter;
 
 /**
  * performs all logic and HTTP requests for the FeedAdapter
  */
-public class ProfilePostsFeedController extends ReplyPostPresenter {
+public class ProfilePostPresenter extends ProfileCommentPresenter implements ProfilePostContract.Presenter {
     private JSONObject post;
-    private ProfilePostsFeedPostViewHolder holder;
-    private ProfilePostContract profilePostContract;
+    private ProfilePostViewHolder holder;
     private Map<String, String> likeProperties;
 
+    @NonNull
+    private ProfilePostContract.View mProfilePostView;
+    private ProfilePostInteractor mProfilePostInteractor;
+
+
     /**
-     * @param profilePostContract: inherits from MostGenericInterface and declares all its methods
+     * @param profilePostView: inherits from MostGenericInterface and declares all its methods
      * @param posts: JSONArray of posts from the database
      * @param images: JSONArray of profile images from the database
      * @param i: counter for the array adapter
      * @param holder: view holder that contains all the front end declarations
      */
-    public ProfilePostsFeedController(ProfilePostContract profilePostContract, JSONArray posts, JSONArray images, int i, ProfilePostsFeedPostViewHolder holder){
-        super(profilePostContract, posts, images, i, holder);
-        this.profilePostContract = profilePostContract;
+    public ProfilePostPresenter(ProfilePostContract.View profilePostView, JSONArray posts, JSONArray images, int i, ProfilePostViewHolder holder){
+        super(profilePostView, posts, images, i, holder);
+        mProfilePostView = profilePostView;
         try {
             this.post = posts.getJSONObject(i);
         } catch (JSONException e) {
@@ -41,13 +54,27 @@ public class ProfilePostsFeedController extends ReplyPostPresenter {
         }
         this.holder = holder;
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
+
+        mProfilePostView.setPresenter(this);
+        mProfilePostInteractor = new ProfilePostInteractor(this);
+        mProfilePostInteractor.getUserPosts(Config.currentUser);
     }
 
-    /**
-     * Super runs the display post in MostGeneric
-     * Displays the posts in the profile
-     * @throws JSONException
-     */
+    @Override
+    public void setPresenterView (ProfilePostContract.View profilePostView){
+        mProfilePostView = profilePostView;
+    }
+
+    @Override
+    public ProfilePostContract.View getPresenterView (){
+        return mProfilePostView;
+    }
+
+        /**
+         * Super runs the display post in MostGeneric
+         * Displays the posts in the profile
+         * @throws JSONException
+         */
     @Override
     public void displayPost() throws JSONException{
         super.displayPost();
@@ -71,21 +98,71 @@ public class ProfilePostsFeedController extends ReplyPostPresenter {
      */
     @Override
     public void formPostTitle() throws JSONException {
-        profilePostContract.setPostTitle(post.getString("posttitle"), holder);
+        mProfilePostView.setPostTitle(post.getString("posttitle"), holder);
     }
 
     /**
      * Description: checks current comment count and sets item accordingly
      * @param commentCount: current comment count
      */
-    private void checkCommentCount(String commentCount){
+    public void checkCommentCount(String commentCount){
         String defaultCount = "0";
         if(!commentCount.equals("null")){
-            profilePostContract.setCommentCount(commentCount, holder);
+            mProfilePostView.setCommentCount(commentCount, holder);
         }else{
-            profilePostContract.setCommentCount(defaultCount, holder);
+            mProfilePostView.setCommentCount(defaultCount, holder);
         }
     }
+
+//    /**
+//     * FROM ProfilePostsController
+//     */
+//
+//    /**
+//     * HTTP Requests to get all the user posts infos
+//     * @param userid: passes the userid of the profile clicked on
+//     */
+//    public void getUserPosts(final String userid) {
+//        String url = Config.baseIP + "profile/posttextfill/" + userid + "/" + Config.currentUser;
+//        JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+//            @Override
+//            public void onResponse(final JSONArray postsResponse) {
+//                String url = Config.baseIP + "profile/postimagefill/"  + userid;
+//                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray imagesResponse) {
+//                        mProfilePostView.setRecyclerView(postsResponse, imagesResponse);
+//                    }
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                    }
+//                }) {
+//                    public Map<String, String> getHeaders() throws AuthFailureError {
+//                        // inserting the token into the response header that will be sent to the server
+//                        Map<String, String> header = new HashMap<>();
+//                        header.put("authorization", Config.token);
+//                        return header;
+//                    }
+//                };
+//                Config.requestQueue.add(imageRequest);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        }) {
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                // inserting the token into the response header that will be sent to the server
+//                Map<String, String> header = new HashMap<>();
+//                header.put("authorization", Config.token);
+//                return header;
+//            }
+//        };
+//        Config.requestQueue.add(postRequest);
+//    }
 
 
 }

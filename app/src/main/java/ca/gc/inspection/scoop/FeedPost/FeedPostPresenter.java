@@ -1,31 +1,45 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.FeedPost;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.View;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.DisplayPostActivity;
+import ca.gc.inspection.scoop.MyCamera;
 import ca.gc.inspection.scoop.ProfilePost.ProfilePostPresenter;
 
 
-public class ImageController extends ProfilePostPresenter {
+public class FeedPostPresenter extends ProfilePostPresenter implements FeedPostContract.Presenter{
     private JSONObject images;
     private FeedPostViewHolder holder;
-    private ImageInterface imageInterface;
+    private FeedPostContract.View mFeedPostView;
 
-    public ImageController(ImageInterface imageInterface, JSONArray posts, JSONArray images, int i, FeedPostViewHolder holder){
-        super(imageInterface, posts, images, i, holder);
+    public FeedPostPresenter(FeedPostContract.View feedPostView, JSONArray posts, JSONArray images, int i, FeedPostViewHolder holder){
+        super(feedPostView, posts, images, i, holder);
 
-        this.imageInterface = imageInterface;
+        mFeedPostView = feedPostView;
         try {
             this.images = images.getJSONObject(i);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         this.holder = holder;
+
+        mFeedPostView.setPresenter(this);
     }
 
     @Override
@@ -34,7 +48,7 @@ public class ImageController extends ProfilePostPresenter {
             formatImage(images.getString("postimagepath"), "post"); //formats post image
             formatImage(images.getString("profileimage"), "user"); //formats profile image
         }else{
-            imageInterface.hidePostImage(holder); //hides post image
+            mFeedPostView.hidePostImage(holder); //hides post image
         }
 
         // tapping on any item from the view holder will go to the display post activity
@@ -51,21 +65,60 @@ public class ImageController extends ProfilePostPresenter {
      * @param image: image to convert
      * @param type: type of image
      */
-    private void formatImage(String image, String type){
+    public void formatImage(String image, String type){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
         if(type.equals("post")) {
             if(!image.equals("") && !image.equals("null")) {
-               imageInterface.setPostImage(bitmap, holder);
+                mFeedPostView.setPostImage(bitmap, holder);
             } else{
-                imageInterface.hidePostImage(holder);
+                mFeedPostView.hidePostImage(holder);
             }
         }else{
-            imageInterface.setUserImage(bitmap, holder);
+            mFeedPostView.setUserImage(bitmap, holder);
         }
     }
 
-    public interface ImageInterface extends ProfileFeedInterface {
-        void setPostImage(Bitmap image, FeedPostViewHolder holder);
-        void hidePostImage(FeedPostViewHolder holder);
-    }
+//    public void getPosts(){
+//        String URL = Config.baseIP + "display-post/posts/" + mFeedPostView.getFeedType() + "/" + Config.currentUser;
+//        JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() { //makes request for all posts for specific feed
+//            @Override
+//            public void onResponse(final JSONArray postResponse) {
+//                String imageURL = Config.baseIP + "display-post/images/" + mFeedPostView.getFeedType() + "/" + Config.currentUser;
+//                JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, imageURL, null, new Response.Listener<JSONArray>() { //makes request for all corresponding images
+//                    @Override
+//                    public void onResponse(JSONArray imageResponse) {
+//                        mFeedPostView.setRecyclerView(postResponse, imageResponse);
+//                    }
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        error.printStackTrace();
+//                    }
+//                })
+//                { @Override
+//                public Map<String, String> getHeaders() throws AuthFailureError {
+//                    // inserting the token into the response header that will be sent to the server
+//                    Map<String, String> header = new HashMap<>();
+//                    header.put("authorization", Config.token);
+//                    return header;
+//                }};
+//
+//                Config.requestQueue.add(imageRequest);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                error.printStackTrace();
+//            }
+//        })
+//        { @Override
+//        public Map<String, String> getHeaders() throws AuthFailureError {
+//            // inserting the token into the response header that will be sent to the server
+//            Map<String, String> header = new HashMap<>();
+//            header.put("authorization", Config.token);
+//            return header;
+//        }};
+//        Config.requestQueue.add(postRequest);
+//    }
+
 }

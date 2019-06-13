@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.ReplyPost;
+package ca.gc.inspection.scoop.ProfileComment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,7 +11,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -34,16 +33,18 @@ import ca.gc.inspection.scoop.MyCamera;
  * related to "posting" actions. Parent presenter for ProfilePostPresenter.
  */
 
-public class ReplyPostPresenter implements ReplyPostContract.Presenter {
+public class ProfileCommentPresenter implements ProfileCommentContract.Presenter {
     private JSONObject post, profileImage;
-    private ReplyPostViewHolder holder;
+    private ProfileCommentViewHolder holder;
     private Map<String, String> likeProperties;
 
     @NonNull
-    private final ReplyPostContract.View mPostReplyView;
+    private ProfileCommentContract.View mProfileCommentView;
+    private ProfileCommentInteractor mProfileCommentInteractor;
 
-    public ReplyPostPresenter(ReplyPostContract.View postReplyView, JSONArray posts, JSONArray profileImages, int i, ReplyPostViewHolder holder){
-        mPostReplyView = postReplyView;
+
+    public ProfileCommentPresenter(ProfileCommentContract.View profileCommentView, JSONArray posts, JSONArray profileImages, int i, ProfileCommentViewHolder holder){
+        mProfileCommentView = profileCommentView;
         try {
             this.post = posts.getJSONObject(i);
             this.profileImage = profileImages.getJSONObject(i);
@@ -53,9 +54,23 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
         this.holder = holder;
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
 
-        mPostReplyView.setPresenter(this);
+        mProfileCommentView.setPresenter(this);
+        mProfileCommentInteractor = new ProfileCommentInteractor(this);
+        mProfileCommentInteractor.getUserComments(Config.currentUser);
     }
 
+    public void setPresenterView (ProfileCommentContract.View profileCommentView){
+        mProfileCommentView = profileCommentView;
+    }
+
+    public ProfileCommentContract.View getPresenterView (){
+        return mProfileCommentView;
+    }
+
+
+//    public void setPresenterInteractor (ProfileCommentInteractor profileCommentInteractor){
+//        mProfileCommentInteractor = profileCommentInteractor;
+//    }
 
     /**
      * Description: main method to display a single post
@@ -66,7 +81,7 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
         final String posterid = post.getString("userid");
         likeProperties.put("liketype", post.getString("liketype")); //puts liketype into properties map
         likeProperties.put("likecount", checkLikeCount(post.getString("likecount"))); //puts likecount into properties map
-        mPostReplyView.setPostText(post.getString("posttext"), holder);
+        mProfileCommentView.setPostText(post.getString("posttext"), holder);
         formatDate(post.getString("createddate"));
         checkFullName();
         checkLikeState(likeProperties.get("liketype"));
@@ -117,7 +132,7 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
     }
 
     public void formPostTitle() throws JSONException {
-        mPostReplyView.setPostTitle("Replying to " + post.getString("postfirstname") + " " + post.getString("postlastname") + "'s post", holder);
+        mProfileCommentView.setPostTitle("Replying to " + post.getString("postfirstname") + " " + post.getString("postlastname") + "'s post", holder);
     }
 
     /**
@@ -126,7 +141,7 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
      */
     public void checkFullName() throws JSONException {
         String fullName = checkFirstName(post.getString("firstname")) + checkLastName(post.getString("lastname"));
-        mPostReplyView.setUserName(fullName, holder);
+        mProfileCommentView.setUserName(fullName, holder);
     }
 
     /**
@@ -166,10 +181,10 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(time); //parses the created date to be in specified date format
             DateFormat properDateFormat = new SimpleDateFormat("MM-dd-yy"); //formats the date to be how we want it to output
-            mPostReplyView.setDate(properDateFormat.format(parsedDate),holder);
+            mProfileCommentView.setDate(properDateFormat.format(parsedDate),holder);
         }catch(Exception e){
             e.printStackTrace();
-            mPostReplyView.hideDate(holder);
+            mProfileCommentView.hideDate(holder);
         }
     }
 
@@ -182,10 +197,10 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
     public String checkLikeCount(String likeCount){
         String defaultCount = "0";
         if(likeCount.equals("null")){
-            mPostReplyView.setLikeCount(defaultCount, holder);
+            mProfileCommentView.setLikeCount(defaultCount, holder);
             return defaultCount;
         }else{
-            mPostReplyView.setLikeCount(likeCount, holder);
+            mProfileCommentView.setLikeCount(likeCount, holder);
             return likeCount;
         }
     }
@@ -197,13 +212,13 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
     public void checkLikeState(String likeState){
         Log.i("likestate", likeState);
         switch(likeState){
-            case "1": mPostReplyView.setLikeUpvoteState(holder);
+            case "1": mProfileCommentView.setLikeUpvoteState(holder);
                 break;
-            case "-1": mPostReplyView.setLikeDownvoteState(holder);
+            case "-1": mProfileCommentView.setLikeDownvoteState(holder);
                 break;
-            case "0": mPostReplyView.setLikeNeutralState(holder);
+            case "0": mProfileCommentView.setLikeNeutralState(holder);
                 break;
-            default: mPostReplyView.setLikeNeutralState(holder);
+            default: mProfileCommentView.setLikeNeutralState(holder);
                 break;
         }
     }
@@ -221,23 +236,23 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
         switch(likeType){
             case "1": //if it's already liked, it'll be set to neutral if pressed
                 likeCount -= 1;
-                mPostReplyView.setLikeNeutralState(holder);
+                mProfileCommentView.setLikeNeutralState(holder);
                 updateLikes("0", activityid, posterid);
                 break;
             case "-1": //if it's downvoted, it'll be set to upvote state
                 likeCount += 2;
-                mPostReplyView.setLikeUpvoteState(holder);
+                mProfileCommentView.setLikeUpvoteState(holder);
                 updateLikes("1", activityid, posterid);
                 break;
             case "0": //if it's neutral, it'll be set to upvote state
                 likeCount += 1;
-                mPostReplyView.setLikeUpvoteState(holder);
+                mProfileCommentView.setLikeUpvoteState(holder);
                 updateLikes("1", activityid, posterid);
                 break;
             default: //default will be upvote state, if liketype is null
                 likeCount += 1;
                 insertLikes("1", activityid, posterid); //will insert the like for the first time
-                mPostReplyView.setLikeUpvoteState(holder);
+                mProfileCommentView.setLikeUpvoteState(holder);
                 break;
         }
         Log.i("likecount1", String.valueOf(likeCount));
@@ -257,23 +272,23 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
         switch(likeType){
             case "1": //if it's liked, it'll be set to downvote state
                 likeCount -= 2;
-                mPostReplyView.setLikeDownvoteState(holder);
+                mProfileCommentView.setLikeDownvoteState(holder);
                 updateLikes("-1", activityid, posterid);
                 break;
             case "-1": //if it's downvoted, it'll be set to neutral state
                 likeCount += 1;
-                mPostReplyView.setLikeNeutralState(holder);
+                mProfileCommentView.setLikeNeutralState(holder);
                 updateLikes("0", activityid, posterid);
                 break;
             case "0": //if it's netural state, it'll be set to downvote state
                 likeCount -= 1;
-                mPostReplyView.setLikeDownvoteState(holder);
+                mProfileCommentView.setLikeDownvoteState(holder);
                 updateLikes("-1", activityid, posterid);
                 break;
             default: //default will be downvote state, if liketype is null
                 likeCount -= 1;
                 insertLikes("-1", activityid, posterid); //will insert the downvote for the first time
-                mPostReplyView.setLikeDownvoteState(holder);
+                mProfileCommentView.setLikeDownvoteState(holder);
                 break;
         }
         Log.i("likecount2", String.valueOf(likeCount));
@@ -288,7 +303,7 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
     public void updateLikeCount(String likeCount) throws JSONException {
         likeProperties.put("likecount", likeCount); //updates in map
         post.put("likecount", likeCount); //updates in post object
-        mPostReplyView.setLikeCount(likeCount,holder); //sets like count to new total
+        mProfileCommentView.setLikeCount(likeCount,holder); //sets like count to new total
     }
 
 
@@ -320,9 +335,9 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
                 Map<String, String> params = new HashMap<>();
                 Log.i("hello", "cmoff");
                 params.put("liketype", likeProperties.get("liketype"));
-                params.put("userid", Config.currentUser);
                 params.put("activityid",activityid);
                 params.put("posterid", posterid);
+                params.put("userid", Config.currentUser);
                 return params;
             }
             @Override
@@ -350,6 +365,7 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
     public void insertLikes(final String likeType, final String activityid, final String posterid) throws JSONException {
         post.put("liketype", likeType); //updates post object
         likeProperties.put("liketype", likeType); //updates properties map
+        Log.i("hello", "should be here");
         String URL = Config.baseIP + "display-post/insertlikes";
         StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //sends a POST request to insert new like
             @Override
@@ -386,6 +402,10 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
         Config.requestQueue.add(request);
     }
 
+    /**
+     *
+     * @throws JSONException
+     */
     public void displayImages() throws JSONException {
         if(profileImage != null) { // null check to see if there are images
             formatImage(profileImage.getString("profileimage")); //formats profile image
@@ -407,52 +427,52 @@ public class ReplyPostPresenter implements ReplyPostContract.Presenter {
      */
     public void formatImage(String image){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        mPostReplyView.setUserImage(bitmap, holder);
+        mProfileCommentView.setUserImage(bitmap, holder);
     }
 
-    /**
-     * HTTPRequests for comments and images
-     * @param userid: userid
-     */
-    public void getUserComments(final String userid) {
-        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
-        JsonArrayRequest commentRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(final JSONArray commentsResponse) {
-                String url = Config.baseIP + "profile/commentimagefill/" + userid;
-                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray imagesResponse) {
-                        mPostReplyView.setRecyclerView(commentsResponse, imagesResponse);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }) {
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        // inserting the token into the response header that will be sent to the server
-                        Map<String, String> header = new HashMap<>();
-                        header.put("authorization", Config.token);
-                        return header;
-                    }
-                };
-                Config.requestQueue.add(imageRequest);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                // inserting the token into the response header that will be sent to the server
-                Map<String, String> header = new HashMap<>();
-                header.put("authorization", Config.token);
-                return header;
-            }
-        };
-        Config.requestQueue.add(commentRequest);
-    }
+//    /**
+//     * HTTPRequests for comments and images
+//     * @param userid: userid
+//     */
+//    public void getUserComments(final String userid) {
+//        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
+//        JsonArrayRequest commentRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+//            @Override
+//            public void onResponse(final JSONArray commentsResponse) {
+//                String url = Config.baseIP + "profile/commentimagefill/" + userid;
+//                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray imagesResponse) {
+//                        mProfileCommentView.setRecyclerView(commentsResponse, imagesResponse);
+//                    }
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                    }
+//                }) {
+//                    public Map<String, String> getHeaders() throws AuthFailureError {
+//                        // inserting the token into the response header that will be sent to the server
+//                        Map<String, String> header = new HashMap<>();
+//                        header.put("authorization", Config.token);
+//                        return header;
+//                    }
+//                };
+//                Config.requestQueue.add(imageRequest);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        }) {
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                // inserting the token into the response header that will be sent to the server
+//                Map<String, String> header = new HashMap<>();
+//                header.put("authorization", Config.token);
+//                return header;
+//            }
+//        };
+//        Config.requestQueue.add(commentRequest);
+//    }
 }

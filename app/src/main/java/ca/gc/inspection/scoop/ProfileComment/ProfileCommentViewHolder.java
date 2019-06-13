@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.ReplyPost;
+package ca.gc.inspection.scoop.ProfileComment;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,13 +13,13 @@ import ca.gc.inspection.scoop.R;
  * related to "posting" actions. Parent View Holder for ProfilePostViewHolder.
  */
 
-public class ReplyPostViewHolder extends RecyclerView.ViewHolder {
+public class ProfileCommentViewHolder extends RecyclerView.ViewHolder {
 
     public TextView username, date, postText, postTitle, likeCount;
     public ImageView profileImage, upvote, downvote;
 
 
-    public ReplyPostViewHolder(View v) {
+    public ProfileCommentViewHolder(View v) {
         super(v);
         username = v.findViewById(R.id.name);
         profileImage = v.findViewById(R.id.profile_image);
