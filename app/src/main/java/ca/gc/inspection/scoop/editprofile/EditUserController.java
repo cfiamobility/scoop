@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.editprofile;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +19,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.TabFragment;
 
 class EditUserController {
 

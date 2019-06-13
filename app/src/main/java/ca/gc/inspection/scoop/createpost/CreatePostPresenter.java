@@ -9,10 +9,10 @@ public class CreatePostPresenter implements CreatePostContract.Presenter {
     CreatePostPresenter() {
         mInteractor = new CreatePostInteractor(this);
     }
-
-    @Override
-    public void start() {
-    }
+//
+//    @Override
+//    public void start() {
+//    }
 
     /*** sendPostToDatabase
      * Simple post request to store the newly created post to the postcomment table

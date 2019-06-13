@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.FeedPost;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.android.volley.AuthFailureError;
@@ -20,13 +21,19 @@ import java.util.Map;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.DisplayPostActivity;
 import ca.gc.inspection.scoop.MyCamera;
+import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostInteractor;
 import ca.gc.inspection.scoop.ProfilePost.ProfilePostPresenter;
 
 
 public class FeedPostPresenter extends ProfilePostPresenter implements FeedPostContract.Presenter{
     private JSONObject images;
     private FeedPostViewHolder holder;
+
+    @NonNull
     private FeedPostContract.View mFeedPostView;
+    private FeedPostInteractor mFeedPostInteractor;
+
 
     public FeedPostPresenter(FeedPostContract.View feedPostView, JSONArray posts, JSONArray images, int i, FeedPostViewHolder holder){
         super(feedPostView, posts, images, i, holder);
@@ -40,6 +47,8 @@ public class FeedPostPresenter extends ProfilePostPresenter implements FeedPostC
         this.holder = holder;
 
         mFeedPostView.setPresenter(this);
+        mFeedPostInteractor = new FeedPostInteractor(this);
+
     }
 
     @Override
@@ -76,6 +85,18 @@ public class FeedPostPresenter extends ProfilePostPresenter implements FeedPostC
         }else{
             mFeedPostView.setUserImage(bitmap, holder);
         }
+    }
+
+    public void getRecyclerView(JSONArray posts, JSONArray images){
+        mFeedPostView.setRecyclerView(posts, images);
+    }
+
+    public void getPosts(MySingleton singleton){
+        mFeedPostInteractor.getFeedPosts(singleton);
+    }
+
+    public String getFeedType(){
+        return mFeedPostView.getFeedType();
     }
 
 //    public void getPosts(){

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 
@@ -29,18 +30,19 @@ public interface ProfileCommentContract {
         void hideDate(ProfileCommentViewHolder holder);
         void setUserImage(Bitmap image, ProfileCommentViewHolder holder);
 
+        void formatImage(String image, ProfileCommentViewHolder holder);
         void setRecyclerView(JSONArray comments, JSONArray images);
+        void displayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid);
+        void displayImagesListener(ProfileCommentViewHolder holder);
     }
 
     interface Presenter extends BasePresenter {
         void displayPost() throws JSONException;
         void formPostTitle() throws JSONException;
         void checkFullName() throws JSONException;
-        void changeUpvoteLikeState(String activityid, String posterid) throws JSONException;
-        void changeDownvoteLikeState(String activityid, String posterid) throws JSONException;
+        void changeUpvoteLikeState(MySingleton singleton, String activityid, String posterid) throws JSONException;
+        void changeDownvoteLikeState(MySingleton singleton, String activityid, String posterid) throws JSONException;
         void updateLikeCount(String likeCount) throws JSONException;
-//        void updateLikes(final String likeType, final String activityid, final String posterid) throws JSONException;
-//        void insertLikes(final String likeType, final String activityid, final String posterid) throws JSONException;
         void displayImages() throws JSONException;
 
 
@@ -49,7 +51,8 @@ public interface ProfileCommentContract {
         void formatDate(String time);
         String checkLikeCount(String likeCount);
         void checkLikeState(String likeState);
-        void formatImage(String image);
+        void getRecyclerView(JSONArray posts, JSONArray images);
+        void getPosts(MySingleton singleton, final String userid);
 //        void getUserComments(final String userid);
 
 //        void setPresenterView (ProfileCommentContract.View profileCommentView);

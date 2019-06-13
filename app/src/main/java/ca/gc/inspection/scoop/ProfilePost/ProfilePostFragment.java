@@ -1,13 +1,17 @@
 package ca.gc.inspection.scoop.ProfilePost;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +22,10 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MyCamera;
+import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.PostOptionsDialog;
+import ca.gc.inspection.scoop.ProfileComment.ProfileCommentFragment;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
@@ -27,7 +35,7 @@ import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
  * A simple {@link Fragment} subclass that holds a recycler view of profile posts on the
  * profile feed
  */
-public class ProfilePostFragment extends Fragment implements ProfilePostContract.View {
+public class ProfilePostFragment extends ProfileCommentFragment implements ProfilePostContract.View {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -35,9 +43,9 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
     private RecyclerView.LayoutManager mLayoutManager;
     private String userid;
     private View view;
-    private ProfileCommentContract.Presenter mProfilePostPresenter;
+    private ProfilePostContract.Presenter mProfilePostPresenter;
 
-    public void setPresenter (ProfileCommentContract.Presenter presenter){
+    public void setPresenter (ProfilePostContract.Presenter presenter){
         mProfilePostPresenter = presenter;
     }
 //    public String getUserId() {
@@ -70,10 +78,7 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        ProfilePostContract.Presenter mProfilePostPresenter = new ProfilePostPresenter(this);
-//        mProfilePostPresenter.getUserPosts(userid);
-
-
-        mProfilePostPresenter.setPresenterView(this);
+        mProfilePostPresenter.getPosts(MySingleton.getInstance(getContext()), Config.currentUser);
 
     }
 
@@ -98,68 +103,89 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
         postRecyclerView.setAdapter(mAdapter);
     }
 
+    public void setCommentCount(String commentCount, ProfilePostViewHolder holder) {
+        holder.commentCount.setText(commentCount);
+    }
 
+    public void displayPostListener(ProfilePostViewHolder holder){
+        // to get the options menu to appear
+        holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
+                final Context context = v.getContext();
+                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                bottomSheetDialog.show(fragmentManager, "bottomSheet");
+            }
+        });
+    }
     /**
      * FROM ADAPTER
      */
 
-    @Override
     public void setPostText(String postText, ProfileCommentViewHolder holder) {
         holder.postText.setText(postText);
     }
 
-    @Override
     public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
         holder.postTitle.setText(postTitle);
     }
 
-    @Override
     public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
         Log.i("image", image.toString());
         holder.profileImage.setImageBitmap(image);
     }
 
-    @Override
     public void setUserName(String userName, ProfileCommentViewHolder holder) {
         holder.username.setText(userName);
     }
 
-    @Override
     public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
         holder.likeCount.setText(likeCount);
     }
 
-    @Override
     public void setDate(String date, ProfileCommentViewHolder holder) {
         holder.date.setText(date);
     }
 
-    @Override
     public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
     }
 
-    @Override
     public void setLikeNeutralState(ProfileCommentViewHolder holder) {
         holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
 
-    @Override
     public void setLikeUpvoteState(ProfileCommentViewHolder holder) {
         holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
         holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
 
-    @Override
-    public void setCommentCount(String commentCount, ProfilePostViewHolder holder) {
-        holder.commentCount.setText(commentCount);
-    }
-
-    @Override
     public void hideDate(ProfileCommentViewHolder holder) {
         holder.date.setVisibility(View.GONE);
     }
+
+
+    public void formatImage(String image, ProfileCommentViewHolder holder){
+        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
+        setUserImage(bitmap, holder);
+    }
+
+//    @Override
+//    public void displayPostListener(ProfilePostViewHolder holder){
+//        // to get the options menu to appear
+//        holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
+//                final Context context = v.getContext();
+//                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+//                bottomSheetDialog.show(fragmentManager, "bottomSheet");
+//            }
+//        });
+//    }
+
 
 }

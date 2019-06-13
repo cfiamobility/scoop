@@ -27,6 +27,7 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.DisplayPostActivity;
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.MyCamera;
+import ca.gc.inspection.scoop.MySingleton;
 
 /**
  * Presenter for the replying to a post action; it is the most generic presenter
@@ -56,16 +57,15 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
 
         mProfileCommentView.setPresenter(this);
         mProfileCommentInteractor = new ProfileCommentInteractor(this);
-        mProfileCommentInteractor.getUserComments(Config.currentUser);
     }
 
-    public void setPresenterView (ProfileCommentContract.View profileCommentView){
-        mProfileCommentView = profileCommentView;
-    }
-
-    public ProfileCommentContract.View getPresenterView (){
-        return mProfileCommentView;
-    }
+//    public void setPresenterView (ProfileCommentContract.View profileCommentView){
+//        mProfileCommentView = profileCommentView;
+//    }
+//
+//    public ProfileCommentContract.View getPresenterView (){
+//        return mProfileCommentView;
+//    }
 
 
 //    public void setPresenterInteractor (ProfileCommentInteractor profileCommentInteractor){
@@ -85,50 +85,51 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         formatDate(post.getString("createddate"));
         checkFullName();
         checkLikeState(likeProperties.get("liketype"));
-        holder.upvote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    changeUpvoteLikeState(activityid, posterid); //changes upvote state on click
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        holder.downvote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    changeDownvoteLikeState(activityid, posterid); //changes downvote state on click
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        // tapping on any item from the view holder will go to the display post activity
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
-            }
-        });
-
-        // tapping on profile picture will bring user to poster's profile page
-        holder.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.otherUserClicked(posterid);
-            }
-        });
-
-        holder.username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.otherUserClicked(posterid);
-            }
-        });
+        mProfileCommentView.displayPostListener(holder, activityid, posterid);
+//        holder.upvote.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                try {
+//                    changeUpvoteLikeState(activityid, posterid); //changes upvote state on click
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        holder.downvote.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                try {
+//                    changeDownvoteLikeState(activityid, posterid); //changes downvote state on click
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        // tapping on any item from the view holder will go to the display post activity
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
+//            }
+//        });
+//
+//        // tapping on profile picture will bring user to poster's profile page
+//        holder.profileImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainActivity.otherUserClicked(posterid);
+//            }
+//        });
+//
+//        holder.username.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainActivity.otherUserClicked(posterid);
+//            }
+//        });
     }
 
     public void formPostTitle() throws JSONException {
@@ -229,7 +230,7 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
      * @param posterid: user who posted the post
      * @throws JSONException
      */
-    public void changeUpvoteLikeState(String activityid, String posterid) throws JSONException{
+    public void changeUpvoteLikeState(MySingleton singleton, String activityid, String posterid) throws JSONException{
         String likeType = likeProperties.get("liketype"); //gets current like type
         int likeCount = Integer.parseInt(likeProperties.get("likecount")); //gets current like count
         Log.i("liketype1", String.valueOf(likeType));
@@ -237,21 +238,21 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
             case "1": //if it's already liked, it'll be set to neutral if pressed
                 likeCount -= 1;
                 mProfileCommentView.setLikeNeutralState(holder);
-                updateLikes("0", activityid, posterid);
+                mProfileCommentInteractor.updateLikes(singleton, "0", activityid, posterid, post, likeProperties);
                 break;
             case "-1": //if it's downvoted, it'll be set to upvote state
                 likeCount += 2;
                 mProfileCommentView.setLikeUpvoteState(holder);
-                updateLikes("1", activityid, posterid);
+                mProfileCommentInteractor.updateLikes(singleton, "1", activityid, posterid, post, likeProperties);
                 break;
             case "0": //if it's neutral, it'll be set to upvote state
                 likeCount += 1;
                 mProfileCommentView.setLikeUpvoteState(holder);
-                updateLikes("1", activityid, posterid);
+                mProfileCommentInteractor.updateLikes(singleton, "1", activityid, posterid, post, likeProperties);
                 break;
             default: //default will be upvote state, if liketype is null
                 likeCount += 1;
-                insertLikes("1", activityid, posterid); //will insert the like for the first time
+                mProfileCommentInteractor.insertLikes(singleton, "1", activityid, posterid, post, likeProperties); //will insert the like for the first time
                 mProfileCommentView.setLikeUpvoteState(holder);
                 break;
         }
@@ -265,7 +266,7 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
      * @param posterid: poster id of the post
      * @throws JSONException
      */
-    public void changeDownvoteLikeState(String activityid, String posterid) throws JSONException {
+    public void changeDownvoteLikeState(MySingleton singleton, String activityid, String posterid) throws JSONException {
         String likeType = likeProperties.get("liketype"); //gets current like type
         int likeCount = Integer.parseInt(likeProperties.get("likecount")); //gets current like count
         Log.i("liketype2", String.valueOf(likeType));
@@ -273,21 +274,21 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
             case "1": //if it's liked, it'll be set to downvote state
                 likeCount -= 2;
                 mProfileCommentView.setLikeDownvoteState(holder);
-                updateLikes("-1", activityid, posterid);
+                mProfileCommentInteractor.updateLikes(singleton, "-1", activityid, posterid, post, likeProperties);
                 break;
             case "-1": //if it's downvoted, it'll be set to neutral state
                 likeCount += 1;
                 mProfileCommentView.setLikeNeutralState(holder);
-                updateLikes("0", activityid, posterid);
+                mProfileCommentInteractor.updateLikes(singleton, "0", activityid, posterid, post, likeProperties);
                 break;
             case "0": //if it's netural state, it'll be set to downvote state
                 likeCount -= 1;
                 mProfileCommentView.setLikeDownvoteState(holder);
-                updateLikes("-1", activityid, posterid);
+                mProfileCommentInteractor.updateLikes(singleton, "-1", activityid, posterid, post, likeProperties);
                 break;
             default: //default will be downvote state, if liketype is null
                 likeCount -= 1;
-                insertLikes("-1", activityid, posterid); //will insert the downvote for the first time
+                mProfileCommentInteractor.insertLikes(singleton, "-1", activityid, posterid, post, likeProperties); //will insert the downvote for the first time
                 mProfileCommentView.setLikeDownvoteState(holder);
                 break;
         }
@@ -307,99 +308,27 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     }
 
 
-    /**
-     * Description: updates likes in table and adds notifications if like type is 1
-     * @param likeType: current like type
-     * @param activityid: activity id of post
-     * @param posterid: user id of poster of post
-     * @throws JSONException
-     */
-    public void updateLikes(final String likeType, final String activityid, final String posterid) throws JSONException {
-        post.put("liketype", likeType); //updates post object
-        likeProperties.put("liketype", likeType); //updates properties map
-        Log.i("hello", "should be here");
-        String URL = Config.baseIP + "display-post/updatelikes";
-        StringRequest request = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() { //sends a PUT request to update new likes
-            @Override
-            public void onResponse(String response) {
-                Log.i("response", response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                Log.i("hello", "cmoff");
-                params.put("liketype", likeProperties.get("liketype"));
-                params.put("activityid",activityid);
-                params.put("posterid", posterid);
-                params.put("userid", Config.currentUser);
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                // inserting the token into the response header that will be sent to the server
-                Map<String, String> header = new HashMap<>();
-                header.put("authorization", Config.token);
-                return header;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                30000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Config.requestQueue.add(request);
+//    /**
+//     * Description: changes image from a string to a bitmap, then setting image
+//     * @param image: image to convert
+//     *
+//     */
+//    public void formatImage(String image){
+//        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
+//        mProfileCommentView.setUserImage(bitmap, holder);
+//    }
+
+    public void getRecyclerView(JSONArray posts, JSONArray images){
+        mProfileCommentView.setRecyclerView(posts, images);
     }
 
     /**
-     * Description: inserts likes in table and adds notifications if like type is 1
-     * @param likeType: current like type
-     * @param activityid: activity id of post
-     * @param posterid: user id of poster of post
-     * @throws JSONException
+     * GETS USER COMMENTS DONT FORGET IT BABY
+     * @param singleton
+     * @param userId
      */
-    public void insertLikes(final String likeType, final String activityid, final String posterid) throws JSONException {
-        post.put("liketype", likeType); //updates post object
-        likeProperties.put("liketype", likeType); //updates properties map
-        Log.i("hello", "should be here");
-        String URL = Config.baseIP + "display-post/insertlikes";
-        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //sends a POST request to insert new like
-            @Override
-            public void onResponse(String response) {
-                Log.i("response", response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<>();
-                params.put("liketype", likeType);
-                params.put("activityid", activityid);
-                params.put("posterid", posterid);
-                params.put("userid", Config.currentUser);
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                // inserting the token into the response header that will be sent to the server
-                Map<String, String> header = new HashMap<>();
-                header.put("authorization", Config.token);
-                return header;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                30000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Config.requestQueue.add(request);
+    public void getPosts(MySingleton singleton, final String userId) {
+        mProfileCommentInteractor.getUserComments(singleton, userId);
     }
 
     /**
@@ -408,71 +337,16 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
      */
     public void displayImages() throws JSONException {
         if(profileImage != null) { // null check to see if there are images
-            formatImage(profileImage.getString("profileimage")); //formats profile image
+            mProfileCommentView.formatImage(profileImage.getString("profileimage"), holder); //formats profile image
         }
-        // tapping on any item from the view holder will go to the display post activity
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
-            }
-        });
+        mProfileCommentView.displayImagesListener(holder);
+//        // tapping on any item from the view holder will go to the display post activity
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
+//            }
+//        });
     }
 
-
-    /**
-     * Description: changes image from a string to a bitmap, then setting image
-     * @param image: image to convert
-     *
-     */
-    public void formatImage(String image){
-        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        mProfileCommentView.setUserImage(bitmap, holder);
-    }
-
-//    /**
-//     * HTTPRequests for comments and images
-//     * @param userid: userid
-//     */
-//    public void getUserComments(final String userid) {
-//        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
-//        JsonArrayRequest commentRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-//            @Override
-//            public void onResponse(final JSONArray commentsResponse) {
-//                String url = Config.baseIP + "profile/commentimagefill/" + userid;
-//                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-//                    @Override
-//                    public void onResponse(JSONArray imagesResponse) {
-//                        mProfileCommentView.setRecyclerView(commentsResponse, imagesResponse);
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//
-//                    }
-//                }) {
-//                    public Map<String, String> getHeaders() throws AuthFailureError {
-//                        // inserting the token into the response header that will be sent to the server
-//                        Map<String, String> header = new HashMap<>();
-//                        header.put("authorization", Config.token);
-//                        return header;
-//                    }
-//                };
-//                Config.requestQueue.add(imageRequest);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        }) {
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                // inserting the token into the response header that will be sent to the server
-//                Map<String, String> header = new HashMap<>();
-//                header.put("authorization", Config.token);
-//                return header;
-//            }
-//        };
-//        Config.requestQueue.add(commentRequest);
-//    }
 }

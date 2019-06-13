@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
@@ -49,12 +50,21 @@ public class CreatePostInteractor {
             @Override
             protected Map<String, String> getParams()
             {
-                return CreatePostContract.Presenter.getPostParams(userId, title, text, imageBitmap);
+                Map<String, String>  params = new HashMap<>();
+                params.put("userid", userId); // post test user
+                params.put("activitytype", Integer.toString(Config.postType));
+                params.put("posttitle", title);
+                params.put("posttext", text);
+                params.put("postimage", imageBitmap);
+                return params;
             }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return CreatePostContract.Presenter.getPostHeaders();
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
             }
         };
         singleton.addToRequestQueue(postRequest);

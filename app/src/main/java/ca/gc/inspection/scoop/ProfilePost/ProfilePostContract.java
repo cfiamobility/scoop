@@ -1,7 +1,9 @@
 package ca.gc.inspection.scoop.ProfilePost;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
+import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
 
 /**
@@ -13,6 +15,8 @@ public interface ProfilePostContract extends ProfileCommentContract {
         void setCommentCount(String commentCount, ProfilePostViewHolder holder);
 //        void setRecyclerView(JSONArray posts, JSONArray images);
 //        String getUserId();
+        void displayPostListener(ProfilePostViewHolder holder);
+//        void getUserPosts(MySingleton singleton, final String userId);
 
 
     }
@@ -22,6 +26,8 @@ public interface ProfilePostContract extends ProfileCommentContract {
         void displayPost() throws JSONException;
         void formPostTitle() throws JSONException;
         void checkCommentCount(String commentCount);
+//        void getRecyclerView(JSONArray posts, JSONArray images);
+        void getPosts(MySingleton singleton, final String userId);
     }
 
 

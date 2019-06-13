@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.editprofile;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -25,10 +25,13 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import ca.gc.inspection.scoop.ImageFilePath;
+import ca.gc.inspection.scoop.MyCamera;
+import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.ActivityUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static ca.gc.inspection.scoop.EditProfileFragment.bitmap;
+import static ca.gc.inspection.scoop.editprofile.EditProfileFragment.bitmap;
 import static ca.gc.inspection.scoop.MyCamera.CHOOSE_PIC_REQUEST_CODE;
 import static ca.gc.inspection.scoop.MyCamera.MY_CAMERA_PERMISSION_CODE;
 import static ca.gc.inspection.scoop.MyCamera.currentPhotoPath;

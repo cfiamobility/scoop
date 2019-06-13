@@ -23,8 +23,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import ca.gc.inspection.scoop.SplashScreen.SplashScreenActivity;
 import ca.gc.inspection.scoop.createpost.CreatePostActivity;
+import ca.gc.inspection.scoop.SplashScreen.SplashScreenActivity;
 
 public class MainActivity extends AppCompatActivity {
 

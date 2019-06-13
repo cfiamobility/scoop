@@ -20,9 +20,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.PostOptionsDialog;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentPresenter;
+import ca.gc.inspection.scoop.MySingleton;
+
 
 /**
  * performs all logic and HTTP requests for the FeedAdapter
@@ -57,18 +60,18 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements Pro
 
         mProfilePostView.setPresenter(this);
         mProfilePostInteractor = new ProfilePostInteractor(this);
-        mProfilePostInteractor.getUserPosts(Config.currentUser);
+//        mProfilePostInteractor.getUserPosts(Config.currentUser);
     }
 
-    @Override
-    public void setPresenterView (ProfilePostContract.View profilePostView){
-        mProfilePostView = profilePostView;
-    }
+//    @Override
+//    public void setPresenterView (ProfilePostContract.View profilePostView){
+//        mProfilePostView = profilePostView;
+//    }
 
-    @Override
-    public ProfilePostContract.View getPresenterView (){
-        return mProfilePostView;
-    }
+//    @Override
+//    public ProfilePostContract.View getPresenterView (){
+//        return mProfilePostView;
+//    }
 
         /**
          * Super runs the display post in MostGeneric
@@ -79,17 +82,19 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements Pro
     public void displayPost() throws JSONException{
         super.displayPost();
         checkCommentCount(post.getString("commentcount"));
+        mProfilePostView.displayPostListener(holder);
 
-        // to get the options menu to appear
-        holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
-                final Context context = v.getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                bottomSheetDialog.show(fragmentManager, "bottomSheet");
-            }
-        });
+
+//        // to get the options menu to appear
+//        holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
+//                final Context context = v.getContext();
+//                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+//                bottomSheetDialog.show(fragmentManager, "bottomSheet");
+//            }
+//        });
     }
 
     /**
@@ -112,6 +117,21 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements Pro
         }else{
             mProfilePostView.setCommentCount(defaultCount, holder);
         }
+    }
+
+
+    public void getRecyclerView(JSONArray posts, JSONArray images){
+        mProfilePostView.setRecyclerView(posts, images);
+    }
+
+    /**
+     * GET USER POSTS
+     * @param singleton
+     * @param userId
+     */
+
+    public void getPosts(MySingleton singleton, final String userId){
+        mProfilePostInteractor.getUserPosts(singleton, userId);
     }
 
 //    /**

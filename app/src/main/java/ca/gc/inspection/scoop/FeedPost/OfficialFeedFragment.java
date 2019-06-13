@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentInteractor;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentViewHolder;
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostFragment;
 import ca.gc.inspection.scoop.ProfilePost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
@@ -25,7 +26,7 @@ import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OfficialFeedFragment extends Fragment implements FeedPostContract.View {
+public class OfficialFeedFragment extends ProfilePostFragment implements FeedPostContract.View {
 
 
     // recycler view widget

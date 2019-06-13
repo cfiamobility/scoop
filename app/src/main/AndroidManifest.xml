@@ -23,7 +23,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".InfoActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".editprofile.EditProfileActivity" />
         <activity android:name=".SavedPostActivity" />
         <activity
             android:name=".createpost.CreatePostActivity"

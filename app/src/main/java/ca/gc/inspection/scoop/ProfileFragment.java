@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.editprofile.EditProfileActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 

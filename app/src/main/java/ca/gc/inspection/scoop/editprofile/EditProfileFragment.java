@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.editprofile;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.gc.inspection.scoop.MyCamera;
+import ca.gc.inspection.scoop.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static ca.gc.inspection.scoop.util.StringUtils.capFirstLetter;

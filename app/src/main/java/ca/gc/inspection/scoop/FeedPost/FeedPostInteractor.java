@@ -13,24 +13,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostContract;
 
 public class FeedPostInteractor {
-    FeedPostContract.View mFeedPostView;
+    private FeedPostContract.Presenter mFeedPostPresenter;
 
-    public FeedPostInteractor(FeedPostContract.View feedPostView){
-        mFeedPostView = feedPostView;
+    public FeedPostInteractor(FeedPostContract.Presenter presenter){
+        mFeedPostPresenter = presenter;
     }
 
-    public void getPosts(){
-        String URL = Config.baseIP + "display-post/posts/" + mFeedPostView.getFeedType() + "/" + Config.currentUser;
+    public void getFeedPosts(MySingleton singleton){
+        String URL = Config.baseIP + "display-post/posts/" + mFeedPostPresenter.getFeedType() + "/" + Config.currentUser;
         JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() { //makes request for all posts for specific feed
             @Override
             public void onResponse(final JSONArray postResponse) {
-                String imageURL = Config.baseIP + "display-post/images/" + mFeedPostView.getFeedType() + "/" + Config.currentUser;
+                String imageURL = Config.baseIP + "display-post/images/" + mFeedPostPresenter.getFeedType() + "/" + Config.currentUser;
                 JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, imageURL, null, new Response.Listener<JSONArray>() { //makes request for all corresponding images
                     @Override
                     public void onResponse(JSONArray imageResponse) {
-                        mFeedPostView.setRecyclerView(postResponse, imageResponse);
+                        mFeedPostPresenter.getRecyclerView(postResponse, imageResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -46,7 +48,7 @@ public class FeedPostInteractor {
                     return header;
                 }};
 
-                Config.requestQueue.add(imageRequest);
+                singleton.addToRequestQueue(imageRequest);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -61,7 +63,7 @@ public class FeedPostInteractor {
             header.put("authorization", Config.token);
             return header;
         }};
-        Config.requestQueue.add(postRequest);
+        singleton.addToRequestQueue(postRequest);
     }
 
 }

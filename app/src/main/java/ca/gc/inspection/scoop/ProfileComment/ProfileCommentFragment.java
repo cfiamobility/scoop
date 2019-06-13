@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.ProfileComment;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -16,8 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.DisplayPostActivity;
+import ca.gc.inspection.scoop.MainActivity;
+import ca.gc.inspection.scoop.MyCamera;
+import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.R;
 
 
@@ -30,7 +37,6 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
     private RecyclerView commentsRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private String userid;
     private View view;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
 
@@ -58,7 +64,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
         Bundle bundle = getArguments();
-        userid = bundle.getString("userid");
+        String userid = bundle.getString("userid");
         return view;
     }
 
@@ -77,7 +83,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
 //        // After created, the first method is called
 //        profileCommentsController.getUserComments(userid);
 //        interactor.getUserComments(Config.currentUser);
-        mProfileCommentPresenter.setPresenterView(this);
+        mProfileCommentPresenter.getPosts(MySingleton.getInstance(getContext()), Config.currentUser);
     }
 
     /**
@@ -194,5 +200,74 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
      */
     public void hideDate(ProfileCommentViewHolder holder) {
         holder.date.setVisibility(View.GONE);
+    }
+
+
+    public void displayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid){
+
+        holder.upvote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    mProfileCommentPresenter.changeUpvoteLikeState(MySingleton.getInstance(getContext()), activityid, posterid); //changes upvote state on click
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        holder.downvote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    mProfileCommentPresenter.changeDownvoteLikeState(MySingleton.getInstance(getContext()), activityid, posterid); //changes downvote state on click
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        // tapping on any item from the view holder will go to the display post activity
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
+            }
+        });
+
+        // tapping on profile picture will bring user to poster's profile page
+        holder.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.otherUserClicked(posterid);
+            }
+        });
+
+        holder.username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.otherUserClicked(posterid);
+            }
+        });
+    }
+
+    public void displayImagesListener(ProfileCommentViewHolder holder){
+        // tapping on any item from the view holder will go to the display post activity
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
+            }
+        });
+    }
+
+    /**
+     //     * Description: changes image from a string to a bitmap, then setting image
+     //     * @param image: image to convert
+     //     *
+     //     */
+    public void formatImage(String image, ProfileCommentViewHolder holder){
+        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
+        setUserImage(bitmap, holder);
     }
 }

@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.editprofile;
 
 public class EditProfilePresenter implements EditProfileContract.Presenter {
 

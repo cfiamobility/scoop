@@ -16,7 +16,9 @@ import org.json.JSONArray;
 
 import java.util.List;
 
+import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentViewHolder;
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostFragment;
 import ca.gc.inspection.scoop.ProfilePost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
@@ -25,7 +27,7 @@ import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CommunityFeedFragment extends Fragment implements FeedPostContract.View  {
+public class CommunityFeedFragment extends ProfilePostFragment implements FeedPostContract.View  {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -36,10 +38,9 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
     private List<String> test;
     private View view;
 
-    private ProfileCommentContract.Presenter mFeedPostPresenter;
-    private FeedPostInteractor mFeedPostFeedPostInteractor;
+    private FeedPostContract.Presenter mFeedPostPresenter;
 
-    public void setPresenter (ProfileCommentContract.Presenter presenter){
+    public void setPresenter (FeedPostContract.Presenter presenter){
         mFeedPostPresenter = presenter;
     }
 
@@ -64,9 +65,7 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
 //
 //        FeedController controller = new FeedController(this);
 //        controller.getPosts();
-
-        mFeedPostFeedPostInteractor = new FeedPostInteractor(this);
-        mFeedPostFeedPostInteractor.getPosts();
+        mFeedPostPresenter.getPosts(MySingleton.getInstance(getContext()));
     }
 
     @Override

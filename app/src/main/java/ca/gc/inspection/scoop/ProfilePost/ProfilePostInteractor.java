@@ -11,15 +11,16 @@ package ca.gc.inspection.scoop.ProfilePost;
         import java.util.Map;
 
         import ca.gc.inspection.scoop.Config;
+        import ca.gc.inspection.scoop.MySingleton;
+
 
 public class ProfilePostInteractor {
-    ProfilePostContract.Presenter mProfilePostPresenter;
-    ProfilePostContract.View mProfilePostView;
+    private ProfilePostContract.Presenter mProfilePostPresenter;
 
-//    public ProfilePostInteractor( ProfilePostContract.Presenter profilePostPresenter){
-//        mProfilePostPresenter = profilePostPresenter;
-//        mProfilePostView = mProfilePostPresenter.getPresenterView();
-//    }
+    ProfilePostInteractor(ProfilePostContract.Presenter presenter) {
+        mProfilePostPresenter = presenter;
+    }
+
 
     /**
      * FROM ProfilePostsController
@@ -29,7 +30,7 @@ public class ProfilePostInteractor {
      * HTTP Requests to get all the user posts infos
      * @param userid: passes the userid of the profile clicked on
      */
-    public void getUserPosts(final String userid) {
+    public void getUserPosts(MySingleton singleton, final String userid) {
         String url = Config.baseIP + "profile/posttextfill/" + userid + "/" + Config.currentUser;
         JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -38,7 +39,7 @@ public class ProfilePostInteractor {
                 final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray imagesResponse) {
-                        mProfilePostView.setRecyclerView(postsResponse, imagesResponse);
+                        mProfilePostPresenter.getRecyclerView(postsResponse, imagesResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -53,7 +54,8 @@ public class ProfilePostInteractor {
                         return header;
                     }
                 };
-                Config.requestQueue.add(imageRequest);
+//                Config.requestQueue.add(imageRequest);
+                  singleton.addToRequestQueue(imageRequest);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -68,7 +70,9 @@ public class ProfilePostInteractor {
                 return header;
             }
         };
-        Config.requestQueue.add(postRequest);
+//        Config.requestQueue.add(postRequest);
+          singleton.addToRequestQueue(postRequest);
+
     }
 
 

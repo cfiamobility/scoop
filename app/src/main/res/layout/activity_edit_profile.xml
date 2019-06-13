@@ -3,5 +3,5 @@
     android:id="@+id/activity_edit_profile"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".EditProfileActivity"
+    tools:context=".editprofile.EditProfileActivity"
     xmlns:tools="http://schemas.android.com/tools"/>
