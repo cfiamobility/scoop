@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import ca.gc.inspection.scoop.SplashScreen.SplashScreenActivity;
+import ca.gc.inspection.scoop.createpost.CreatePostActivity;
 
 public class MainActivity extends AppCompatActivity {
 

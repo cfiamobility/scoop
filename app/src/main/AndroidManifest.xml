@@ -26,7 +26,7 @@
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".SavedPostActivity" />
         <activity
-            android:name=".CreatePostActivity"
+            android:name=".createpost.CreatePostActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
         <activity
             android:name=".SignUpActivity"

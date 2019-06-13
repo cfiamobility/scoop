@@ -1,14 +1,6 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.createpost;
 
-import android.util.Log;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import java.util.Map;
+import ca.gc.inspection.scoop.MySingleton;
 
 public class CreatePostPresenter implements CreatePostContract.Presenter {
 

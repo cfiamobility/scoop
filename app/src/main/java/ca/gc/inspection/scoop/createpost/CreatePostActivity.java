@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.createpost;
 
 import android.Manifest;
 import android.content.Intent;
@@ -29,6 +29,12 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.ImageFilePath;
+import ca.gc.inspection.scoop.MyCamera;
+import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.R;
 
 public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.View {
 

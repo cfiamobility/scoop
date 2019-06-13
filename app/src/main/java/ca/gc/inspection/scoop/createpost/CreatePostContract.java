@@ -1,9 +1,10 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.createpost;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 
