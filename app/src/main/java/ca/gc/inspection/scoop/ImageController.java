@@ -8,6 +8,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
+import ca.gc.inspection.scoop.util.CameraUtils;
+
 
 public class ImageController extends ProfilePostsFeedController {
     private JSONObject images;
@@ -50,7 +53,7 @@ public class ImageController extends ProfilePostsFeedController {
      * @param type: type of image
      */
     private void formatImage(String image, String type){
-        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
+        Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
         if(type.equals("Post")) {
             if(!image.equals("") && !image.equals("null")) {
                imageInterface.setPostImage(bitmap, holder);

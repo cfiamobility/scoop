@@ -1,36 +1,32 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.createpost;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
-public class CommentController {
-    /** simple Post command
-     *
-     * @param context context of DisplayPostActivity.java
-     * @param userId current userID
-     * @param comment user inputted comment
-     * @param otherPostActivity the Post the current user is commenting to
-     */
-    public static void sendCommentToDatabase(Context context, final String userId, final String comment, final String otherPostActivity){
-        String URL = Config.baseIP + "add-comment";
 
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
+public class CreatePostInteractor {
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
+    private CreatePostContract.Presenter mPresenter;
+
+    CreatePostInteractor(CreatePostContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+    public void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
+        String url = Config.baseIP + "add-Post";
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
                 {
                     @Override
@@ -39,7 +35,6 @@ public class CommentController {
                         Log.d("Response", response);
                         if (response.contains("Success")){
                             Log.i("Info", "We good");
-                            DisplayPostActivity.updateCommentList();
                         }
                     }
                 },
@@ -57,9 +52,10 @@ public class CommentController {
             {
                 Map<String, String>  params = new HashMap<>();
                 params.put("userid", userId); // Post test user
-                params.put("activitytype", Integer.toString(Config.commentType));
-                params.put("posttext", comment);
-                params.put("activityreference", otherPostActivity);
+                params.put("activitytype", Integer.toString(Config.postType));
+                params.put("posttitle", title);
+                params.put("posttext", text);
+                params.put("postimage", imageBitmap);
                 return params;
             }
 
@@ -71,15 +67,6 @@ public class CommentController {
                 return header;
             }
         };
-
-        // Stops the application from sending the data twice. Don't know why it works, but it does.
-        postRequest.setRetryPolicy(new DefaultRetryPolicy(
-                0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        requestQueue.add(postRequest);
-
+        network.addToRequestQueue(postRequest);
     }
-
 }

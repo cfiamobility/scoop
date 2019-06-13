@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.editprofile.EditProfileActivity;
+import ca.gc.inspection.scoop.util.CameraUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -128,7 +130,7 @@ public class ProfileFragment extends Fragment {
 
             // Profile Image
             imageEncoded = response.getString("profileimage");
-            profileImageIV.setImageBitmap(MyCamera.stringToBitmap(imageEncoded));
+            profileImageIV.setImageBitmap(CameraUtils.stringToBitmap(imageEncoded));
 
             // Position string set
             if (!response.get("position").toString().equals("null")) {

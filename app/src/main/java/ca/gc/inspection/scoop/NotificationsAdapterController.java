@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import ca.gc.inspection.scoop.util.CameraUtils;
+
 public class NotificationsAdapterController {
     private JSONObject notification, image;
     private NotificationViewHolder holder;
@@ -160,7 +162,7 @@ public class NotificationsAdapterController {
      *
      */
     private void setProfileImage(String image) {
-        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
+        Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
         notificationAdapterInterface.setImage(bitmap, holder); //sets image for the holder
         holder.profileImage.setOnClickListener(new View.OnClickListener() { //on click for the image
             @Override

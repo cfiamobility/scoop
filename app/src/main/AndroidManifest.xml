@@ -17,16 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DisplayPostActivity"></activity>
+        <activity android:name=".displaypost.DisplayPostActivity"></activity>
         <activity
-            android:name=".SearchActivity"
+            android:name=".search.SearchActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".InfoActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".EditProfileActivity" />
-        <activity android:name=".SavedPostActivity" />
+        <activity android:name=".info.InfoActivity" />
+        <activity android:name=".settings.SettingsActivity" />
+        <activity android:name=".editprofile.EditProfileActivity" />
+        <activity android:name=".savedpost.SavedPostActivity" />
         <activity
-            android:name=".CreatePostActivity"
+            android:name=".createpost.CreatePostActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
         <activity
             android:name=".SignUpActivity"

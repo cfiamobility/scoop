@@ -21,8 +21,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.view.View;
+
+import ca.gc.inspection.scoop.createpost.CreatePostActivity;
+import ca.gc.inspection.scoop.info.InfoActivity;
+import ca.gc.inspection.scoop.savedpost.SavedPostActivity;
+import ca.gc.inspection.scoop.search.SearchActivity;
+import ca.gc.inspection.scoop.settings.SettingsActivity;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 

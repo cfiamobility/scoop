@@ -21,7 +21,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
+
+import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
+import ca.gc.inspection.scoop.util.CameraUtils;
 
 public class MostGenericController {
     private JSONObject post, profileImage;
@@ -390,7 +392,7 @@ public class MostGenericController {
      *
      */
     private void formatImage(String image){
-        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
+        Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
         mostGenericInterface.setUserImage(bitmap, holder);
     }
 
