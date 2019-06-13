@@ -1,9 +1,8 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.notifications;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +16,10 @@ import org.json.JSONArray;
 
 import java.sql.Timestamp;
 
-public class NotificationsFragment extends Fragment implements NotificationsController.NotificationInterface{
+import ca.gc.inspection.scoop.NetworkUtils;
+import ca.gc.inspection.scoop.R;
+
+public class NotificationsFragment extends Fragment implements NotificationsContract{
 
 
     private RecyclerView todayRecyclerView, recentRecyclerView;
@@ -39,7 +41,8 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        notificationsScreenController = new NotificationsController(this); //instantiates controller for notifications screen
+
+        notificationsScreenController = new NotificationsController(this,  NetworkUtils.getInstance(getContext())); //instantiates controller for notifications screen
 
         new TodayTask().execute(); //executes async task for today notifications
         new RecentTask().execute(); //executes async task for recent notifications
