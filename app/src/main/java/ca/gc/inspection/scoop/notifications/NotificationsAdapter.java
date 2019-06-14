@@ -21,7 +21,7 @@ import ca.gc.inspection.scoop.R;
 /**
  * Adapter used by the notifications recycler view
  */
-public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> implements NotificationsAdapterContract{
+public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> implements NotificationsAdapterInterface.View{
     private JSONArray notifications, images;
     private RequestQueue requestQueue;
 
@@ -119,7 +119,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         // each data item is just a string in this case
         ImageView profileImage;
         TextView fullName, actionType, activityType, time;
-
 
         /**
          * Description: Viewholder holds each item in the recycler view and holds each piece that altogether makes the item

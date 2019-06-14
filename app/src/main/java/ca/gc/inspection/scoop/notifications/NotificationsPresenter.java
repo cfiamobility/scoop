@@ -26,14 +26,13 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 /**
  * Controller for the notifications view/fragment
  */
-public class NotificationsController {
+public class NotificationsPresenter implements NotificationsContract.Presenter {
     private RequestQueue requestQueue;
     private Timestamp currentTime;
-    private NotificationsContract notificationsContract;
+    private NotificationsContract.View notificationsContract;
     private NetworkUtils networkUtils;
 
-
-    public NotificationsController(NotificationsContract notificationsContract, NetworkUtils networkUtils){
+    public NotificationsPresenter(NotificationsContract.View notificationsContract, NetworkUtils networkUtils){
         this.networkUtils = networkUtils;
         this.notificationsContract = notificationsContract;
         this.requestQueue = Volley.newRequestQueue(MyApplication.getContext()); //instantiating the request queue for volley
@@ -142,6 +141,11 @@ public class NotificationsController {
                         todayRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this); //removes the listener
                     }
                 });
+    }
+
+    @Override
+    public void start() {
+
     }
 
 

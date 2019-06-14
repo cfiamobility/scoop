@@ -31,14 +31,15 @@ import ca.gc.inspection.scoop.Post;
 public class NotificationsAdapterController {
     private JSONObject notification, image;
     private NotificationsAdapter.NotificationViewHolder holder;
-    private NotificationsAdapterContract notificationsAdapterContract;
+    //private NotificationsAdapterInterface notificationsAdapterContract;
+    private NotificationsAdapterInterface.View notificationsAdapterInterface;
     private Map<String, String> ids;
     private Timestamp currentTime;
     private String timeType;
 
-    public NotificationsAdapterController(NotificationsAdapter.NotificationViewHolder holder, int i, NotificationsAdapterContract notificationsAdapterContract, JSONArray notifications, JSONArray images, Timestamp currentTime, String timeType) {
+    public NotificationsAdapterController(NotificationsAdapter.NotificationViewHolder holder, int i, NotificationsAdapterInterface.View notificationsAdapterInterface, JSONArray notifications, JSONArray images, Timestamp currentTime, String timeType) {
         this.holder = holder;
-        this.notificationsAdapterContract = notificationsAdapterContract;
+        this.notificationsAdapterInterface = notificationsAdapterInterface;
         try {
             this.notification = notifications.getJSONObject(i);
             this.image = images.getJSONObject(i);
@@ -65,7 +66,7 @@ public class NotificationsAdapterController {
             if(image != null) {
                 setProfileImage(image.getString("activityprofileimage")); //sets profile image
             }else{
-                notificationsAdapterContract.hideImage(holder);
+                notificationsAdapterInterface.hideImage(holder);
             }
         } else { //for notifications with a likeid
             setLikes(); //sets like notification
@@ -73,7 +74,7 @@ public class NotificationsAdapterController {
             if(image !=null) {
                 setProfileImage(image.getString("likesprofileimage")); //sets profile image
             }else{
-                notificationsAdapterContract.hideImage(holder);
+                notificationsAdapterInterface.hideImage(holder);
             }
         }
 
@@ -147,7 +148,7 @@ public class NotificationsAdapterController {
         ids.put("userid", notification.getString("userid")); //puts the corresponding user id into the map
         checkReferenceActivityId(referenceActivityId, notification); //checks reference activity id
         new NameTask().execute(notification.getString("activityfirstname"), notification.getString("activitylastname"));
-        notificationsAdapterContract.setActionType(actionTypeResponses[activityType], holder); //sets the action type for corresponding activity type
+        notificationsAdapterInterface.setActionType(actionTypeResponses[activityType], holder); //sets the action type for corresponding activity type
     }
 
     /**
@@ -160,7 +161,7 @@ public class NotificationsAdapterController {
         ids.put("userid", notification.getString("likesuserid")); //putting the user id of the like into ids
         checkActivityType(activityType, notification); //checks activity type
         new NameTask().execute(notification.getString("likesfirstname"), notification.getString("likeslastname"));
-        notificationsAdapterContract.setActionType(MyApplication.getContext().getResources().getString(R.string.liked), holder); //sets action type as liked
+        notificationsAdapterInterface.setActionType(MyApplication.getContext().getResources().getString(R.string.liked), holder); //sets action type as liked
     }
 
     /**
@@ -171,7 +172,7 @@ public class NotificationsAdapterController {
      */
     private void setProfileImage(String image) {
         Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
-        notificationsAdapterContract.setImage(bitmap, holder); //sets image for the holder
+        notificationsAdapterInterface.setImage(bitmap, holder); //sets image for the holder
         holder.profileImage.setOnClickListener(new View.OnClickListener() { //on click for the image
             @Override
             public void onClick(View view) {
@@ -201,11 +202,11 @@ public class NotificationsAdapterController {
     private void checkReferenceActivityId(String referenceActivityId, JSONObject activityResponse) throws JSONException {
         final String[] activityTypeResponses = new String[]{"your post", "a new post"}; //the possible activityType responses for activityid
         if (!referenceActivityId.equals("null")) { //if there is a reference activity id (the activity is not a post)
-            notificationsAdapterContract.setActivityType(activityTypeResponses[0], holder); //sets the activity type response
+            notificationsAdapterInterface.setActivityType(activityTypeResponses[0], holder); //sets the activity type response
             ids.put("activityid", activityResponse.getString("activityactivityreference")); //puts the activity reference id into the ids map
 
         } else { //if there is no reference activity id (the activity is a post)
-            notificationsAdapterContract.setActivityType(activityTypeResponses[1], holder); //sets the activity type response
+            notificationsAdapterInterface.setActivityType(activityTypeResponses[1], holder); //sets the activity type response
             ids.put("activityid", activityResponse.getString("activityactivityid")); //puts the activity id into the ids map
 
         }
@@ -225,7 +226,7 @@ public class NotificationsAdapterController {
         } else { //if the activity is a comment
             ids.put("activityid", likeResponse.getString("likesactivityreference")); //putting the activity reference of the activity which is a Post
         }
-        notificationsAdapterContract.setActivityType(activityTypeResponse[activityType], holder); //setting text based on activityTypeResponse
+        notificationsAdapterInterface.setActivityType(activityTypeResponse[activityType], holder); //setting text based on activityTypeResponse
     }
 
     /**
@@ -277,9 +278,9 @@ public class NotificationsAdapterController {
         @Override
         protected void onPostExecute(String time) {
             if (time != null) {
-                notificationsAdapterContract.setTime(time, holder); //sets time to what is given
+                notificationsAdapterInterface.setTime(time, holder); //sets time to what is given
             } else {
-                notificationsAdapterContract.hideTime(holder); //sets visibility to gone
+                notificationsAdapterInterface.hideTime(holder); //sets visibility to gone
             }
         }
     }
@@ -295,7 +296,7 @@ public class NotificationsAdapterController {
 
         @Override
         protected void onPostExecute(String fullName) {
-            notificationsAdapterContract.setFullName(fullName, holder); //sets full name
+            notificationsAdapterInterface.setFullName(fullName, holder); //sets full name
             holder.fullName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

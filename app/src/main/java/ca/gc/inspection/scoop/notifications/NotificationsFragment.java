@@ -16,21 +16,26 @@ import org.json.JSONArray;
 
 import java.sql.Timestamp;
 
+import androidx.annotation.NonNull;
 import ca.gc.inspection.scoop.*;
 import ca.gc.inspection.scoop.util.NetworkUtils;
+
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
  * View for the notifications controller
  */
-public class NotificationsFragment extends Fragment implements NotificationsContract{
+public class NotificationsFragment extends Fragment implements NotificationsContract.View{
 
 
     private RecyclerView todayRecyclerView, recentRecyclerView;
     private RecyclerView.Adapter todayAdapter, recentAdapter;
     private RecyclerView.LayoutManager todayLayoutManager, recentLayoutManager;
     private TextView today, recent;
-    private NotificationsController notificationsScreenController;
+    //private NotificationsPresenter notificationsScreenController;
+    private NotificationsContract.Presenter mPresenter;
     private View view;
+
 
 
     @Override
@@ -44,7 +49,9 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        notificationsScreenController = new NotificationsController(this,  NetworkUtils.getInstance(getContext())); //instantiates controller for notifications screen
+        //notificationsScreenController = new NotificationsPresenter(this,  NetworkUtils.getInstance(getContext())); //instantiates controller for notifications screen
+        setPresenter(new NotificationsPresenter(this, NetworkUtils.getInstance(getContext())));
+
 
         new TodayTask().execute(); //executes async task for today notifications
         new RecentTask().execute(); //executes async task for recent notifications
@@ -71,7 +78,8 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
         recentRecyclerView.setLayoutManager(recentLayoutManager); //sets the layout manager to one chosen
         recentAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "recent", currentTime); //instantiates the adapter
         recentRecyclerView.setAdapter(recentAdapter); //sets the adapter
-        notificationsScreenController.listenRecentRecyclerView(recentRecyclerView);
+        //notificationsScreenController.listenRecentRecyclerView(recentRecyclerView);
+        mPresenter.listenRecentRecyclerView(recentRecyclerView);
 
     }
 
@@ -90,7 +98,8 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
         todayRecyclerView.setLayoutManager(todayLayoutManager); //sets the layout manager to one chosen
         todayAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "today", currentTime); //instantiates the adapter
         todayRecyclerView.setAdapter(todayAdapter); //sets the adapter
-        notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
+        //notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, notificationResponse);\
+        mPresenter.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
 
     }
 
@@ -153,6 +162,11 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
 //        view.findViewById(R.id.view3).requestFocus();
     }
 
+    @Override
+    public void setPresenter(@NonNull NotificationsContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
+
     /**
      * Description: performs the call to the notifications screen controller in the background
      */
@@ -160,7 +174,8 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
 
         @Override
         protected Void doInBackground(Void... voids) {
-            notificationsScreenController.getTodayNotifications(); //gets the today notifications
+            //notificationsScreenController.getTodayNotifications(); //gets the today notifications
+            mPresenter.getTodayNotifications(); //gets the today notifications
             return null;
         }
     }
@@ -172,7 +187,8 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
 
         @Override
         protected Void doInBackground(Void... voids) {
-            notificationsScreenController.getRecentNotifications(); //gets the recent notifications
+            //notificationsScreenController.getRecentNotifications(); //gets the recent notifications
+            mPresenter.getRecentNotifications(); //gets the recent notifications
             return null;
         }
     }

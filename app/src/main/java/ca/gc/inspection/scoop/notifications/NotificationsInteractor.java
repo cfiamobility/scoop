@@ -1,7 +1,5 @@
 package ca.gc.inspection.scoop.notifications;
 
-import android.content.Context;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,7 +9,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,19 +16,27 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
- * Handles notification database request from the notifications controller
+ * Handles notification database request from the notifications presenter
  */
 public class NotificationsInteractor {
 
 
     private RequestQueue requestQueue;
-    private NotificationsController controller;
+    private NotificationsPresenter presenter;
 
-    public NotificationsInteractor(NotificationsController controller, NetworkUtils networkUtils){
+    /**
+     * reference to the presenter is passed into the interactor so that we can return json results back into the presenter after performing a json request
+     * @param presenter a reference to the presenter
+     * @param networkUtils reference the networksUtils singleton
+     */
+    public NotificationsInteractor(NotificationsPresenter presenter, NetworkUtils networkUtils){
         this.requestQueue = networkUtils.getRequestQueue();
-        this.controller = controller;
+        this.presenter = presenter;
     }
 
+    /**
+     * gets today notifications from the database
+     */
     public void getTodayNotifications(){
         String todayURL = Config.baseIP + "notifications/todaynotifs/" + Config.currentUser; //the url to get notifications related to today with userid
         JsonArrayRequest todayRequest = new JsonArrayRequest(Request.Method.GET, todayURL, null, new Response.Listener<JSONArray>() { //making a get request for today notifications
@@ -42,7 +47,7 @@ public class NotificationsInteractor {
                     @Override
                     public void onResponse(final JSONArray imageResponse) {
                         //notificationsContract.setTodayRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse); //calls notificationInterface to set the today recycler view
-                        controller.getTodayNotificationsCallBack(notificationResponse, imageResponse);
+                        presenter.getTodayNotificationsCallBack(notificationResponse, imageResponse); // return results back to the presenter
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -77,6 +82,9 @@ public class NotificationsInteractor {
         requestQueue.add(todayRequest); //adds today request to request queue
     }
 
+    /**
+     * gets recent notifications from the database
+     */
     public void getRecentNotifications(){
         String recentURL = Config.baseIP + "notifications/recentnotifs/" + Config.currentUser; //the url to get notifications related to recent with userid"1a3860f2-a8f2-4af6-a577-b43f7cc17cdd";
         JsonArrayRequest recentRequest = new JsonArrayRequest(Request.Method.GET, recentURL, null, new Response.Listener<JSONArray>() { //making a get request for recent notifications
@@ -87,7 +95,7 @@ public class NotificationsInteractor {
                     @Override
                     public void onResponse(final JSONArray imageResponse) {
                         //notificationsContract.setRecentRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse); //calls notificationInterface to set the recent recycler view
-                        controller.getRecentNotificationsCallBack(notificationResponse, imageResponse);
+                        presenter.getRecentNotificationsCallBack(notificationResponse, imageResponse); // return results back into the presenter
                     }
                 }, new Response.ErrorListener() {
                     @Override
