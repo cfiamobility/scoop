@@ -27,7 +27,7 @@ public interface ProfilePostContract extends ProfileCommentContract {
         void formPostTitle() throws JSONException;
         void checkCommentCount(String commentCount);
 //        void getRecyclerView(JSONArray posts, JSONArray images);
-        void getPosts(MySingleton singleton, final String userId);
+//        void getPosts(MySingleton singleton, final String userId);
     }
 
 

@@ -16,6 +16,7 @@ import org.json.JSONArray;
 
 import java.util.List;
 
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.ProfilePost.ProfilePostFragment;
@@ -39,6 +40,7 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
     private View view;
 
     private FeedPostContract.Presenter mFeedPostPresenter;
+    private FeedPostInteractor mFeedPostInteractor;
 
     public void setPresenter (FeedPostContract.Presenter presenter){
         mFeedPostPresenter = presenter;
@@ -65,7 +67,10 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
 //
 //        FeedController controller = new FeedController(this);
 //        controller.getPosts();
-        mFeedPostPresenter.getPosts(MySingleton.getInstance(getContext()));
+//        mFeedPostPresenter.getPosts(MySingleton.getInstance(getContext()));
+        mFeedPostInteractor = new FeedPostInteractor(this);
+        mFeedPostInteractor.getFeedPosts(MySingleton.getInstance(getContext()));
+
     }
 
     @Override
@@ -82,6 +87,9 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
         mAdapter = new FeedPostAdapter(posts, images);
         ((FeedPostAdapter) mAdapter).setView(this);
         mRecyclerView.setAdapter(mAdapter);
+
+//        mFeedPostPresenter.getPosts(MySingleton.getInstance(getContext()));
+
     }
 
     @Override

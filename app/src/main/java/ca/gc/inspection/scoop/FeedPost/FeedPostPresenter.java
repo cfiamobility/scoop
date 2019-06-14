@@ -47,7 +47,7 @@ public class FeedPostPresenter extends ProfilePostPresenter implements FeedPostC
         this.holder = holder;
 
         mFeedPostView.setPresenter(this);
-        mFeedPostInteractor = new FeedPostInteractor(this);
+//        mFeedPostInteractor = new FeedPostInteractor(this);
 
     }
 
@@ -86,14 +86,14 @@ public class FeedPostPresenter extends ProfilePostPresenter implements FeedPostC
             mFeedPostView.setUserImage(bitmap, holder);
         }
     }
-
-    public void getRecyclerView(JSONArray posts, JSONArray images){
-        mFeedPostView.setRecyclerView(posts, images);
-    }
-
-    public void getPosts(MySingleton singleton){
-        mFeedPostInteractor.getFeedPosts(singleton);
-    }
+//
+//    public void getRecyclerView(JSONArray posts, JSONArray images){
+//        mFeedPostView.setRecyclerView(posts, images);
+//    }
+//
+//    public void getPosts(MySingleton singleton){
+//        mFeedPostInteractor.getFeedPosts(singleton);
+//    }
 
     public String getFeedType(){
         return mFeedPostView.getFeedType();

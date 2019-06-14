@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MyApplication;
 import ca.gc.inspection.scoop.MyCamera;
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.PostOptionsDialog;
@@ -29,6 +30,8 @@ import ca.gc.inspection.scoop.ProfileComment.ProfileCommentFragment;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
+
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 /**
@@ -44,9 +47,10 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     private String userid;
     private View view;
     private ProfilePostContract.Presenter mProfilePostPresenter;
+    private ProfilePostInteractor mProfilePostInteractor;
 
     public void setPresenter (ProfilePostContract.Presenter presenter){
-        mProfilePostPresenter = presenter;
+        mProfilePostPresenter = checkNotNull(presenter);
     }
 //    public String getUserId() {
 //        return userid;
@@ -78,7 +82,9 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        ProfilePostContract.Presenter mProfilePostPresenter = new ProfilePostPresenter(this);
-        mProfilePostPresenter.getPosts(MySingleton.getInstance(getContext()), Config.currentUser);
+//        mProfilePostPresenter.getPosts(MySingleton.getInstance(MyApplication.getContext()), Config.currentUser);
+        mProfilePostInteractor = new ProfilePostInteractor(this);
+        mProfilePostInteractor.getUserPosts(MySingleton.getInstance(getContext()), Config.currentUser);
 
     }
 
@@ -101,6 +107,9 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         mAdapter = new ProfilePostAdapter(posts, images);
         ((ProfilePostAdapter) mAdapter).setView(this);
         postRecyclerView.setAdapter(mAdapter);
+
+//        mProfilePostPresenter.getPosts(MySingleton.getInstance(getActivity()), Config.currentUser);
+
     }
 
     public void setCommentCount(String commentCount, ProfilePostViewHolder holder) {

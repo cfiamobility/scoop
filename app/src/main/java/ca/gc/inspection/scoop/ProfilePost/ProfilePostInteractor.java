@@ -1,4 +1,6 @@
 package ca.gc.inspection.scoop.ProfilePost;
+        import android.util.Log;
+
         import com.android.volley.AuthFailureError;
         import com.android.volley.Request;
         import com.android.volley.Response;
@@ -16,9 +18,14 @@ package ca.gc.inspection.scoop.ProfilePost;
 
 public class ProfilePostInteractor {
     private ProfilePostContract.Presenter mProfilePostPresenter;
+    private ProfilePostContract.View mProfilePostView;
 
-    ProfilePostInteractor(ProfilePostContract.Presenter presenter) {
-        mProfilePostPresenter = presenter;
+
+
+
+    ProfilePostInteractor(ProfilePostContract.View view) {
+//        mProfilePostPresenter = presenter;
+        mProfilePostView = view;
     }
 
 
@@ -31,6 +38,8 @@ public class ProfilePostInteractor {
      * @param userid: passes the userid of the profile clicked on
      */
     public void getUserPosts(MySingleton singleton, final String userid) {
+
+
         String url = Config.baseIP + "profile/posttextfill/" + userid + "/" + Config.currentUser;
         JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -39,12 +48,12 @@ public class ProfilePostInteractor {
                 final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray imagesResponse) {
-                        mProfilePostPresenter.getRecyclerView(postsResponse, imagesResponse);
+                        mProfilePostView.setRecyclerView(postsResponse, imagesResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.d("Error.Response", String.valueOf(error));
                     }
                 }) {
                     public Map<String, String> getHeaders() throws AuthFailureError {
@@ -54,8 +63,8 @@ public class ProfilePostInteractor {
                         return header;
                     }
                 };
-//                Config.requestQueue.add(imageRequest);
-                  singleton.addToRequestQueue(imageRequest);
+                Config.requestQueue.add(imageRequest);
+//                  singleton.addToRequestQueue(imageRequest);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -70,8 +79,8 @@ public class ProfilePostInteractor {
                 return header;
             }
         };
-//        Config.requestQueue.add(postRequest);
-          singleton.addToRequestQueue(postRequest);
+        Config.requestQueue.add(postRequest);
+//          singleton.addToRequestQueue(postRequest);
 
     }
 

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentInteractor;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.ProfilePost.ProfilePostFragment;
@@ -34,10 +35,11 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
-    private ProfileCommentContract.Presenter mFeedPostPresenter;
-    private ProfileCommentInteractor mFeedPostProfileCommentInteractor;
+    private FeedPostContract.Presenter mFeedPostPresenter;
+    private FeedPostInteractor mFeedPostInteractor;
 
-    public void setPresenter (ProfileCommentContract.Presenter presenter){
+
+    public void setPresenter (FeedPostContract.Presenter presenter){
         mFeedPostPresenter = presenter;
     }
 
@@ -58,6 +60,9 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //        controller.getPosts();
 //        mFeedPostProfileCommentInteractor = new ProfileCommentInteractor(this);
 //        mFeedPostProfileCommentInteractor.getUserComments(Config.currentUser);
+//        mFeedPostPresenter.getPosts(MySingleton.getInstance(getActivity()));
+        mFeedPostInteractor = new FeedPostInteractor(this);
+        mFeedPostInteractor.getFeedPosts(MySingleton.getInstance(getContext()));
     }
 
 
@@ -76,6 +81,9 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
         mAdapter = new FeedPostAdapter(posts, images);
         ((FeedPostAdapter) mAdapter).setView(this);
         mRecyclerView.setAdapter(mAdapter);
+
+//        mFeedPostPresenter.getPosts(MySingleton.getInstance(getContext()));
+
     }
 
     @Override

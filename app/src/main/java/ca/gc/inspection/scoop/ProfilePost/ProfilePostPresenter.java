@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.android.volley.AuthFailureError;
@@ -34,6 +35,8 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements Pro
     private JSONObject post;
     private ProfilePostViewHolder holder;
     private Map<String, String> likeProperties;
+    private static final String TAG = "presenter";
+
 
     @NonNull
     private ProfilePostContract.View mProfilePostView;
@@ -59,7 +62,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements Pro
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
 
         mProfilePostView.setPresenter(this);
-        mProfilePostInteractor = new ProfilePostInteractor(this);
+//        mProfilePostInteractor = new ProfilePostInteractor(this);
 //        mProfilePostInteractor.getUserPosts(Config.currentUser);
     }
 
@@ -120,9 +123,9 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements Pro
     }
 
 
-    public void getRecyclerView(JSONArray posts, JSONArray images){
-        mProfilePostView.setRecyclerView(posts, images);
-    }
+//    public void getRecyclerView(JSONArray posts, JSONArray images){
+//        mProfilePostView.setRecyclerView(posts, images);
+//    }
 
     /**
      * GET USER POSTS
@@ -130,9 +133,11 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements Pro
      * @param userId
      */
 
+  /*  @Override
     public void getPosts(MySingleton singleton, final String userId){
         mProfilePostInteractor.getUserPosts(singleton, userId);
-    }
+
+    }*/
 
 //    /**
 //     * FROM ProfilePostsController

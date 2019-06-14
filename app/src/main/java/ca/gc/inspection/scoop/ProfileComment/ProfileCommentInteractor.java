@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.ProfileComment;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -19,13 +20,15 @@ import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostContract;
 import ca.gc.inspection.scoop.post;
 
 public class ProfileCommentInteractor {
-    private ProfileCommentContract.Presenter mProfileCommentPresenter;
+//    private ProfileCommentContract.Presenter mProfileCommentPresenter;
+    private ProfileCommentContract.View mProfileCommentView;
 
-    public ProfileCommentInteractor(ProfileCommentContract.Presenter profileCommentPresenter){
-        mProfileCommentPresenter = profileCommentPresenter;
+    public ProfileCommentInteractor(ProfileCommentContract.View view){
+        mProfileCommentView = view;
     }
 
     /**
@@ -41,7 +44,7 @@ public class ProfileCommentInteractor {
                 final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray imagesResponse) {
-                        mProfileCommentPresenter.getRecyclerView(commentsResponse, imagesResponse);
+                        mProfileCommentView.setRecyclerView(commentsResponse, imagesResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -56,8 +59,8 @@ public class ProfileCommentInteractor {
                         return header;
                     }
                 };
-//                Config.requestQueue.add(imageRequest);
-                singleton.addToRequestQueue(imageRequest);
+                Config.requestQueue.add(imageRequest);
+//                singleton.addToRequestQueue(imageRequest);
 
             }
         }, new Response.ErrorListener() {
@@ -73,8 +76,8 @@ public class ProfileCommentInteractor {
                 return header;
             }
         };
-//        Config.requestQueue.add(commentRequest);
-        singleton.addToRequestQueue(commentRequest);
+        Config.requestQueue.add(commentRequest);
+//        singleton.addToRequestQueue(commentRequest);
 
     }
 
@@ -125,6 +128,7 @@ public class ProfileCommentInteractor {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Config.requestQueue.add(request);
+//        singleton.addToRequestQueue(request);
     }
 
     /**
@@ -172,8 +176,8 @@ public class ProfileCommentInteractor {
                 30000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//        Config.requestQueue.add(request);
-        singleton.addToRequestQueue(request);
+        Config.requestQueue.add(request);
+//        singleton.addToRequestQueue(request);
 
     }
 

@@ -22,7 +22,7 @@ public interface FeedPostContract extends ProfilePostContract {
     interface Presenter extends ProfilePostContract.Presenter {
         void displayImages() throws JSONException;
         void formatImage(String image, String type);
-        void getPosts(MySingleton singleton);
+//        void getPosts(MySingleton singleton);
         String getFeedType();
 
     }

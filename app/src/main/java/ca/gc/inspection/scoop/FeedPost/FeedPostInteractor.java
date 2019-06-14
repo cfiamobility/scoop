@@ -18,21 +18,23 @@ import ca.gc.inspection.scoop.ProfilePost.ProfilePostContract;
 
 public class FeedPostInteractor {
     private FeedPostContract.Presenter mFeedPostPresenter;
+    private FeedPostContract.View mFeedPostView;
 
-    public FeedPostInteractor(FeedPostContract.Presenter presenter){
-        mFeedPostPresenter = presenter;
+
+    public FeedPostInteractor(FeedPostContract.View view){
+        mFeedPostView = view;
     }
 
     public void getFeedPosts(MySingleton singleton){
-        String URL = Config.baseIP + "display-post/posts/" + mFeedPostPresenter.getFeedType() + "/" + Config.currentUser;
+        String URL = Config.baseIP + "display-post/posts/" + mFeedPostView.getFeedType() + "/" + Config.currentUser;
         JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() { //makes request for all posts for specific feed
             @Override
             public void onResponse(final JSONArray postResponse) {
-                String imageURL = Config.baseIP + "display-post/images/" + mFeedPostPresenter.getFeedType() + "/" + Config.currentUser;
+                String imageURL = Config.baseIP + "display-post/images/" + mFeedPostView.getFeedType() + "/" + Config.currentUser;
                 JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, imageURL, null, new Response.Listener<JSONArray>() { //makes request for all corresponding images
                     @Override
                     public void onResponse(JSONArray imageResponse) {
-                        mFeedPostPresenter.getRecyclerView(postResponse, imageResponse);
+                        mFeedPostView.setRecyclerView(postResponse, imageResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -47,8 +49,8 @@ public class FeedPostInteractor {
                     header.put("authorization", Config.token);
                     return header;
                 }};
-
-                singleton.addToRequestQueue(imageRequest);
+                Config.requestQueue.add(imageRequest);
+//                singleton.addToRequestQueue(imageRequest);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -63,7 +65,9 @@ public class FeedPostInteractor {
             header.put("authorization", Config.token);
             return header;
         }};
-        singleton.addToRequestQueue(postRequest);
+//        singleton.addToRequestQueue(postRequest);
+        Config.requestQueue.add(postRequest);
+
     }
 
 }

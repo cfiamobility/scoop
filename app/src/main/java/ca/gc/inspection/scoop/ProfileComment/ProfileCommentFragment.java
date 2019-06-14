@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.ProfileComment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -25,6 +26,7 @@ import ca.gc.inspection.scoop.DisplayPostActivity;
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.MyCamera;
 import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.ProfilePost.ProfilePostInteractor;
 import ca.gc.inspection.scoop.R;
 
 
@@ -39,6 +41,8 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
+    private MySingleton singleton;
+    private ProfileCommentInteractor mProfileCommentInteractor;
 
     public void setPresenter (ProfileCommentContract.Presenter presenter){
         mProfileCommentPresenter = presenter;
@@ -48,9 +52,11 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
      * Empty Constructor for fragments
      */
     public ProfileCommentFragment() {
-        // Required empty public constructor
     }
-
+//
+//    public MySingleton getSingleton(){
+//        return singleton;
+//    }
     /**
      * When the fragment initializes
      * @param inflater: inflates the view
@@ -83,7 +89,8 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
 //        // After created, the first method is called
 //        profileCommentsController.getUserComments(userid);
 //        interactor.getUserComments(Config.currentUser);
-        mProfileCommentPresenter.getPosts(MySingleton.getInstance(getContext()), Config.currentUser);
+        mProfileCommentInteractor = new ProfileCommentInteractor(this);
+        mProfileCommentInteractor.getUserComments(MySingleton.getInstance(getContext()), Config.currentUser);
     }
 
     /**
@@ -105,6 +112,8 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         mAdapter = new ProfileCommentAdapter(comments, images);
         ((ProfileCommentAdapter) mAdapter).setView(this);
         commentsRecyclerView.setAdapter(mAdapter);
+
+//        mProfileCommentPresenter.getPosts(MySingleton.getInstance(getContext()), Config.currentUser);
     }
 
     /**

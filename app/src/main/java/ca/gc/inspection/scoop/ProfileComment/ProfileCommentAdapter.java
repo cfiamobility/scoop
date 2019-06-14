@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.R;
 
 public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder> {

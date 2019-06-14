@@ -34,6 +34,9 @@ public interface ProfileCommentContract {
         void setRecyclerView(JSONArray comments, JSONArray images);
         void displayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid);
         void displayImagesListener(ProfileCommentViewHolder holder);
+
+//        MySingleton getSingleton();
+
     }
 
     interface Presenter extends BasePresenter {
@@ -51,8 +54,8 @@ public interface ProfileCommentContract {
         void formatDate(String time);
         String checkLikeCount(String likeCount);
         void checkLikeState(String likeState);
-        void getRecyclerView(JSONArray posts, JSONArray images);
-        void getPosts(MySingleton singleton, final String userid);
+//        void getRecyclerView(JSONArray posts, JSONArray images);
+//        void getPosts(MySingleton singleton, final String userid);
 //        void getUserComments(final String userid);
 
 //        void setPresenterView (ProfileCommentContract.View profileCommentView);

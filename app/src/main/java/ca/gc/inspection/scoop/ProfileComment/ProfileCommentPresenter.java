@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop.ProfileComment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 
@@ -28,6 +29,7 @@ import ca.gc.inspection.scoop.DisplayPostActivity;
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.MyCamera;
 import ca.gc.inspection.scoop.MySingleton;
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
  * Presenter for the replying to a post action; it is the most generic presenter
@@ -44,7 +46,8 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     private ProfileCommentInteractor mProfileCommentInteractor;
 
 
-    public ProfileCommentPresenter(ProfileCommentContract.View profileCommentView, JSONArray posts, JSONArray profileImages, int i, ProfileCommentViewHolder holder){
+    public ProfileCommentPresenter(ProfileCommentContract.View profileCommentView, JSONArray posts, JSONArray profileImages,
+                                   int i, ProfileCommentViewHolder holder){
         mProfileCommentView = profileCommentView;
         try {
             this.post = posts.getJSONObject(i);
@@ -55,8 +58,8 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         this.holder = holder;
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
 
-        mProfileCommentView.setPresenter(this);
-        mProfileCommentInteractor = new ProfileCommentInteractor(this);
+        mProfileCommentView.setPresenter(checkNotNull(this));
+//        mProfileCommentInteractor = new ProfileCommentInteractor(this);
     }
 
 //    public void setPresenterView (ProfileCommentContract.View profileCommentView){
@@ -318,18 +321,18 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
 //        mProfileCommentView.setUserImage(bitmap, holder);
 //    }
 
-    public void getRecyclerView(JSONArray posts, JSONArray images){
-        mProfileCommentView.setRecyclerView(posts, images);
-    }
-
-    /**
-     * GETS USER COMMENTS DONT FORGET IT BABY
-     * @param singleton
-     * @param userId
-     */
-    public void getPosts(MySingleton singleton, final String userId) {
-        mProfileCommentInteractor.getUserComments(singleton, userId);
-    }
+//    public void getRecyclerView(JSONArray posts, JSONArray images){
+//        mProfileCommentView.setRecyclerView(posts, images);
+//    }
+//
+//    /**
+//     * GETS USER COMMENTS DONT FORGET IT BABY
+//     * @param singleton
+//     * @param userId
+//     */
+//    public void getPosts(MySingleton singleton, final String userId) {
+//        mProfileCommentInteractor.getUserComments(singleton, userId);
+//    }
 
     /**
      *
