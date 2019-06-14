@@ -35,7 +35,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProfileCommentFragment extends Fragment implements ProfileCommentContract.View {
+public class ProfileCommentFragment extends Fragment {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
@@ -45,7 +45,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
     private MySingleton singleton;
 
-    public void setPresenter (ProfileCommentContract.Presenter presenter){
+    public void setPresenter (@NonNull ProfileCommentContract.Presenter presenter){
         mProfileCommentPresenter = checkNotNull(presenter);
     }
 
@@ -54,10 +54,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
      */
     public ProfileCommentFragment() {
     }
-//
-//    public MySingleton getSingleton(){
-//        return singleton;
-//    }
+
     /**
      * When the fragment initializes
      * @param inflater: inflates the view
@@ -83,13 +80,6 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-//        // Passes in interface into the controller
-//        profileCommentsController = new ProfileCommentsController(this);
-//
-//        // After created, the first method is called
-//        profileCommentsController.getUserComments(userid);
-//        interactor.getUserComments(Config.currentUser);
         mProfileCommentPresenter.getUserComments(MySingleton.getInstance(getContext()), Config.currentUser);
     }
 

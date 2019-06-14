@@ -4,21 +4,17 @@ import android.graphics.Bitmap;
 
 public interface ProfileCommentViewHolderContract {
 
-    void setPostTitle(String postTitle);
+    ProfileCommentViewHolder setPostTitle(String postTitle);
 
-    void setPostText(String postText);
+    ProfileCommentViewHolder setPostText(String postText);
 
-    void setUserImage(Bitmap image);
+    ProfileCommentViewHolder setUserImage(Bitmap image);
 
-    void setUserName(String userName);
+    ProfileCommentViewHolder setUserName(String userName);
 
-    void setLikeCount(String likeCount);
+    ProfileCommentViewHolder setLikeCount(String likeCount);
 
-    void setDate(String date);
+    ProfileCommentViewHolder setDate(String date);
 
-    void setLikeDownvoteState();
-
-    void setLikeNeutralState();
-
-    void setLikeUpvoteState();
+    ProfileCommentViewHolder setLikeState(LikeState likeState);
 }

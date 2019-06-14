@@ -5,13 +5,15 @@ import org.json.JSONException;
 
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.ProfileComment.ProfileCommentContract;
+import ca.gc.inspection.scoop.base.BasePresenter;
+import ca.gc.inspection.scoop.base.BaseView;
 
 /**
  * Interface that inherits from mostgeneric interface
  */
 public interface ProfilePostContract extends ProfileCommentContract {
 
-    interface View extends ProfileCommentContract.View {
+    interface View extends BaseView<Presenter> {
         void setCommentCount(String commentCount, ProfilePostViewHolder holder);
 //        void setRecyclerView(JSONArray posts, JSONArray images);
 //        String getUserId();
@@ -21,7 +23,7 @@ public interface ProfilePostContract extends ProfileCommentContract {
 
     }
 
-    interface Presenter extends ProfileCommentContract.Presenter {
+    interface Presenter extends BasePresenter {
 //        void getUserPosts(final String userid);
         void displayPost() throws JSONException;
         void formPostTitle() throws JSONException;

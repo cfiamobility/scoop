@@ -39,8 +39,9 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param postTitle: post title
      */
     @Override
-    public void setPostTitle(String postTitle) {
+    public ProfileCommentViewHolder setPostTitle(String postTitle) {
         this.postTitle.setText(postTitle);
+        return this;
     }
 
     /**
@@ -48,8 +49,9 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param postText
      */
     @Override
-    public void setPostText(String postText) {
+    public ProfileCommentViewHolder setPostText(String postText) {
         this.postText.setText(postText);
+        return this;
     }
 
     /**
@@ -57,9 +59,10 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param image
      */
     @Override
-    public void setUserImage(Bitmap image) {
+    public ProfileCommentViewHolder setUserImage(Bitmap image) {
         Log.i("image", image.toString());
         profileImage.setImageBitmap(image);
+        return this;
     }
 
     /**
@@ -67,8 +70,9 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param userName
      */
     @Override
-    public void setUserName(String userName) {
+    public ProfileCommentViewHolder setUserName(String userName) {
         username.setText(userName);
+        return this;
     }
 
     /**
@@ -76,8 +80,9 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param likeCount
      */
     @Override
-    public void setLikeCount(String likeCount) {
+    public ProfileCommentViewHolder setLikeCount(String likeCount) {
         this.likeCount.setText(likeCount);
+        return this;
     }
 
     /**
@@ -85,25 +90,37 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param date
      */
     @Override
-    public void setDate(String date) {
+    public ProfileCommentViewHolder setDate(String date) {
         this.date.setText(date);
+        return this;
     }
 
-
     @Override
-    public void setLikeDownvoteState() {
+    public ProfileCommentViewHolder setLikeState(LikeState likeState) {
+        switch (likeState) {
+            case UPVOTE:
+                setLikeUpvoteState();
+                break;
+            case NEUTRAL:
+                setLikeNeutralState();
+                break;
+            case DOWNVOTE:
+                setLikeDownvoteState();
+        }
+        return this;
+    }
+
+    private void setLikeDownvoteState() {
         upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
     }
 
-    @Override
-    public void setLikeNeutralState() {
+    private void setLikeNeutralState() {
         upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
         downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
 
-    @Override
-    public void setLikeUpvoteState() {
+    private void setLikeUpvoteState() {
         upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
         downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }

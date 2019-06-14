@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
@@ -40,6 +41,8 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     private JSONObject post, profileImage;
     private ProfileCommentViewHolder holder;
     private Map<String, String> likeProperties;
+    // TODO presenter stores all the adapter data
+    private List<ProfileComment> profileComments;
 
     @NonNull
     private ProfileCommentContract.View mProfileCommentView;
@@ -48,7 +51,7 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
 
     public ProfileCommentPresenter(@NonNull ProfileCommentContract.View profileCommentView, JSONArray posts, JSONArray profileImages,
                                    int i, ProfileCommentViewHolder holder){
-        mProfileCommentView = profileCommentView;
+        mProfileCommentView = checkNotNull(profileCommentView);
         try {
             this.post = posts.getJSONObject(i);
             this.profileImage = profileImages.getJSONObject(i);
@@ -59,21 +62,8 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
 
         mProfileCommentView.setPresenter(checkNotNull(this));
-//        mProfileCommentInteractor = new ProfileCommentInteractor(this);
+        mProfileCommentInteractor = new ProfileCommentInteractor(this);
     }
-
-//    public void setPresenterView (ProfileCommentContract.View profileCommentView){
-//        mProfileCommentView = profileCommentView;
-//    }
-//
-//    public ProfileCommentContract.View getPresenterView (){
-//        return mProfileCommentView;
-//    }
-
-
-//    public void setPresenterInteractor (ProfileCommentInteractor profileCommentInteractor){
-//        mProfileCommentInteractor = profileCommentInteractor;
-//    }
 
     /**
      * Description: main method to display a single post
@@ -89,50 +79,6 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         checkFullName();
         checkLikeState(likeProperties.get("liketype"));
         mProfileCommentView.displayPostListener(holder, activityid, posterid);
-//        holder.upvote.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                try {
-//                    changeUpvoteLikeState(activityid, posterid); //changes upvote state on click
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//
-//        holder.downvote.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                try {
-//                    changeDownvoteLikeState(activityid, posterid); //changes downvote state on click
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//
-//        // tapping on any item from the view holder will go to the display post activity
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
-//            }
-//        });
-//
-//        // tapping on profile picture will bring user to poster's profile page
-//        holder.profileImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainActivity.otherUserClicked(posterid);
-//            }
-//        });
-//
-//        holder.username.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainActivity.otherUserClicked(posterid);
-//            }
-//        });
     }
 
     public void formPostTitle() throws JSONException {
@@ -320,30 +266,6 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         mProfileCommentView.setLikeCount(likeCount,holder); //sets like count to new total
     }
 
-
-//    /**
-//     * Description: changes image from a string to a bitmap, then setting image
-//     * @param image: image to convert
-//     *
-//     */
-//    public void formatImage(String image){
-//        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-//        mProfileCommentView.setUserImage(bitmap, holder);
-//    }
-
-//    public void getRecyclerView(JSONArray posts, JSONArray images){
-//        mProfileCommentView.setRecyclerView(posts, images);
-//    }
-//
-//    /**
-//     * GETS USER COMMENTS DONT FORGET IT BABY
-//     * @param singleton
-//     * @param userId
-//     */
-//    public void getPosts(MySingleton singleton, final String userId) {
-//        mProfileCommentInteractor.getUserComments(singleton, userId);
-//    }
-
     /**
      *
      * @throws JSONException
@@ -353,13 +275,17 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
             mProfileCommentView.formatImage(profileImage.getString("profileimage"), holder); //formats profile image
         }
         mProfileCommentView.displayImagesListener(holder);
-//        // tapping on any item from the view holder will go to the display post activity
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
-//            }
-//        });
     }
 
+    public void onBindProfileCommentViewHolderAtPosition(ProfileCommentViewHolder profileCommentViewHolder, int i) {
+        ProfileComment profileComment = profileComments.get(i);
+
+        profileCommentViewHolder.setDate(profileComment.getDate())
+                .setLikeCount(profileComment.getLikeCount())
+                .setPostText(profileComment.getPostText())
+                .setPostTitle(profileComment.getPostTitle())
+                .setUserImage(profileComment.getProfileImage())
+                .setUserName(profileComment.getUserName())
+                .setLikeState(profileComment.getLikeState());
+    }
 }
