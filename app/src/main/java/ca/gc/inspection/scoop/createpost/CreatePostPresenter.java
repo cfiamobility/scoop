@@ -7,6 +7,10 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class CreatePostPresenter implements CreatePostContract.Presenter {
+    /**
+     * Implements the Presenter in the CreatePostContract interface to follow MVP architecture.
+     *
+     */
 
     private CreatePostInteractor mInteractor;
     private CreatePostContract.View mView;

@@ -50,6 +50,11 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class EditProfileActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener, EditProfileContract.View {
+	/**
+	 * Implements the View in the EditProfileContract interface to follow MVP architecture.
+	 * Allows the user to edit their profile information such as their first name, last name, address,
+     * and social media.
+	 */
 
     private enum EditTextType {
         POSITION, ADDRESS, DIVISION
@@ -209,10 +214,9 @@ public class EditProfileActivity extends AppCompatActivity implements
 		provinceSpinner.setSelection(0);
 	}
 
-	// Method to fill the existing boxes with information in the database
-	// Runs when edit profile is clicked
-
 	/**
+     * Method to fill the existing boxes with information in the database
+     * Runs when edit profile is clicked
 	 * @param response
 	 */
 	public void setInitialFill(JSONObject response) {
@@ -280,7 +284,8 @@ public class EditProfileActivity extends AppCompatActivity implements
 		}
 	}
 
-	// Method to establish/set up the auto complete text views for position, division and building
+    /** Method to establish/set up the auto complete text views for position, division and building
+     */
 	private void autoComplete() {
 
 		// Autocomplete for position edittext
@@ -299,14 +304,20 @@ public class EditProfileActivity extends AppCompatActivity implements
         textView.addTextChangedListener(new EditProfileTextWatcher(textView, type));
     }
 
-    // Method to setup the front end of autocomplete text view for positions
+    /** Method to setup the front end of autocomplete text view for positions
+     *
+     * @param positionAutoComplete
+     */
     public void setPositionETAdapter(ArrayList<String> positionAutoComplete) {
         //array adapter to set the autocomplete menu
         ArrayAdapter positionAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, positionAutoComplete);
         positionET.setAdapter(positionAdapter);
     }
 
-    // Method to setup the front end of autocomplete text view for building / city / province
+    /** Method to setup the front end of autocomplete text view for building / city / province
+     *
+     * @param buildingsAutoComplete
+     */
     public void setBuildingETAdapter(ArrayList<String> buildingsAutoComplete) {
         // Setting the adapter
         try {
@@ -318,13 +329,19 @@ public class EditProfileActivity extends AppCompatActivity implements
         }
     }
 
+    /** Method to setup the front end of autocomplete text view for division
+     *
+     * @param divisionsAutoComplete
+     */
     public void setDivisionETAdapter(ArrayList<String> divisionsAutoComplete) {
         // Setting up the adapter
         ArrayAdapter divisionAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, divisionsAutoComplete);
         divisionET.setAdapter(divisionAdapter);
     }
 
-	// on item click listener for the office address edittext
+    /** on item click listener for the office address edittext
+     *
+     */
 	private AdapterView.OnItemClickListener autoItemSelectedListener = new AdapterView.OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -473,7 +490,15 @@ public class EditProfileActivity extends AppCompatActivity implements
 		}
 	}
 
-	// General permissions request
+    /**
+     * Receives the permission result. Starts an activity to take a picture if permission was granted
+     * by the user.
+     * Overrides Android Activity method.
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -529,8 +554,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 
         @Override
         public void afterTextChanged(Editable s) {
-            // extra measure to ensure text variable is set when the user is done typing
-            // positionText = textView.getText().toString();
+            // necessary to implement interface
         }
     }
 }

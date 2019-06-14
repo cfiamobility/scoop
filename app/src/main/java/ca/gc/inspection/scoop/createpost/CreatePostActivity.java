@@ -39,6 +39,11 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.View {
+    /**
+     * Implements the View in the CreatePostContract interface to follow MVP architecture.
+     * Allows the user to create a new post by adding a title, text, and using the camera or camera roll
+     * to add an image.
+     */
 
     private static final int TEXT_CHAR_LIMIT = 255;
     private CreatePostContract.Presenter mPresenter;
@@ -143,6 +148,15 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         CameraUtils.takePicture(this);
     }
 
+    /**
+     * Receives the permission granted (or not granted) by the user to start an activity to take a
+     * picture or get an image from the camera roll.
+     * Overrides Android Activity method.
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -165,6 +179,15 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
     }
 
+    /**
+     * Receives the result from the Intent used to take a picture or get an image from the camera roll.
+     * Creates a Bitmap from the image and updates the GUI to display it.
+     * Overrides Android Activity method.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode, resultCode, data);
