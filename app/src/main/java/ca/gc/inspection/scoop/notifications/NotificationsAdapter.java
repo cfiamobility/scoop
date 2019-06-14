@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.notifications;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 
@@ -14,7 +16,12 @@ import org.json.JSONException;
 
 import java.sql.Timestamp;
 
-public class NotificationsAdapter extends RecyclerView.Adapter<NotificationViewHolder> implements NotificationsAdapterController.NotificationAdapterInterface{
+import ca.gc.inspection.scoop.R;
+
+/**
+ * Adapter used by the notifications recycler view
+ */
+public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> implements NotificationsAdapterContract{
     private JSONArray notifications, images;
     private RequestQueue requestQueue;
 
@@ -43,7 +50,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationViewH
      */
     @NonNull
     @Override
-    public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public NotificationsAdapter.NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_notifications, viewGroup, false);
 
         return new NotificationViewHolder(v);
@@ -55,7 +62,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationViewH
      * @param i
      */
     @Override
-    public void onBindViewHolder(@NonNull final NotificationViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull final NotificationsAdapter.NotificationViewHolder holder, int i) {
         NotificationsAdapterController controller = new NotificationsAdapterController(holder, i, this, notifications, images, currentTime, timeType);
         try {
             controller.displayNotifications();
@@ -105,6 +112,28 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationViewH
     @Override
     public int getItemCount() {
         return notifications.length();
+    }
+
+
+    public class NotificationViewHolder extends RecyclerView.ViewHolder{
+        // each data item is just a string in this case
+        ImageView profileImage;
+        TextView fullName, actionType, activityType, time;
+
+
+        /**
+         * Description: Viewholder holds each item in the recycler view and holds each piece that altogether makes the item
+         * @param v: passed in the view from the custom row layout
+         */
+        NotificationViewHolder(View v) {
+            super(v);
+            profileImage = (ImageView) v.findViewById(R.id.profile_image); //instantiating the profile image imageview
+            actionType = (TextView) v.findViewById(R.id.actiontype); //instantiating the action type textview
+            activityType = (TextView) v.findViewById(R.id.activitytype); //instantiating the activity type textview
+            time = (TextView) v.findViewById(R.id.time); //instantiating the time textview
+            fullName = (TextView) v.findViewById(R.id.fullname); //instantiating the full name linearlayout
+        }
+
     }
 
 
