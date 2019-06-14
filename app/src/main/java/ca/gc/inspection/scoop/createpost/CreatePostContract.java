@@ -5,6 +5,10 @@ import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 
 public interface CreatePostContract {
+    /**
+     * Defines the interaction between the View and Presenter of CreatePostContract
+     */
+
     interface View extends BaseView<Presenter> {
 
     }

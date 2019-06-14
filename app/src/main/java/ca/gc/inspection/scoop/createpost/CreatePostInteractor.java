@@ -23,6 +23,15 @@ public class CreatePostInteractor {
         mPresenter = presenter;
     }
 
+    /**
+     * Sends post to database using RequestQueue.
+     *
+     * @param network       An instance of the singleton class which encapsulates the RequestQueue
+     * @param userId        UserId
+     * @param title         Title of the new post
+     * @param text          Text body of the new post
+     * @param imageBitmap   Bitmap in String format
+     */
     public void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
         String url = Config.baseIP + "add-Post";
 
