@@ -10,12 +10,12 @@ import org.json.JSONArray;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
-import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.*;
 
 public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder> {
 
     private JSONArray comments, images;
-    private ProfileCommentPresenter mProfileCommentPresenter;
+    private ProfileCommentContract.Presenter mProfileCommentPresenter;
     private ProfileCommentContract.View mProfileCommentView;
 
     /**
@@ -23,7 +23,8 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
      * @param comments: JSONArray of comments
      * @param images: JSONArray of profile images
      */
-    public ProfileCommentAdapter(JSONArray comments, JSONArray images) {
+    public ProfileCommentAdapter(ProfileCommentContract.Presenter presenter, JSONArray comments, JSONArray images) {
+        mProfileCommentPresenter = presenter;
         this.comments = comments;
         this.images = images;
     }

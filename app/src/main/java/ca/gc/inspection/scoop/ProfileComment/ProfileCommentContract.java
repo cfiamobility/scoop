@@ -54,6 +54,10 @@ public interface ProfileCommentContract {
         void formatDate(String time);
         String checkLikeCount(String likeCount);
         void checkLikeState(String likeState);
+
+        void getUserComments(MySingleton instance, String currentUser);
+
+        void setRecyclerView(JSONArray commentsResponse, JSONArray imagesResponse);
 //        void getRecyclerView(JSONArray posts, JSONArray images);
 //        void getPosts(MySingleton singleton, final String userid);
 //        void getUserComments(final String userid);

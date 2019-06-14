@@ -46,7 +46,7 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     private ProfileCommentInteractor mProfileCommentInteractor;
 
 
-    public ProfileCommentPresenter(ProfileCommentContract.View profileCommentView, JSONArray posts, JSONArray profileImages,
+    public ProfileCommentPresenter(@NonNull ProfileCommentContract.View profileCommentView, JSONArray posts, JSONArray profileImages,
                                    int i, ProfileCommentViewHolder holder){
         mProfileCommentView = profileCommentView;
         try {
@@ -225,6 +225,16 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
             default: mProfileCommentView.setLikeNeutralState(holder);
                 break;
         }
+    }
+
+    @Override
+    public void getUserComments(MySingleton instance, String currentUser) {
+        mProfileCommentInteractor.getUserComments(instance, currentUser);
+    }
+
+    @Override
+    public void setRecyclerView(JSONArray commentsResponse, JSONArray imagesResponse) {
+        mProfileCommentView.setRecyclerView(commentsResponse, imagesResponse);
     }
 
     /**

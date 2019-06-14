@@ -29,6 +29,8 @@ import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.ProfilePost.ProfilePostInteractor;
 import ca.gc.inspection.scoop.R;
 
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,15 +39,14 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ProfileCommentAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
     private MySingleton singleton;
-    private ProfileCommentInteractor mProfileCommentInteractor;
 
     public void setPresenter (ProfileCommentContract.Presenter presenter){
-        mProfileCommentPresenter = presenter;
+        mProfileCommentPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -89,8 +90,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
 //        // After created, the first method is called
 //        profileCommentsController.getUserComments(userid);
 //        interactor.getUserComments(Config.currentUser);
-        mProfileCommentInteractor = new ProfileCommentInteractor(this);
-        mProfileCommentInteractor.getUserComments(MySingleton.getInstance(getContext()), Config.currentUser);
+        mProfileCommentPresenter.getUserComments(MySingleton.getInstance(getContext()), Config.currentUser);
     }
 
     /**
@@ -110,97 +110,10 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
 
         // Setting the custom adapter for the recycler view
         mAdapter = new ProfileCommentAdapter(comments, images);
-        ((ProfileCommentAdapter) mAdapter).setView(this);
+        mAdapter.setView(this);
         commentsRecyclerView.setAdapter(mAdapter);
 
 //        mProfileCommentPresenter.getPosts(MySingleton.getInstance(getContext()), Config.currentUser);
-    }
-
-    /**
-     * FROM ADAPTER
-     */
-
-
-    /**
-     * Sets the post title ("Replying to ..." )
-     * @param postTitle: post title
-     * @param holder: the view holder created
-     */
-    public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
-        holder.postTitle.setText(postTitle);
-    }
-
-    /**
-     *
-     * @param postText
-     * @param holder
-     */
-    public void setPostText(String postText, ProfileCommentViewHolder holder) {
-        holder.postText.setText(postText);
-    }
-
-    /**
-     *
-     * @param image
-     * @param holder
-     */
-    public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
-        Log.i("image", image.toString());
-        holder.profileImage.setImageBitmap(image);
-    }
-
-    /**
-     *
-     * @param userName
-     * @param holder
-     */
-    public void setUserName(String userName, ProfileCommentViewHolder holder) {
-        holder.username.setText(userName);
-    }
-
-    /**
-     *
-     * @param likeCount
-     * @param holder
-     */
-    public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
-        holder.likeCount.setText(likeCount);
-    }
-
-    /**
-     *
-     * @param date
-     * @param holder
-     */
-    public void setDate(String date, ProfileCommentViewHolder holder) {
-        holder.date.setText(date);
-    }
-
-    /**
-     *
-     * @param holder
-     */
-    public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
-        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-        holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
-    }
-
-    /**
-     *
-     * @param holder
-     */
-    public void setLikeNeutralState(ProfileCommentViewHolder holder) {
-        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
-    }
-
-    /**
-     *
-     * @param holder
-     */
-    public void setLikeUpvoteState(ProfileCommentViewHolder holder) {
-        holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
-        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
     }
 
     /**

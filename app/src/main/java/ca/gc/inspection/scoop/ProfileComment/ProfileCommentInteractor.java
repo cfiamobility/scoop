@@ -23,12 +23,13 @@ import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.ProfilePost.ProfilePostContract;
 import ca.gc.inspection.scoop.post;
 
-public class ProfileCommentInteractor {
-//    private ProfileCommentContract.Presenter mProfileCommentPresenter;
-    private ProfileCommentContract.View mProfileCommentView;
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-    public ProfileCommentInteractor(ProfileCommentContract.View view){
-        mProfileCommentView = view;
+public class ProfileCommentInteractor {
+    private ProfileCommentContract.Presenter mProfileCommentPresenter;
+
+    public ProfileCommentInteractor(ProfileCommentContract.Presenter presenter){
+        mProfileCommentPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -44,7 +45,7 @@ public class ProfileCommentInteractor {
                 final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray imagesResponse) {
-                        mProfileCommentView.setRecyclerView(commentsResponse, imagesResponse);
+                        mProfileCommentPresenter.setRecyclerView(commentsResponse, imagesResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override
