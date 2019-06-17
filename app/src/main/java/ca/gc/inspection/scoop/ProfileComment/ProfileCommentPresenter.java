@@ -1,34 +1,16 @@
 package ca.gc.inspection.scoop.ProfileComment;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.View;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.DisplayPostActivity;
-import ca.gc.inspection.scoop.MainActivity;
-import ca.gc.inspection.scoop.MyCamera;
 import ca.gc.inspection.scoop.MySingleton;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -46,10 +28,10 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     @NonNull
     private ProfileCommentContract.View mProfileCommentView;
     private ProfileCommentInteractor mProfileCommentInteractor;
+    private JSONArray mComments, mImages;
 
 
-    public ProfileCommentPresenter(@NonNull ProfileCommentContract.View profileCommentView, JSONArray posts, JSONArray profileImages,
-                                   int i){
+    public ProfileCommentPresenter(@NonNull ProfileCommentContract.View profileCommentView){
         mProfileCommentView = checkNotNull(profileCommentView);
         try {
             this.post = posts.getJSONObject(i);
@@ -59,8 +41,17 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         }
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
 
-        mProfileCommentView.setPresenter(checkNotNull(this));
         mProfileCommentInteractor = new ProfileCommentInteractor(this);
+    }
+    /**
+     *
+     * @throws JSONException
+     */
+    public void displayImages() throws JSONException {
+        if(profileImage != null) { // null check to see if there are images
+            mProfileCommentView.formatImage(profileImage.getString("profileimage"), holder); //formats profile image
+        }
+        mProfileCommentView.setDisplayImagesListener(holder);
     }
 
     /**
@@ -76,7 +67,7 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         formatDate(post.getString("createddate"));
         checkFullName();
         checkLikeState(likeProperties.get("liketype"));
-        mProfileCommentView.displayPostListener(holder, activityid, posterid);
+        mProfileCommentView.setDisplayPostListener(holder, activityid, posterid);
     }
 
     public void formPostTitle() throws JSONException {
@@ -121,23 +112,6 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     }
 
     /**
-     * Description: formats date accordingly
-     * @param time
-     */
-    public void formatDate(String time){
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
-            Date parsedDate = dateFormat.parse(time); //parses the created date to be in specified date format
-            DateFormat properDateFormat = new SimpleDateFormat("MM-dd-yy"); //formats the date to be how we want it to output
-            mProfileCommentView.setDate(properDateFormat.format(parsedDate),holder);
-        }catch(Exception e){
-            e.printStackTrace();
-            mProfileCommentView.hideDate(holder);
-        }
-    }
-
-
-    /**
      * Description: initial setting of likeCount and checks if likeCount is null
      * @param likeCount: the number of likes on a post
      * @return the proper like count
@@ -173,13 +147,13 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     }
 
     @Override
-    public void getUserComments(MySingleton instance, String currentUser) {
-        mProfileCommentInteractor.getUserComments(instance, currentUser);
+    public void loadUserCommentsAndImages(MySingleton instance, String currentUser) {
+        mProfileCommentInteractor.getUserCommentsAndImages(instance, currentUser);
     }
 
-    @Override
-    public void setRecyclerView(JSONArray commentsResponse, JSONArray imagesResponse) {
-        mProfileCommentView.setRecyclerView(commentsResponse, imagesResponse);
+    public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
+        mComments = commentsResponse;
+        mImages = imagesResponse;
     }
 
     /**
@@ -265,17 +239,6 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         mProfileCommentView.setLikeCount(likeCount,holder); //sets like count to new total
     }
 
-    /**
-     *
-     * @throws JSONException
-     */
-    public void displayImages() throws JSONException {
-        if(profileImage != null) { // null check to see if there are images
-            mProfileCommentView.formatImage(profileImage.getString("profileimage"), holder); //formats profile image
-        }
-        mProfileCommentView.displayImagesListener(holder);
-    }
-
     public void onBindProfileCommentViewHolderAtPosition(ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i) {
         ProfileComment profileComment = profileComments.get(i);
 
@@ -286,5 +249,16 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
                 .setUserImage(profileComment.getProfileImage())
                 .setUserName(profileComment.getUserName())
                 .setLikeState(profileComment.getLikeState());
+    }
+
+    /**
+     * Gets the item Count of the comments JSONArray
+     * @return the length
+     */
+    @Override
+    public int getItemCount() {
+        if (mComments == null)
+            return 0;
+        return mComments.length();
     }
 }

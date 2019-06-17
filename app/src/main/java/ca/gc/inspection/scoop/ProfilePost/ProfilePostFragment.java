@@ -176,14 +176,8 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         holder.date.setVisibility(View.GONE);
     }
 
-
-    public void formatImage(String image, ProfileCommentViewHolder holder){
-        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        setUserImage(bitmap, holder);
-    }
-
 //    @Override
-//    public void displayPostListener(ProfilePostViewHolder holder){
+//    public void setDisplayPostListener(ProfilePostViewHolder holder){
 //        // to get the options menu to appear
 //        holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
 //            @Override

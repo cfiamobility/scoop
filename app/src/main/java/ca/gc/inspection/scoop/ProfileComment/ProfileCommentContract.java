@@ -20,29 +20,25 @@ import ca.gc.inspection.scoop.base.BaseView;
 public interface ProfileCommentContract {
 
     interface View extends BaseView<Presenter> {
-        void hideDate(ProfileCommentViewHolder holder);
-        void formatImage(String image, ProfileCommentViewHolder holder);
-        void setRecyclerView(JSONArray comments, JSONArray images);
-        void displayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid);
-        void displayImagesListener(ProfileCommentViewHolder holder);
+        void setDisplayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid);
+        void setDisplayImagesListener(ProfileCommentViewHolder holder);
 
 //        MySingleton getSingleton();
 
         interface ViewHolder {
 
             ProfileCommentContract.View.ViewHolder setPostTitle(String postTitle);
-
             ProfileCommentContract.View.ViewHolder setPostText(String postText);
-
             ProfileCommentContract.View.ViewHolder setUserImage(Bitmap image);
-
             ProfileCommentContract.View.ViewHolder setUserName(String userName);
-
             ProfileCommentContract.View.ViewHolder setLikeCount(String likeCount);
-
             ProfileCommentContract.View.ViewHolder setDate(String date);
-
             ProfileCommentContract.View.ViewHolder setLikeState(LikeState likeState);
+
+            void hideDate();
+            void formatImage(String image);
+
+            void formatDate(String time);
         }
 
     }
@@ -59,16 +55,17 @@ public interface ProfileCommentContract {
 
         String checkFirstName(String firstName);
         String checkLastName(String lastName);
-        void formatDate(String time);
         String checkLikeCount(String likeCount);
         void checkLikeState(String likeState);
 
-        void getUserComments(MySingleton instance, String currentUser);
+        void loadUserCommentsAndImages(MySingleton instance, String currentUser);
 
         void setRecyclerView(JSONArray commentsResponse, JSONArray imagesResponse);
 
         void onBindProfileCommentViewHolderAtPosition(
                 ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
+
+        int getItemCount();
 //        void getRecyclerView(JSONArray posts, JSONArray images);
 //        void getPosts(MySingleton singleton, final String userid);
 //        void getUserComments(final String userid);

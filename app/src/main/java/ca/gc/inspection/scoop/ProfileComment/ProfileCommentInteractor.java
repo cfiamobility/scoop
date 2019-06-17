@@ -26,9 +26,9 @@ import ca.gc.inspection.scoop.post;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfileCommentInteractor {
-    private ProfileCommentContract.Presenter mProfileCommentPresenter;
+    private ProfileCommentPresenter mProfileCommentPresenter;
 
-    public ProfileCommentInteractor(ProfileCommentContract.Presenter presenter){
+    public ProfileCommentInteractor(ProfileCommentPresenter presenter){
         mProfileCommentPresenter = checkNotNull(presenter);
     }
 
@@ -36,7 +36,7 @@ public class ProfileCommentInteractor {
      * HTTPRequests for comments and images
      * @param userid: userid
      */
-    public void getUserComments(MySingleton singleton, final String userid) {
+    public void getUserCommentsAndImages(MySingleton singleton, final String userid) {
         String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
         JsonArrayRequest commentRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -45,7 +45,7 @@ public class ProfileCommentInteractor {
                 final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray imagesResponse) {
-                        mProfileCommentPresenter.setRecyclerView(commentsResponse, imagesResponse);
+                        mProfileCommentPresenter.setData(commentsResponse, imagesResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override

@@ -3,6 +3,10 @@ package ca.gc.inspection.scoop.ProfileComment;
 import android.graphics.Bitmap;
 
 public class ProfileComment {
+    /**
+     * Data class which stores information for a single profile comment
+     */
+
     private String mUserName, mDate, mPostText, mPostTitle, mLikeCount;
     private Bitmap mProfileImage;
     private LikeState mLikeState;

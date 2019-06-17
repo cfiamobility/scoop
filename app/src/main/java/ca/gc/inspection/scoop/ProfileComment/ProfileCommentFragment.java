@@ -67,7 +67,9 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
         Bundle bundle = getArguments();
-        String userid = bundle.getString("userid");
+        String userid = bundle.getString("userid"); // TODO: can we delete unused userid var?
+        setPresenter(new ProfileCommentPresenter(this));
+        mProfileCommentPresenter.loadUserCommentsAndImages(MySingleton.getInstance(getContext()), Config.currentUser);
         return view;
     }
 
@@ -79,16 +81,13 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mProfileCommentPresenter.getUserComments(MySingleton.getInstance(getContext()), Config.currentUser);
+        setRecyclerView();
     }
 
     /**
-     * Sets the recycler view, after initializing and setting up the adapter
-     * @param comments: JSONArray of the comments of that user
-     * @param images: JSONArray of the profile pictures of that user
+     * Sets the recycler view
      */
-    @Override
-    public void setRecyclerView(JSONArray comments, JSONArray images) {
+    public void setRecyclerView() {
         // Initializing the recycler view
         commentsRecyclerView = view.findViewById(R.id.fragment_profile_comments_rv);
         commentsRecyclerView.setHasFixedSize(true);
@@ -98,23 +97,15 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         commentsRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setting the custom adapter for the recycler view
-        mAdapter = new ProfileCommentAdapter(comments, images);
+        mAdapter = new ProfileCommentAdapter(this, mProfileCommentPresenter);
         mAdapter.setView(this);
         commentsRecyclerView.setAdapter(mAdapter);
 
 //        mProfileCommentPresenter.getPosts(MySingleton.getInstance(getContext()), Config.currentUser);
     }
 
-    /**
-     *
-     * @param holder
-     */
-    public void hideDate(ProfileCommentViewHolder holder) {
-        holder.date.setVisibility(View.GONE);
-    }
 
-
-    public void displayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid){
+    public void setDisplayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid){
 
         holder.upvote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +129,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
             }
         });
 
+        // TODO: remove duplicated display post activity intent
         // tapping on any item from the view holder will go to the display post activity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +154,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         });
     }
 
-    public void displayImagesListener(ProfileCommentViewHolder holder){
+    public void setDisplayImagesListener(ProfileCommentViewHolder holder){
         // tapping on any item from the view holder will go to the display post activity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,15 +162,5 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
                 v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
             }
         });
-    }
-
-    /**
-     //     * Description: changes image from a string to a bitmap, then setting image
-     //     * @param image: image to convert
-     //     *
-     //     */
-    public void formatImage(String image, ProfileCommentViewHolder holder){
-        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        holder.setUserImage(bitmap);
     }
 }

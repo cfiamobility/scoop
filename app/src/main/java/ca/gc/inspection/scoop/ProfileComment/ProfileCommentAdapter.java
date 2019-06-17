@@ -14,19 +14,19 @@ import ca.gc.inspection.scoop.*;
 
 public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder> {
 
-    private JSONArray comments, images;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
-    private ProfileCommentContract.View mProfileCommentView;
+    private ProfileCommentFragment mProfileCommentView;
+
+    public void setView (ProfileCommentFragment profileCommentView){
+        mProfileCommentView = profileCommentView;
+    }
 
     /**
      * Constructor for the adapter
-     * @param comments: JSONArray of comments
-     * @param images: JSONArray of profile images
      */
-    public ProfileCommentAdapter(ProfileCommentContract.Presenter presenter, JSONArray comments, JSONArray images) {
+    public ProfileCommentAdapter(ProfileCommentFragment profileCommentView, ProfileCommentContract.Presenter presenter) {
+        mProfileCommentView = profileCommentView;
         mProfileCommentPresenter = presenter;
-        this.comments = comments;
-        this.images = images;
     }
 
     /**
@@ -63,17 +63,9 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
         mProfileCommentPresenter.onBindProfileCommentViewHolderAtPosition(profileCommentViewHolder, i);
     }
 
-    /**
-     * Gets the item Count of the comments JSONArray
-     * @return the length
-     */
-    // TODO: if null then return 0;
+    @Override
     public int getItemCount() {
-        return comments.length();
-    }
-
-    public void setView (ProfileCommentContract.View profileCommentView){
-        mProfileCommentView = profileCommentView;
+        return mProfileCommentPresenter.getItemCount();
     }
 
 }
