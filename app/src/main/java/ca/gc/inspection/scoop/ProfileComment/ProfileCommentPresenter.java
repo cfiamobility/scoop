@@ -39,7 +39,6 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfileCommentPresenter implements ProfileCommentContract.Presenter {
     private JSONObject post, profileImage;
-    private ProfileCommentViewHolder holder;
     private Map<String, String> likeProperties;
     // TODO presenter stores all the adapter data
     private List<ProfileComment> profileComments;
@@ -50,7 +49,7 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
 
 
     public ProfileCommentPresenter(@NonNull ProfileCommentContract.View profileCommentView, JSONArray posts, JSONArray profileImages,
-                                   int i, ProfileCommentViewHolder holder){
+                                   int i){
         mProfileCommentView = checkNotNull(profileCommentView);
         try {
             this.post = posts.getJSONObject(i);
@@ -58,7 +57,6 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        this.holder = holder;
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
 
         mProfileCommentView.setPresenter(checkNotNull(this));
@@ -159,14 +157,15 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
      * Description: checks likeType currently on the post and sets upvote and downvote buttons accordingly
      * @param likeState: like type of post
      */
-    public void checkLikeState(String likeState){
-        Log.i("likestate", likeState);
+    public void checkLikeState(LikeState likeState){
+        Log.i("likestate", likeState.toString());
+
         switch(likeState){
-            case "1": mProfileCommentView.setLikeUpvoteState(holder);
+            case UPVOTE: mProfileCommentView.setLikeUpvoteState(holder);
                 break;
-            case "-1": mProfileCommentView.setLikeDownvoteState(holder);
+            case DOWNVOTE: mProfileCommentView.setLikeDownvoteState(holder);
                 break;
-            case "0": mProfileCommentView.setLikeNeutralState(holder);
+            case NEUTRAL: mProfileCommentView.setLikeNeutralState(holder);
                 break;
             default: mProfileCommentView.setLikeNeutralState(holder);
                 break;
@@ -277,7 +276,7 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         mProfileCommentView.displayImagesListener(holder);
     }
 
-    public void onBindProfileCommentViewHolderAtPosition(ProfileCommentViewHolder profileCommentViewHolder, int i) {
+    public void onBindProfileCommentViewHolderAtPosition(ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i) {
         ProfileComment profileComment = profileComments.get(i);
 
         profileCommentViewHolder.setDate(profileComment.getDate())

@@ -109,7 +109,7 @@ public class ProfileCommentInteractor {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                Log.i("hello", "cmoff");
+                Log.i("ProfileCommentInteractor", "getParams for updateLikes");
                 params.put("liketype", likeProperties.get("liketype"));
                 params.put("activityid",activityid);
                 params.put("posterid", posterid);
@@ -181,7 +181,5 @@ public class ProfileCommentInteractor {
 //        singleton.addToRequestQueue(request);
 
     }
-
-
 
 }

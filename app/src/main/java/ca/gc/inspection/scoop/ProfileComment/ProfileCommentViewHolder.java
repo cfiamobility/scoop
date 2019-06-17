@@ -17,7 +17,7 @@ import ca.gc.inspection.scoop.*;
  * related to "posting" actions. Parent View Holder for ProfilePostViewHolder.
  */
 
-public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements ProfileCommentViewHolderContract {
+public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements ProfileCommentContract.View.ViewHolder {
 
     public TextView username, date, postText, postTitle, likeCount;
     public ImageView profileImage, upvote, downvote;
@@ -39,7 +39,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param postTitle: post title
      */
     @Override
-    public ProfileCommentViewHolder setPostTitle(String postTitle) {
+    public ProfileCommentContract.View.ViewHolder setPostTitle(String postTitle) {
         this.postTitle.setText(postTitle);
         return this;
     }
@@ -49,7 +49,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param postText
      */
     @Override
-    public ProfileCommentViewHolder setPostText(String postText) {
+    public ProfileCommentContract.View.ViewHolder setPostText(String postText) {
         this.postText.setText(postText);
         return this;
     }
@@ -59,7 +59,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param image
      */
     @Override
-    public ProfileCommentViewHolder setUserImage(Bitmap image) {
+    public ProfileCommentContract.View.ViewHolder setUserImage(Bitmap image) {
         Log.i("image", image.toString());
         profileImage.setImageBitmap(image);
         return this;
@@ -70,7 +70,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param userName
      */
     @Override
-    public ProfileCommentViewHolder setUserName(String userName) {
+    public ProfileCommentContract.View.ViewHolder setUserName(String userName) {
         username.setText(userName);
         return this;
     }
@@ -80,7 +80,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param likeCount
      */
     @Override
-    public ProfileCommentViewHolder setLikeCount(String likeCount) {
+    public ProfileCommentContract.View.ViewHolder setLikeCount(String likeCount) {
         this.likeCount.setText(likeCount);
         return this;
     }
@@ -90,13 +90,13 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param date
      */
     @Override
-    public ProfileCommentViewHolder setDate(String date) {
+    public ProfileCommentContract.View.ViewHolder setDate(String date) {
         this.date.setText(date);
         return this;
     }
 
     @Override
-    public ProfileCommentViewHolder setLikeState(LikeState likeState) {
+    public ProfileCommentContract.View.ViewHolder setLikeState(LikeState likeState) {
         switch (likeState) {
             case UPVOTE:
                 setLikeUpvoteState();

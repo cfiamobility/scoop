@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.ProfileComment;
 
 
 import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,23 +20,30 @@ import ca.gc.inspection.scoop.base.BaseView;
 public interface ProfileCommentContract {
 
     interface View extends BaseView<Presenter> {
-        void setPostText(String postText, ProfileCommentViewHolder holder);
-        void setPostTitle(String postTitle, ProfileCommentViewHolder holder);
-        void setUserName(String userName, ProfileCommentViewHolder holder);
-        void setLikeCount(String likeCount, ProfileCommentViewHolder holder);
-        void setDate(String date, ProfileCommentViewHolder holder);
-        void setLikeNeutralState(ProfileCommentViewHolder holder);
-        void setLikeUpvoteState(ProfileCommentViewHolder holder);
-        void setLikeDownvoteState(ProfileCommentViewHolder holder);
         void hideDate(ProfileCommentViewHolder holder);
-        void setUserImage(Bitmap image, ProfileCommentViewHolder holder);
-
         void formatImage(String image, ProfileCommentViewHolder holder);
         void setRecyclerView(JSONArray comments, JSONArray images);
         void displayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid);
         void displayImagesListener(ProfileCommentViewHolder holder);
 
 //        MySingleton getSingleton();
+
+        interface ViewHolder {
+
+            ProfileCommentContract.View.ViewHolder setPostTitle(String postTitle);
+
+            ProfileCommentContract.View.ViewHolder setPostText(String postText);
+
+            ProfileCommentContract.View.ViewHolder setUserImage(Bitmap image);
+
+            ProfileCommentContract.View.ViewHolder setUserName(String userName);
+
+            ProfileCommentContract.View.ViewHolder setLikeCount(String likeCount);
+
+            ProfileCommentContract.View.ViewHolder setDate(String date);
+
+            ProfileCommentContract.View.ViewHolder setLikeState(LikeState likeState);
+        }
 
     }
 
@@ -58,6 +66,9 @@ public interface ProfileCommentContract {
         void getUserComments(MySingleton instance, String currentUser);
 
         void setRecyclerView(JSONArray commentsResponse, JSONArray imagesResponse);
+
+        void onBindProfileCommentViewHolderAtPosition(
+                ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
 //        void getRecyclerView(JSONArray posts, JSONArray images);
 //        void getPosts(MySingleton singleton, final String userid);
 //        void getUserComments(final String userid);

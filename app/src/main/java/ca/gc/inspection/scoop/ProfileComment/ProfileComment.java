@@ -6,7 +6,6 @@ public class ProfileComment {
     private String mUserName, mDate, mPostText, mPostTitle, mLikeCount;
     private Bitmap mProfileImage;
     private LikeState mLikeState;
-// TODO upvote and downvote state variable
 
     ProfileComment(String userName, String date, String postText, String postTitle, String likeCount, Bitmap profileImage, LikeState likeState) {
         mUserName = userName;

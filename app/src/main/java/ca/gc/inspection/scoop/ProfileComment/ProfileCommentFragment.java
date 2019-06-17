@@ -35,7 +35,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProfileCommentFragment extends Fragment {
+public class ProfileCommentFragment extends Fragment implements ProfileCommentContract.View {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
@@ -43,7 +43,6 @@ public class ProfileCommentFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
-    private MySingleton singleton;
 
     public void setPresenter (@NonNull ProfileCommentContract.Presenter presenter){
         mProfileCommentPresenter = checkNotNull(presenter);
@@ -180,6 +179,6 @@ public class ProfileCommentFragment extends Fragment {
      //     */
     public void formatImage(String image, ProfileCommentViewHolder holder){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        setUserImage(bitmap, holder);
+        holder.setUserImage(bitmap);
     }
 }
