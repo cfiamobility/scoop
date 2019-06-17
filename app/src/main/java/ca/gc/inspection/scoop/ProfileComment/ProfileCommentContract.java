@@ -20,10 +20,8 @@ import ca.gc.inspection.scoop.base.BaseView;
 public interface ProfileCommentContract {
 
     interface View extends BaseView<Presenter> {
-        void setDisplayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid);
-        void setDisplayImagesListener(ProfileCommentViewHolder holder);
-
-//        MySingleton getSingleton();
+        void setDisplayPostListener(ProfileCommentContract.View.ViewHolder holder, String activityid, String posterid);
+        void setDisplayImagesListener(ProfileCommentContract.View.ViewHolder holder);
 
         interface ViewHolder {
 
@@ -37,7 +35,6 @@ public interface ProfileCommentContract {
 
             void hideDate();
             void formatImage(String image);
-
             void formatDate(String time);
         }
 
@@ -66,12 +63,5 @@ public interface ProfileCommentContract {
                 ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
 
         int getItemCount();
-//        void getRecyclerView(JSONArray posts, JSONArray images);
-//        void getPosts(MySingleton singleton, final String userid);
-//        void getUserComments(final String userid);
-
-//        void setPresenterView (ProfileCommentContract.View profileCommentView);
-//        ProfileCommentContract.View getPresenterView ();
-//        void setPresenterInteractor (ProfileCommentInteractor profileCommentInteractor);
     }
 }

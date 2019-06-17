@@ -100,14 +100,13 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         mAdapter = new ProfileCommentAdapter(this, mProfileCommentPresenter);
         mAdapter.setView(this);
         commentsRecyclerView.setAdapter(mAdapter);
-
-//        mProfileCommentPresenter.getPosts(MySingleton.getInstance(getContext()), Config.currentUser);
     }
 
 
-    public void setDisplayPostListener(ProfileCommentViewHolder holder, String activityid, String posterid){
+    public void setDisplayPostListener(ProfileCommentContract.View.ViewHolder holder, String activityid, String posterid){
 
-        holder.upvote.setOnClickListener(new View.OnClickListener() {
+        // TODO: determine better practice than casting interface to an implementation
+        ((ProfileCommentViewHolder) holder).upvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
@@ -118,7 +117,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
             }
         });
 
-        holder.downvote.setOnClickListener(new View.OnClickListener() {
+        ((ProfileCommentViewHolder) holder).downvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
@@ -129,34 +128,29 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
             }
         });
 
-        // TODO: remove duplicated display post activity intent
-        // tapping on any item from the view holder will go to the display post activity
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
-            }
-        });
-
         // tapping on profile picture will bring user to poster's profile page
-        holder.profileImage.setOnClickListener(new View.OnClickListener() {
+        ((ProfileCommentViewHolder) holder).profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.otherUserClicked(posterid);
             }
         });
 
-        holder.username.setOnClickListener(new View.OnClickListener() {
+        ((ProfileCommentViewHolder) holder).username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.otherUserClicked(posterid);
             }
         });
+
+        // TODO: remove duplicated display post activity intent
+        setDisplayImagesListener(holder);
     }
 
-    public void setDisplayImagesListener(ProfileCommentViewHolder holder){
+    public void setDisplayImagesListener(ProfileCommentContract.View.ViewHolder holder){
         // tapping on any item from the view holder will go to the display post activity
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        // TODO: determine better practice than casting interface to an implementation
+        ((ProfileCommentViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));

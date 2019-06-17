@@ -31,14 +31,9 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     private JSONArray mComments, mImages;
 
 
-    public ProfileCommentPresenter(@NonNull ProfileCommentContract.View profileCommentView){
-        mProfileCommentView = checkNotNull(profileCommentView);
-        try {
-            this.post = posts.getJSONObject(i);
-            this.profileImage = profileImages.getJSONObject(i);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewContract){
+        mProfileCommentView = checkNotNull(viewContract);
+
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
 
         mProfileCommentInteractor = new ProfileCommentInteractor(this);
@@ -47,40 +42,44 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
      *
      * @throws JSONException
      */
-    public void displayImages() throws JSONException {
+    public void displayProfileCommentImages(ProfileCommentContract.View.ViewHolder viewHolderContract) throws JSONException {
         if(profileImage != null) { // null check to see if there are images
-            mProfileCommentView.formatImage(profileImage.getString("profileimage"), holder); //formats profile image
+            viewHolderContract.formatImage(profileImage.getString("profileimage")); //formats profile image
         }
-        mProfileCommentView.setDisplayImagesListener(holder);
+        mProfileCommentView.setDisplayImagesListener(viewHolderContract);
     }
+
+    public void displayProfileCommentTitle(ProfileCommentContract.View.ViewHolder viewHolderContract) throws JSONException {
+        viewHolderContract.setPostTitle("Replying to " + post.getString("postfirstname") + " " + post.getString("postlastname") + "'s post");
+    }
+
 
     /**
      * Description: main method to display a single post
      * @throws JSONException
      */
-    public void displayPost() throws JSONException {
+    public void displayProfileComment(ProfileCommentContract.View.ViewHolder viewHolderContract, int i) throws JSONException {
         final String activityid = post.getString("activityid");
         final String posterid = post.getString("userid");
         likeProperties.put("liketype", post.getString("liketype")); //puts liketype into properties map
         likeProperties.put("likecount", checkLikeCount(post.getString("likecount"))); //puts likecount into properties map
-        mProfileCommentView.setPostText(post.getString("posttext"), holder);
-        formatDate(post.getString("createddate"));
+        viewHolderContract.setPostText(post.getString("posttext"));
+        viewHolderContract.formatDate(post.getString("createddate"));
         checkFullName();
         checkLikeState(likeProperties.get("liketype"));
-        mProfileCommentView.setDisplayPostListener(holder, activityid, posterid);
-    }
+        mProfileCommentView.setDisplayPostListener(viewHolderContract, activityid, posterid);
 
-    public void formPostTitle() throws JSONException {
-        mProfileCommentView.setPostTitle("Replying to " + post.getString("postfirstname") + " " + post.getString("postlastname") + "'s post", holder);
+        displayProfileCommentImages(viewHolderContract);
+        displayProfileCommentTitle(viewHolderContract);
     }
 
     /**
      * Description: checks to see if full name is valid before setting name
      * @throws JSONException
      */
-    public void checkFullName() throws JSONException {
+    public void checkFullName(ProfileCommentContract.View.ViewHolder viewHolderContract) throws JSONException {
         String fullName = checkFirstName(post.getString("firstname")) + checkLastName(post.getString("lastname"));
-        mProfileCommentView.setUserName(fullName, holder);
+        viewHolderContract.setUserName(fullName);
     }
 
     /**
@@ -154,6 +153,14 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
         mComments = commentsResponse;
         mImages = imagesResponse;
+
+        // TODO: parse JSON comments/images data and store in List of ProfileComment data objects
+//        try {
+//            this.post = posts.getJSONObject(i);
+//            this.profileImage = profileImages.getJSONObject(i);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**
@@ -239,16 +246,18 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         mProfileCommentView.setLikeCount(likeCount,holder); //sets like count to new total
     }
 
-    public void onBindProfileCommentViewHolderAtPosition(ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i) {
+    public void onBindProfileCommentViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderContract, int i) {
         ProfileComment profileComment = profileComments.get(i);
 
-        profileCommentViewHolder.setDate(profileComment.getDate())
+        viewHolderContract.setDate(profileComment.getDate())
                 .setLikeCount(profileComment.getLikeCount())
                 .setPostText(profileComment.getPostText())
                 .setPostTitle(profileComment.getPostTitle())
                 .setUserImage(profileComment.getProfileImage())
                 .setUserName(profileComment.getUserName())
                 .setLikeState(profileComment.getLikeState());
+
+        displayProfileComment(viewHolderContract, i);
     }
 
     /**

@@ -6,12 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONArray;
-
-import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.MySingleton;
-import ca.gc.inspection.scoop.*;
-
 public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder> {
 
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
@@ -50,16 +44,6 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
      */
     @Override
     public void onBindViewHolder(@NonNull ProfileCommentViewHolder profileCommentViewHolder, int i) {
-        //TODO remove commented lines
-//        mProfileCommentPresenter = new ProfileCommentPresenter(mProfileCommentView, comments, images, i, profileCommentViewHolder);
-//        try {
-//            mProfileCommentPresenter.displayPost();
-//            mProfileCommentPresenter.displayImages();
-//            mProfileCommentPresenter.formPostTitle();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
         mProfileCommentPresenter.onBindProfileCommentViewHolderAtPosition(profileCommentViewHolder, i);
     }
 
