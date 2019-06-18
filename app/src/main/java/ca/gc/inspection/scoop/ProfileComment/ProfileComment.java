@@ -108,7 +108,7 @@ public class ProfileComment {
         }
     }
 
-    public String getProfileImage() {
+    public String getProfileImageString() {
         try {
             return mImage.getString(PROFILE_COMMENT_PROFILE_IMAGE_KEY);
         }
@@ -129,7 +129,13 @@ public class ProfileComment {
     }
 
     public LikeState getLikeState() {
-        // TODO refactor
-        return mLikeState;
+        try {
+            int likeTypeInteger = mComment.getInt(PROFILE_COMMENT_POST_LIKE_TYPE_KEY);
+            return LikeState.valueOf(likeTypeInteger);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return LikeState.NEUTRAL;
+        }
     }
 }

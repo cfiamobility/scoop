@@ -6,9 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder> {
+public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder>
+    implements ProfileCommentContract.View.Adapter {
 
-    private ProfileCommentContract.Presenter mProfileCommentPresenter;
+    private ProfileCommentContract.Presenter.AdapterAPI mProfileCommentPresenter;
     private ProfileCommentFragment mProfileCommentView;
 
     public void setView (ProfileCommentFragment profileCommentView){
@@ -18,7 +19,7 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     /**
      * Constructor for the adapter
      */
-    public ProfileCommentAdapter(ProfileCommentFragment profileCommentView, ProfileCommentContract.Presenter presenter) {
+    public ProfileCommentAdapter(ProfileCommentFragment profileCommentView, ProfileCommentContract.Presenter.AdapterAPI presenter) {
         mProfileCommentView = profileCommentView;
         mProfileCommentPresenter = presenter;
     }

@@ -85,6 +85,22 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      */
     @Override
     public ProfileCommentContract.View.ViewHolder setLikeCount(String likeCount) {
+        // TODO refactor
+//        /**
+//         * Description: initial setting of likeCount and checks if likeCount is null
+//         * @param likeCount: the number of likes on a post
+//         * @return the proper like count
+//         */
+//        public String checkLikeCount(String likeCount){
+//            String defaultCount = "0";
+//            if(likeCount.equals("null")){
+//                mProfileCommentView.setLikeCount(defaultCount, holder);
+//                return defaultCount;
+//            }else{
+//                mProfileCommentView.setLikeCount(likeCount, holder);
+//                return likeCount;
+//            }
+//        }
         this.likeCount.setText(likeCount);
         return this;
     }
@@ -132,8 +148,9 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
     }
 
     @Override
-    public void hideDate() {
+    public ProfileCommentContract.View.ViewHolder hideDate() {
         date.setVisibility(View.GONE);
+        return this;
     }
 
     /**
@@ -141,9 +158,10 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param image: image to convert
      */
     @Override
-    public void formatImage(String image){
+    public ProfileCommentContract.View.ViewHolder setUserImageFromString(String image){
         Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
         setUserImage(bitmap);
+        return this;
     }
 
     /**
@@ -151,15 +169,15 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      * @param time
      */
     @Override
-    public void formatDate(String time){
+    public ProfileCommentContract.View.ViewHolder formatDate(String time){
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(time); //parses the created date to be in specified date format
             DateFormat properDateFormat = new SimpleDateFormat("MM-dd-yy"); //formats the date to be how we want it to output
-            setDate(properDateFormat.format(parsedDate));
+            return setDate(properDateFormat.format(parsedDate));
         }catch(Exception e){
             e.printStackTrace();
-            hideDate();
+            return hideDate();
         }
     }
 }

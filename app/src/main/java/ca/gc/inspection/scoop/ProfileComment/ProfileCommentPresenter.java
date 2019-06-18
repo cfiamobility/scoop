@@ -23,7 +23,10 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * related to "posting" actions. Parent presenter for ProfilePostPresenter.
  */
 
-public class ProfileCommentPresenter implements ProfileCommentContract.Presenter {
+public class ProfileCommentPresenter implements
+        ProfileCommentContract.Presenter,
+        ProfileCommentContract.Presenter.AdapterAPI,
+        ProfileCommentContract.Presenter.ViewHolderAPI {
     // TODO: like properties for each post
     private Map<String, String> likeProperties;
     private ArrayList<ProfileComment> mProfileComments;
@@ -40,13 +43,10 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
 
         likeProperties = new HashMap<>(); //map of liketype and likecount of specified post
     }
-    /**
-     *
-     * @throws JSONException
-     */
+
     public void displayProfileCommentImages(ProfileCommentContract.View.ViewHolder viewHolderInterface, ProfileComment profileComment) {
-        if(profileComment.getProfileImage() != null) { // null check to see if there are images
-            viewHolderInterface.formatImage(profileComment.getProfileImage()); //formats profile image
+        if(profileComment.getProfileImageString() != null) { // null check to see if there are images
+            viewHolderInterface.setUserImageFromString(profileComment.getProfileImageString()); //formats profile image
         }
         mProfileCommentView.setDisplayImagesListener(viewHolderInterface);
     }
@@ -64,8 +64,6 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         ProfileComment profileComment = mProfileComments.get(i);
         final String activityid = profileComment.getActivityId();
         final String posterid = profileComment.getUserId();
-        likeProperties.put(PROFILE_COMMENT_POST_LIKE_TYPE_KEY, profileComment.getLikeState(PROFILE_COMMENT_POST_LIKE_TYPE_KEY)); //puts liketype into properties map
-        likeProperties.put(PROFILE_COMMENT_POST_LIKE_COUNT_KEY, checkLikeCount(profileComment.getLikeCount())); //puts likecount into properties map
         viewHolderInterface.setPostText(profileComment.getPostText());
         viewHolderInterface.formatDate(profileComment.getDate());
         viewHolderInterface.setUserName(getValidFullName(profileComment));
@@ -112,23 +110,6 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
         }
     }
 
-    /**
-     * Description: initial setting of likeCount and checks if likeCount is null
-     * @param likeCount: the number of likes on a post
-     * @return the proper like count
-     */
-    public String checkLikeCount(String likeCount){
-        // TODO refactor
-        String defaultCount = "0";
-        if(likeCount.equals("null")){
-            mProfileCommentView.setLikeCount(defaultCount, holder);
-            return defaultCount;
-        }else{
-            mProfileCommentView.setLikeCount(likeCount, holder);
-            return likeCount;
-        }
-    }
-
     @Override
     public void loadUserCommentsAndImages(MySingleton instance, String currentUser) {
         mProfileCommentInteractor.getUserCommentsAndImages(instance, currentUser);
@@ -137,14 +118,8 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
         mComments = commentsResponse;
         mImages = imagesResponse;
+        mProfileComments = new ArrayList<>();
 
-        // TODO: parse JSON comments/images data and store in List of ProfileComment data objects
-//        try {
-//            this.post = posts.getJSONObject(i);
-//            this.profileImage = profileImages.getJSONObject(i);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
         if ((commentsResponse.length() != imagesResponse.length()))
             throw new AssertionError("Error: length of commentsReponse != imagesResponse");
 
@@ -255,8 +230,8 @@ public class ProfileCommentPresenter implements ProfileCommentContract.Presenter
                 .setLikeCount(profileComment.getLikeCount())
                 .setPostText(profileComment.getPostText())
                 .setPostTitle(profileComment.getPostTitle())
-                .setUserImage(profileComment.getProfileImage())
-                .setUserName(profileComment.getUserName())
+                .setUserImageFromString(profileComment.getProfileImageString())
+                .setUserName(getValidFullName(profileComment))  // TODO move getvalidfullname method to profilecomment?
                 .setLikeState(profileComment.getLikeState());
 
         displayProfileComment(viewHolderInterface, i);

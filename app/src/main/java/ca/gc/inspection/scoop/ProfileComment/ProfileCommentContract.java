@@ -22,8 +22,10 @@ public interface ProfileCommentContract {
         void setDisplayPostListener(ProfileCommentContract.View.ViewHolder holder, String activityid, String posterid);
         void setDisplayImagesListener(ProfileCommentContract.View.ViewHolder holder);
 
-        interface ViewHolder {
+        interface Adapter {
+        }
 
+        interface ViewHolder {
             ProfileCommentContract.View.ViewHolder setPostTitle(String postTitle);
             ProfileCommentContract.View.ViewHolder setPostText(String postText);
             ProfileCommentContract.View.ViewHolder setUserImage(Bitmap image);
@@ -31,12 +33,10 @@ public interface ProfileCommentContract {
             ProfileCommentContract.View.ViewHolder setLikeCount(String likeCount);
             ProfileCommentContract.View.ViewHolder setDate(String date);
             ProfileCommentContract.View.ViewHolder setLikeState(LikeState likeState);
-
-            void hideDate();
-            void formatImage(String image);
-            void formatDate(String time);
+            ProfileCommentContract.View.ViewHolder setUserImageFromString(String image);
+            ProfileCommentContract.View.ViewHolder hideDate();
+            ProfileCommentContract.View.ViewHolder formatDate(String time);
         }
-
     }
 
     interface Presenter extends BasePresenter {
@@ -46,13 +46,15 @@ public interface ProfileCommentContract {
         void changeDownvoteLikeState(MySingleton singleton, String activityid, String posterid, View.ViewHolder holder) throws JSONException;
         void updateLikeCount(String likeCount) throws JSONException;
         void displayImages() throws JSONException;
-        String checkLikeCount(String likeCount);
-
         void loadUserCommentsAndImages(MySingleton instance, String currentUser);
 
-        void onBindProfileCommentViewHolderAtPosition(
-                ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
+        interface AdapterAPI {
+            void onBindProfileCommentViewHolderAtPosition(
+                    ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
+            int getItemCount();
+        }
 
-        int getItemCount();
+        interface ViewHolderAPI {
+        }
     }
 }

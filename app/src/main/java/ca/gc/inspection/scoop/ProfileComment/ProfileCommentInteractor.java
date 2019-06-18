@@ -33,7 +33,7 @@ public class ProfileCommentInteractor {
     }
 
     /**
-     * HTTPRequests for comments and images
+     * HTTPRequests for comments and profile images
      * @param userid: userid
      */
     public void getUserCommentsAndImages(MySingleton singleton, final String userid) {
