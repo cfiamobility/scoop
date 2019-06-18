@@ -21,7 +21,8 @@ import ca.gc.inspection.scoop.*;
  * related to "posting" actions. Parent View Holder for ProfilePostViewHolder.
  */
 
-public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements ProfileCommentContract.View.ViewHolder {
+public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
+        implements ProfileCommentContract.View.ViewHolder {
 
     public TextView username, date, postText, postTitle, likeCount;
     public ImageView profileImage, upvote, downvote;
@@ -85,22 +86,8 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
      */
     @Override
     public ProfileCommentContract.View.ViewHolder setLikeCount(String likeCount) {
-        // TODO refactor
-//        /**
-//         * Description: initial setting of likeCount and checks if likeCount is null
-//         * @param likeCount: the number of likes on a post
-//         * @return the proper like count
-//         */
-//        public String checkLikeCount(String likeCount){
-//            String defaultCount = "0";
-//            if(likeCount.equals("null")){
-//                mProfileCommentView.setLikeCount(defaultCount, holder);
-//                return defaultCount;
-//            }else{
-//                mProfileCommentView.setLikeCount(likeCount, holder);
-//                return likeCount;
-//            }
-//        }
+        if(likeCount.equals("null"))
+            likeCount = "0";
         this.likeCount.setText(likeCount);
         return this;
     }

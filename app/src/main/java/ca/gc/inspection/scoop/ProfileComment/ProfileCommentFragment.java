@@ -97,12 +97,12 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         commentsRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setting the custom adapter for the recycler view
-        mAdapter = new ProfileCommentAdapter(this, mProfileCommentPresenter);
+        mAdapter = new ProfileCommentAdapter(this, (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter);
         mAdapter.setView(this);
         commentsRecyclerView.setAdapter(mAdapter);
     }
 
-    public void setDisplayPostListener(ProfileCommentViewHolder viewHolder, int i) {
+    public void setProfileCommentLikesListener(ProfileCommentViewHolder viewHolder, int i) {
 
         viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,27 +126,26 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
                 }
             }
         });
+    }
 
+    public void setProfileCommentUserInfoListener(ProfileCommentViewHolder viewHolder, String posterId) {
         // tapping on profile picture will bring user to poster's profile page
         viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.otherUserClicked(posterid);
+                MainActivity.otherUserClicked(posterId);
             }
         });
 
         viewHolder.username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.otherUserClicked(posterid);
+                MainActivity.otherUserClicked(posterId);
             }
         });
-
-        // TODO: remove duplicated display post activity intent
-        setDisplayImagesListener(viewHolder);
     }
 
-    public void setDisplayImagesListener(ProfileCommentViewHolder viewHolder){
+    public void setProfileCommentImageListener(ProfileCommentViewHolder viewHolder){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

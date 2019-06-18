@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.ProfileComment;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
@@ -134,8 +135,8 @@ public class ProfileComment {
 
     public LikeState getLikeState() {
         try {
-            int likeTypeInteger = mComment.getInt(PROFILE_COMMENT_LIKE_TYPE_KEY);
-            return LikeState.valueOf(likeTypeInteger);
+            String likeTypeString = mComment.getString(PROFILE_COMMENT_LIKE_TYPE_KEY);
+            return LikeState.valueOf(likeTypeString);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -152,12 +153,26 @@ public class ProfileComment {
         }
     }
 
-    //TODO remove
-//    public Map<String, String> getLikeProperties() {
-//        Map<String, String> likeProperties = new HashMap<>();
-//
-//        likeProperties.put(PROFILE_COMMENT_LIKE_COUNT_KEY, getLikeCount());
-//        likeProperties.put(PROFILE_COMMENT_LIKE_TYPE_KEY, LikeState.valueOf(getLikeState().getValue()).toString());
-//        return likeProperties;
-//    }
+    public void setLikeState(LikeState likeState) {
+        try {
+            mComment.put(PROFILE_COMMENT_LIKE_TYPE_KEY, likeState.getDatabaseValue());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getPostTitle() {
+        return "Replying to " + getPostFirstName() + " " + getPostLastName() + "'s post";
+    }
+
+    /**
+     * Description: returns a valid full name format.
+     * Add spacing only if both first and last names are non empty
+     */
+    public String getValidFullName() {
+        if (!getFirstName().equals("") && !getLastName().equals(""))
+            return getFirstName() + " " + getLastName();
+        return getFirstName() + getLastName();
+    }
 }

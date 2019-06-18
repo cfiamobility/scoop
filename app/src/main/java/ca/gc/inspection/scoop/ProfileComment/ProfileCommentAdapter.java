@@ -6,8 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder>
-    implements ProfileCommentContract.View.Adapter {
+public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder> {
 
     private ProfileCommentContract.Presenter.AdapterAPI mProfileCommentPresenter;
     private ProfileCommentFragment mProfileCommentView;
@@ -46,8 +45,10 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     @Override
     public void onBindViewHolder(@NonNull ProfileCommentViewHolder profileCommentViewHolder, int i) {
         mProfileCommentPresenter.onBindProfileCommentViewHolderAtPosition(profileCommentViewHolder, i);
-        mProfileCommentView.setDisplayImagesListener(profileCommentViewHolder);
-        mProfileCommentView.setDisplayPostListener(profileCommentViewHolder, i);
+        mProfileCommentView.setProfileCommentImageListener(profileCommentViewHolder);
+        mProfileCommentView.setProfileCommentLikesListener(profileCommentViewHolder, i);
+        mProfileCommentView.setProfileCommentUserInfoListener(profileCommentViewHolder,
+                mProfileCommentPresenter.getPosterIdByIndex(i));
     }
 
     @Override

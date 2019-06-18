@@ -32,6 +32,10 @@ public class ProfileCommentPresenter implements
     private JSONArray mComments, mImages;
     private ArrayList<ProfileComment> mProfileComments;
 
+    private ProfileComment getProfileCommentByIndex(int i) {
+        return mProfileComments.get(i);
+    }
+
     public ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewInterface){
 
         mProfileCommentView = checkNotNull(viewInterface);
@@ -46,7 +50,7 @@ public class ProfileCommentPresenter implements
     }
 
     public void displayProfileCommentTitle(ProfileCommentContract.View.ViewHolder viewHolderInterface, ProfileComment profileComment) {
-        viewHolderInterface.setPostTitle("Replying to " + profileComment.getPostFirstName() + " " + profileComment.getPostLastName() + "'s post");
+        viewHolderInterface.setPostTitle(profileComment.getPostTitle());
     }
 
     /**
@@ -54,51 +58,16 @@ public class ProfileCommentPresenter implements
      * @throws JSONException
      */
     public void displayProfileComment(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
-        ProfileComment profileComment = mProfileComments.get(i);
+        ProfileComment profileComment = getProfileCommentByIndex(i);
 
         viewHolderInterface.setPostText(profileComment.getPostText());
         viewHolderInterface.formatDate(profileComment.getDate());
-        viewHolderInterface.setUserName(getValidFullName(profileComment));
+        viewHolderInterface.setUserName(profileComment.getValidFullName());
         viewHolderInterface.setLikeState(profileComment.getLikeState());
+        viewHolderInterface.setLikeCount(profileComment.getLikeCount());
 
         displayProfileCommentImages(viewHolderInterface, profileComment);
         displayProfileCommentTitle(viewHolderInterface, profileComment);
-    }
-
-    /**
-     * Description: checks to see if full name is valid before setting name
-     * @throws JSONException
-     */
-    public String getValidFullName(ProfileComment profileComment) {
-        return getValidFirstName(profileComment.getFirstName()) + getValidLastName(profileComment.getLastName());
-    }
-
-    /**
-     * Description: checks the first name to see if it is valid
-     *
-     * @param firstName: the first name of user
-     * @return first name if not null
-     */
-    public String getValidFirstName(String firstName) {
-        if (!firstName.equals("null")) { //if there is a first name returned
-            return firstName;
-        } else { //if the first name is not filled
-            return "";
-        }
-    }
-
-    /**
-     * Description: checks last name to see if it is valid
-     *
-     * @param lastName: the last name of user
-     * @return last name if not null
-     */
-    public String getValidLastName(String lastName) {
-        if (!lastName.equals("null")) { //if there is a last name returned
-            return " " + lastName;
-        } else { //if the last name is not filled
-            return "";
-        }
     }
 
     @Override
@@ -132,7 +101,7 @@ public class ProfileCommentPresenter implements
      * @throws JSONException
      */
     public void changeUpvoteLikeState(MySingleton singleton, ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException{
-        ProfileComment profileComment = mProfileComments.get(i);
+        ProfileComment profileComment = getProfileCommentByIndex(i);
         String activityid = profileComment.getActivityId();
         String posterid = profileComment.getPosterId();
         LikeState likeState = profileComment.getLikeState();
@@ -143,17 +112,17 @@ public class ProfileCommentPresenter implements
             case UPVOTE: //if it's already liked, it'll be set to neutral if pressed
                 likeCount -= 1;
                 viewHolderInterface.setLikeState(NEUTRAL);
-                mProfileCommentInteractor.updateLikes(singleton, NEUTRAL, activityid, posterid, i, viewHolderInterface);
+                mProfileCommentInteractor.updateLikes(singleton, NEUTRAL, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                 break;
             case DOWNVOTE: //if it's downvoted, it'll be set to upvote state
                 likeCount += 2;
                 viewHolderInterface.setLikeState(UPVOTE);
-                mProfileCommentInteractor.updateLikes(singleton, UPVOTE, activityid, posterid, i, viewHolderInterface);
+                mProfileCommentInteractor.updateLikes(singleton, UPVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                 break;
             case NEUTRAL: //if it's neutral, it'll be set to upvote state
                 likeCount += 1;
                 viewHolderInterface.setLikeState(UPVOTE);
-                mProfileCommentInteractor.updateLikes(singleton, UPVOTE, activityid, posterid, i, viewHolderInterface);
+                mProfileCommentInteractor.updateLikes(singleton, UPVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                 break;
             default: //default will be upvote state, if liketype is null
                 likeCount += 1;
@@ -162,7 +131,6 @@ public class ProfileCommentPresenter implements
                 break;
         }
         Log.i("likecount1", String.valueOf(likeCount));
-        updateLikeCount(String.valueOf(likeCount)); //updates like count to new total
     }
 
     /**
@@ -171,7 +139,7 @@ public class ProfileCommentPresenter implements
      * @throws JSONException
      */
     public void changeDownvoteLikeState(MySingleton singleton, ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException {
-        ProfileComment profileComment = mProfileComments.get(i);
+        ProfileComment profileComment = getProfileCommentByIndex(i);
         String activityid = profileComment.getActivityId();
         String posterid = profileComment.getPosterId();
         LikeState likeState = profileComment.getLikeState();
@@ -182,17 +150,17 @@ public class ProfileCommentPresenter implements
             case UPVOTE: //if it's liked, it'll be set to downvote state
                 likeCount -= 2;
                 viewHolderInterface.setLikeState(DOWNVOTE);
-                mProfileCommentInteractor.updateLikes(singleton, DOWNVOTE, activityid, posterid, i, viewHolderInterface);
+                mProfileCommentInteractor.updateLikes(singleton, DOWNVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                 break;
             case DOWNVOTE: //if it's downvoted, it'll be set to neutral state
                 likeCount += 1;
                 viewHolderInterface.setLikeState(NEUTRAL);
-                mProfileCommentInteractor.updateLikes(singleton, NEUTRAL, activityid, posterid, i, viewHolderInterface);
+                mProfileCommentInteractor.updateLikes(singleton, NEUTRAL, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                 break;
             case NEUTRAL: //if it's netural state, it'll be set to downvote state
                 likeCount -= 1;
                 viewHolderInterface.setLikeState(DOWNVOTE);
-                mProfileCommentInteractor.updateLikes(singleton, DOWNVOTE, activityid, posterid, i, viewHolderInterface);
+                mProfileCommentInteractor.updateLikes(singleton, DOWNVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                 break;
             default: //default will be downvote state, if liketype is null
                 likeCount -= 1;
@@ -201,36 +169,33 @@ public class ProfileCommentPresenter implements
                 break;
         }
         Log.i("likecount2", String.valueOf(likeCount));
-        updateLikeCount(String.valueOf(likeCount)); //updates the likecount to new total
     }
 
     /**
      * Description: updates the like count to new total
      *
-     * @param profileComment
      * @param likeCount
      * @throws JSONException
      */
-    public void updateLikeCount(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i, int likeCount)
-            throws JSONException {
-        mProfileComments.get(i).setLikeCount(likeCount);
+    public void updateLikeCount(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i, String likeCount) {
+        getProfileCommentByIndex(i).setLikeCount(likeCount);
         viewHolderInterface.setLikeCount(likeCount); //sets like count to new total
     }
 
-    public void updateLikeType(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i)
-        throws JSONException {
-
+    public void updateLikeState(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i, LikeState likeState) {
+        getProfileCommentByIndex(i).setLikeState(likeState);
+        viewHolderInterface.setLikeState(likeState);
     }
 
     public void onBindProfileCommentViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
-        ProfileComment profileComment = mProfileComments.get(i);
+        ProfileComment profileComment = getProfileCommentByIndex(i);
 
         viewHolderInterface.setDate(profileComment.getDate())
                 .setLikeCount(profileComment.getLikeCount())
                 .setPostText(profileComment.getPostText())
                 .setPostTitle(profileComment.getPostTitle())
                 .setUserImageFromString(profileComment.getProfileImageString())
-                .setUserName(getValidFullName(profileComment))  // TODO move getvalidfullname method to profilecomment?
+                .setUserName(profileComment.getValidFullName())
                 .setLikeState(profileComment.getLikeState());
 
         displayProfileComment(viewHolderInterface, i);
@@ -245,5 +210,10 @@ public class ProfileCommentPresenter implements
         if (mComments == null)
             return 0;
         return mComments.length();
+    }
+
+    @Override
+    public String getPosterIdByIndex(int i) {
+        return getProfileCommentByIndex(i).getPosterId();
     }
 }

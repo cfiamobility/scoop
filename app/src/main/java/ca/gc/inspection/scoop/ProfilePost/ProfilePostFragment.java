@@ -177,7 +177,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     }
 
 //    @Override
-//    public void setDisplayPostListener(ProfilePostViewHolder holder){
+//    public void setDisplayPostLikesListener(ProfilePostViewHolder holder){
 //        // to get the options menu to appear
 //        holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
 //            @Override

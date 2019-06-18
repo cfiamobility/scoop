@@ -20,9 +20,6 @@ public interface ProfileCommentContract {
 
     interface View extends BaseView<Presenter> {
 
-        interface Adapter {
-        }
-
         interface ViewHolder {
             ProfileCommentContract.View.ViewHolder setPostTitle(String postTitle);
             ProfileCommentContract.View.ViewHolder setPostText(String postText);
@@ -38,18 +35,16 @@ public interface ProfileCommentContract {
     }
 
     interface Presenter extends BasePresenter {
-        void displayPost() throws JSONException;
-        void formPostTitle() throws JSONException;
         void changeUpvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
         void changeDownvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
-        void updateLikeCount(String likeCount) throws JSONException;
-        void displayImages() throws JSONException;
         void loadUserCommentsAndImages(MySingleton instance, String currentUser);
 
         interface AdapterAPI {
             void onBindProfileCommentViewHolderAtPosition(
                     ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
             int getItemCount();
+
+            String getPosterIdByIndex(int i);
         }
 
         interface ViewHolderAPI {

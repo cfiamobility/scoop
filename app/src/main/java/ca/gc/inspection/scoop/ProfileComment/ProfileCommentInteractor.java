@@ -94,12 +94,12 @@ public class ProfileCommentInteractor {
      */
     public void updateLikes(
             MySingleton singleton, LikeState likeType, String likeCount, final String activityid, final String posterid,
-            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) throws JSONException {
+            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
         String URL = Config.baseIP + "display-post/updatelikes";
         //sends a PUT request to update new likes
-        StringRequest request = newLikesRequestWithMethod(
+        StringRequest request = newLikesStringRequest(
                 Request.Method.PUT, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
         request.setRetryPolicy(new DefaultRetryPolicy(
                 30000,
@@ -119,13 +119,13 @@ public class ProfileCommentInteractor {
      */
     public void insertLikes(
             MySingleton singleton, LikeState likeType, final String activityid, final String posterid,
-            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) throws JSONException {
+            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
         String URL = Config.baseIP + "display-post/insertlikes";
         String likeCount = "1";
 
-        StringRequest request = newLikesRequestWithMethod(
+        StringRequest request = newLikesStringRequest(
                 Request.Method.POST, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
         request.setRetryPolicy(new DefaultRetryPolicy(
                 30000,
@@ -147,7 +147,7 @@ public class ProfileCommentInteractor {
      * @param viewHolderInterface
      * @return
      */
-    private StringRequest newLikesRequestWithMethod(
+    private StringRequest newLikesStringRequest(
             int requestMethod, String URL, LikeState likeType, String likeCount, final String activityid,
             final String posterid, int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
 
@@ -155,7 +155,7 @@ public class ProfileCommentInteractor {
             @Override
             public void onResponse(String response) {
                 Log.i("response", response);
-                mProfileCommentPresenter.updateLikeType(viewHolderInterface, i, likeType);
+                mProfileCommentPresenter.updateLikeState(viewHolderInterface, i, likeType);
                 mProfileCommentPresenter.updateLikeCount(viewHolderInterface, i, likeCount);
             }
         }, new Response.ErrorListener() {
