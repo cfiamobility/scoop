@@ -28,6 +28,7 @@ import ca.gc.inspection.scoop.info.InfoActivity;
 import ca.gc.inspection.scoop.savedpost.SavedPostActivity;
 import ca.gc.inspection.scoop.search.SearchActivity;
 import ca.gc.inspection.scoop.settings.SettingsActivity;
+import ca.gc.inspection.scoop.splashscreen.SplashScreenActivity;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
