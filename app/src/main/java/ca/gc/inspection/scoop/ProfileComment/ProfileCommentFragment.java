@@ -110,7 +110,8 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
             @Override
             public void onClick(View view) {
                 try {
-                    mProfileCommentPresenter.changeUpvoteLikeState(MySingleton.getInstance(getContext()), activityid, posterid); //changes upvote state on click
+                    mProfileCommentPresenter.changeUpvoteLikeState(
+                            MySingleton.getInstance(getContext()), activityid, posterid, holder); //changes upvote state on click
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -121,7 +122,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
             @Override
             public void onClick(View view) {
                 try {
-                    mProfileCommentPresenter.changeDownvoteLikeState(MySingleton.getInstance(getContext()), activityid, posterid); //changes downvote state on click
+                    mProfileCommentPresenter.changeDownvoteLikeState(MySingleton.getInstance(getContext()), activityid, posterid, holder); //changes downvote state on click
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

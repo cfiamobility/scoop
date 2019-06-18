@@ -2,7 +2,6 @@ package ca.gc.inspection.scoop.ProfileComment;
 
 
 import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,21 +42,13 @@ public interface ProfileCommentContract {
     interface Presenter extends BasePresenter {
         void displayPost() throws JSONException;
         void formPostTitle() throws JSONException;
-        void checkFullName() throws JSONException;
-        void changeUpvoteLikeState(MySingleton singleton, String activityid, String posterid) throws JSONException;
-        void changeDownvoteLikeState(MySingleton singleton, String activityid, String posterid) throws JSONException;
+        void changeUpvoteLikeState(MySingleton singleton, String activityid, String posterid, View.ViewHolder holder) throws JSONException;
+        void changeDownvoteLikeState(MySingleton singleton, String activityid, String posterid, View.ViewHolder holder) throws JSONException;
         void updateLikeCount(String likeCount) throws JSONException;
         void displayImages() throws JSONException;
-
-
-        String checkFirstName(String firstName);
-        String checkLastName(String lastName);
         String checkLikeCount(String likeCount);
-        void checkLikeState(String likeState);
 
         void loadUserCommentsAndImages(MySingleton instance, String currentUser);
-
-        void setRecyclerView(JSONArray commentsResponse, JSONArray imagesResponse);
 
         void onBindProfileCommentViewHolderAtPosition(
                 ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);

@@ -1,51 +1,135 @@
 package ca.gc.inspection.scoop.ProfileComment;
 
-import android.graphics.Bitmap;
-
+import org.json.JSONObject;
 public class ProfileComment {
     /**
      * Data class which stores information for a single profile comment
      */
+    private JSONObject mComment, mImage;
 
-    private String mUserName, mDate, mPostText, mPostTitle, mLikeCount;
-    private Bitmap mProfileImage;
-    private LikeState mLikeState;
+    private static final String PROFILE_COMMENT_ACTIVITYID_KEY = "activityid";
+    private static final String PROFILE_COMMENT_USERID_KEY = "userid";
+    private static final String PROFILE_COMMENT_DATE_KEY = "createddate";
+    private static final String PROFILE_COMMENT_PROFILE_IMAGE_KEY = "profileimage";
+    private static final String PROFILE_COMMENT_POST_FIRST_NAME_KEY = "postfirstname";
+    private static final String PROFILE_COMMENT_POST_LAST_NAME_KEY = "postlastname";
+    private static final String PROFILE_COMMENT_FIRST_NAME_KEY = "firstname";
+    private static final String PROFILE_COMMENT_LAST_NAME_KEY = "lastname";
+    private static final String PROFILE_COMMENT_POST_LIKE_TYPE_KEY = "liketype";
+    private static final String PROFILE_COMMENT_POST_LIKE_COUNT_KEY = "likecount";
+    private static final String PROFILE_COMMENT_POST_POST_TEXT_KEY = "posttext";
 
-    ProfileComment(String userName, String date, String postText, String postTitle, String likeCount, Bitmap profileImage, LikeState likeState) {
-        mUserName = userName;
-        mDate = date;
-        mPostText = postText;
-        mPostTitle = postTitle;
-        mLikeCount = likeCount;
-        mProfileImage = profileImage;
-        mLikeState = likeState;
+    ProfileComment(JSONObject jsonComment, JSONObject jsonImage) {
+        mComment = jsonComment;
+        mImage = jsonImage;
     }
 
-    public String getUserName() {
-        return mUserName;
+    public String getActivityId() {
+        try {
+            return mComment.getString(PROFILE_COMMENT_ACTIVITYID_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * Get the UserId of the poster
+     * @return UserId string if it exists, otherwise return an empty string
+     */
+    public String getUserId() {
+        try {
+            return mComment.getString(PROFILE_COMMENT_USERID_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public String getDate() {
-        return mDate;
+        try {
+            return mComment.getString(PROFILE_COMMENT_DATE_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String getFirstName() {
+        try {
+            return mComment.getString(PROFILE_COMMENT_FIRST_NAME_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String getLastName() {
+        try {
+            return mComment.getString(PROFILE_COMMENT_LAST_NAME_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String getPostFirstName() {
+        try {
+            return mComment.getString(PROFILE_COMMENT_POST_FIRST_NAME_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String getPostLastName() {
+        try {
+            return mComment.getString(PROFILE_COMMENT_POST_LAST_NAME_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public String getPostText() {
-        return mPostText;
+        try {
+            return mComment.getString(PROFILE_COMMENT_POST_POST_TEXT_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
-    public String getPostTitle() {
-        return mPostTitle;
+    public String getProfileImage() {
+        try {
+            return mImage.getString(PROFILE_COMMENT_PROFILE_IMAGE_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public String getLikeCount() {
-        return mLikeCount;
-    }
-
-    public Bitmap getProfileImage() {
-        return mProfileImage;
+        try {
+            return mComment.getString(PROFILE_COMMENT_POST_LIKE_COUNT_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public LikeState getLikeState() {
+        // TODO refactor
         return mLikeState;
     }
 }

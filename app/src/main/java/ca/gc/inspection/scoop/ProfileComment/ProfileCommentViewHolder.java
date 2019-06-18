@@ -101,6 +101,8 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder implements
 
     @Override
     public ProfileCommentContract.View.ViewHolder setLikeState(LikeState likeState) {
+        Log.i("likestate: ", likeState.toString());
+
         switch (likeState) {
             case UPVOTE:
                 setLikeUpvoteState();
