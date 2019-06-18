@@ -52,7 +52,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     public void setPresenter (ProfilePostContract.Presenter presenter){
         mProfilePostPresenter = checkNotNull(presenter);
     }
-//    public String getUserId() {
+//    public String getPosterId() {
 //        return userid;
 //    }
 

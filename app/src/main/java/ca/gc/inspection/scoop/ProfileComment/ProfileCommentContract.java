@@ -19,8 +19,6 @@ import ca.gc.inspection.scoop.base.BaseView;
 public interface ProfileCommentContract {
 
     interface View extends BaseView<Presenter> {
-        void setDisplayPostListener(ProfileCommentContract.View.ViewHolder holder, String activityid, String posterid);
-        void setDisplayImagesListener(ProfileCommentContract.View.ViewHolder holder);
 
         interface Adapter {
         }
@@ -42,8 +40,8 @@ public interface ProfileCommentContract {
     interface Presenter extends BasePresenter {
         void displayPost() throws JSONException;
         void formPostTitle() throws JSONException;
-        void changeUpvoteLikeState(MySingleton singleton, String activityid, String posterid, View.ViewHolder holder) throws JSONException;
-        void changeDownvoteLikeState(MySingleton singleton, String activityid, String posterid, View.ViewHolder holder) throws JSONException;
+        void changeUpvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
+        void changeDownvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
         void updateLikeCount(String likeCount) throws JSONException;
         void displayImages() throws JSONException;
         void loadUserCommentsAndImages(MySingleton instance, String currentUser);

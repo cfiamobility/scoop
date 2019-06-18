@@ -1,23 +1,26 @@
 package ca.gc.inspection.scoop.ProfileComment;
 
 import org.json.JSONObject;
+
+import static ca.gc.inspection.scoop.Config.USERID_KEY;
+
 public class ProfileComment {
     /**
      * Data class which stores information for a single profile comment
      */
     private JSONObject mComment, mImage;
 
-    private static final String PROFILE_COMMENT_ACTIVITYID_KEY = "activityid";
-    private static final String PROFILE_COMMENT_USERID_KEY = "userid";
-    private static final String PROFILE_COMMENT_DATE_KEY = "createddate";
-    private static final String PROFILE_COMMENT_PROFILE_IMAGE_KEY = "profileimage";
-    private static final String PROFILE_COMMENT_POST_FIRST_NAME_KEY = "postfirstname";
-    private static final String PROFILE_COMMENT_POST_LAST_NAME_KEY = "postlastname";
-    private static final String PROFILE_COMMENT_FIRST_NAME_KEY = "firstname";
-    private static final String PROFILE_COMMENT_LAST_NAME_KEY = "lastname";
-    private static final String PROFILE_COMMENT_POST_LIKE_TYPE_KEY = "liketype";
-    private static final String PROFILE_COMMENT_POST_LIKE_COUNT_KEY = "likecount";
-    private static final String PROFILE_COMMENT_POST_POST_TEXT_KEY = "posttext";
+    public static final String PROFILE_COMMENT_ACTIVITYID_KEY = "activityid";
+    public static final String PROFILE_COMMENT_LIKE_POSTERID_KEY = "posterid";  // TODO document difference between posterid and userid
+    public static final String PROFILE_COMMENT_DATE_KEY = "createddate";
+    public static final String PROFILE_COMMENT_PROFILE_IMAGE_KEY = "profileimage";
+    public static final String PROFILE_COMMENT_POST_FIRST_NAME_KEY = "postfirstname";
+    public static final String PROFILE_COMMENT_POST_LAST_NAME_KEY = "postlastname";
+    public static final String PROFILE_COMMENT_FIRST_NAME_KEY = "firstname";
+    public static final String PROFILE_COMMENT_LAST_NAME_KEY = "lastname";
+    public static final String PROFILE_COMMENT_LIKE_TYPE_KEY = "liketype";
+    public static final String PROFILE_COMMENT_LIKE_COUNT_KEY = "likecount";
+    public static final String PROFILE_COMMENT_POST_TEXT_KEY = "posttext";
 
     ProfileComment(JSONObject jsonComment, JSONObject jsonImage) {
         mComment = jsonComment;
@@ -38,9 +41,10 @@ public class ProfileComment {
      * Get the UserId of the poster
      * @return UserId string if it exists, otherwise return an empty string
      */
-    public String getUserId() {
+    // TODO document difference between posterid and userid
+    public String getPosterId() {
         try {
-            return mComment.getString(PROFILE_COMMENT_USERID_KEY);
+            return mComment.getString(USERID_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -100,7 +104,7 @@ public class ProfileComment {
 
     public String getPostText() {
         try {
-            return mComment.getString(PROFILE_COMMENT_POST_POST_TEXT_KEY);
+            return mComment.getString(PROFILE_COMMENT_POST_TEXT_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -120,7 +124,7 @@ public class ProfileComment {
 
     public String getLikeCount() {
         try {
-            return mComment.getString(PROFILE_COMMENT_POST_LIKE_COUNT_KEY);
+            return mComment.getString(PROFILE_COMMENT_LIKE_COUNT_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -130,7 +134,7 @@ public class ProfileComment {
 
     public LikeState getLikeState() {
         try {
-            int likeTypeInteger = mComment.getInt(PROFILE_COMMENT_POST_LIKE_TYPE_KEY);
+            int likeTypeInteger = mComment.getInt(PROFILE_COMMENT_LIKE_TYPE_KEY);
             return LikeState.valueOf(likeTypeInteger);
         }
         catch (Exception e) {
@@ -138,4 +142,22 @@ public class ProfileComment {
             return LikeState.NEUTRAL;
         }
     }
+
+    public void setLikeCount(String likeCount) {
+        try {
+            mComment.put(PROFILE_COMMENT_LIKE_COUNT_KEY, likeCount);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //TODO remove
+//    public Map<String, String> getLikeProperties() {
+//        Map<String, String> likeProperties = new HashMap<>();
+//
+//        likeProperties.put(PROFILE_COMMENT_LIKE_COUNT_KEY, getLikeCount());
+//        likeProperties.put(PROFILE_COMMENT_LIKE_TYPE_KEY, LikeState.valueOf(getLikeState().getValue()).toString());
+//        return likeProperties;
+//    }
 }

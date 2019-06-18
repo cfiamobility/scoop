@@ -46,6 +46,8 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     @Override
     public void onBindViewHolder(@NonNull ProfileCommentViewHolder profileCommentViewHolder, int i) {
         mProfileCommentPresenter.onBindProfileCommentViewHolderAtPosition(profileCommentViewHolder, i);
+        mProfileCommentView.setDisplayImagesListener(profileCommentViewHolder);
+        mProfileCommentView.setDisplayPostListener(profileCommentViewHolder, i);
     }
 
     @Override

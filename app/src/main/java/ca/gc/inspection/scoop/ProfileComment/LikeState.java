@@ -1,16 +1,16 @@
 package ca.gc.inspection.scoop.ProfileComment;
 
-import android.util.SparseArray;
+import java.util.HashMap;
 
 public enum LikeState {
-    UPVOTE(1),
-    NEUTRAL(0),
-    DOWNVOTE(-1);
+    UPVOTE("1"),
+    NEUTRAL("0"),
+    DOWNVOTE("-1");
 
-    private int databaseValue;
-    private static SparseArray<LikeState> map = new SparseArray<>();
+    private String databaseValue;
+    private static HashMap<String, LikeState> map = new HashMap<>();
 
-    LikeState(int databaseValue) {
+    LikeState(String databaseValue) {
         this.databaseValue = databaseValue;
     }
 
@@ -20,11 +20,11 @@ public enum LikeState {
         }
     }
 
-    public static LikeState valueOf(int databaseValue) {
+    public static LikeState getLikeStateFrom(String databaseValue) {
         return map.get(databaseValue);
     }
 
-    public int getValue() {
+    public String getDatabaseValue() {
         return this.databaseValue;
     }
 }

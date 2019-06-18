@@ -16,7 +16,7 @@ public interface ProfilePostContract extends ProfileCommentContract {
     interface View extends BaseView<Presenter> {
         void setCommentCount(String commentCount, ProfilePostViewHolder holder);
 //        void setRecyclerView(JSONArray posts, JSONArray images);
-//        String getUserId();
+//        String getPosterId();
         void displayPostListener(ProfilePostViewHolder holder);
 //        void getUserPosts(MySingleton singleton, final String userId);
 

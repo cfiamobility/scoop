@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop.ProfileComment;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -13,16 +12,19 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
-import ca.gc.inspection.scoop.ProfilePost.ProfilePostContract;
-import ca.gc.inspection.scoop.post;
 
+import static ca.gc.inspection.scoop.Config.USERID_KEY;
+import static ca.gc.inspection.scoop.ProfileComment.ProfileComment.PROFILE_COMMENT_ACTIVITYID_KEY;
+import static ca.gc.inspection.scoop.ProfileComment.ProfileComment.PROFILE_COMMENT_LIKE_POSTERID_KEY;
+import static ca.gc.inspection.scoop.ProfileComment.ProfileComment.PROFILE_COMMENT_POSTERID_KEY;
+import static ca.gc.inspection.scoop.ProfileComment.ProfileComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
+import static ca.gc.inspection.scoop.ProfileComment.ProfileComment.USERID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfileCommentInteractor {
@@ -84,46 +86,21 @@ public class ProfileCommentInteractor {
 
     /**
      * Description: updates likes in table and adds notifications if like type is 1
-     * @param likeType: current like type
-     * @param activityid: activity id of post
-     * @param posterid: user id of poster of post
+     * @param likeType : current like type
+     * @param activityid : activity id of post
+     * @param posterid : user id of poster of post
+     * @param viewHolderInterface
      * @throws JSONException
      */
-    public void updateLikes(MySingleton singleton, final String likeType, final String activityid, final String posterid,
-                            JSONObject post, Map<String, String> likeProperties) throws JSONException {
-        post.put("liketype", likeType); //updates post object
-        likeProperties.put("liketype", likeType); //updates properties map
+    public void updateLikes(
+            MySingleton singleton, LikeState likeType, String likeCount, final String activityid, final String posterid,
+            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) throws JSONException {
+
         Log.i("hello", "should be here");
         String URL = Config.baseIP + "display-post/updatelikes";
-        StringRequest request = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() { //sends a PUT request to update new likes
-            @Override
-            public void onResponse(String response) {
-                Log.i("response", response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                Log.i("ProfileCommentInteractor", "getParams for updateLikes");
-                params.put("liketype", likeProperties.get("liketype"));
-                params.put("activityid",activityid);
-                params.put("posterid", posterid);
-                params.put("userid", Config.currentUser);
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                // inserting the token into the response header that will be sent to the server
-                Map<String, String> header = new HashMap<>();
-                header.put("authorization", Config.token);
-                return header;
-            }
-        };
+        //sends a PUT request to update new likes
+        StringRequest request = newLikesRequestWithMethod(
+                Request.Method.PUT, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
         request.setRetryPolicy(new DefaultRetryPolicy(
                 30000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -134,21 +111,52 @@ public class ProfileCommentInteractor {
 
     /**
      * Description: inserts likes in table and adds notifications if like type is 1
-     * @param likeType: current like type
-     * @param activityid: activity id of post
-     * @param posterid: user id of poster of post
+     * @param likeType : current like type
+     * @param activityid : activity id of post
+     * @param posterid : user id of poster of post
+     * @param viewHolderInterface
      * @throws JSONException
      */
-    public void insertLikes(MySingleton singleton, final String likeType, final String activityid, final String posterid,
-                            JSONObject post, Map<String, String> likeProperties) throws JSONException {
-        post.put("liketype", likeType); //updates post object
-        likeProperties.put("liketype", likeType); //updates properties map
+    public void insertLikes(
+            MySingleton singleton, LikeState likeType, final String activityid, final String posterid,
+            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) throws JSONException {
+
         Log.i("hello", "should be here");
         String URL = Config.baseIP + "display-post/insertlikes";
-        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() { //sends a POST request to insert new like
+        String likeCount = "1";
+
+        StringRequest request = newLikesRequestWithMethod(
+                Request.Method.POST, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        Config.requestQueue.add(request);
+//        singleton.addToRequestQueue(request);
+
+    }
+
+    /**
+     * //sends a POST request to insert new like
+     * @param requestMethod
+     * @param URL
+     * @param likeType
+     * @param activityid
+     * @param posterid
+     * @param i
+     * @param viewHolderInterface
+     * @return
+     */
+    private StringRequest newLikesRequestWithMethod(
+            int requestMethod, String URL, LikeState likeType, String likeCount, final String activityid,
+            final String posterid, int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
+
+        return new StringRequest(requestMethod, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i("response", response);
+                mProfileCommentPresenter.updateLikeType(viewHolderInterface, i, likeType);
+                mProfileCommentPresenter.updateLikeCount(viewHolderInterface, i, likeCount);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -158,11 +166,12 @@ public class ProfileCommentInteractor {
         }){
             @Override
             protected Map<String, String> getParams(){
+                Log.i("ProfileCommentInteractor", "getParams for insert/updateLikes");
                 Map<String, String> params = new HashMap<>();
-                params.put("liketype", likeType);
-                params.put("activityid", activityid);
-                params.put("posterid", posterid);
-                params.put("userid", Config.currentUser);
+                params.put(PROFILE_COMMENT_LIKE_TYPE_KEY, likeType.getDatabaseValue());
+                params.put(PROFILE_COMMENT_ACTIVITYID_KEY, activityid);
+                params.put(PROFILE_COMMENT_LIKE_POSTERID_KEY, posterid);
+                params.put(USERID_KEY, Config.currentUser);
                 return params;
             }
             @Override
@@ -173,13 +182,6 @@ public class ProfileCommentInteractor {
                 return header;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                30000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Config.requestQueue.add(request);
-//        singleton.addToRequestQueue(request);
-
     }
 
 }

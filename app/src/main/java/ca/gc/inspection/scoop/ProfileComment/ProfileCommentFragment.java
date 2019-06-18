@@ -102,27 +102,25 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         commentsRecyclerView.setAdapter(mAdapter);
     }
 
+    public void setDisplayPostListener(ProfileCommentViewHolder viewHolder, int i) {
 
-    public void setDisplayPostListener(ProfileCommentContract.View.ViewHolder holder, String activityid, String posterid){
-
-        // TODO: determine better practice than casting interface to an implementation
-        ((ProfileCommentViewHolder) holder).upvote.setOnClickListener(new View.OnClickListener() {
+        viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     mProfileCommentPresenter.changeUpvoteLikeState(
-                            MySingleton.getInstance(getContext()), activityid, posterid, holder); //changes upvote state on click
+                            MySingleton.getInstance(getContext()), viewHolder, i); //changes upvote state on click
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        ((ProfileCommentViewHolder) holder).downvote.setOnClickListener(new View.OnClickListener() {
+        viewHolder.downvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    mProfileCommentPresenter.changeDownvoteLikeState(MySingleton.getInstance(getContext()), activityid, posterid, holder); //changes downvote state on click
+                    mProfileCommentPresenter.changeDownvoteLikeState(MySingleton.getInstance(getContext()), viewHolder, i); //changes downvote state on click
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -130,14 +128,14 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         });
 
         // tapping on profile picture will bring user to poster's profile page
-        ((ProfileCommentViewHolder) holder).profileImage.setOnClickListener(new View.OnClickListener() {
+        viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.otherUserClicked(posterid);
             }
         });
 
-        ((ProfileCommentViewHolder) holder).username.setOnClickListener(new View.OnClickListener() {
+        viewHolder.username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.otherUserClicked(posterid);
@@ -145,13 +143,12 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         });
 
         // TODO: remove duplicated display post activity intent
-        setDisplayImagesListener(holder);
+        setDisplayImagesListener(viewHolder);
     }
 
-    public void setDisplayImagesListener(ProfileCommentContract.View.ViewHolder holder){
+    public void setDisplayImagesListener(ProfileCommentViewHolder viewHolder){
         // tapping on any item from the view holder will go to the display post activity
-        // TODO: determine better practice than casting interface to an implementation
-        ((ProfileCommentViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
