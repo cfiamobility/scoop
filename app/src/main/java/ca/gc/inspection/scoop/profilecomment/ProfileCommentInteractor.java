@@ -24,9 +24,7 @@ import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
 import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_ACTIVITYID_KEY;
 import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_LIKE_POSTERID_KEY;
-import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_POSTERID_KEY;
 import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
-import static ca.gc.inspection.scoop.profilecomment.ProfileComment.USERID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfileCommentInteractor {

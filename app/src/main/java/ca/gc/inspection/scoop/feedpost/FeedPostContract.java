@@ -13,7 +13,7 @@ import ca.gc.inspection.scoop.base.BaseView;
 
 public interface FeedPostContract extends ProfilePostContract {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends ProfilePostContract.View {
         String getFeedType();
 
         interface ViewHolder extends ProfilePostContract.View.ViewHolder {

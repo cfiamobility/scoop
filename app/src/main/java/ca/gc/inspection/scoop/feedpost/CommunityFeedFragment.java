@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.DisplayPostActivity;
 import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
@@ -39,8 +40,9 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
     private View view;
     private FeedPostContract.Presenter mFeedPostPresenter;
 
-    public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
-        mFeedPostPresenter = checkNotNull(presenter);
+    @Override
+    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
+        mFeedPostPresenter = (FeedPostContract.Presenter) checkNotNull(presenter);
     }
 
     /**

@@ -10,9 +10,9 @@ import ca.gc.inspection.scoop.base.BaseView;
 /**
  * Interface that inherits from mostgeneric interface
  */
-public interface ProfilePostContract extends ProfileCommentContract {
+public interface ProfilePostContract {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends ProfileCommentContract.View {
         void setDisplayPostListener(ProfilePostViewHolder holder);
 
         interface ViewHolder extends ProfileCommentContract.View.ViewHolder {
