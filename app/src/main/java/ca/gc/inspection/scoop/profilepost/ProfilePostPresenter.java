@@ -31,7 +31,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     private ProfilePostInteractor mProfilePostInteractor;
     // TODO extend JSONArray mComments, mImages, and ArrayList mProfileComments from parent
     // - currently using mComments with extra commentsCount field
-    protected ArrayList<ProfilePost> mProfilePosts;
+    private ArrayList<ProfilePost> mProfilePosts;
 
     // TODO replace overriding method by creating a DataCache object in ProfileCommentPresenter and overriding it here
     @Override
@@ -86,10 +86,10 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
                 .setCommentCount(profilePost.getCommentCount());
     }
 
-        /**
-         * Gets the item Count of the comments JSONArray
-         * @return the length
-         */
+    /**
+     * Gets the item Count of the posts JSONArray
+     * @return the length
+     */
     // TODO refactor when DataCache object is implemented
     @Override
     public int getItemCount() {

@@ -46,7 +46,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     private View view;
     private ProfilePostContract.Presenter mProfilePostPresenter;
 
-    public void setPresenter (@NonNull ProfilePostContract.Presenter presenter){
+    public void setPresenter(@NonNull ProfilePostContract.Presenter presenter) {
         mProfilePostPresenter = checkNotNull(presenter);
     }
 
@@ -89,7 +89,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     /**
      * Sets the recycler view
      */
-
+    @Override
     public void setRecyclerView() {
         // initializing the recycler view
         postRecyclerView = view.findViewById(R.id.fragment_profile_posts_rv);

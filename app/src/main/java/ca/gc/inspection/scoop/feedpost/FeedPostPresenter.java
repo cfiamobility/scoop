@@ -9,36 +9,57 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import ca.gc.inspection.scoop.DisplayPostActivity;
 import ca.gc.inspection.scoop.MyCamera;
+import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.profilecomment.ProfileComment;
+import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
+import ca.gc.inspection.scoop.profilepost.ProfilePost;
+import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
+import ca.gc.inspection.scoop.profilepost.ProfilePostInteractor;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
 
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class FeedPostPresenter extends ProfilePostPresenter implements FeedPostContract.Presenter{
-    private JSONObject images;
-    private FeedPostViewHolder holder;
+
+public class FeedPostPresenter extends ProfilePostPresenter implements
+        FeedPostContract.Presenter,
+        FeedPostContract.Presenter.AdapterAPI {
 
     @NonNull
     private FeedPostContract.View mFeedPostView;
     private FeedPostInteractor mFeedPostInteractor;
 
+    // TODO extend JSONArray mComments, mImages, and ArrayList mProfileComments from parent
+    // - currently assume mComments stores only community feed fragment data
+    private ArrayList<FeedPost> mFeedPosts;
 
-    public FeedPostPresenter(FeedPostContract.View feedPostView, JSONArray posts, JSONArray images, int i, FeedPostViewHolder holder){
-        super(feedPostView, posts, images, i, holder);
+    // TODO replace overriding method by creating a DataCache object in ProfileCommentPresenter and overriding it here
+    @Override
+    protected ProfileComment getProfileCommentByIndex(int i) {
+        return getFeedPostByIndex(i);
+    }
 
-        mFeedPostView = feedPostView;
-        try {
-            this.images = images.getJSONObject(i);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        this.holder = holder;
+    private FeedPost getFeedPostByIndex(int i) {
+        return mFeedPosts.get(i);
+    }
 
-        mFeedPostView.setPresenter(this);
-//        mFeedPostInteractor = new FeedPostInteractor(this);
+    public FeedPostPresenter(@NonNull FeedPostContract.View viewInterface){
+
+        mFeedPostView = checkNotNull(viewInterface);
+        mFeedPostInteractor = new FeedPostInteractor(this);
 
     }
 
+    // TODO implement getting different data for community vs official feed
+    @Override
+    public void loadDataFromDatabase(MySingleton singleton, String currentUser) {
+        mFeedPostInteractor.getUserPosts(singleton, currentUser);
+    }
+
+    // TODO refactor
     @Override
     public void displayImages() throws JSONException {
         if(images != null) { // null check to see if there are images
@@ -74,60 +95,53 @@ public class FeedPostPresenter extends ProfilePostPresenter implements FeedPostC
             mFeedPostView.setUserImage(bitmap, holder);
         }
     }
-//
-//    public void getRecyclerView(JSONArray posts, JSONArray images){
-//        mFeedPostView.setRecyclerView(posts, images);
-//    }
-//
-//    public void getPosts(MySingleton singleton){
-//        mFeedPostInteractor.getFeedPosts(singleton);
-//    }
 
+    // TODO pass into interactor as parameter?
     public String getFeedType(){
         return mFeedPostView.getFeedType();
     }
 
-//    public void getPosts(){
-//        String URL = Config.baseIP + "display-post/posts/" + mFeedPostView.getFeedType() + "/" + Config.currentUser;
-//        JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() { //makes request for all posts for specific feed
-//            @Override
-//            public void onResponse(final JSONArray postResponse) {
-//                String imageURL = Config.baseIP + "display-post/images/" + mFeedPostView.getFeedType() + "/" + Config.currentUser;
-//                JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, imageURL, null, new Response.Listener<JSONArray>() { //makes request for all corresponding images
-//                    @Override
-//                    public void onResponse(JSONArray imageResponse) {
-//                        mFeedPostView.setRecyclerView(postResponse, imageResponse);
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        error.printStackTrace();
-//                    }
-//                })
-//                { @Override
-//                public Map<String, String> getHeaders() throws AuthFailureError {
-//                    // inserting the token into the response header that will be sent to the server
-//                    Map<String, String> header = new HashMap<>();
-//                    header.put("authorization", Config.token);
-//                    return header;
-//                }};
-//
-//                Config.requestQueue.add(imageRequest);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                error.printStackTrace();
-//            }
-//        })
-//        { @Override
-//        public Map<String, String> getHeaders() throws AuthFailureError {
-//            // inserting the token into the response header that will be sent to the server
-//            Map<String, String> header = new HashMap<>();
-//            header.put("authorization", Config.token);
-//            return header;
-//        }};
-//        Config.requestQueue.add(postRequest);
-//    }
+    @Override
+    public void setData(JSONArray feedPostsResponse, JSONArray imagesResponse) {
+        mComments = feedPostsResponse;
+        mImages = imagesResponse;
+        mFeedPosts = new ArrayList<>();
+
+        if ((feedPostsResponse.length() != imagesResponse.length()))
+            throw new AssertionError("Error: length of feedPostsResponse != imagesResponse");
+
+        for (int i=0; i<feedPostsResponse.length(); i++) {
+            try {
+                JSONObject jsonFeedPost = mComments.getJSONObject(i);
+                JSONObject jsonImage = mImages.getJSONObject(i);
+                FeedPost feedPost = new FeedPost(jsonFeedPost, jsonImage);
+                mFeedPosts.add(feedPost);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onBindViewHolderAtPosition(FeedPostContract.View.ViewHolder viewHolderInterface, int i) {
+        super.onBindViewHolderAtPosition(viewHolderInterface, i);
+        // TODO implement onbind
+    }
+
+    /**
+     * Gets the item Count of the feedposts JSONArray
+     * @return the length
+     */
+    // TODO refactor when DataCache object is implemented
+    @Override
+    public int getItemCount() {
+        return super.getItemCount();
+    }
+
+    // TODO refactor when DataCache object is implemented
+    @Override
+    public String getPosterIdByIndex(int i) {
+        return getFeedPostByIndex(i).getPosterId();
+    }
 
 }

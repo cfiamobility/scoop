@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,13 +15,14 @@ import android.view.ViewGroup;
 
 import org.json.JSONArray;
 
-import java.util.List;
-
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.R;
+
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 /**
@@ -32,47 +34,53 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    // array list to test the custom recycler view
-    private List<String> test;
     private View view;
-
     private FeedPostContract.Presenter mFeedPostPresenter;
-    private FeedPostInteractor mFeedPostInteractor;
 
-    public void setPresenter (FeedPostContract.Presenter presenter){
-        mFeedPostPresenter = presenter;
+    public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
+        mFeedPostPresenter = checkNotNull(presenter);
     }
 
-//    public CommunityFeedFragment() {
-//        // Required empty public constructor
-//    }
+    /**
+     * Empty Constructor for fragments
+     */
+    public CommunityFeedFragment() {
+    }
 
 
+    /**
+     * When the fragment initializes
+     * @param inflater: inflates the layout
+     * @param container: contains the layout
+     * @param savedInstanceState: ??
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_community_feed, container, false);
-
+        setPresenter(new FeedPostPresenter(this));
+        mFeedPostPresenter.loadDataFromDatabase(MySingleton.getInstance(getContext()), Config.currentUser);
         return view;
     }
 
+    /**
+     * See - Fragment Lifecycle
+     * @param view: the view
+     * @param savedInstanceState: ??
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-//
-//        FeedController controller = new FeedController(this);
-//        controller.getPosts();
-//        mFeedPostPresenter.getPosts(MySingleton.getInstance(getContext()));
-        mFeedPostInteractor = new FeedPostInteractor(this);
-        mFeedPostInteractor.getFeedPosts(MySingleton.getInstance(getContext()));
-
+        setRecyclerView();
     }
 
+    /**
+     * Sets the recycler view
+     */
     @Override
-    public void setRecyclerView(JSONArray posts, JSONArray images) {
+    public void setRecyclerView() {
         // setting up the recycler view
         mRecyclerView = view.findViewById(R.id.fragment_community_feed_rv);
         mRecyclerView.setHasFixedSize(true);
@@ -82,11 +90,8 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // using the custom adapter for the recycler view
-        mAdapter = new FeedPostAdapter(posts, images);
-        ((FeedPostAdapter) mAdapter).setView(this);
+        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
         mRecyclerView.setAdapter(mAdapter);
-
-//        mFeedPostPresenter.getPosts(MySingleton.getInstance(getContext()));
 
     }
 
@@ -95,6 +100,8 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
         return "community";
     }
 
+
+    //TODO remove set methods
     /**
      * FROM ADAPTER
      */
