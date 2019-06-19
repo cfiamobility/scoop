@@ -13,7 +13,7 @@ import ca.gc.inspection.scoop.base.BaseView;
 public interface ProfilePostContract extends ProfileCommentContract {
 
     interface View extends BaseView<Presenter> {
-        void displayPostListener(ProfilePostViewHolder holder);
+        void setDisplayPostListener(ProfilePostViewHolder holder);
 
         interface ViewHolder extends ProfileCommentContract.View.ViewHolder {
             ViewHolder setPostTitle(String postTitle);

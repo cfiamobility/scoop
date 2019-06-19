@@ -104,10 +104,9 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         postRecyclerView.setAdapter(mAdapter);
     }
 
-    // TODO refactor listeners
-    public void displayPostListener(ProfilePostViewHolder holder){
+    public void setDisplayPostListener(ProfilePostViewHolder viewHolder){
         // to get the options menu to appear
-        holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
+        viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
@@ -117,19 +116,5 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
             }
         });
     }
-
-//    @Override
-//    public void setDisplayPostLikesListener(ProfilePostViewHolder holder){
-//        // to get the options menu to appear
-//        holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
-//                final Context context = v.getContext();
-//                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-//                bottomSheetDialog.show(fragmentManager, "bottomSheet");
-//            }
-//        });
-//    }
 
 }

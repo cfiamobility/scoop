@@ -55,6 +55,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
         mProfilePostInteractor.getUserPosts(singleton, currentUser);
     }
 
+    @Override
     public void setData(JSONArray postsResponse, JSONArray imagesResponse) {
         mComments = postsResponse;
         mImages = imagesResponse;

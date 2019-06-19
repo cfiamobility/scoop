@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONArray;
-
 
 import ca.gc.inspection.scoop.R;
 
@@ -45,8 +43,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
     @Override
     public void onBindViewHolder(@NonNull ProfilePostViewHolder profilePostViewHolder, int i) {
         mProfilePostPresenter.onBindViewHolderAtPosition(profilePostViewHolder, i);
-
-        // TODO set listeners in view
+        mProfilePostView.setDisplayPostListener(profilePostViewHolder);
     }
 
 	@Override

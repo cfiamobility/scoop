@@ -18,6 +18,8 @@ import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
+import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
 
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
 import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_ACTIVITYID_KEY;
@@ -28,10 +30,17 @@ import static ca.gc.inspection.scoop.profilecomment.ProfileComment.USERID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfileCommentInteractor {
-    private ProfileCommentPresenter mProfileCommentPresenter;
+    protected ProfileCommentPresenter mPresenter;
+
+    /**
+     * Empty constructor called by child classes (ie. ProfilePostInteractor) to allow them to set
+     * their own presenter
+     */
+    public ProfileCommentInteractor() {
+    }
 
     public ProfileCommentInteractor(ProfileCommentPresenter presenter){
-        mProfileCommentPresenter = checkNotNull(presenter);
+        mPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -40,19 +49,26 @@ public class ProfileCommentInteractor {
      */
     public void getUserCommentsAndImages(MySingleton singleton, final String userid) {
         String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
-        JsonArrayRequest commentRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        String responseUrl = Config.baseIP + "profile/commentimagefill/" + userid;
+        JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
+        Config.requestQueue.add(commentRequest);
+//        singleton.addToRequestQueue(commentRequest);
+    }
+
+    public JsonArrayRequest newProfileJsonArrayRequest(String url, String responseUrl) {
+        return new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(final JSONArray commentsResponse) {
-                String url = Config.baseIP + "profile/commentimagefill/" + userid;
-                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            public void onResponse(final JSONArray response) {
+                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, responseUrl, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray imagesResponse) {
-                        mProfileCommentPresenter.setData(commentsResponse, imagesResponse);
+                        // TODO: *** if called by ProfilePostInteractor, setData should call the overridden method ***
+                        mPresenter.setData(response, imagesResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.d("Error.Response", String.valueOf(error));
                     }
                 }) {
                     public Map<String, String> getHeaders() throws AuthFailureError {
@@ -79,9 +95,6 @@ public class ProfileCommentInteractor {
                 return header;
             }
         };
-        Config.requestQueue.add(commentRequest);
-//        singleton.addToRequestQueue(commentRequest);
-
     }
 
     /**
@@ -155,8 +168,8 @@ public class ProfileCommentInteractor {
             @Override
             public void onResponse(String response) {
                 Log.i("response", response);
-                mProfileCommentPresenter.updateLikeState(viewHolderInterface, i, likeType);
-                mProfileCommentPresenter.updateLikeCount(viewHolderInterface, i, likeCount);
+                mPresenter.updateLikeState(viewHolderInterface, i, likeType);
+                mPresenter.updateLikeCount(viewHolderInterface, i, likeCount);
             }
         }, new Response.ErrorListener() {
             @Override

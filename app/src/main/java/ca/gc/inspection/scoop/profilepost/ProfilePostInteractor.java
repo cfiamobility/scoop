@@ -14,15 +14,16 @@ package ca.gc.inspection.scoop.profilepost;
 
         import ca.gc.inspection.scoop.Config;
         import ca.gc.inspection.scoop.MySingleton;
+        import ca.gc.inspection.scoop.profilecomment.ProfileCommentInteractor;
+        import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
 
         import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
-public class ProfilePostInteractor {
-    private ProfilePostPresenter mProfilePostPresenter;
+public class ProfilePostInteractor extends ProfileCommentInteractor {
 
     ProfilePostInteractor(ProfilePostPresenter presenter) {
-        mProfilePostPresenter = checkNotNull(presenter);
+        mPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -30,51 +31,11 @@ public class ProfilePostInteractor {
      * @param userid: passes the userid of the profile clicked on
      */
     public void getUserPosts(MySingleton singleton, final String userid) {
-
         String url = Config.baseIP + "profile/posttextfill/" + userid + "/" + Config.currentUser;
-        JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(final JSONArray postsResponse) {
-                String url = Config.baseIP + "profile/postimagefill/"  + userid;
-                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray imagesResponse) {
-                        mProfilePostPresenter.setData(postsResponse, imagesResponse);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", String.valueOf(error));
-                    }
-                }) {
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        // inserting the token into the response header that will be sent to the server
-                        Map<String, String> header = new HashMap<>();
-                        header.put("authorization", Config.token);
-                        return header;
-                    }
-                };
-                Config.requestQueue.add(imageRequest);
-//                  singleton.addToRequestQueue(imageRequest);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                // inserting the token into the response header that will be sent to the server
-                Map<String, String> header = new HashMap<>();
-                header.put("authorization", Config.token);
-                return header;
-            }
-        };
+        String responseUrl = Config.baseIP + "profile/postimagefill/" + userid;
+        JsonArrayRequest postRequest = super.newProfileJsonArrayRequest(url, responseUrl);
         Config.requestQueue.add(postRequest);
-//          singleton.addToRequestQueue(postRequest);
-
+//        singleton.addToRequestQueue(postRequest);
     }
-
-
 }
 
