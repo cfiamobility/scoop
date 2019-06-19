@@ -20,33 +20,30 @@ public interface ProfileCommentContract {
     interface View extends BaseView<Presenter> {
 
         interface ViewHolder {
-            ProfileCommentContract.View.ViewHolder setPostTitle(String postTitle);
-            ProfileCommentContract.View.ViewHolder setPostText(String postText);
-            ProfileCommentContract.View.ViewHolder setUserImage(Bitmap image);
-            ProfileCommentContract.View.ViewHolder setUserName(String userName);
-            ProfileCommentContract.View.ViewHolder setLikeCount(String likeCount);
-            ProfileCommentContract.View.ViewHolder setDate(String date);
-            ProfileCommentContract.View.ViewHolder setLikeState(LikeState likeState);
-            ProfileCommentContract.View.ViewHolder setUserImageFromString(String image);
-            ProfileCommentContract.View.ViewHolder hideDate();
-            ProfileCommentContract.View.ViewHolder formatDate(String time);
+            ViewHolder setPostTitle(String postTitle);
+            ViewHolder setPostText(String postText);
+            ViewHolder setUserImage(Bitmap image);
+            ViewHolder setUserName(String userName);
+            ViewHolder setLikeCount(String likeCount);
+            ViewHolder setDate(String date);
+            ViewHolder setLikeState(LikeState likeState);
+            ViewHolder setUserImageFromString(String image);
+            ViewHolder hideDate();
+            ViewHolder formatDate(String time);
         }
     }
 
     interface Presenter extends BasePresenter {
         void changeUpvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
         void changeDownvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
-        void loadUserCommentsAndImages(MySingleton instance, String currentUser);
+        void loadDataFromDatabase(MySingleton instance, String currentUser);
 
         interface AdapterAPI {
-            void onBindProfileCommentViewHolderAtPosition(
+            void onBindViewHolderAtPosition(
                     ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
             int getItemCount();
 
             String getPosterIdByIndex(int i);
-        }
-
-        interface ViewHolderAPI {
         }
     }
 }

@@ -8,7 +8,7 @@ public class ProfileComment {
     /**
      * Data class which stores information for a single profile comment
      */
-    private JSONObject mComment, mImage;
+    protected JSONObject mComment, mImage;
 
     public static final String PROFILE_COMMENT_ACTIVITYID_KEY = "activityid";
     public static final String PROFILE_COMMENT_LIKE_POSTERID_KEY = "posterid";  // TODO document difference between posterid and userid
@@ -22,7 +22,7 @@ public class ProfileComment {
     public static final String PROFILE_COMMENT_LIKE_COUNT_KEY = "likecount";
     public static final String PROFILE_COMMENT_POST_TEXT_KEY = "posttext";
 
-    ProfileComment(JSONObject jsonComment, JSONObject jsonImage) {
+    protected ProfileComment(JSONObject jsonComment, JSONObject jsonImage) {
         mComment = jsonComment;
         mImage = jsonImage;
     }

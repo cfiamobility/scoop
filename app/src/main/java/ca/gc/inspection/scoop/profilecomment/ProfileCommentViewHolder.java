@@ -146,8 +146,10 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
      */
     @Override
     public ProfileCommentContract.View.ViewHolder setUserImageFromString(String image){
-        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        setUserImage(bitmap);
+        if (image != null && !image.isEmpty()) {
+            Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
+            setUserImage(bitmap);
+        }
         return this;
     }
 

@@ -60,7 +60,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         Bundle bundle = getArguments();
         String userid = bundle.getString("userid"); // TODO: can we delete unused userid var?
         setPresenter(new ProfileCommentPresenter(this));
-        mProfileCommentPresenter.loadUserCommentsAndImages(MySingleton.getInstance(getContext()), Config.currentUser);
+        mProfileCommentPresenter.loadDataFromDatabase(MySingleton.getInstance(getContext()), Config.currentUser);
         return view;
     }
 

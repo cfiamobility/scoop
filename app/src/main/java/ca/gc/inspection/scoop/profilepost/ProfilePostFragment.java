@@ -71,8 +71,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         Bundle bundle = getArguments();
         userid = bundle.getString("userid");
         setPresenter(new ProfilePostPresenter(this));
-        // TODO check what needs to be loaded
-        mProfilePostPresenter.loadUserCommentsAndImages(MySingleton.getInstance(getContext()), Config.currentUser);
+        mProfilePostPresenter.loadDataFromDatabase(MySingleton.getInstance(getContext()), Config.currentUser);
         return view;
     }
 
@@ -85,12 +84,6 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setRecyclerView();
-//        TODO remove comments
-////        ProfilePostContract.Presenter mProfilePostPresenter = new ProfilePostPresenter(this);
-////        mProfilePostPresenter.getPosts(MySingleton.getInstance(MyApplication.getContext()), Config.currentUser);
-//        mProfilePostInteractor = new ProfilePostInteractor(this);
-//        mProfilePostInteractor.getUserPosts(MySingleton.getInstance(getContext()), Config.currentUser);
-
     }
 
     /**
@@ -111,6 +104,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         postRecyclerView.setAdapter(mAdapter);
     }
 
+    // TODO refactor listeners
     public void displayPostListener(ProfilePostViewHolder holder){
         // to get the options menu to appear
         holder.optionsMenu.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +131,5 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
 //            }
 //        });
 //    }
-
 
 }

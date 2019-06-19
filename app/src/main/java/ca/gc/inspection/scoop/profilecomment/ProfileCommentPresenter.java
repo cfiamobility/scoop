@@ -23,55 +23,34 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfileCommentPresenter implements
         ProfileCommentContract.Presenter,
-        ProfileCommentContract.Presenter.AdapterAPI,
-        ProfileCommentContract.Presenter.ViewHolderAPI {
+        ProfileCommentContract.Presenter.AdapterAPI {
 
     @NonNull
     private ProfileCommentContract.View mProfileCommentView;
     private ProfileCommentInteractor mProfileCommentInteractor;
-    private JSONArray mComments, mImages;
-    private ArrayList<ProfileComment> mProfileComments;
+    protected JSONArray mComments, mImages;   // TODO encapsulate into DataCache class to allow inheritance
+    protected ArrayList<ProfileComment> mProfileComments;
 
-    private ProfileComment getProfileCommentByIndex(int i) {
+    /**
+     * Empty constructor called by child classes (ie. ProfilePostPresenter) to allow them to create
+     * their own View and Interactor objects
+     */
+    public ProfileCommentPresenter() {
+    }
+
+    protected ProfileComment getProfileCommentByIndex(int i) {
         return mProfileComments.get(i);
     }
 
-    public ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewInterface){
+    ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewInterface){
 
         mProfileCommentView = checkNotNull(viewInterface);
         mProfileCommentInteractor = new ProfileCommentInteractor(this);
 
     }
 
-    public void displayProfileCommentImages(ProfileCommentContract.View.ViewHolder viewHolderInterface, ProfileComment profileComment) {
-        if(profileComment.getProfileImageString() != null) { // null check to see if there are images
-            viewHolderInterface.setUserImageFromString(profileComment.getProfileImageString()); //formats profile image
-        }
-    }
-
-    public void displayProfileCommentTitle(ProfileCommentContract.View.ViewHolder viewHolderInterface, ProfileComment profileComment) {
-        viewHolderInterface.setPostTitle(profileComment.getPostTitle());
-    }
-
-    /**
-     * Description: main method to display a single post
-     * @throws JSONException
-     */
-    public void displayProfileComment(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
-        ProfileComment profileComment = getProfileCommentByIndex(i);
-
-        viewHolderInterface.setPostText(profileComment.getPostText());
-        viewHolderInterface.formatDate(profileComment.getDate());
-        viewHolderInterface.setUserName(profileComment.getValidFullName());
-        viewHolderInterface.setLikeState(profileComment.getLikeState());
-        viewHolderInterface.setLikeCount(profileComment.getLikeCount());
-
-        displayProfileCommentImages(viewHolderInterface, profileComment);
-        displayProfileCommentTitle(viewHolderInterface, profileComment);
-    }
-
     @Override
-    public void loadUserCommentsAndImages(MySingleton instance, String currentUser) {
+    public void loadDataFromDatabase(MySingleton instance, String currentUser) {
         mProfileCommentInteractor.getUserCommentsAndImages(instance, currentUser);
     }
 
@@ -187,7 +166,7 @@ public class ProfileCommentPresenter implements
         viewHolderInterface.setLikeState(likeState);
     }
 
-    public void onBindProfileCommentViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
+    public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
         ProfileComment profileComment = getProfileCommentByIndex(i);
 
         viewHolderInterface.setDate(profileComment.getDate())
@@ -197,8 +176,6 @@ public class ProfileCommentPresenter implements
                 .setUserImageFromString(profileComment.getProfileImageString())
                 .setUserName(profileComment.getValidFullName())
                 .setLikeState(profileComment.getLikeState());
-
-        displayProfileComment(viewHolderInterface, i);
     }
 
     /**

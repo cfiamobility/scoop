@@ -15,30 +15,21 @@ package ca.gc.inspection.scoop.profilepost;
         import ca.gc.inspection.scoop.Config;
         import ca.gc.inspection.scoop.MySingleton;
 
+        import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+
 
 public class ProfilePostInteractor {
-    private ProfilePostContract.Presenter mProfilePostPresenter;
-    private ProfilePostContract.View mProfilePostView;
+    private ProfilePostPresenter mProfilePostPresenter;
 
-
-
-
-    ProfilePostInteractor(ProfilePostContract.View view) {
-//        mProfilePostPresenter = presenter;
-        mProfilePostView = view;
+    ProfilePostInteractor(ProfilePostPresenter presenter) {
+        mProfilePostPresenter = checkNotNull(presenter);
     }
-
-
-    /**
-     * FROM ProfilePostsController
-     */
 
     /**
      * HTTP Requests to get all the user posts infos
      * @param userid: passes the userid of the profile clicked on
      */
     public void getUserPosts(MySingleton singleton, final String userid) {
-
 
         String url = Config.baseIP + "profile/posttextfill/" + userid + "/" + Config.currentUser;
         JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -48,7 +39,7 @@ public class ProfilePostInteractor {
                 final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray imagesResponse) {
-                        mProfilePostView.setRecyclerView(postsResponse, imagesResponse);
+                        mProfilePostPresenter.setData(postsResponse, imagesResponse);
                     }
                 }, new Response.ErrorListener() {
                     @Override

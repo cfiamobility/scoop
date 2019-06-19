@@ -44,18 +44,9 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
      */
     @Override
     public void onBindViewHolder(@NonNull ProfilePostViewHolder profilePostViewHolder, int i) {
-        mProfilePostPresenter.onBindProfilePostViewHolderAtPosition(profilePostViewHolder, i);
+        mProfilePostPresenter.onBindViewHolderAtPosition(profilePostViewHolder, i);
 
-        // TODO remove commented lines; add listeners?
-//		mProfilePostPresenter = new ProfilePostPresenter(mProfilePostView, posts, images, i, profilePostViewHolder);
-////        mProfilePostPresenter.getUserPosts(Config.currentUser);
-//		try {
-//			mProfilePostPresenter.displayPost();
-//			mProfilePostPresenter.displayImages();
-//			mProfilePostPresenter.formPostTitle();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+        // TODO set listeners in view
     }
 
 	@Override
