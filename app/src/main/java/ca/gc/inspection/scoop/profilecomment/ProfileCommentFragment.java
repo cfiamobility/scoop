@@ -89,7 +89,6 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
 
         // Setting the custom adapter for the recycler view
         mAdapter = new ProfileCommentAdapter(this, (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter);
-        mAdapter.setView(this);
         commentsRecyclerView.setAdapter(mAdapter);
     }
 

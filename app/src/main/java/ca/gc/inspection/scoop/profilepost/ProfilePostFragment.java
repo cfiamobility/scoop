@@ -23,7 +23,9 @@ import org.json.JSONArray;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.PostOptionsDialog;
+import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentFragment;
+import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
 
@@ -43,17 +45,19 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     private String userid;
     private View view;
     private ProfilePostContract.Presenter mProfilePostPresenter;
-    private ProfilePostInteractor mProfilePostInteractor;
 
-    public void setPresenter (ProfilePostContract.Presenter presenter){
+    public void setPresenter (@NonNull ProfilePostContract.Presenter presenter){
         mProfilePostPresenter = checkNotNull(presenter);
     }
-//    public String getPosterId() {
-//        return userid;
-//    }
 
     /**
-     *
+     * Empty Constructor for fragments
+     */
+    public ProfilePostFragment() {
+    }
+
+    /**
+     * When the fragment initializes
      * @param inflater: inflates the layout
      * @param container: contains the layout
      * @param savedInstanceState: ??
@@ -66,6 +70,9 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         view = inflater.inflate(R.layout.fragment_profile_posts, container, false);
         Bundle bundle = getArguments();
         userid = bundle.getString("userid");
+        setPresenter(new ProfilePostPresenter(this));
+        // TODO check what needs to be loaded
+        mProfilePostPresenter.loadUserCommentsAndImages(MySingleton.getInstance(getContext()), Config.currentUser);
         return view;
     }
 
@@ -77,20 +84,20 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        ProfilePostContract.Presenter mProfilePostPresenter = new ProfilePostPresenter(this);
-//        mProfilePostPresenter.getPosts(MySingleton.getInstance(MyApplication.getContext()), Config.currentUser);
-        mProfilePostInteractor = new ProfilePostInteractor(this);
-        mProfilePostInteractor.getUserPosts(MySingleton.getInstance(getContext()), Config.currentUser);
+        setRecyclerView();
+//        TODO remove comments
+////        ProfilePostContract.Presenter mProfilePostPresenter = new ProfilePostPresenter(this);
+////        mProfilePostPresenter.getPosts(MySingleton.getInstance(MyApplication.getContext()), Config.currentUser);
+//        mProfilePostInteractor = new ProfilePostInteractor(this);
+//        mProfilePostInteractor.getUserPosts(MySingleton.getInstance(getContext()), Config.currentUser);
 
     }
 
     /**
-     * Sets the recycler view with the adapter created
-     * @param posts: JSONArray of posts from db
-     * @param images: JSONArray of profile pictures from db
+     * Sets the recycler view
      */
 
-    public void setRecyclerView(JSONArray posts, JSONArray images) {
+    public void setRecyclerView() {
         // initializing the recycler view
         postRecyclerView = view.findViewById(R.id.fragment_profile_posts_rv);
         postRecyclerView.setHasFixedSize(true);
@@ -100,16 +107,8 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         postRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting the custom adapter for the recycler view
-        mAdapter = new ProfilePostAdapter(posts, images);
-        ((ProfilePostAdapter) mAdapter).setView(this);
+        mAdapter = new ProfilePostAdapter(this, (ProfilePostContract.Presenter.AdapterAPI) mProfilePostPresenter);
         postRecyclerView.setAdapter(mAdapter);
-
-//        mProfilePostPresenter.getPosts(MySingleton.getInstance(getActivity()), Config.currentUser);
-
-    }
-
-    public void setCommentCount(String commentCount, ProfilePostViewHolder holder) {
-        holder.commentCount.setText(commentCount);
     }
 
     public void displayPostListener(ProfilePostViewHolder holder){
@@ -123,53 +122,6 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");
             }
         });
-    }
-    /**
-     * FROM ADAPTER
-     */
-
-    public void setPostText(String postText, ProfileCommentViewHolder holder) {
-        holder.postText.setText(postText);
-    }
-
-    public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
-        holder.postTitle.setText(postTitle);
-    }
-
-    public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
-        Log.i("image", image.toString());
-        holder.profileImage.setImageBitmap(image);
-    }
-
-    public void setUserName(String userName, ProfileCommentViewHolder holder) {
-        holder.username.setText(userName);
-    }
-
-    public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
-        holder.likeCount.setText(likeCount);
-    }
-
-    public void setDate(String date, ProfileCommentViewHolder holder) {
-        holder.date.setText(date);
-    }
-
-    public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
-        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-        holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
-    }
-
-    public void setLikeNeutralState(ProfileCommentViewHolder holder) {
-        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
-    }
-
-    public void setLikeUpvoteState(ProfileCommentViewHolder holder) {
-        holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
-        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
-    }
-
-    public void hideDate(ProfileCommentViewHolder holder) {
-        holder.date.setVisibility(View.GONE);
     }
 
 //    @Override

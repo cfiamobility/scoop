@@ -16,9 +16,10 @@ public interface ProfilePostContract extends ProfileCommentContract {
 //        void setRecyclerView(JSONArray posts, JSONArray images);
 //        String getPosterId();
         void displayPostListener(ProfilePostViewHolder holder);
+
+        interface ViewHolder extends ProfileCommentContract.View.ViewHolder {
+        }
 //        void getUserPosts(MySingleton singleton, final String userId);
-
-
     }
 
     interface Presenter extends BasePresenter {
@@ -28,7 +29,7 @@ public interface ProfilePostContract extends ProfileCommentContract {
         void checkCommentCount(String commentCount);
 //        void getRecyclerView(JSONArray posts, JSONArray images);
 //        void getPosts(MySingleton singleton, final String userId);
+        interface AdapterAPI {
+        }
     }
-
-
 }

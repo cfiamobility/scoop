@@ -11,10 +11,6 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     private ProfileCommentContract.Presenter.AdapterAPI mProfileCommentPresenter;
     private ProfileCommentFragment mProfileCommentView;
 
-    public void setView (ProfileCommentFragment profileCommentView){
-        mProfileCommentView = profileCommentView;
-    }
-
     /**
      * Constructor for the adapter
      */
@@ -24,7 +20,6 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     }
 
     /**
-     * Creates the viewholder that contains all the parts of the adapter
      * @param viewGroup: ??
      * @param i: item iterator for each row of the recycler view
      * @returns a new view holder

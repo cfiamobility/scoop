@@ -17,6 +17,7 @@ import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
  */
 public class ProfilePostPresenter extends ProfileCommentPresenter implements ProfilePostContract.Presenter {
     private JSONObject post;
+    private JSONArray posts, images;
     private ProfilePostViewHolder holder;
     private Map<String, String> likeProperties;
     private static final String TAG = "presenter";

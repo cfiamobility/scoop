@@ -11,102 +11,56 @@ import org.json.JSONArray;
 
 import ca.gc.inspection.scoop.R;
 
-public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder>{
-	private JSONArray posts, images;
-	private ProfilePostPresenter mProfilePostPresenter;
-    private ProfilePostContract.View mProfilePostView;
+public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder> {
 
-	public ProfilePostAdapter(JSONArray posts, JSONArray images) {
-		this.posts = posts;
-		this.images = images;
+	private ProfilePostContract.Presenter.AdapterAPI mProfilePostPresenter;
+    private ProfilePostFragment mProfilePostView;
+
+    /**
+     * Constructor for the adapter
+     */
+	public ProfilePostAdapter(ProfilePostFragment profileCommentView, ProfilePostContract.Presenter.AdapterAPI presenter) {
+        mProfilePostView = profileCommentView;
+        mProfilePostPresenter = presenter;
 	}
 
-	@NonNull
-	@Override
-	public ProfilePostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-		View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_profile_layout, viewGroup, false);
-		return new ProfilePostViewHolder(v);
-	}
+    /**
+     * @param viewGroup
+     * @param i
+     * @return
+     */
+    @NonNull
+    @Override
+    public ProfilePostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_profile_layout, viewGroup, false);
+        return new ProfilePostViewHolder(v);
+    }
 
-	@Override
-	public void onBindViewHolder(@NonNull ProfilePostViewHolder profilePostViewHolder, int i) {
-		mProfilePostPresenter = new ProfilePostPresenter(mProfilePostView, posts, images, i, profilePostViewHolder);
-//        mProfilePostPresenter.getUserPosts(Config.currentUser);
-		try {
-			mProfilePostPresenter.displayPost();
-			mProfilePostPresenter.displayImages();
-			mProfilePostPresenter.formPostTitle();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * Binds new data to the viewholder
+     *
+     * @param profilePostViewHolder
+     * @param i
+     */
+    @Override
+    public void onBindViewHolder(@NonNull ProfilePostViewHolder profilePostViewHolder, int i) {
+        mProfilePostPresenter.onBindProfilePostViewHolderAtPosition(profilePostViewHolder, i);
+
+        // TODO remove commented lines; add listeners?
+//		mProfilePostPresenter = new ProfilePostPresenter(mProfilePostView, posts, images, i, profilePostViewHolder);
+////        mProfilePostPresenter.getUserPosts(Config.currentUser);
+//		try {
+//			mProfilePostPresenter.displayPost();
+//			mProfilePostPresenter.displayImages();
+//			mProfilePostPresenter.formPostTitle();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+    }
 
 	@Override
 	public int getItemCount() {
-		return posts.length();
+		return mProfilePostPresenter.getItemCount();
 	}
-
-
-    public void setView (ProfilePostContract.View profilePostView){
-        mProfilePostView = profilePostView;
-    }
-//
-//
-//	@Override
-//	public void setPostText(String postText, ProfileCommentViewHolder holder) {
-//		holder.postText.setText(postText);
-//	}
-//
-//	@Override
-//	public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
-//		holder.postTitle.setText(postTitle);
-//	}
-//
-//	@Override
-//	public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
-//		Log.i("image", image.toString());
-//		holder.profileImage.setImageBitmap(image);
-//	}
-//
-//	@Override
-//	public void setUserName(String userName, ProfileCommentViewHolder holder) {
-//		holder.username.setText(userName);
-//	}
-//
-//	@Override
-//	public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
-//		holder.likeCount.setText(likeCount);
-//	}
-//
-//	@Override
-//	public void setDate(String date, ProfileCommentViewHolder holder) {
-//		holder.date.setText(date);
-//	}
-//
-//	@Override
-//	public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
-//		holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-//		holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
-//	}
-//
-//	@Override
-//	public void setLikeNeutralState(ProfileCommentViewHolder holder) {
-//		holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-//		holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
-//	}
-//
-//	public void setLikeUpvoteState(ProfilePostViewHolder holder) {
-//		holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
-//		holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
-//	}
-//
-//	public void setCommentCount(String commentCount, ProfilePostViewHolder holder) {
-//		holder.commentCount.setText(commentCount);
-//	}
-//
-//	@Override
-//	public void hideDate(ProfileCommentViewHolder holder) {
-//		holder.date.setVisibility(View.GONE);
-//	}
 
 }
