@@ -16,12 +16,12 @@ import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>  {
 
     private FeedPostContract.Presenter.AdapterAPI mFeedPostPresenter;
-    private FeedPostContract.View mFeedPostView;    //TODO determine best practice for getting fragment views
+    private CommunityFeedFragment mFeedPostView;    // current assumption: only implementing community feed fragment
 
     /**
      * Constructor for the adapter
      */
-    public FeedPostAdapter(FeedPostContract.View profileCommentView, ProfilePostContract.Presenter.AdapterAPI presenter) {
+    public FeedPostAdapter(CommunityFeedFragment profileCommentView, FeedPostContract.Presenter.AdapterAPI presenter) {
         mFeedPostView = profileCommentView;
         mFeedPostPresenter = presenter;
     }
@@ -40,14 +40,12 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>  {
 
     /**
      * Binds new data to the viewholder
-     * @param holder
      * @param i
      */
     @Override
     public void onBindViewHolder(@NonNull FeedPostViewHolder feedPostViewHolder, int i) {
         mFeedPostPresenter.onBindViewHolderAtPosition(feedPostViewHolder, i);
-
-        //TODO set listeners
+        mFeedPostView.setProfileCommentImageListener(feedPostViewHolder);
     }
 
     @Override

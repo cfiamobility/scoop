@@ -53,52 +53,9 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
 
     }
 
-    // TODO implement getting different data for community vs official feed
     @Override
-    public void loadDataFromDatabase(MySingleton singleton, String currentUser) {
-        mFeedPostInteractor.getUserPosts(singleton, currentUser);
-    }
-
-    // TODO refactor
-    @Override
-    public void displayImages() throws JSONException {
-        if(images != null) { // null check to see if there are images
-            formatImage(images.getString("postimagepath"), "post"); //formats post image
-            formatImage(images.getString("profileimage"), "user"); //formats profile image
-        }else{
-            mFeedPostView.hidePostImage(holder); //hides post image
-        }
-
-        // tapping on any item from the view holder will go to the display post activity
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
-            }
-        });
-    }
-
-    /**
-     * Description: changes image from a string to a bitmap, then setting image
-     * @param image: image to convert
-     * @param type: type of image
-     */
-    public void formatImage(String image, String type){
-        Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-        if(type.equals("post")) {
-            if(!image.equals("") && !image.equals("null")) {
-                mFeedPostView.setPostImage(bitmap, holder);
-            } else{
-                mFeedPostView.hidePostImage(holder);
-            }
-        }else{
-            mFeedPostView.setUserImage(bitmap, holder);
-        }
-    }
-
-    // TODO pass into interactor as parameter?
-    public String getFeedType(){
-        return mFeedPostView.getFeedType();
+    public void loadDataFromDatabase(MySingleton singleton, String feedType) {
+        mFeedPostInteractor.getFeedPosts(singleton, feedType);
     }
 
     @Override
@@ -123,9 +80,10 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     }
 
     @Override
-    public void onBindViewHolderAtPosition(FeedPostContract.View.ViewHolder viewHolderInterface, int i) {
+    public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
         super.onBindViewHolderAtPosition(viewHolderInterface, i);
-        // TODO implement onbind
+        FeedPost feedPost = getFeedPostByIndex(i);
+        ((FeedPostContract.View.ViewHolder) viewHolderInterface).setPostImageFromString(feedPost.getFeedPostImagePath());
     }
 
     /**

@@ -85,7 +85,7 @@ public class ProfileCommentInteractor {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                error.printStackTrace();
             }
         }) {
             public Map<String, String> getHeaders() throws AuthFailureError {

@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.feedpost;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.DisplayPostActivity;
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
@@ -61,7 +63,7 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_community_feed, container, false);
         setPresenter(new FeedPostPresenter(this));
-        mFeedPostPresenter.loadDataFromDatabase(MySingleton.getInstance(getContext()), Config.currentUser);
+        mFeedPostPresenter.loadDataFromDatabase(MySingleton.getInstance(getContext()), getFeedType());
         return view;
     }
 
@@ -98,134 +100,5 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
     @Override
     public String getFeedType(){
         return "community";
-    }
-
-
-    //TODO remove set methods
-    /**
-     * FROM ADAPTER
-     */
-
-    @Override
-    public void setPostText(String postText, ProfileCommentViewHolder holder) {
-        holder.postText.setText(postText);
-    }
-
-    /**
-     * Description: sets title of post
-     * @param postTitle: title of post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
-        holder.postTitle.setText(postTitle);
-    }
-
-    /**
-     * Description: sets image of post
-     * @param image: image of post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setPostImage(Bitmap image, FeedPostViewHolder holder) {
-        holder.postImage.setImageBitmap(image);
-    }
-
-    /**
-     * Description: sets image of user
-     * @param image: image of user
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
-        holder.profileImage.setImageBitmap(image);
-    }
-
-    /**
-     * Description: sets name of user
-     * @param userName: name of user
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setUserName(String userName, ProfileCommentViewHolder holder) {
-        holder.username.setText(userName);
-    }
-
-    /**
-     * Description: sets like count on post
-     * @param likeCount: like count on post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
-        holder.likeCount.setText(likeCount);
-    }
-
-    /**
-     * Description: sets date of post
-     * @param date: date of post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setDate(String date, ProfileCommentViewHolder holder) {
-        holder.date.setText(date);
-    }
-
-    /**
-     * Description: sets neutral state of likes
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setLikeNeutralState(ProfileCommentViewHolder holder) {
-        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
-    }
-
-    /**
-     * Description: sets upvote state of likes
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setLikeUpvoteState(ProfileCommentViewHolder holder) {
-        holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
-        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
-    }
-
-    /**
-     * Description: sets downvote state of likes
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
-        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
-        holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
-    }
-
-    /**
-     * Description: sets comment count of post
-     * @param commentCount: comment count of post
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void setCommentCount(String commentCount, ProfilePostViewHolder holder) {
-        holder.commentCount.setText(commentCount);
-    }
-
-    /**
-     * Description: hides post image if there is none
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void hidePostImage(FeedPostViewHolder holder) {
-        holder.postImage.setVisibility(View.GONE);
-    }
-
-    /**
-     * Description: hides date if there is an error
-     * @param holder: viewholder of item
-     */
-    @Override
-    public void hideDate(ProfileCommentViewHolder holder) {
-        holder.date.setVisibility(View.GONE);
     }
 }

@@ -22,6 +22,13 @@ package ca.gc.inspection.scoop.profilepost;
 
 public class ProfilePostInteractor extends ProfileCommentInteractor {
 
+    /**
+     * Empty constructor called by child classes (ie. FeedPostInteractor) to allow them to set
+     * their own presenter
+     */
+    public ProfilePostInteractor() {
+    }
+
     ProfilePostInteractor(ProfilePostPresenter presenter) {
         mPresenter = checkNotNull(presenter);
     }

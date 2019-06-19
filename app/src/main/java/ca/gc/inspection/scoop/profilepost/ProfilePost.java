@@ -10,7 +10,7 @@ public class ProfilePost extends ProfileComment {
     public static final String PROFILE_POST_TITLE_KEY = "posttitle";
     public static final String PROFILE_POST_COMMENT_COUNT_KEY = "commentcount";
 
-    ProfilePost(JSONObject jsonPost, JSONObject jsonImage) {
+    protected ProfilePost(JSONObject jsonPost, JSONObject jsonImage) {
         super(jsonPost, jsonImage);
     }
 

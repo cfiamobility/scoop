@@ -38,6 +38,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
     private FeedPostContract.Presenter mFeedPostPresenter;
 
 
+    @Override
     public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
         mFeedPostPresenter = checkNotNull(presenter);
     }
@@ -60,7 +61,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_official_feed, container, false);
-        setPresenter(new FeedPostPresenter(this));
+        // setPresenter(new FeedPostPresenter(this));
         // TODO call different loaddatafromdatabase method for official feed data
 //        mFeedPostPresenter.loadDataFromDatabase(MySingleton.getInstance(getContext()), Config.currentUser);
         return view;
@@ -72,21 +73,20 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
         // TODO add setRecyclerView
     }
 
-
     @Override
-    public void setRecyclerView(JSONArray posts, JSONArray images){
-
-        // initializing the recycler view
-        mRecyclerView = view.findViewById(R.id.fragment_official_feed_rv);
-        mRecyclerView.setHasFixedSize(true);
-
-        // setting up the layout manager for the recycler view
-        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // setting up the custom adapter for the recycler view
-        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
-        mRecyclerView.setAdapter(mAdapter);
+    public void setRecyclerView(){
+//
+//        // initializing the recycler view
+//        mRecyclerView = view.findViewById(R.id.fragment_official_feed_rv);
+//        mRecyclerView.setHasFixedSize(true);
+//
+//        // setting up the layout manager for the recycler view
+//        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+//        mRecyclerView.setLayoutManager(mLayoutManager);
+//
+//        // setting up the custom adapter for the recycler view
+//        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
+//        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

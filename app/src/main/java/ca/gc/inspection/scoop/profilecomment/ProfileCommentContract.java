@@ -22,14 +22,12 @@ public interface ProfileCommentContract {
         interface ViewHolder {
             ViewHolder setPostTitle(String postTitle);
             ViewHolder setPostText(String postText);
-            ViewHolder setUserImage(Bitmap image);
             ViewHolder setUserName(String userName);
             ViewHolder setLikeCount(String likeCount);
             ViewHolder setDate(String date);
             ViewHolder setLikeState(LikeState likeState);
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
-            ViewHolder formatDate(String time);
         }
     }
 

@@ -46,6 +46,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     private View view;
     private ProfilePostContract.Presenter mProfilePostPresenter;
 
+    @Override
     public void setPresenter(@NonNull ProfilePostContract.Presenter presenter) {
         mProfilePostPresenter = checkNotNull(presenter);
     }

@@ -43,7 +43,14 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
         return mProfilePosts.get(i);
     }
 
-    public ProfilePostPresenter(@NonNull ProfilePostContract.View viewInterface){
+    /**
+     * Empty constructor called by child classes (ie. FeedPostPresenter) to allow them to create
+     * their own View and Interactor objects
+     */
+    protected ProfilePostPresenter() {
+    }
+
+    ProfilePostPresenter(@NonNull ProfilePostContract.View viewInterface){
 
         mProfilePostView = checkNotNull(viewInterface);
         mProfilePostInteractor = new ProfilePostInteractor(this);

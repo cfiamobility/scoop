@@ -61,17 +61,6 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
 
     /**
      *
-     * @param image
-     */
-    @Override
-    public ProfileCommentContract.View.ViewHolder setUserImage(Bitmap image) {
-        Log.i("image", image.toString());
-        profileImage.setImageBitmap(image);
-        return this;
-    }
-
-    /**
-     *
      * @param userName
      */
     @Override
@@ -98,8 +87,16 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
      */
     @Override
     public ProfileCommentContract.View.ViewHolder setDate(String date) {
-        this.date.setText(date);
-        return this;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
+            Date parsedDate = dateFormat.parse(date); //parses the created date to be in specified date format
+            DateFormat properDateFormat = new SimpleDateFormat("MM-dd-yy"); //formats the date to be how we want it to output
+            this.date.setText(properDateFormat.format(parsedDate));
+            return this;
+        } catch(Exception e){
+            e.printStackTrace();
+            return hideDate();
+        }
     }
 
     @Override
@@ -148,25 +145,9 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
     public ProfileCommentContract.View.ViewHolder setUserImageFromString(String image){
         if (image != null && !image.isEmpty()) {
             Bitmap bitmap = MyCamera.stringToBitmap(image); //converts image string to bitmap
-            setUserImage(bitmap);
+            Log.i("image", image);
+            profileImage.setImageBitmap(bitmap);
         }
         return this;
-    }
-
-    /**
-     * Description: formats date accordingly
-     * @param time
-     */
-    @Override
-    public ProfileCommentContract.View.ViewHolder formatDate(String time){
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
-            Date parsedDate = dateFormat.parse(time); //parses the created date to be in specified date format
-            DateFormat properDateFormat = new SimpleDateFormat("MM-dd-yy"); //formats the date to be how we want it to output
-            return setDate(properDateFormat.format(parsedDate));
-        }catch(Exception e){
-            e.printStackTrace();
-            return hideDate();
-        }
     }
 }
