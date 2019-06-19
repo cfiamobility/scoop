@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import ca.gc.inspection.scoop.ProfilePost.ProfilePostFragment;
-import ca.gc.inspection.scoop.ProfileComment.ProfileCommentFragment;
+import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
+import ca.gc.inspection.scoop.profilecomment.ProfileCommentFragment;
 
 public class ProfileFragmentPagerAdapter  extends FragmentStatePagerAdapter {
     int mNumOfTabs;

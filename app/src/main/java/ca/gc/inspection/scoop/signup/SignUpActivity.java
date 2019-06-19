@@ -1,20 +1,27 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.signup;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 
+import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.splashscreen.SplashScreenActivity;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements SignUpContract.View{
+
+    SignUpContract.Presenter mSignUpPresenter;
+
+    public void setPresenter(SignUpContract.Presenter presenter){
+        mSignUpPresenter = presenter;
+    }
 
     // Initializing the buttons, edit texts, and string variables
     String firstNameText, lastNameText, emailText, passwordText;
@@ -51,8 +58,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Getting the text from the edit texts
-                firstNameText = capitalizeFirstLetter(firstNameET.getText().toString());
-                lastNameText = capitalizeFirstLetter(lastNameET.getText().toString());
+                firstNameText = mSignUpPresenter.capitalizeFirstLetter(firstNameET.getText().toString());
+                lastNameText = mSignUpPresenter.capitalizeFirstLetter(lastNameET.getText().toString());
                 emailText = (emailET.getText().toString()).toLowerCase();
                 passwordText = passwordET.getText().toString();
 
@@ -132,6 +139,9 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
+
+        mSignUpPresenter = new SignUpPresenter(this);
+
     }
 
     // [INPUT]:         The first name, last name, email, and password that the user entered is passed into this function
@@ -149,73 +159,15 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (TextUtils.isEmpty(email) || !email.contains("@canada.ca")) { // if the email field is empty or if they do not enter a @canada.ca email
             emailLayout.setError("Please enter valid email.");
             return;
-        } else if (TextUtils.isEmpty(password) || password.length() < 8 || !isValidPassword(password)) { // is the password field is empty or is less than 8 characters or is not valid
+        } else if (TextUtils.isEmpty(password) || password.length() < 8 || !(mSignUpPresenter.isValidPassword(password))) { // is the password field is empty or is less than 8 characters or is not valid
             passwordLayout.setError("Password is invalid. Ensure your password contains at least one of the following: Uppercase Letter, Lowercase Letter, Number, Symbol.");
             return;
         }
 
-        SignUpController.registerUser(getApplicationContext(), email, password, firstName, lastName, this);
+        SignUpPresenter.registerUser(getApplicationContext(), email, password, firstName, lastName, this);
     }
 
-    private String capitalizeFirstLetter(String word) {
-        char ch[] = word.toCharArray();
-        for (int i = 0; i < word.length(); i++) {
 
-            // If first character of a word is found
-            if ((i == 0 && ch[i] != ' ') || (ch[i] != ' ' && ch[i - 1] == ' ')) {
-                // If it is in lower-case
-                if (ch[i] >= 'a' && ch[i] <= 'z') {
-                    // Convert into Upper-case
-                    ch[i] = (char)(ch[i] - 'a' + 'A');
-                }
-            }
-            // If apart from first character
-            // Any one is in Upper-case
-            else if (ch[i] >= 'A' && ch[i] <= 'Z')
-                // Convert into Lower-Case
-                ch[i] = (char)(ch[i] + 'a' - 'A');
-        }
-        // Convert the char array to equivalent String
-        return new String(ch);
-    }
 
-    // [INPUT]:         The password string is passed into this function
-    // [PROCESSING]:    Checks to see if the password contains at least 1 Uppercase, 1 Lowercase, 1 Number, and 1 Non-Alphanumeric character.
-    // [OUTPUT]:        None.
-    private boolean isValidPassword(String password) {
-        char ch;
-        // Checks, all must be true to pass this test
-        boolean containsUpp = false,
-                containsLow = false,
-                containsNum = false,
-                containsSym = false;
 
-        // For loop to loop through the password string
-        for (int i = 0; i < password.length(); i++) {
-            ch = password.charAt(i);
-
-            // Contains number
-            if (Character.isDigit(ch)) {
-                containsNum = true;
-            }
-            // Contains uppercase
-            else if (Character.isUpperCase(ch)) {
-                containsUpp = true;
-            }
-            // Contains lowercase
-            else if (Character.isLowerCase(ch)) {
-                containsLow = true;
-            }
-            // Contains symbol
-            else if (!Character.isLetterOrDigit(ch)) {
-                containsSym = true;
-            }
-
-            // Check if all specifications are satisfied
-            if (containsLow && containsNum && containsUpp && containsSym) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

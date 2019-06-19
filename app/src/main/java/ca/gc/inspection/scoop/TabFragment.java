@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ca.gc.inspection.scoop.FeedPost.CommunityFeedFragment;
-import ca.gc.inspection.scoop.FeedPost.OfficialFeedFragment;
+import ca.gc.inspection.scoop.feedpost.CommunityFeedFragment;
+import ca.gc.inspection.scoop.feedpost.OfficialFeedFragment;
 
 
 public class TabFragment extends Fragment {
