@@ -15,14 +15,18 @@ import ca.gc.inspection.scoop.R;
 public class ProfilePostViewHolder extends ProfileCommentViewHolder
         implements ProfilePostContract.View.ViewHolder {
 
+    ProfilePostContract.Presenter.ViewHolderAPI mPresenter;
+
     public TextView commentCount;
     public ImageView optionsMenu;
 
 
-    public ProfilePostViewHolder(View v) {
-        super(v);
+    public ProfilePostViewHolder(View v, ProfilePostContract.Presenter.ViewHolderAPI presenter) {
+        super(v, presenter);
         commentCount = v.findViewById(R.id.comment_count);
         optionsMenu = v.findViewById(R.id.options_menu);
+
+        mPresenter = presenter;
     }
 
     /**

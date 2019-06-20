@@ -37,8 +37,7 @@ public interface ProfileCommentContract {
     }
 
     interface Presenter extends BasePresenter {
-        void changeUpvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
-        void changeDownvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
+
         void loadDataFromDatabase(MySingleton instance, String currentUser);
 
         interface AdapterAPI {
@@ -49,5 +48,11 @@ public interface ProfileCommentContract {
 
             String getPosterIdByIndex(int i);
         }
+
+        interface ViewHolderAPI {
+            void changeUpvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
+            void changeDownvoteLikeState(MySingleton singleton, View.ViewHolder viewHolderInterface, int i) throws JSONException;
+        }
+
     }
 }

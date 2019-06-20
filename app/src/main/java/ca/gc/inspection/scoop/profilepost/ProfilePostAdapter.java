@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 
 public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder>
     implements ProfilePostContract.View.Adapter {
@@ -34,7 +33,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
     @Override
     public ProfilePostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_profile_layout, viewGroup, false);
-        return new ProfilePostViewHolder(v);
+        return new ProfilePostViewHolder(v, (ProfilePostContract.Presenter.ViewHolderAPI) mProfilePostPresenter);
     }
 
     /**
@@ -46,7 +45,16 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
     @Override
     public void onBindViewHolder(@NonNull ProfilePostViewHolder profilePostViewHolder, int i) {
         mProfilePostPresenter.onBindViewHolderAtPosition(profilePostViewHolder, i);
-        mProfilePostView.setDisplayPostListener(profilePostViewHolder);
+
+        // TODO use inheritance and call super? - NOTE that either onBind in Adapter or Presenter
+        // should call super but not both as it would cause the same information to be set to the view
+        // multiple times
+        mProfilePostView.setProfileCommentImageListener(profilePostViewHolder);
+        mProfilePostView.setProfileCommentLikesListener(profilePostViewHolder, i);
+        mProfilePostView.setProfileCommentUserInfoListener(profilePostViewHolder,
+                mProfilePostPresenter.getPosterIdByIndex(i));
+
+        mProfilePostView.setPostOptionsListener(profilePostViewHolder);
     }
 
 	@Override

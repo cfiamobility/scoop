@@ -24,10 +24,12 @@ import ca.gc.inspection.scoop.*;
 public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
         implements ProfileCommentContract.View.ViewHolder {
 
+    ProfileCommentContract.Presenter.ViewHolderAPI mPresenter;
+
     public TextView username, date, postText, postTitle, likeCount;
     public ImageView profileImage, upvote, downvote;
 
-    public ProfileCommentViewHolder(View v) {
+    public ProfileCommentViewHolder(View v, ProfileCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v);
         username = v.findViewById(R.id.name);
         profileImage = v.findViewById(R.id.profile_image);
@@ -37,6 +39,8 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
         likeCount = v.findViewById(R.id.vote_count);
         upvote = v.findViewById(R.id.up_vote);
         downvote = v.findViewById(R.id.down_vote);
+
+        mPresenter = presenter;
     }
 
     /**
@@ -149,5 +153,23 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
             profileImage.setImageBitmap(bitmap);
         }
         return this;
+    }
+
+    public void changeUpvoteLikeState(MySingleton instance, ProfileCommentViewHolder viewHolder, int i) {
+        try {
+            mPresenter.changeUpvoteLikeState(instance, viewHolder, i);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changeDownvoteLikeState(MySingleton instance, ProfileCommentViewHolder viewHolder, int i) {
+        try {
+            mPresenter.changeDownvoteLikeState(instance, viewHolder, i);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

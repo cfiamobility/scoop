@@ -6,12 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 
 public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
     implements FeedPostContract.View.Adapter {
@@ -37,7 +32,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
     @Override
     public FeedPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_post, viewGroup, false);
-        return new FeedPostViewHolder(view);
+        return new FeedPostViewHolder(view, (FeedPostContract.Presenter.ViewHolderAPI) mFeedPostPresenter);
     }
 
     /**
@@ -47,7 +42,15 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
     @Override
     public void onBindViewHolder(@NonNull FeedPostViewHolder feedPostViewHolder, int i) {
         mFeedPostPresenter.onBindViewHolderAtPosition(feedPostViewHolder, i);
+
+        // TODO use inheritance and call super? - NOTE that either onBind in Adapter or Presenter
+        // should call super but not both as it would cause the same information to be set to the view
+        // multiple times
         mFeedPostView.setProfileCommentImageListener(feedPostViewHolder);
+        mFeedPostView.setProfileCommentLikesListener(feedPostViewHolder, i);
+        mFeedPostView.setProfileCommentUserInfoListener(feedPostViewHolder,
+                mFeedPostPresenter.getPosterIdByIndex(i));
+        mFeedPostView.setPostOptionsListener(feedPostViewHolder);
     }
 
     @Override

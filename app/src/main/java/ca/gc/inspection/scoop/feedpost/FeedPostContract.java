@@ -30,6 +30,9 @@ public interface FeedPostContract extends ProfilePostContract {
         interface AdapterAPI extends ProfilePostContract.Presenter.AdapterAPI {
             void setAdapter(FeedPostContract.View.Adapter adapter);
         }
+
+        interface ViewHolderAPI extends ProfilePostContract.Presenter.ViewHolderAPI {
+        }
     }
 
 }

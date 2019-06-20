@@ -26,7 +26,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class FeedPostPresenter extends ProfilePostPresenter implements
         FeedPostContract.Presenter,
-        FeedPostContract.Presenter.AdapterAPI {
+        FeedPostContract.Presenter.AdapterAPI,
+        FeedPostContract.Presenter.ViewHolderAPI {
 
     @NonNull
     private FeedPostContract.View mFeedPostView;

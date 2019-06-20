@@ -31,7 +31,7 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     @Override
     public ProfileCommentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_profile_comments, viewGroup, false);
-        return new ProfileCommentViewHolder(v);
+        return new ProfileCommentViewHolder(v, (ProfileCommentContract.Presenter.ViewHolderAPI) mProfileCommentPresenter);
     }
 
     /**

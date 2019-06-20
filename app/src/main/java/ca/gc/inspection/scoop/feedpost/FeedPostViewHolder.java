@@ -14,11 +14,14 @@ import ca.gc.inspection.scoop.R;
 
 public class FeedPostViewHolder extends ProfilePostViewHolder
         implements FeedPostContract.View.ViewHolder {
+    FeedPostContract.Presenter.ViewHolderAPI mPresenter;
+
     ImageView postImage;
 
-    public FeedPostViewHolder(View v) {
-        super(v);
+    public FeedPostViewHolder(View v, FeedPostContract.Presenter.ViewHolderAPI presenter) {
+        super(v, presenter);
         postImage = v.findViewById(R.id.post_image);
+        mPresenter = presenter;
     }
 
     /**

@@ -105,7 +105,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         postRecyclerView.setAdapter(mAdapter);
     }
 
-    public void setDisplayPostListener(ProfilePostViewHolder viewHolder){
+    public void setPostOptionsListener(ProfilePostViewHolder viewHolder){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override

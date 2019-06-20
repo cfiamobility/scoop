@@ -24,7 +24,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  */
 public class ProfilePostPresenter extends ProfileCommentPresenter implements
         ProfilePostContract.Presenter,
-        ProfilePostContract.Presenter.AdapterAPI {
+        ProfilePostContract.Presenter.AdapterAPI,
+        ProfilePostContract.Presenter.ViewHolderAPI {
 
     @NonNull
     private ProfilePostContract.View mProfilePostView;

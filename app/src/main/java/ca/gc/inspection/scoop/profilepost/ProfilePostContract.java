@@ -27,5 +27,8 @@ public interface ProfilePostContract {
         interface AdapterAPI extends ProfileCommentContract.Presenter.AdapterAPI {
             void setAdapter(ProfilePostContract.View.Adapter adapter);
         }
+
+        interface ViewHolderAPI extends ProfileCommentContract.Presenter.ViewHolderAPI {
+        }
     }
 }

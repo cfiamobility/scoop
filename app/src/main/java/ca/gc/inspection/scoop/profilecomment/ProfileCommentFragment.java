@@ -97,23 +97,15 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    mProfileCommentPresenter.changeUpvoteLikeState(
-                            MySingleton.getInstance(getContext()), viewHolder, i); //changes upvote state on click
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                viewHolder.changeUpvoteLikeState(
+                        MySingleton.getInstance(getContext()), viewHolder, i); //changes upvote state on click
             }
         });
 
         viewHolder.downvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    mProfileCommentPresenter.changeDownvoteLikeState(MySingleton.getInstance(getContext()), viewHolder, i); //changes downvote state on click
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                viewHolder.changeDownvoteLikeState(MySingleton.getInstance(getContext()), viewHolder, i); //changes downvote state on click
             }
         });
     }

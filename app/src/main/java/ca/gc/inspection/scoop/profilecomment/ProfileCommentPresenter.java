@@ -24,7 +24,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfileCommentPresenter implements
         ProfileCommentContract.Presenter,
-        ProfileCommentContract.Presenter.AdapterAPI {
+        ProfileCommentContract.Presenter.AdapterAPI,
+        ProfileCommentContract.Presenter.ViewHolderAPI {
 
     @NonNull
     private ProfileCommentContract.View mProfileCommentView;
@@ -97,7 +98,7 @@ public class ProfileCommentPresenter implements
         String posterid = profileComment.getPosterId();
         LikeState likeState = profileComment.getLikeState();
         int likeCount = Integer.parseInt(profileComment.getLikeCount());
-        Log.i("liketype1", String.valueOf(likeState));
+        Log.i("liketype1", likeState.getDatabaseValue());
 
         switch(likeState){
             case UPVOTE: //if it's already liked, it'll be set to neutral if pressed
