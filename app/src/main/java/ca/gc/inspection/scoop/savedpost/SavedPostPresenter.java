@@ -14,8 +14,5 @@ public class SavedPostPresenter implements SavedPostContract.Presenter {
         mView = checkNotNull(view);
     }
 
-    @Override
-    public void start() {
 
-    }
 }

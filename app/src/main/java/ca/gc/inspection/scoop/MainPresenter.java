@@ -13,8 +13,4 @@ class MainPresenter implements MainContract.Presenter {
         mView = checkNotNull(view);
     }
 
-    @Override
-    public void start() {
-
-    }
 }

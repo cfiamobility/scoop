@@ -97,8 +97,4 @@ public class SplashScreenActivityPresenter implements SplashScreenContract.Prese
         }
     }
 
-    @Override
-    public void start() {
-
-    }
 }

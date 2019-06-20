@@ -20,9 +20,7 @@ public class CreatePostPresenter implements CreatePostContract.Presenter {
         mView = checkNotNull(view);
     }
 
-    @Override
-    public void start() {
-    }
+
 
     /*** sendPostToDatabase
      * Simple Post request to store the newly created Post to the postcomment table

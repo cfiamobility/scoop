@@ -14,8 +14,5 @@ class DisplayPostPresenter implements DisplayPostContract.Presenter {
         mView = checkNotNull(view);
     }
 
-    @Override
-    public void start() {
 
-    }
 }

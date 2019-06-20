@@ -143,10 +143,7 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
                 });
     }
 
-    @Override
-    public void start() {
 
-    }
 
 
     /**

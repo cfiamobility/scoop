@@ -14,8 +14,5 @@ public class SearchPresenter implements SearchContract.Presenter {
         mView = checkNotNull(view);
     }
 
-    @Override
-    public void start() {
 
-    }
 }

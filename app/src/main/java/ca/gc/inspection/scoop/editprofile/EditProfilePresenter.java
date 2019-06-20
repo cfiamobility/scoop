@@ -24,11 +24,6 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
         mView = checkNotNull(view);
     }
 
-	@Override
-	public void start() {
-
-	}
-
 	// Runs when the edit profile is pressed
     @Override
 	public void initialFill(NetworkUtils network) {

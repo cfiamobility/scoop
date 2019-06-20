@@ -14,8 +14,5 @@ public class InfoPresenter implements InfoContract.Presenter {
         mView = checkNotNull(view);
     }
 
-    @Override
-    public void start() {
 
-    }
 }

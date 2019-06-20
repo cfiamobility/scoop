@@ -11,7 +11,7 @@ import android.text.TextWatcher;
 import android.view.View;
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.SignUpActivity;
+import ca.gc.inspection.scoop.signup.SignUpActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.MyApplication.getContext;

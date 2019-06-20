@@ -13,8 +13,5 @@ public class SettingsPresenter implements SettingsContract.Presenter {
         mView = checkNotNull(view);
     }
 
-    @Override
-    public void start() {
 
-    }
 }

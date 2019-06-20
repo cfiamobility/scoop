@@ -1,6 +1,8 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.signup;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
@@ -12,9 +14,19 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MainActivity;
+import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.splashscreen.SplashScreenActivity;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements SignUpContract.View{
+
+    private SignUpContract.Presenter mSignUpPresenter;
+
+    public void setPresenter (SignUpContract.Presenter presenter){
+        mSignUpPresenter = presenter;
+    }
 
     // Initializing the buttons, edit texts, and string variables
     String firstNameText, lastNameText, emailText, passwordText;
@@ -32,6 +44,9 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        // construct presenter
+        mSignUpPresenter = new SignUpPresenter(this);
 
         // text layout variables
         firstNameLayout = findViewById(R.id.activity_sign_up_etl_first_name);
@@ -51,8 +66,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Getting the text from the edit texts
-                firstNameText = capitalizeFirstLetter(firstNameET.getText().toString());
-                lastNameText = capitalizeFirstLetter(lastNameET.getText().toString());
+                firstNameText = SignUpPresenter.capitalizeFirstLetter(firstNameET.getText().toString());
+                lastNameText = SignUpPresenter.capitalizeFirstLetter(lastNameET.getText().toString());
                 emailText = (emailET.getText().toString()).toLowerCase();
                 passwordText = passwordET.getText().toString();
 
@@ -149,73 +164,33 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (TextUtils.isEmpty(email) || !email.contains("@canada.ca")) { // if the email field is empty or if they do not enter a @canada.ca email
             emailLayout.setError("Please enter valid email.");
             return;
-        } else if (TextUtils.isEmpty(password) || password.length() < 8 || !isValidPassword(password)) { // is the password field is empty or is less than 8 characters or is not valid
+        } else if (TextUtils.isEmpty(password) || password.length() < 8 || !SignUpPresenter.isValidPassword(password)) { // is the password field is empty or is less than 8 characters or is not valid
             passwordLayout.setError("Password is invalid. Ensure your password contains at least one of the following: Uppercase Letter, Lowercase Letter, Number, Symbol.");
             return;
         }
 
-        SignUpController.registerUser(getApplicationContext(), email, password, firstName, lastName, this);
+        mSignUpPresenter.registerUser(NetworkUtils.getInstance(getApplicationContext()), email, password, firstName, lastName, this);
     }
 
-    private String capitalizeFirstLetter(String word) {
-        char ch[] = word.toCharArray();
-        for (int i = 0; i < word.length(); i++) {
 
-            // If first character of a word is found
-            if ((i == 0 && ch[i] != ' ') || (ch[i] != ' ' && ch[i - 1] == ' ')) {
-                // If it is in lower-case
-                if (ch[i] >= 'a' && ch[i] <= 'z') {
-                    // Convert into Upper-case
-                    ch[i] = (char)(ch[i] - 'a' + 'A');
-                }
-            }
-            // If apart from first character
-            // Any one is in Upper-case
-            else if (ch[i] >= 'A' && ch[i] <= 'Z')
-                // Convert into Lower-Case
-                ch[i] = (char)(ch[i] + 'a' - 'A');
-        }
-        // Convert the char array to equivalent String
-        return new String(ch);
+    public void storePreferences(String userid, String response){
+        // storing the token into shared preferences
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString("token", response).apply();
+        Config.token = response;
+
+        // storing the user id into shared preferences
+        sharedPreferences.edit().putString("userid", userid).apply();
+        Config.currentUser = userid;
+
+        // change activities once register is successful
+        if(Config.token != null && Config.currentUser != null) registerSuccess();
     }
 
-    // [INPUT]:         The password string is passed into this function
-    // [PROCESSING]:    Checks to see if the password contains at least 1 Uppercase, 1 Lowercase, 1 Number, and 1 Non-Alphanumeric character.
-    // [OUTPUT]:        None.
-    private boolean isValidPassword(String password) {
-        char ch;
-        // Checks, all must be true to pass this test
-        boolean containsUpp = false,
-                containsLow = false,
-                containsNum = false,
-                containsSym = false;
-
-        // For loop to loop through the password string
-        for (int i = 0; i < password.length(); i++) {
-            ch = password.charAt(i);
-
-            // Contains number
-            if (Character.isDigit(ch)) {
-                containsNum = true;
-            }
-            // Contains uppercase
-            else if (Character.isUpperCase(ch)) {
-                containsUpp = true;
-            }
-            // Contains lowercase
-            else if (Character.isLowerCase(ch)) {
-                containsLow = true;
-            }
-            // Contains symbol
-            else if (!Character.isLetterOrDigit(ch)) {
-                containsSym = true;
-            }
-
-            // Check if all specifications are satisfied
-            if (containsLow && containsNum && containsUpp && containsSym) {
-                return true;
-            }
-        }
-        return false;
+    private void registerSuccess(){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        getApplicationContext().startActivity(intent);
+        this.finish();
     }
+
 }
