@@ -1,26 +1,5 @@
 package ca.gc.inspection.scoop.signup;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.util.Log;
-
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.auth0.android.jwt.Claim;
-import com.auth0.android.jwt.JWT;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 class SignUpPresenter implements SignUpContract.Presenter{
@@ -61,6 +40,12 @@ class SignUpPresenter implements SignUpContract.Presenter{
 	// [INPUT]:         The password string is passed into this function
 	// [PROCESSING]:    Checks to see if the password contains at least 1 Uppercase, 1 Lowercase, 1 Number, and 1 Non-Alphanumeric character.
 	// [OUTPUT]:        None.
+
+	/**
+	 *
+	 * @param password
+	 * @return
+	 */
 	protected static boolean isValidPassword(String password) {
 		char ch;
 		// Checks, all must be true to pass this test
@@ -98,8 +83,8 @@ class SignUpPresenter implements SignUpContract.Presenter{
 		return false;
 	}
 
-	public void registerUser(final NetworkUtils network, final String email, final String password, final String firstName, final String lastName, final Activity activity){
-		mSignUpInteractor.registerUser(network, email, password, firstName, lastName, activity);
+	public void registerUser(final NetworkUtils network, final String email, final String password, final String firstName, final String lastName){
+		mSignUpInteractor.registerUser(network, email, password, firstName, lastName);
 	}
 
 	public void storePreferences(String userid, String response){

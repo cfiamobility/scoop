@@ -20,7 +20,7 @@ public interface SignUpContract {
      * Interface implemented by SignUpPresenter
      */
     interface Presenter extends BasePresenter {
-        void registerUser(final NetworkUtils network, final String email, final String password, final String firstName, final String lastName, final Activity activity);
+        void registerUser(final NetworkUtils network, final String email, final String password, final String firstName, final String lastName);
         // called in interactor
         void storePreferences(String userid, String response);
     }

@@ -24,20 +24,16 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
 
     private SignUpContract.Presenter mSignUpPresenter;
 
-    public void setPresenter (SignUpContract.Presenter presenter){
-        mSignUpPresenter = presenter;
-    }
-
     // Initializing the buttons, edit texts, and string variables
     String firstNameText, lastNameText, emailText, passwordText;
     Button registerBTN;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET;
-    TextInputLayout firstNameLayout, lastNameLayout, emailLayout, passwordLayout; // needed to set the error messages for the edit text
+    // needed to set the error messages for the edit text
+    TextInputLayout firstNameLayout, lastNameLayout, emailLayout, passwordLayout;
 
-    // to go back to the splash screen when the back button is pressed
-    public void goBackToSplash(View v) {
-        startActivity(new Intent(v.getContext(), SplashScreenActivity.class));
-        finish();
+    @Override
+    public void setPresenter (SignUpContract.Presenter presenter){
+        mSignUpPresenter = presenter;
     }
 
     @Override
@@ -149,11 +145,22 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
         });
     }
 
+    // to go back to the splash screen when the back button is pressed
+    public void goBackToSplash(View v) {
+        startActivity(new Intent(v.getContext(), SplashScreenActivity.class));
+        finish();
+    }
+
     // [INPUT]:         The first name, last name, email, and password that the user entered is passed into this function
     // [PROCESSING]:    Checks to see if the strings are valid (Ex. of invalid strings: empty, email isn't @canada.ca, password doesn't have uppercase, lowercase, number, or symbol)
     // [PROCESSING]:    Makes request to NodeJS server and sends info to NodeJS as a Map<String, String>
     // [OUTPUT]:        Toasts to notify of error or success.
     private void registerUser(final String firstName, final String lastName, final String email, final String password) {
+        validRegister(firstName, lastName, email, password);
+        mSignUpPresenter.registerUser(NetworkUtils.getInstance(this), email, password, firstName, lastName);
+    }
+
+    private void validRegister(final String firstName, final String lastName, final String email, final String password){
         // Checks for string validity
         if (TextUtils.isEmpty(firstName)) { // first name field is empty
             firstNameLayout.setError("Please enter a first name.");
@@ -168,10 +175,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
             passwordLayout.setError("Password is invalid. Ensure your password contains at least one of the following: Uppercase Letter, Lowercase Letter, Number, Symbol.");
             return;
         }
-
-        mSignUpPresenter.registerUser(NetworkUtils.getInstance(getApplicationContext()), email, password, firstName, lastName, this);
     }
-
 
     public void storePreferences(String userid, String response){
         // storing the token into shared preferences
@@ -190,7 +194,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
     private void registerSuccess(){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         getApplicationContext().startActivity(intent);
-        this.finish();
+        finish();
     }
 
 }
