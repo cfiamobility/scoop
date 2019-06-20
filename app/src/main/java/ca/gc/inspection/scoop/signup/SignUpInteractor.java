@@ -1,18 +1,12 @@
 package ca.gc.inspection.scoop.signup;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
 
@@ -20,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 public class SignUpInteractor {
@@ -31,7 +24,7 @@ public class SignUpInteractor {
         mSignUpPresenter = presenter;
     }
 
-    public void registerUser(final NetworkUtils network, final String email, final String password, final String firstName, final String lastName, final Activity activity) {
+    public void registerUser(final NetworkUtils network, final String email, final String password, final String firstName, final String lastName) {
 
         // URL Call
         String url = Config.baseIP + "signup/register";
@@ -40,7 +33,8 @@ public class SignUpInteractor {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                // the response string that is received from the user
+                Log.i("RESPONSE", response);
                 // grabbing the user id from the jwt token
                 JWT parsedJWT = new JWT(response);
                 Claim userIdMetaData = parsedJWT.getClaim("userid");
