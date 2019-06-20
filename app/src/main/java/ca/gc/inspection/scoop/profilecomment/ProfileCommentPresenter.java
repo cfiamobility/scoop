@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.profilecomment;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -27,6 +28,7 @@ public class ProfileCommentPresenter implements
 
     @NonNull
     private ProfileCommentContract.View mProfileCommentView;
+    private ProfileCommentContract.View.Adapter mAdapter;
     private ProfileCommentInteractor mProfileCommentInteractor;
     protected JSONArray mComments, mImages;   // TODO encapsulate into DataCache class to allow inheritance
     protected ArrayList<ProfileComment> mProfileComments;
@@ -39,6 +41,8 @@ public class ProfileCommentPresenter implements
     }
 
     protected ProfileComment getProfileCommentByIndex(int i) {
+        if (mProfileComments == null)
+            return null;
         return mProfileComments.get(i);
     }
 
@@ -47,6 +51,11 @@ public class ProfileCommentPresenter implements
         mProfileCommentView = checkNotNull(viewInterface);
         mProfileCommentInteractor = new ProfileCommentInteractor(this);
 
+    }
+
+    @Override
+    public void setAdapter(ProfileCommentContract.View.Adapter adapter) {
+        mAdapter = adapter;
     }
 
     @Override
@@ -72,6 +81,9 @@ public class ProfileCommentPresenter implements
                 e.printStackTrace();
             }
         }
+
+        mAdapter.refreshAdapter();
+        // TODO if adapter has not been set - wait until it has been set and call refreshAdapter?
     }
 
     /**
@@ -169,13 +181,15 @@ public class ProfileCommentPresenter implements
     public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
         ProfileComment profileComment = getProfileCommentByIndex(i);
 
-        viewHolderInterface.setDate(profileComment.getDate())
-                .setLikeCount(profileComment.getLikeCount())
-                .setPostText(profileComment.getPostText())
-                .setPostTitle(profileComment.getPostTitle())
-                .setUserImageFromString(profileComment.getProfileImageString())
-                .setUserName(profileComment.getValidFullName())
-                .setLikeState(profileComment.getLikeState());
+        if (profileComment != null) {
+            viewHolderInterface.setDate(profileComment.getDate())
+                    .setLikeCount(profileComment.getLikeCount())
+                    .setPostText(profileComment.getPostText())
+                    .setPostTitle(profileComment.getPostTitle())
+                    .setUserImageFromString(profileComment.getProfileImageString())
+                    .setUserName(profileComment.getValidFullName())
+                    .setLikeState(profileComment.getLikeState());
+        }
     }
 
     /**

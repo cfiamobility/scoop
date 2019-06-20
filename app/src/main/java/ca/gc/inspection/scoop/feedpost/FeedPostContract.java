@@ -16,6 +16,9 @@ public interface FeedPostContract extends ProfilePostContract {
     interface View extends ProfilePostContract.View {
         String getFeedType();
 
+        interface Adapter extends ProfilePostContract.View.Adapter {
+        }
+
         interface ViewHolder extends ProfilePostContract.View.ViewHolder {
             FeedPostContract.View.ViewHolder setPostImageFromString(String image);
         }
@@ -25,7 +28,7 @@ public interface FeedPostContract extends ProfilePostContract {
     interface Presenter extends ProfilePostContract.Presenter {
 
         interface AdapterAPI extends ProfilePostContract.Presenter.AdapterAPI {
-
+            void setAdapter(FeedPostContract.View.Adapter adapter);
         }
     }
 

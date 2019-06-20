@@ -28,6 +28,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
 
     @NonNull
     private ProfilePostContract.View mProfilePostView;
+    private ProfilePostContract.View.Adapter mAdapter;
     private ProfilePostInteractor mProfilePostInteractor;
     // TODO extend JSONArray mComments, mImages, and ArrayList mProfileComments from parent
     // - currently using mComments with extra commentsCount field
@@ -40,6 +41,8 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     }
 
     private ProfilePost getProfilePostByIndex(int i) {
+        if (mProfilePosts == null)
+            return null;
         return mProfilePosts.get(i);
     }
 
@@ -55,6 +58,11 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
         mProfilePostView = checkNotNull(viewInterface);
         mProfilePostInteractor = new ProfilePostInteractor(this);
 
+    }
+
+    @Override
+    public void setAdapter(ProfilePostContract.View.Adapter adapter) {
+        mAdapter = adapter;
     }
 
     @Override
@@ -81,6 +89,8 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
                 e.printStackTrace();
             }
         }
+
+        mAdapter.refreshAdapter();
     }
 
     @Override
@@ -88,9 +98,11 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
         super.onBindViewHolderAtPosition(viewHolderInterface, i);
         // need to manually call overriden setPostTitle method due to super method casting viewHolderInterface down
         ProfilePost profilePost = getProfilePostByIndex(i);
-        ((ProfilePostContract.View.ViewHolder) viewHolderInterface)
-                .setPostTitle(profilePost.getPostTitle())
-                .setCommentCount(profilePost.getCommentCount());
+        if (profilePost != null) {
+            ((ProfilePostContract.View.ViewHolder) viewHolderInterface)
+                    .setPostTitle(profilePost.getPostTitle())
+                    .setCommentCount(profilePost.getCommentCount());
+        }
     }
 
     /**

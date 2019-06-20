@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.profilecomment;
 
 
 import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 
 import org.json.JSONException;
 
@@ -18,6 +19,10 @@ import ca.gc.inspection.scoop.base.BaseView;
 public interface ProfileCommentContract {
 
     interface View extends BaseView<Presenter> {
+
+        interface Adapter {
+            void refreshAdapter();
+        }
 
         interface ViewHolder {
             ViewHolder setPostTitle(String postTitle);
@@ -37,6 +42,7 @@ public interface ProfileCommentContract {
         void loadDataFromDatabase(MySingleton instance, String currentUser);
 
         interface AdapterAPI {
+            void setAdapter(ProfileCommentContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
                     ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
             int getItemCount();

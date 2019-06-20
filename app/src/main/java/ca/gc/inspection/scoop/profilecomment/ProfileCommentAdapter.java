@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
 
-public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder> {
+public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder>
+        implements ProfileCommentContract.View.Adapter {
 
     private ProfileCommentContract.Presenter.AdapterAPI mProfileCommentPresenter;
     private ProfileCommentFragment mProfileCommentView;
@@ -18,6 +19,7 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     public ProfileCommentAdapter(ProfileCommentFragment profileCommentView, ProfileCommentContract.Presenter.AdapterAPI presenter) {
         mProfileCommentView = profileCommentView;
         mProfileCommentPresenter = presenter;
+        mProfileCommentPresenter.setAdapter(this);
     }
 
     /**
@@ -52,4 +54,8 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
         return mProfileCommentPresenter.getItemCount();
     }
 
+    @Override
+    public void refreshAdapter() {
+        notifyDataSetChanged();
+    }
 }

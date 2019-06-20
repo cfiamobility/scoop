@@ -13,7 +13,9 @@ import ca.gc.inspection.scoop.base.BaseView;
 public interface ProfilePostContract {
 
     interface View extends ProfileCommentContract.View {
-        void setDisplayPostListener(ProfilePostViewHolder holder);
+
+        interface Adapter extends ProfileCommentContract.View.Adapter {
+        }
 
         interface ViewHolder extends ProfileCommentContract.View.ViewHolder {
             ViewHolder setPostTitle(String postTitle);
@@ -23,7 +25,7 @@ public interface ProfilePostContract {
 
     interface Presenter extends ProfileCommentContract.Presenter {
         interface AdapterAPI extends ProfileCommentContract.Presenter.AdapterAPI {
-
+            void setAdapter(ProfilePostContract.View.Adapter adapter);
         }
     }
 }

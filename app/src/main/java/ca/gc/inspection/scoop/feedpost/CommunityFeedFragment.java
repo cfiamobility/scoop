@@ -99,6 +99,7 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
 
     }
 
+    // TODO remove unnecessary override?
     @Override
     public String getFeedType(){
         return "community";

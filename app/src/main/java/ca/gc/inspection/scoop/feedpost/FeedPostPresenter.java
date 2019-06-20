@@ -30,6 +30,7 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
 
     @NonNull
     private FeedPostContract.View mFeedPostView;
+    private FeedPostContract.View.Adapter mAdapter;
     private FeedPostInteractor mFeedPostInteractor;
 
     // TODO extend JSONArray mComments, mImages, and ArrayList mProfileComments from parent
@@ -43,6 +44,8 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     }
 
     private FeedPost getFeedPostByIndex(int i) {
+        if (mFeedPosts == null)
+            return null;
         return mFeedPosts.get(i);
     }
 
@@ -51,6 +54,11 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         mFeedPostView = checkNotNull(viewInterface);
         mFeedPostInteractor = new FeedPostInteractor(this);
 
+    }
+
+    @Override
+    public void setAdapter(FeedPostContract.View.Adapter adapter) {
+        mAdapter = adapter;
     }
 
     @Override
@@ -77,13 +85,22 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
                 e.printStackTrace();
             }
         }
+
+        try {
+            mAdapter.refreshAdapter();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
         super.onBindViewHolderAtPosition(viewHolderInterface, i);
         FeedPost feedPost = getFeedPostByIndex(i);
-        ((FeedPostContract.View.ViewHolder) viewHolderInterface).setPostImageFromString(feedPost.getFeedPostImagePath());
+        if (feedPost != null) {
+            ((FeedPostContract.View.ViewHolder) viewHolderInterface).setPostImageFromString(feedPost.getFeedPostImagePath());
+        }
     }
 
     /**

@@ -13,7 +13,8 @@ import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 
-public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>  {
+public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
+    implements FeedPostContract.View.Adapter {
 
     private FeedPostContract.Presenter.AdapterAPI mFeedPostPresenter;
     private CommunityFeedFragment mFeedPostView;    // current assumption: only implementing community feed fragment
@@ -24,6 +25,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>  {
     public FeedPostAdapter(CommunityFeedFragment profileCommentView, FeedPostContract.Presenter.AdapterAPI presenter) {
         mFeedPostView = profileCommentView;
         mFeedPostPresenter = presenter;
+        mFeedPostPresenter.setAdapter(this);
     }
 
     /**
@@ -51,5 +53,11 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>  {
     @Override
     public int getItemCount() {
         return mFeedPostPresenter.getItemCount();
+    }
+
+    // TODO remove unnecessary override?
+    @Override
+    public void refreshAdapter() {
+        notifyDataSetChanged();
     }
 }

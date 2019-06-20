@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 
-public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder> {
+public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder>
+    implements ProfilePostContract.View.Adapter {
 
 	private ProfilePostContract.Presenter.AdapterAPI mProfilePostPresenter;
     private ProfilePostFragment mProfilePostView;
@@ -20,6 +22,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
 	public ProfilePostAdapter(ProfilePostFragment profileCommentView, ProfilePostContract.Presenter.AdapterAPI presenter) {
         mProfilePostView = profileCommentView;
         mProfilePostPresenter = presenter;
+        mProfilePostPresenter.setAdapter(this);
 	}
 
     /**
@@ -51,4 +54,9 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
 		return mProfilePostPresenter.getItemCount();
 	}
 
+    // TODO remove unnecessary override?
+    @Override
+    public void refreshAdapter() {
+        notifyDataSetChanged();
+    }
 }
