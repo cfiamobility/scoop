@@ -119,6 +119,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
                 break;
             case DOWNVOTE:
                 setLikeDownvoteState();
+                break;
             default:
                 setLikeNeutralState();
                 break;
