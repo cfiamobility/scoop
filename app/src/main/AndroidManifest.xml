@@ -29,7 +29,7 @@
             android:name=".createpost.CreatePostActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".signup.SignUpActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize"/>
         <activity
