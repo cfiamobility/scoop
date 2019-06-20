@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop.feedpost;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 
 import org.json.JSONArray;
@@ -29,6 +30,8 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         FeedPostContract.Presenter.AdapterAPI,
         FeedPostContract.Presenter.ViewHolderAPI {
 
+    private static final String TAG = "FeedPostPresenter";
+
     @NonNull
     private FeedPostContract.View mFeedPostView;
     private FeedPostContract.View.Adapter mAdapter;
@@ -52,9 +55,23 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
 
     public FeedPostPresenter(@NonNull FeedPostContract.View viewInterface){
 
-        mFeedPostView = checkNotNull(viewInterface);
-        mFeedPostInteractor = new FeedPostInteractor(this);
+        setView(viewInterface);
+        setInteractor(new FeedPostInteractor(this));
 
+    }
+
+    public void setView(@NonNull FeedPostContract.View viewInterface) {
+        super.setView(viewInterface);
+        mFeedPostView = checkNotNull(viewInterface);
+    }
+
+    /**
+     * set parent interactor as a casted down version without the parent creating a new object
+     * @param interactor
+     */
+    public void setInteractor(@NonNull FeedPostInteractor interactor) {
+        super.setInteractor(interactor);
+        mFeedPostInteractor = checkNotNull(interactor);
     }
 
     @Override
@@ -74,17 +91,19 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         mFeedPosts = new ArrayList<>();
 
         if ((feedPostsResponse.length() != imagesResponse.length()))
-            throw new AssertionError("Error: length of feedPostsResponse != imagesResponse");
+            Log.i(TAG, "length of feedPostsResponse != imagesResponse; some users may not have profile images");
 
         for (int i=0; i<feedPostsResponse.length(); i++) {
+            JSONObject jsonFeedPost = null;
+            JSONObject jsonImage = null;
             try {
-                JSONObject jsonFeedPost = mComments.getJSONObject(i);
-                JSONObject jsonImage = mImages.getJSONObject(i);
-                FeedPost feedPost = new FeedPost(jsonFeedPost, jsonImage);
-                mFeedPosts.add(feedPost);
+                jsonFeedPost = mComments.getJSONObject(i);
+                jsonImage = mImages.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            FeedPost feedPost = new FeedPost(jsonFeedPost, jsonImage);
+            mFeedPosts.add(feedPost);
         }
 
         try {

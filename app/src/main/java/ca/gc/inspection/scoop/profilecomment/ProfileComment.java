@@ -1,8 +1,12 @@
 package ca.gc.inspection.scoop.profilecomment;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
+import static ca.gc.inspection.scoop.profilecomment.LikeState.NEUTRAL;
+import static ca.gc.inspection.scoop.profilecomment.LikeState.NULL;
 
 public class ProfileComment {
     /**
@@ -123,24 +127,34 @@ public class ProfileComment {
     }
 
     public String getLikeCount() {
+        String likeCount = "";
         try {
-            return mComment.getString(PROFILE_COMMENT_LIKE_COUNT_KEY);
+            likeCount = mComment.getString(PROFILE_COMMENT_LIKE_COUNT_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
-            return "";
         }
+
+        Log.d("GET LIKE COUNT", likeCount);
+        if (likeCount != null && !likeCount.isEmpty() && !likeCount.equals("null"))
+            return likeCount;
+        else return "0";
     }
 
     public LikeState getLikeState() {
+        String likeTypeString = "";
         try {
-            String likeTypeString = mComment.getString(PROFILE_COMMENT_LIKE_TYPE_KEY);
-            return LikeState.valueOf(likeTypeString);
+            likeTypeString = mComment.getString(PROFILE_COMMENT_LIKE_TYPE_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
-            return LikeState.NEUTRAL;
         }
+
+        if (likeTypeString != null && !likeTypeString.isEmpty() && !likeTypeString.equals("null")) {
+            Log.d("LIKE TYPE", likeTypeString);
+            return LikeState.getLikeStateFrom(likeTypeString);
+        }
+        else return NULL;
     }
 
     public void setLikeCount(String likeCount) {

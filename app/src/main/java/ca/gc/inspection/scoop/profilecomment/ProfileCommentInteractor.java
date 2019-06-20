@@ -60,7 +60,7 @@ public class ProfileCommentInteractor {
                 final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, responseUrl, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray imagesResponse) {
-                        // TODO: *** if called by ProfilePostInteractor, setData should call the overridden method ***
+                        // if called by ProfilePostInteractor or FeedPostInteractor, setData calls the overridden method
                         mPresenter.setData(response, imagesResponse);
                     }
                 }, new Response.ErrorListener() {
@@ -166,8 +166,9 @@ public class ProfileCommentInteractor {
             @Override
             public void onResponse(String response) {
                 Log.i("response", response);
-                mPresenter.updateLikeState(viewHolderInterface, i, likeType);
-                mPresenter.updateLikeCount(viewHolderInterface, i, likeCount);
+                // TODO update the likestate/likecount UI based on database response -> need fast database response
+//                mPresenter.updateLikeState(viewHolderInterface, i, likeType);
+//                mPresenter.updateLikeCount(viewHolderInterface, i, likeCount);
             }
         }, new Response.ErrorListener() {
             @Override

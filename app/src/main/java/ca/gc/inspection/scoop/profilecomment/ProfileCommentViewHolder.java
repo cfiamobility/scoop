@@ -105,7 +105,10 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
 
     @Override
     public ProfileCommentContract.View.ViewHolder setLikeState(LikeState likeState) {
-        Log.i("likestate: ", likeState.toString());
+        if (likeState == null)
+            return this;
+
+        Log.i("likestate: ", likeState.getDatabaseValue());
 
         switch (likeState) {
             case UPVOTE:
@@ -116,6 +119,9 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
                 break;
             case DOWNVOTE:
                 setLikeDownvoteState();
+            default:
+                setLikeNeutralState();
+                break;
         }
         return this;
     }

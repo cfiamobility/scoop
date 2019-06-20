@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.profilepost;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,8 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
         ProfilePostContract.Presenter,
         ProfilePostContract.Presenter.AdapterAPI,
         ProfilePostContract.Presenter.ViewHolderAPI {
+
+    private static final String TAG = "ProfilePostPresenter";
 
     @NonNull
     private ProfilePostContract.View mProfilePostView;
@@ -56,9 +59,23 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
 
     ProfilePostPresenter(@NonNull ProfilePostContract.View viewInterface){
 
-        mProfilePostView = checkNotNull(viewInterface);
-        mProfilePostInteractor = new ProfilePostInteractor(this);
+        setView(viewInterface);
+        setInteractor(new ProfilePostInteractor(this));
 
+    }
+
+    public void setView(@NonNull ProfilePostContract.View viewInterface) {
+        super.setView(viewInterface);
+        mProfilePostView = checkNotNull(viewInterface);
+    }
+
+    /**
+     * set parent interactor as a casted down version without the parent creating a new object
+     * @param interactor
+     */
+    public void setInteractor(@NonNull ProfilePostInteractor interactor) {
+        super.setInteractor(interactor);
+        mProfilePostInteractor = checkNotNull(interactor);
     }
 
     @Override
@@ -78,17 +95,19 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
         mProfilePosts = new ArrayList<>();
 
         if ((postsResponse.length() != imagesResponse.length()))
-            throw new AssertionError("Error: length of postsResponse != imagesResponse");
+            Log.i(TAG, "length of postsResponse != imagesResponse");
 
         for (int i=0; i<postsResponse.length(); i++) {
+            JSONObject jsonPost = null;
+            JSONObject jsonImage = null;
             try {
-                JSONObject jsonPost = mComments.getJSONObject(i);
-                JSONObject jsonImage = mImages.getJSONObject(i);
-                ProfilePost profilePost = new ProfilePost(jsonPost, jsonImage);
-                mProfilePosts.add(profilePost);
+                jsonPost = mComments.getJSONObject(i);
+                jsonImage = mImages.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            ProfilePost profilePost = new ProfilePost(jsonPost, jsonImage);
+            mProfilePosts.add(profilePost);
         }
 
         mAdapter.refreshAdapter();
