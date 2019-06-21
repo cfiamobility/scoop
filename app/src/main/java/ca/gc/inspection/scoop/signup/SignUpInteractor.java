@@ -16,20 +16,29 @@ import java.util.Map;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+/**
+ * SignUpInteractor used by Presenter to create POST request and store data into the Model(database/server)
+ */
 public class SignUpInteractor {
 
-    SignUpContract.Presenter mSignUpPresenter;
+    SignUpPresenter mSignUpPresenter;
 
-    public SignUpInteractor (SignUpContract.Presenter presenter){
+    public SignUpInteractor (SignUpPresenter presenter){
         mSignUpPresenter = presenter;
     }
 
+    /**
+     * Creates a POST request and adds to request queue to store validated user registration data
+     * @param network Singleton utility to add string request to global application request queue
+     * @param email User inputted email after being validated
+     * @param password User inputted password after being validated
+     * @param firstName User inputted first name after being capitalized
+     * @param lastName User inputted last name after being capitalized
+     */
     public void registerUser(final NetworkUtils network, final String email, final String password, final String firstName, final String lastName) {
-
-        // URL Call
+        //URL for which the http request will be made, corresponding to Node.js code
         String url = Config.baseIP + "signup/register";
-
-        // Volley Request
+        //Setting up the request as a Post request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -43,23 +52,8 @@ public class SignUpInteractor {
                 Log.i("TOKEN", String.valueOf(parsedJWT));
                 Log.i("USER ID", userid);
 
-                // storing token and user id into shared preferences
+                // Helper method to store token and user id into shared preferences
                 mSignUpPresenter.storePreferences(userid, response);
-
-//                // storing the token into shared preferences
-//                SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-//                sharedPreferences.edit().putString("token", response).apply();
-//                Config.token = response;
-//
-//                // storing the user id into shared preferences
-//                sharedPreferences.edit().putString("userid", userid).apply();
-//                Config.currentUser = userid;
-//
-//                // change activities once register is successful
-//                Intent intent = new Intent(context, MainActivity.class);
-//                context.startActivity(intent);
-//                activity.finish();
-
 
             }
         }, new Response.ErrorListener() {
@@ -81,13 +75,12 @@ public class SignUpInteractor {
             }
         };
 
-        // Stops the application from sending the data twice. Don't know why it works, but it does.
+        // refrains Volley from sending information twice
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(
                 0,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        // Sends the data to NodeJS
+        // adds the request to the request queue
         network.addToRequestQueue(stringRequest);
     }
 }

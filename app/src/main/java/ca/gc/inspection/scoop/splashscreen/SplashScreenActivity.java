@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop.splashscreen;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,20 +19,20 @@ import ca.gc.inspection.scoop.signup.SignUpActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
- * - The SplashScreen is the first screen the user enters upon opening the app
- * - This is the view for the splash screen activity
+ * - The SplashScreenActivity is the first screen the user enters upon opening the app
+ * - This is the View for the Splash Screen action case
  */
 public class SplashScreenActivity extends AppCompatActivity implements SplashScreenContract.View {
-    // text fields
+    // Initializing text fields
     TextInputEditText email, password;
-    // text field layouts - needed to set the error messages if the user input is invalid
+    // Needed to set the error messages if the user input is invalid
     TextInputLayout emailLayout, passwordLayout;
     // reference to the presenter
     private SplashScreenContract.Presenter mSplashScreenPresenter;
 
     /**
-     * stores a reference to the presenter to be accessed later
-     * @param presenter
+     * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
+     * @param presenter Presenter to be associated with the View and accessed later
      */
     @Override
     public void setPresenter(SplashScreenContract.Presenter presenter) {
@@ -41,16 +40,24 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
     }
 
 
+    /**
+     * Checks if the current user is logged in and reroutes otherwise,
+     * Creates and displays text field layouts with text listeners for email and password input
+     * @param savedInstanceState State of the application in a bundle to be recreated so that no prior
+     *                           information is lost; if no data is supplied, savedInstanceState is null
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSplashScreenPresenter = new SplashScreenPresenter(this);
+        // Helper method to check if a current user is logged in
+        goToMainScreen(getApplicationContext());
 
         setContentView(R.layout.activity_splash_screen);
+        mSplashScreenPresenter = new SplashScreenPresenter(this);
 
-        email = findViewById(R.id.activity_splash_screen_et_email); // instantiating email
-        password = findViewById(R.id.activity_splash_screen_et_password); // instantiating password
+        email = findViewById(R.id.activity_splash_screen_et_email); // instantiating email edit text
+        password = findViewById(R.id.activity_splash_screen_et_password); // instantiating password edit text
 
         emailLayout = findViewById(R.id.activity_splash_screen_etl_email); // instantiating email text field layout
         passwordLayout = findViewById(R.id.activity_splash_screen_etl_password); // instantiating password text field layout
@@ -92,27 +99,31 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
 
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.secondary));
-
-        // to check if a current user is logged in
-        goToMainScreen(getApplicationContext(), this);
     }
 
-    private void goToMainScreen(Context context, Activity activity){
+    /**
+     * Helper method that checks Shared Preferences if a user is logged in
+     * If logged in, method creates MainActivity (Community Feed) and ends the Splash Screen activity
+     * @param context Context of the current application to access Shared Preferences
+     */
+    private void goToMainScreen(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
         if(!sharedPreferences.getString("userid", "nothing").equals("nothing")){
             String userId = sharedPreferences.getString("userid", "nothing");
             String token = sharedPreferences.getString("token", "nothing");
+
             Intent intent = new Intent(context, MainActivity.class);
             Config.currentUser = userId;
             Config.token = token;
             context.startActivity(intent);
-            activity.finish();
+            finish();
         }
     }
 
     /**
-     * Invoked when the user clicks the "create account" button
-     * @param view
+     * Invoked when the user clicks the "create account" button and ends the current
+     * Splash Screen Activity to start the Sign Up Activity
+     * @param view The Splash Screen View containing the "create account" button
      */
     public void createAccount (View view) {
         startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
@@ -120,15 +131,16 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
     }
 
     /**
-     * Invoked when the user clicks the "log in" button
-     * @param view
+     * Invoked when the user clicks the "log in" button and calls the Presenter loginUser method,
+     * passing in NetworkUtils with application context, email input as String, and password as String
+     * @param view The Splash Screen View containing the "log in" button
      */
     public void logIn (View view) {
         mSplashScreenPresenter.loginUser(NetworkUtils.getInstance(this), email.getText().toString(), password.getText().toString());
     }
 
     /**
-     * invoked by the presenter to set an error message when the users inputs an incorrect password
+     * Invoked by the presenter to set an error message when the users inputs an incorrect password
      * @param error string containing the error message
      */
     @Override
@@ -137,7 +149,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
     }
 
     /**
-     * invoked by the presenter to set and error message when the user inputs an invalid/incorrect email
+     * Invoked by the presenter to set and error message when the user inputs an invalid/incorrect email
      * @param error string containing the error message
      */
     @Override
@@ -145,6 +157,12 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         emailLayout.setError(error);
     }
 
+    /**
+     * Invoked by the Presenter and adds the userid and response token to the Shared Preferences and application
+     * config file
+     * @param userid Unique user ID passed from Interactor/Model
+     * @param response Unique reponse token from Interactor/Model
+     */
     public void storePreferences(String userid, String response){
         // storing the token into shared preferences
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
@@ -159,6 +177,9 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         if(Config.token != null && Config.currentUser != null) loginSuccess();
     }
 
+    /**
+     * Helper method to switch to MainActivity (Community Feed) and ends the Splash Screen activity
+     */
     private void loginSuccess(){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         getApplicationContext().startActivity(intent);

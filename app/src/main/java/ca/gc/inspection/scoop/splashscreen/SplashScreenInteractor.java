@@ -1,14 +1,9 @@
 package ca.gc.inspection.scoop.splashscreen;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -19,15 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
- * Interactor used by the presenter to fetch data from the server
+ * SplashScreenInteractor used by the Presenter to create POST request and store data into the Model(database/server)
  */
 public class SplashScreenInteractor {
 
-    private SplashScreenContract.Presenter mSplashScreenPresenter;
+    private SplashScreenPresenter mSplashScreenPresenter;
 
     SplashScreenInteractor(SplashScreenPresenter presenter){
         mSplashScreenPresenter = presenter;
@@ -36,22 +30,23 @@ public class SplashScreenInteractor {
 
     /**
      * Verifies user inputted email and password.
-     *  - Response contains error message if login failed
-     *  - Response contains user id if login successful
-
+     * - Response contains error message if login failed
+     * - Response contains token/userid if login successful
+     * @param network Singleton utility to add string request to global application request queue
+     * @param email User inputted email
+     * @param password User inputted password
      */
     void loginUser(NetworkUtils network, final String email, final String password){
-        //url for which the http request will be made, corresponding to Node.js code
+        //URL for which the http request will be made, corresponding to Node.js code
         String URL = Config.baseIP + "signup/login";
-        //setting up the request as a Post request
+        //Setting up the request as a Post request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 // the response string that is received from the user
                 Log.i("RESPONSE", response);
-//              presenter.loginUserCallBack(response, context, activity);
-                // checking to see if the server responded with error messages
 
+                // Helper method to check if the server responded with error messages
                 if (mSplashScreenPresenter.validLogin(response)) {
                     // to grab the user id from the jwt token
                     JWT parsedJWT = new JWT(response); // convert the response string into a JWT token
@@ -61,22 +56,9 @@ public class SplashScreenInteractor {
                     Log.i("TOKEN", String.valueOf(parsedJWT)); // token
                     Log.i("USER ID", userid); // user id
 
-
+                    // Helper method to store token and user id into shared preferences
                     mSplashScreenPresenter.storePreferences(userid, response);
                 }
-//                // storing the token into shared preferences
-//                SharedPreferences sharedPreferences = context.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-//                sharedPreferences.edit().putString("token", response).apply();
-//                Config.token = response;
-//
-//                // storing the user id into shared preferences
-//                sharedPreferences.edit().putString("userid", userid).apply();
-//                Config.currentUser = userid;
-//
-//                // changes activities once login is successful
-//                Intent intent = new Intent(context, MainActivity.class);
-//                context.startActivity(intent);
-//                activity.finish();
 
             }
         }, new Response.ErrorListener() {
@@ -97,11 +79,13 @@ public class SplashScreenInteractor {
             }
         };
 
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy( //refrains Volley from sending information twice
+        // refrains Volley from sending information twice
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
                 0,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        network.addToRequestQueue(stringRequest); //adds the request to the request queue
+        // adds the request to the request queue
+        network.addToRequestQueue(stringRequest);
 
     }
 }

@@ -19,29 +19,45 @@ import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.splashscreen.SplashScreenActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
+import static ca.gc.inspection.scoop.util.StringUtils.capitalizeFirstLetter;
+
+/**
+ * - The SignUpActivity is the screen that allows users to create an account
+ * - This is the View for the Sign Up action case
+ */
 
 public class SignUpActivity extends AppCompatActivity implements SignUpContract.View{
-
-    private SignUpContract.Presenter mSignUpPresenter;
-
     // Initializing the buttons, edit texts, and string variables
     String firstNameText, lastNameText, emailText, passwordText;
     Button registerBTN;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET;
-    // needed to set the error messages for the edit text
+    // Needed to set the error messages if the user input is invalid
     TextInputLayout firstNameLayout, lastNameLayout, emailLayout, passwordLayout;
+    // reference to the presenter
+    private SignUpContract.Presenter mSignUpPresenter;
 
+
+    /**
+     * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
+     * @param presenter Presetner to be associated with the View and access later
+     */
     @Override
     public void setPresenter (SignUpContract.Presenter presenter){
         mSignUpPresenter = presenter;
     }
 
+    /**
+     * Creates and displays text field layouts with text/button listeners for the first name, last name, email,
+     * and password layout
+     * Registers user when "register" button is clicked with inputted text
+     * @param savedInstanceState State of the application in a bundle to be recreated so that no prior
+     *                           information is lost; if no data is supplied, savedInstanceState is null
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
 
-        // construct presenter
+        setContentView(R.layout.activity_sign_up);
         mSignUpPresenter = new SignUpPresenter(this);
 
         // text layout variables
@@ -62,8 +78,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
             @Override
             public void onClick(View v) {
                 // Getting the text from the edit texts
-                firstNameText = SignUpPresenter.capitalizeFirstLetter(firstNameET.getText().toString());
-                lastNameText = SignUpPresenter.capitalizeFirstLetter(lastNameET.getText().toString());
+                firstNameText = capitalizeFirstLetter(firstNameET.getText().toString());
+                lastNameText = capitalizeFirstLetter(lastNameET.getText().toString());
                 emailText = (emailET.getText().toString()).toLowerCase();
                 passwordText = passwordET.getText().toString();
 
@@ -145,38 +161,64 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
         });
     }
 
-    // to go back to the splash screen when the back button is pressed
-    public void goBackToSplash(View v) {
-        startActivity(new Intent(v.getContext(), SplashScreenActivity.class));
+    /**
+     * Invoked when the user hits the Android device back button and ends the current
+     * Sign Up Activity and returns to the Splash Screen Activity
+     * @param view The current Sign Up View
+     */
+    public void goBackToSplash(View view) {
+        startActivity(new Intent(view.getContext(), SplashScreenActivity.class));
         finish();
     }
 
-    // [INPUT]:         The first name, last name, email, and password that the user entered is passed into this function
-    // [PROCESSING]:    Checks to see if the strings are valid (Ex. of invalid strings: empty, email isn't @canada.ca, password doesn't have uppercase, lowercase, number, or symbol)
-    // [PROCESSING]:    Makes request to NodeJS server and sends info to NodeJS as a Map<String, String>
-    // [OUTPUT]:        Toasts to notify of error or success.
+    /**
+     * Helper method that encapsulates registration by calling methods to validate info
+     * and pass the information to the Presenter
+     * @param firstName User inputted first name
+     * @param lastName User inputted last name
+     * @param email User inputted email
+     * @param password User inputted password
+     */
     private void registerUser(final String firstName, final String lastName, final String email, final String password) {
-        validRegister(firstName, lastName, email, password);
-        mSignUpPresenter.registerUser(NetworkUtils.getInstance(this), email, password, firstName, lastName);
+
+        if (validRegister(firstName, lastName, email, password)){
+            mSignUpPresenter.registerUser(NetworkUtils.getInstance(this), email, password, firstName, lastName);
+        }
+
     }
 
-    private void validRegister(final String firstName, final String lastName, final String email, final String password){
+    /**
+     * Helper method to validate user inputted fields: empty or meets the email/password requirements
+     * @param firstName User inputted first name
+     * @param lastName User inputted last name
+     * @param email User inputted email
+     * @param password User inputted password
+     */
+    //TODO: Middle tier to check if email is valid and pass error through response
+    private boolean validRegister(final String firstName, final String lastName, final String email, final String password){
         // Checks for string validity
         if (TextUtils.isEmpty(firstName)) { // first name field is empty
             firstNameLayout.setError("Please enter a first name.");
-            return;
+            return false;
         } else if (TextUtils.isEmpty(lastName)) { // last name field is empty
             lastNameLayout.setError("Please enter a last name");
-            return;
+            return false;
         } else if (TextUtils.isEmpty(email) || !email.contains("@canada.ca")) { // if the email field is empty or if they do not enter a @canada.ca email
             emailLayout.setError("Please enter valid email.");
-            return;
+            return false;
         } else if (TextUtils.isEmpty(password) || password.length() < 8 || !SignUpPresenter.isValidPassword(password)) { // is the password field is empty or is less than 8 characters or is not valid
             passwordLayout.setError("Password is invalid. Ensure your password contains at least one of the following: Uppercase Letter, Lowercase Letter, Number, Symbol.");
-            return;
+            return false;
         }
+        return true;
     }
 
+    /**
+     * Invoked by the Presenter and adds the userid and response token to the Shared Preferences and application
+     * config file
+     * @param userid Unique user ID passed from Interactor/Model
+     * @param response Unique reponse token from Interactor/Model
+     */
     public void storePreferences(String userid, String response){
         // storing the token into shared preferences
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
@@ -191,6 +233,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
         if(Config.token != null && Config.currentUser != null) registerSuccess();
     }
 
+    /**
+     * Helper method to switch to MainActivity (Community Feed) and ends the Sign Up activity
+     */
     private void registerSuccess(){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         getApplicationContext().startActivity(intent);
