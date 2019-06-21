@@ -1,19 +1,17 @@
 package ca.gc.inspection.scoop.profilepost;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
 
 public class ProfilePostViewHolder extends ProfileCommentViewHolder
         implements ProfilePostContract.View.ViewHolder {
+    /**
+     * ViewHolder for viewing a profile post.
+     */
 
     ProfilePostContract.Presenter.ViewHolderAPI mPresenter;
 

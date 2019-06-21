@@ -18,8 +18,6 @@ import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
-import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
 
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
 import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_ACTIVITYID_KEY;
@@ -28,6 +26,10 @@ import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMME
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfileCommentInteractor {
+    /**
+     * Interactor used to send requests to the network
+     */
+
     protected ProfileCommentPresenter mPresenter;
 
     /**
@@ -148,7 +150,7 @@ public class ProfileCommentInteractor {
     }
 
     /**
-     * //sends a POST request to insert new like
+     * Helper method which creates a POST request to insert new likes
      * @param requestMethod
      * @param URL
      * @param likeType
@@ -182,6 +184,7 @@ public class ProfileCommentInteractor {
                 Map<String, String> params = new HashMap<>();
                 params.put(PROFILE_COMMENT_LIKE_TYPE_KEY, likeType.getDatabaseValue());
                 params.put(PROFILE_COMMENT_ACTIVITYID_KEY, activityid);
+                // See ProfileComment documentation for disambiguation between posterId and userId
                 params.put(PROFILE_COMMENT_LIKE_POSTERID_KEY, posterid);
                 params.put(USERID_KEY, Config.currentUser);
                 return params;

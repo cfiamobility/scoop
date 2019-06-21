@@ -1,26 +1,18 @@
 package ca.gc.inspection.scoop.profilepost;
-        import android.util.Log;
 
-        import com.android.volley.AuthFailureError;
-        import com.android.volley.Request;
-        import com.android.volley.Response;
-        import com.android.volley.VolleyError;
-        import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MySingleton;
+import ca.gc.inspection.scoop.profilecomment.ProfileCommentInteractor;
 
-        import org.json.JSONArray;
-
-        import java.util.HashMap;
-        import java.util.Map;
-
-        import ca.gc.inspection.scoop.Config;
-        import ca.gc.inspection.scoop.MySingleton;
-        import ca.gc.inspection.scoop.profilecomment.ProfileCommentInteractor;
-        import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
-
-        import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 public class ProfilePostInteractor extends ProfileCommentInteractor {
+    /**
+     * Interactor used to send requests to the network. Inherits from ProfileCommentInteractor
+     * so that Profile post has access to methods such as insert/update likes.
+     */
 
     /**
      * Empty constructor called by child classes (ie. FeedPostInteractor) to allow them to set

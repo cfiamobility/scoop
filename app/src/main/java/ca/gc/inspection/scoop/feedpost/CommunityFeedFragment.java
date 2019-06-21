@@ -1,35 +1,24 @@
 package ca.gc.inspection.scoop.feedpost;
 
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import org.json.JSONArray;
-
-import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.DisplayPostActivity;
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
-import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.R;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment which acts as the main view for the viewing community feed action.
+ * Responsible for creating the Presenter and Adapter
  */
 public class CommunityFeedFragment extends ProfilePostFragment implements FeedPostContract.View  {
 
@@ -60,7 +49,7 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
      * @return
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_community_feed, container, false);
@@ -75,7 +64,7 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
      * @param savedInstanceState: ??
      */
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         setRecyclerView();
     }

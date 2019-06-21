@@ -10,6 +10,10 @@ import ca.gc.inspection.scoop.R;
 
 public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
     implements FeedPostContract.View.Adapter {
+    /**
+     * Adapter used to create ViewHolders and bind new data to them for a RecyclerView.
+     * Considered to be part of the View.
+     */
 
     private FeedPostContract.Presenter.AdapterAPI mFeedPostPresenter;
     private CommunityFeedFragment mFeedPostView;    // current assumption: only implementing community feed fragment

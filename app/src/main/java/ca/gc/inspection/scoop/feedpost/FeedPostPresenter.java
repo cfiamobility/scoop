@@ -1,10 +1,7 @@
 package ca.gc.inspection.scoop.feedpost;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,14 +9,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ca.gc.inspection.scoop.DisplayPostActivity;
-import ca.gc.inspection.scoop.MyCamera;
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePost;
-import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePostInteractor;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -29,10 +21,15 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         FeedPostContract.Presenter,
         FeedPostContract.Presenter.AdapterAPI,
         FeedPostContract.Presenter.ViewHolderAPI {
+    /**
+     * Presenter for viewing a feed post.
+     * Inherits from ProfilePostPresenter to extend the method for binding data.
+     * Implements the AdapterAPI and ViewHolderAPI to allow adapter and viewHolder to communicate with
+     * the presenter.
+     */
 
     private static final String TAG = "FeedPostPresenter";
 
-    @NonNull
     private FeedPostContract.View mFeedPostView;
     private FeedPostContract.View.Adapter mAdapter;
     private FeedPostInteractor mFeedPostInteractor;

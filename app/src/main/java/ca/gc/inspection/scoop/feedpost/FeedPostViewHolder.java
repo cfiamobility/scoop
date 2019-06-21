@@ -1,19 +1,20 @@
 package ca.gc.inspection.scoop.feedpost;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import ca.gc.inspection.scoop.MyCamera;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.R;
 
 public class FeedPostViewHolder extends ProfilePostViewHolder
         implements FeedPostContract.View.ViewHolder {
+    /**
+     * ViewHolder for viewing a feed post.
+     */
+
     FeedPostContract.Presenter.ViewHolderAPI mPresenter;
 
     ImageView postImage;
@@ -42,7 +43,7 @@ public class FeedPostViewHolder extends ProfilePostViewHolder
     /**
      * Description: hides post image if there is none
      */
-    public void hidePostImage() {
+    private void hidePostImage() {
         postImage.setVisibility(View.GONE);
     }
 

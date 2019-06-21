@@ -1,22 +1,17 @@
 package ca.gc.inspection.scoop.feedpost;
 
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-
-import org.json.JSONArray;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.profilepost.ProfilePostInteractor;
 
 public class FeedPostInteractor extends ProfilePostInteractor {
+    /**
+     * Interactor used to send requests to the network. Inherits from ProfilePostInteractor (which
+     * in turn inherits from ProfileCommentInteractor) so that Feed post has access to methods
+     * such as insert/update likes.
+     */
 
     FeedPostInteractor(FeedPostPresenter presenter) {
         mPresenter = presenter;

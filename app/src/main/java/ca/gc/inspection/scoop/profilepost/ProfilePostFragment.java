@@ -2,9 +2,6 @@ package ca.gc.inspection.scoop.profilepost;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,28 +10,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import org.json.JSONArray;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MySingleton;
 import ca.gc.inspection.scoop.PostOptionsDialog;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentFragment;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 /**
- * A simple {@link Fragment} subclass that holds a recycler view of profile posts on the
- * profile feed
+ * Fragment which acts as the main view for the viewing profile post action.
+ * Responsible for creating the Presenter and Adapter
  */
 public class ProfilePostFragment extends ProfileCommentFragment implements ProfilePostContract.View {
 
@@ -65,7 +57,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
      * @return - returns the view created
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_posts, container, false);

@@ -8,11 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import ca.gc.inspection.scoop.MySingleton;
-import ca.gc.inspection.scoop.post;
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
@@ -21,7 +17,10 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 /**
- * performs all logic and HTTP requests for the FeedAdapter
+ * Presenter for viewing a profile post.
+ * Inherits from ProfileCommentPresenter to extend the method for binding data.
+ * Implements the AdapterAPI and ViewHolderAPI to allow adapter and viewHolder to communicate with
+ * the presenter.
  */
 public class ProfilePostPresenter extends ProfileCommentPresenter implements
         ProfilePostContract.Presenter,
@@ -45,6 +44,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     }
 
     private ProfilePost getProfilePostByIndex(int i) {
+
         if (mProfilePosts == null)
             return null;
         return mProfilePosts.get(i);

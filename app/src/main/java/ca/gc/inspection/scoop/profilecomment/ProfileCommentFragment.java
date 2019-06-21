@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONException;
-
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.DisplayPostActivity;
 import ca.gc.inspection.scoop.MainActivity;
@@ -24,7 +22,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment which acts as the main view for the viewing profile comments action.
+ * Responsible for creating the Presenter and Adapter
  */
 public class ProfileCommentFragment extends Fragment implements ProfileCommentContract.View {
 
@@ -53,12 +52,10 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
      * @return: the view
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
-        Bundle bundle = getArguments();
-        String userid = bundle.getString("userid"); // TODO: can we delete unused userid var?
         setPresenter(new ProfileCommentPresenter(this));
         mProfileCommentPresenter.loadDataFromDatabase(MySingleton.getInstance(getContext()), Config.currentUser);
         return view;

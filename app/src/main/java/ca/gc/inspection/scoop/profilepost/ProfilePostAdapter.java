@@ -6,11 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import ca.gc.inspection.scoop.R;
 
 public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder>
     implements ProfilePostContract.View.Adapter {
+    /**
+     * Adapter used to create ViewHolders and bind new data to them for a RecyclerView.
+     * Considered to be part of the View.
+     */
 
 	private ProfilePostContract.Presenter.AdapterAPI mProfilePostPresenter;
     private ProfilePostFragment mProfilePostView;

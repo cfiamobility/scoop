@@ -1,7 +1,6 @@
 package ca.gc.inspection.scoop.profilecomment;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -18,8 +17,10 @@ import static ca.gc.inspection.scoop.profilecomment.LikeState.UPVOTE;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
- * Presenter for the replying to a post action; it is the most generic presenter
+ * Presenter for replying to a post action. Tt is the most generic presenter
  * related to "posting" actions. Parent presenter for ProfilePostPresenter.
+ * Implements the AdapterAPI and ViewHolderAPI to allow adapter and viewHolder to communicate with
+ * the presenter.
  */
 
 public class ProfileCommentPresenter implements
@@ -208,6 +209,13 @@ public class ProfileCommentPresenter implements
         }
     }
 
+    /**
+     * Description: updates the like state
+     *
+     * @param viewHolderInterface
+     * @param i
+     * @param likeState
+     */
     public void updateLikeState(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i, LikeState likeState) {
         if (getProfileCommentByIndex(i) != null) {
             getProfileCommentByIndex(i).setLikeState(likeState);

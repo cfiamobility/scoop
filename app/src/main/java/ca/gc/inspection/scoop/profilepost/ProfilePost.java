@@ -1,12 +1,22 @@
 package ca.gc.inspection.scoop.profilepost;
 
-import com.google.gson.JsonObject;
-
 import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
 
 public class ProfilePost extends ProfileComment {
+    /**
+     * Data class which stores information for a single profile post.
+     * Should only interact with the Presenter as this class is a helper data class.
+     * - Not an inner class of Presenter to simplify inheritance.
+     *
+     * Extends ProfileComment by including comment count.
+     *
+     * The data is stored in the Json format provided by the database.
+     * Static string keys are used to access the relevant values in the Json objects
+     *
+     */
+
     public static final String PROFILE_POST_TITLE_KEY = "posttitle";
     public static final String PROFILE_POST_COMMENT_COUNT_KEY = "commentcount";
 
@@ -14,6 +24,10 @@ public class ProfilePost extends ProfileComment {
         super(jsonPost, jsonImage);
     }
 
+    /**
+     * Overrides getPostTitle in ProfileComment to return the appropriate title for a post
+     * @return post title string
+     */
     @Override
     public String getPostTitle() {
         try {
