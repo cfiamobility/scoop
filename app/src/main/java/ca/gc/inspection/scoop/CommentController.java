@@ -15,15 +15,17 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
+
 public class CommentController {
-    /** simple post command
+    /** simple Post command
      *
      * @param context context of DisplayPostActivity.java
      * @param userId current userID
      * @param comment user inputted comment
-     * @param otherPostActivity the post the current user is commenting to
+     * @param otherPostActivity the Post the current user is commenting to
      */
-    static void sendCommentToDatabase(Context context, final String userId, final String comment, final String otherPostActivity){
+    public static void sendCommentToDatabase(Context context, final String userId, final String comment, final String otherPostActivity){
         String URL = Config.baseIP + "add-comment";
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -54,7 +56,7 @@ public class CommentController {
             protected Map<String, String> getParams()
             {
                 Map<String, String>  params = new HashMap<>();
-                params.put("userid", userId); // post test user
+                params.put("userid", userId); // Post test user
                 params.put("activitytype", Integer.toString(Config.commentType));
                 params.put("posttext", comment);
                 params.put("activityreference", otherPostActivity);

@@ -1,10 +1,8 @@
 package ca.gc.inspection.scoop;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
+import ca.gc.inspection.scoop.feedpost.CommunityFeedFragment;
+import ca.gc.inspection.scoop.feedpost.OfficialFeedFragment;
+import ca.gc.inspection.scoop.notifications.NotificationsFragment;
 
 
 public class TabFragment extends Fragment {
@@ -69,7 +70,7 @@ public class TabFragment extends Fragment {
 				MainActivity.bottomNavigationView.getMenu().getItem(i).setChecked(true);
 				previousMenuItem = MainActivity.bottomNavigationView.getMenu().getItem(i);
 
-				// setting the title of the page every time you switch tabs and whether or not the create post button shows
+				// setting the title of the page every time you switch tabs and whether or not the create Post button shows
 				if (i == 0) {
 					// Sets Title
 					((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Community");
