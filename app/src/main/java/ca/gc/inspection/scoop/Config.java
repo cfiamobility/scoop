@@ -13,15 +13,12 @@ public class Config {
 
     //For Post/Comment activity
     public static int postType = 1;
-    static int commentType = 2;
+    public static int commentType = 2;
 
-    //For likes activity
-    static int upvoteType = 1;
-    static int downvoteType = -1;
-
-    static RequestQueue requestQueue =  Volley.newRequestQueue(MyApplication.getContext());
+    public static RequestQueue requestQueue =  Volley.newRequestQueue(MyApplication.getContext());
 
     // token
     public static String token = "";
 
+    public static final String USERID_KEY = "userid";
 }

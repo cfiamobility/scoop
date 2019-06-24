@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import ca.gc.inspection.scoop.feedpost.CommunityFeedFragment;
+import ca.gc.inspection.scoop.feedpost.OfficialFeedFragment;
 import ca.gc.inspection.scoop.notifications.NotificationsFragment;
 
 
