@@ -123,9 +123,9 @@ public class ProfileCommentPresenter implements
                     mProfileCommentInteractor.updateLikes(network, NEUTRAL, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                     break;
                 case DOWNVOTE: //if it's downvoted, it'll be set to upvote state
+                    likeCount += 2;
                     updateLikeState(viewHolderInterface, i, UPVOTE);
                     updateLikeCount(viewHolderInterface, i, String.valueOf(likeCount));
-                    likeCount += 2;
                     mProfileCommentInteractor.updateLikes(network, UPVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                     break;
                 case NEUTRAL: //if it's neutral, it'll be set to upvote state
