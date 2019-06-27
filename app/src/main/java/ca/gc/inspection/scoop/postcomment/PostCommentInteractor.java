@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.profilecomment;
+package ca.gc.inspection.scoop.postcomment;
 
 import android.util.Log;
 
@@ -17,30 +17,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.postcomment.LikeState;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
-import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_ACTIVITYID_KEY;
-import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_LIKE_POSTERID_KEY;
-import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
+import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_ACTIVITYID_KEY;
+import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_POSTERID_KEY;
+import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class ProfileCommentInteractor {
+public class PostCommentInteractor {
     /**
      * Interactor used to send requests to the network
      */
 
-    protected ProfileCommentPresenter mPresenter;
+    protected PostCommentPresenter mPresenter;
 
     /**
      * Empty constructor called by child classes (ie. ProfilePostInteractor) to allow them to set
      * their own presenter
      */
-    public ProfileCommentInteractor() {
+    public PostCommentInteractor() {
     }
 
-    public ProfileCommentInteractor(ProfileCommentPresenter presenter){
+    public PostCommentInteractor(PostCommentPresenter presenter){
         mPresenter = checkNotNull(presenter);
     }
 
@@ -108,7 +107,7 @@ public class ProfileCommentInteractor {
      */
     public void updateLikes(
             NetworkUtils network, LikeState likeType, String likeCount, final String activityid, final String posterid,
-            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
+            int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
         String URL = Config.baseIP + "display-post/updatelikes";
@@ -133,7 +132,7 @@ public class ProfileCommentInteractor {
      */
     public void insertLikes(
             NetworkUtils network, LikeState likeType, final String activityid, final String posterid,
-            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
+            int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
         String URL = Config.baseIP + "display-post/insertlikes";
@@ -163,7 +162,7 @@ public class ProfileCommentInteractor {
      */
     private StringRequest newLikesStringRequest(
             int requestMethod, String URL, LikeState likeType, String likeCount, final String activityid,
-            final String posterid, int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
+            final String posterid, int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
         return new StringRequest(requestMethod, URL, new Response.Listener<String>() {
             @Override

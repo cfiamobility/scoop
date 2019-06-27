@@ -34,11 +34,11 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     private FeedPostContract.View.Adapter mAdapter;
     private FeedPostInteractor mFeedPostInteractor;
 
-    // TODO extend JSONArray mComments, mImages, and ArrayList mProfileComments from parent
+    // TODO extend JSONArray mComments, mImages, and ArrayList mPostComments from parent
     // - currently assume mComments stores only community feed fragment data
     private ArrayList<FeedPost> mFeedPosts;
 
-    // TODO replace overriding method by creating a DataCache object in ProfileCommentPresenter and overriding it here
+    // TODO replace overriding method by creating a DataCache object in PostCommentPresenter and overriding it here
     @Override
     protected ProfileComment getProfileCommentByIndex(int i) {
         return getFeedPostByIndex(i);

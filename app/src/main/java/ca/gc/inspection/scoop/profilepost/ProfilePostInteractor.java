@@ -10,7 +10,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfilePostInteractor extends ProfileCommentInteractor {
     /**
-     * Interactor used to send requests to the network. Inherits from ProfileCommentInteractor
+     * Interactor used to send requests to the network. Inherits from PostCommentInteractor
      * so that Profile post has access to methods such as insert/update likes.
      */
 

@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.profilecomment;
+package ca.gc.inspection.scoop.postcomment;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -13,7 +13,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import ca.gc.inspection.scoop.postcomment.LikeState;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -23,15 +22,15 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
  * related to "posting" actions. Parent View Holder for ProfilePostViewHolder.
  */
 
-public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
-        implements ProfileCommentContract.View.ViewHolder {
+public class PostCommentViewHolder extends RecyclerView.ViewHolder
+        implements PostCommentContract.View.ViewHolder {
 
-    ProfileCommentContract.Presenter.ViewHolderAPI mPresenter;
+    PostCommentContract.Presenter.ViewHolderAPI mPresenter;
 
     public TextView username, date, postText, postTitle, likeCount;
     public ImageView profileImage, upvote, downvote;
 
-    public ProfileCommentViewHolder(View v, ProfileCommentContract.Presenter.ViewHolderAPI presenter) {
+    public PostCommentViewHolder(View v, PostCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v);
         username = v.findViewById(R.id.name);
         profileImage = v.findViewById(R.id.profile_image);
@@ -50,7 +49,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
      * @param postTitle: post title
      */
     @Override
-    public ProfileCommentContract.View.ViewHolder setPostTitle(String postTitle) {
+    public PostCommentContract.View.ViewHolder setPostTitle(String postTitle) {
         this.postTitle.setText(postTitle);
         return this;
     }
@@ -60,7 +59,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
      * @param postText
      */
     @Override
-    public ProfileCommentContract.View.ViewHolder setPostText(String postText) {
+    public PostCommentContract.View.ViewHolder setPostText(String postText) {
         this.postText.setText(postText);
         return this;
     }
@@ -70,7 +69,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
      * @param userName
      */
     @Override
-    public ProfileCommentContract.View.ViewHolder setUserName(String userName) {
+    public PostCommentContract.View.ViewHolder setUserName(String userName) {
         username.setText(userName);
         return this;
     }
@@ -80,7 +79,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
      * @param likeCount
      */
     @Override
-    public ProfileCommentContract.View.ViewHolder setLikeCount(String likeCount) {
+    public PostCommentContract.View.ViewHolder setLikeCount(String likeCount) {
         if(likeCount.equals("null"))
             likeCount = "0";
         this.likeCount.setText(likeCount);
@@ -92,7 +91,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
      * @param date
      */
     @Override
-    public ProfileCommentContract.View.ViewHolder setDate(String date) {
+    public PostCommentContract.View.ViewHolder setDate(String date) {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(date); //parses the created date to be in specified date format
@@ -106,7 +105,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
     }
 
     @Override
-    public ProfileCommentContract.View.ViewHolder setLikeState(LikeState likeState) {
+    public PostCommentContract.View.ViewHolder setLikeState(LikeState likeState) {
         if (likeState == null)
             return this;
 
@@ -145,7 +144,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
     }
 
     @Override
-    public ProfileCommentContract.View.ViewHolder hideDate() {
+    public PostCommentContract.View.ViewHolder hideDate() {
         date.setVisibility(View.GONE);
         return this;
     }
@@ -155,7 +154,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
      * @param image: image to convert
      */
     @Override
-    public ProfileCommentContract.View.ViewHolder setUserImageFromString(String image){
+    public PostCommentContract.View.ViewHolder setUserImageFromString(String image){
         if (image != null && !image.isEmpty()) {
             Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
             Log.i("image", image);
@@ -164,7 +163,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
         return this;
     }
 
-    public void changeUpvoteLikeState(NetworkUtils instance, ProfileCommentViewHolder viewHolder, int i) {
+    public void changeUpvoteLikeState(NetworkUtils instance, PostCommentViewHolder viewHolder, int i) {
         try {
             mPresenter.changeUpvoteLikeState(instance, viewHolder, i);
         }
@@ -173,7 +172,7 @@ public class ProfileCommentViewHolder extends RecyclerView.ViewHolder
         }
     }
 
-    public void changeDownvoteLikeState(NetworkUtils instance, ProfileCommentViewHolder viewHolder, int i) {
+    public void changeDownvoteLikeState(NetworkUtils instance, PostCommentViewHolder viewHolder, int i) {
         try {
             mPresenter.changeDownvoteLikeState(instance, viewHolder, i);
         }

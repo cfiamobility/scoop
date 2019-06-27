@@ -1,11 +1,10 @@
-package ca.gc.inspection.scoop.profilecomment;
+package ca.gc.inspection.scoop.postcomment;
 
 import org.json.JSONException;
 
-import ca.gc.inspection.scoop.postcomment.LikeState;
-import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
  * A contract between the View (layer) and Presenter for the replying to a post
@@ -28,10 +27,17 @@ import ca.gc.inspection.scoop.base.BaseView;
  * If communication is required within the View only or Presenter only, the object itself should be passed in
  * to avoid leaking access to internal methods in the contract.
  *
- * See PostCommentContract for inheritance hierarchy for Posts/Comments
+ * Inheritance hierarchy for Posts/Comments:
+ *      PostComment - base comment containing profile image, username, text, like/dislike functionality
+ *      ^
+ *      ProfileComment - extends above but with post title
+ *      ^
+ *      ProfilePost - extends above but overrides post title and contains comment count
+ *      ^
+ *      FeedPost - extends above but contains
  */
 
-public interface ProfileCommentContract {
+public interface PostCommentContract {
 
     interface View extends BaseView<Presenter> {
         /**
@@ -61,9 +67,9 @@ public interface ProfileCommentContract {
         void loadDataFromDatabase(NetworkUtils network, String currentUser);
 
         interface AdapterAPI {
-            void setAdapter(ProfileCommentContract.View.Adapter adapter);
+            void setAdapter(PostCommentContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
-                    ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
+                    PostCommentContract.View.ViewHolder postCommentViewHolder, int i);
             int getItemCount();
             String getPosterIdByIndex(int i);
         }

@@ -1,15 +1,13 @@
-package ca.gc.inspection.scoop.profilecomment;
+package ca.gc.inspection.scoop.postcomment;
 
 import android.util.Log;
 
 import org.json.JSONObject;
 
-import ca.gc.inspection.scoop.postcomment.LikeState;
-
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.LikeState.NULL;
 
-public class ProfileComment {
+public class PostComment {
     /**
      * Data class which stores information for a single profile comment.
      * Should only interact with the Presenter as this class is a helper data class.
@@ -55,7 +53,7 @@ public class ProfileComment {
      * @param jsonComment       Contains json data of the comment data from the database
      * @param jsonImage         Contains json data of the profile image from the database
      */
-    protected ProfileComment(JSONObject jsonComment, JSONObject jsonImage) {
+    protected PostComment(JSONObject jsonComment, JSONObject jsonImage) {
         mComment = jsonComment;
         mImage = jsonImage;
     }
@@ -209,15 +207,6 @@ public class ProfileComment {
         catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Returns the post title for comments - this method is overridden in ProfilePost.
-     * Hardcoded string values can be replaced with strings xml.
-     * @return post title string
-     */
-    public String getPostTitle() {
-        return "Replying to " + getPostFirstName() + " " + getPostLastName() + "'s post";
     }
 
     /**

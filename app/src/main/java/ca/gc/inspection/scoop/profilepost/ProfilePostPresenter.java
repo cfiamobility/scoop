@@ -18,7 +18,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
  * Presenter for viewing a profile post.
- * Inherits from ProfileCommentPresenter to extend the method for binding data.
+ * Inherits from PostCommentPresenter to extend the method for binding data.
  * Implements the AdapterAPI and ViewHolderAPI to allow adapter and viewHolder to communicate with
  * the presenter.
  */
@@ -33,11 +33,11 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     private ProfilePostContract.View mProfilePostView;
     private ProfilePostContract.View.Adapter mAdapter;
     private ProfilePostInteractor mProfilePostInteractor;
-    // TODO extend JSONArray mComments, mImages, and ArrayList mProfileComments from parent
+    // TODO extend JSONArray mComments, mImages, and ArrayList mPostComments from parent
     // - currently using mComments with extra commentsCount field
     private ArrayList<ProfilePost> mProfilePosts;
 
-    // TODO replace overriding method by creating a DataCache object in ProfileCommentPresenter and overriding it here
+    // TODO replace overriding method by creating a DataCache object in PostCommentPresenter and overriding it here
     @Override
     protected ProfileComment getProfileCommentByIndex(int i) {
         return getProfilePostByIndex(i);

@@ -9,7 +9,7 @@ import ca.gc.inspection.scoop.profilepost.ProfilePostInteractor;
 public class FeedPostInteractor extends ProfilePostInteractor {
     /**
      * Interactor used to send requests to the network. Inherits from ProfilePostInteractor (which
-     * in turn inherits from ProfileCommentInteractor) so that Feed post has access to methods
+     * in turn inherits from PostCommentInteractor) so that Feed post has access to methods
      * such as insert/update likes.
      */
 
