@@ -51,7 +51,6 @@ public interface PostCommentContract {
         }
 
         interface ViewHolder {
-            ViewHolder setPostTitle(String postTitle);
             ViewHolder setPostText(String postText);
             ViewHolder setUserName(String userName);
             ViewHolder setLikeCount(String likeCount);

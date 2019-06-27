@@ -9,7 +9,7 @@ import static ca.gc.inspection.scoop.postcomment.LikeState.NULL;
 
 public class PostComment {
     /**
-     * Data class which stores information for a single profile comment.
+     * Data class which stores information for a single post comment.
      * Should only interact with the Presenter as this class is a helper data class.
      * - Not an inner class of Presenter to simplify inheritance.
      *

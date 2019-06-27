@@ -89,7 +89,7 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
         commentsRecyclerView.setAdapter(mAdapter);
     }
 
-    public void setPostCommentLikesListener(PostCommentViewHolder viewHolder, int i) {
+    public void setLikesListener(PostCommentViewHolder viewHolder, int i) {
 
         viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +107,7 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
         });
     }
 
-    public void setPostCommentUserInfoListener(PostCommentViewHolder viewHolder, String posterId) {
+    public void setUserInfoListener(PostCommentViewHolder viewHolder, String posterId) {
         // tapping on profile picture will bring user to poster's profile page
         viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +124,7 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
         });
     }
 
-    public void setPostCommentImageListener(PostCommentViewHolder viewHolder){
+    public void setDisplayPostListener(PostCommentViewHolder viewHolder){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

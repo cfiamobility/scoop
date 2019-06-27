@@ -15,6 +15,7 @@ import java.util.Date;
 
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
+import ca.gc.inspection.scoop.R;
 
 /**
  * ViewHolder for replying to a post action; it is the most generic View Holder
@@ -42,16 +43,6 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
         downvote = v.findViewById(R.id.down_vote);
 
         mPresenter = presenter;
-    }
-
-    /**
-     * Sets the post title ("Replying to ..." )
-     * @param postTitle: post title
-     */
-    @Override
-    public PostCommentContract.View.ViewHolder setPostTitle(String postTitle) {
-        this.postTitle.setText(postTitle);
-        return this;
     }
 
     /**

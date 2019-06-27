@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.MainActivity;
+import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
@@ -25,7 +26,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing profile comments action.
  * Responsible for creating the Presenter and Adapter
  */
-public class ProfileCommentFragment extends Fragment implements ProfileCommentContract.View {
+public class ProfileCommentFragment extends PostCommentFragment implements ProfileCommentContract.View {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
@@ -87,50 +88,5 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         // Setting the custom adapter for the recycler view
         mAdapter = new ProfileCommentAdapter(this, (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter);
         commentsRecyclerView.setAdapter(mAdapter);
-    }
-
-    public void setProfileCommentLikesListener(ProfileCommentViewHolder viewHolder, int i) {
-
-        viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewHolder.changeUpvoteLikeState(
-                        NetworkUtils.getInstance(getContext()), viewHolder, i); //changes upvote state on click
-            }
-        });
-
-        viewHolder.downvote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewHolder.changeDownvoteLikeState(NetworkUtils.getInstance(getContext()), viewHolder, i); //changes downvote state on click
-            }
-        });
-    }
-
-    public void setProfileCommentUserInfoListener(ProfileCommentViewHolder viewHolder, String posterId) {
-        // tapping on profile picture will bring user to poster's profile page
-        viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.otherUserClicked(posterId);
-            }
-        });
-
-        viewHolder.username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.otherUserClicked(posterId);
-            }
-        });
-    }
-
-    public void setProfileCommentImageListener(ProfileCommentViewHolder viewHolder){
-        // tapping on any item from the view holder will go to the display post activity
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
-            }
-        });
     }
 }

@@ -81,7 +81,7 @@ public class PostCommentPresenter implements
         mPostComments = new ArrayList<>();
 
         if ((commentsResponse.length() != imagesResponse.length()))
-            Log.i(TAG, "length of commentsReponse != imagesResponse");
+            Log.i(TAG, "length of commentsResponse != imagesResponse");
 
         for (int i=0; i<commentsResponse.length(); i++) {
             JSONObject jsonComment = null;

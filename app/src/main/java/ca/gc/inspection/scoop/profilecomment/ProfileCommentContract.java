@@ -1,11 +1,6 @@
 package ca.gc.inspection.scoop.profilecomment;
 
-import org.json.JSONException;
-
-import ca.gc.inspection.scoop.postcomment.LikeState;
-import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.base.BasePresenter;
-import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
 /**
  * A contract between the View (layer) and Presenter for the replying to a post
@@ -31,47 +26,30 @@ import ca.gc.inspection.scoop.base.BaseView;
  * See PostCommentContract for inheritance hierarchy for Posts/Comments
  */
 
-public interface ProfileCommentContract {
+public interface ProfileCommentContract extends PostCommentContract {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends PostCommentContract.View {
         /**
          * Implemented by the main View (ie. PostCommentFragment).
          * Methods specified here in the View but not in the nested View.Adapter and View.ViewHolder interfaces
          * explain how the Presenter is to communicate with the main View only.
          */
 
-        interface Adapter {
-            void refreshAdapter();
+        interface Adapter extends PostCommentContract.View.Adapter {
         }
 
-        interface ViewHolder {
+        interface ViewHolder extends PostCommentContract.View.ViewHolder {
             ViewHolder setPostTitle(String postTitle);
-            ViewHolder setPostText(String postText);
-            ViewHolder setUserName(String userName);
-            ViewHolder setLikeCount(String likeCount);
-            ViewHolder setDate(String date);
-            ViewHolder setLikeState(LikeState likeState);
-            ViewHolder setUserImageFromString(String image);
-            ViewHolder hideDate();
         }
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter extends PostCommentContract.Presenter {
 
-        void loadDataFromDatabase(NetworkUtils network, String currentUser);
-
-        interface AdapterAPI {
+        interface AdapterAPI extends PostCommentContract.Presenter.AdapterAPI {
             void setAdapter(ProfileCommentContract.View.Adapter adapter);
-            void onBindViewHolderAtPosition(
-                    ProfileCommentContract.View.ViewHolder profileCommentViewHolder, int i);
-            int getItemCount();
-            String getPosterIdByIndex(int i);
         }
 
-        interface ViewHolderAPI {
-            void changeUpvoteLikeState(NetworkUtils network, View.ViewHolder viewHolderInterface, int i) throws JSONException;
-            void changeDownvoteLikeState(NetworkUtils network, View.ViewHolder viewHolderInterface, int i) throws JSONException;
+        interface ViewHolderAPI extends PostCommentContract.Presenter.ViewHolderAPI {
         }
-
     }
 }

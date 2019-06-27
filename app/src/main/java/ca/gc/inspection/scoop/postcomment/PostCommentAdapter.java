@@ -41,7 +41,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
     @NonNull
     @Override
     public PostCommentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_profile_comments, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_post_comments, viewGroup, false);
         // Pass in the presenter as a Presenter.ViewHolderAPI to provide the minimum required methods
         return new PostCommentViewHolder(v, (PostCommentContract.Presenter.ViewHolderAPI) mPostCommentPresenter);
     }
@@ -57,9 +57,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
     @Override
     public void onBindViewHolder(@NonNull PostCommentViewHolder postCommentViewHolder, int i) {
         mPostCommentPresenter.onBindViewHolderAtPosition(postCommentViewHolder, i);
-        mPostCommentView.setPostCommentImageListener(postCommentViewHolder);
-        mPostCommentView.setPostCommentLikesListener(postCommentViewHolder, i);
-        mPostCommentView.setPostCommentUserInfoListener(postCommentViewHolder,
+        mPostCommentView.setDisplayPostListener(postCommentViewHolder);
+        mPostCommentView.setLikesListener(postCommentViewHolder, i);
+        mPostCommentView.setUserInfoListener(postCommentViewHolder,
                 mPostCommentPresenter.getPosterIdByIndex(i));
     }
 

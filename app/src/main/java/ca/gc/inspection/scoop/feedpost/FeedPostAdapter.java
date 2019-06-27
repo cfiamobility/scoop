@@ -50,9 +50,9 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
         // TODO use inheritance and call super? - NOTE that either onBind in Adapter or Presenter
         // should call super but not both as it would cause the same information to be set to the view
         // multiple times
-        mFeedPostView.setProfileCommentImageListener(feedPostViewHolder);
-        mFeedPostView.setProfileCommentLikesListener(feedPostViewHolder, i);
-        mFeedPostView.setProfileCommentUserInfoListener(feedPostViewHolder,
+        mFeedPostView.setDisplayPostListener(feedPostViewHolder);
+        mFeedPostView.setLikesListener(feedPostViewHolder, i);
+        mFeedPostView.setUserInfoListener(feedPostViewHolder,
                 mFeedPostPresenter.getPosterIdByIndex(i));
         mFeedPostView.setPostOptionsListener(feedPostViewHolder);
     }
