@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 
 public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
     implements FeedPostContract.View.Adapter {
@@ -16,12 +17,12 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
      */
 
     private FeedPostContract.Presenter.AdapterAPI mFeedPostPresenter;
-    private CommunityFeedFragment mFeedPostView;    // current assumption: only implementing community feed fragment
+    private ProfilePostFragment mFeedPostView;    // current assumption: only implementing community feed fragment
 
     /**
      * Constructor for the adapter
      */
-    public FeedPostAdapter(CommunityFeedFragment profileCommentView, FeedPostContract.Presenter.AdapterAPI presenter) {
+    public FeedPostAdapter(ProfilePostFragment profileCommentView, FeedPostContract.Presenter.AdapterAPI presenter) {
         mFeedPostView = profileCommentView;
         mFeedPostPresenter = presenter;
         mFeedPostPresenter.setAdapter(this);
