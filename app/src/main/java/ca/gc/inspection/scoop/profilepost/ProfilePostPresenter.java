@@ -8,9 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -18,7 +19,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
  * Presenter for viewing a profile post.
- * Inherits from PostCommentPresenter to extend the method for binding data.
+ * Inherits from ProfileCommentPresenter to extend the method for binding data.
  * Implements the AdapterAPI and ViewHolderAPI to allow adapter and viewHolder to communicate with
  * the presenter.
  */
@@ -114,7 +115,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     }
 
     @Override
-    public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
+    public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         super.onBindViewHolderAtPosition(viewHolderInterface, i);
         // need to manually call overriden setPostTitle method due to super method casting viewHolderInterface down
         ProfilePost profilePost = getProfilePostByIndex(i);

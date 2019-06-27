@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import ca.gc.inspection.scoop.postcomment.PostComment;
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -104,12 +105,13 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
         // TODO if adapter has not been set - wait until it has been set and call refreshAdapter?
     }
 
-    public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
+    public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         super.onBindViewHolderAtPosition(viewHolderInterface, i);
 
         ProfileComment profileComment = getProfileCommentByIndex(i);
         if (profileComment != null) {
-            viewHolderInterface.setPostTitle(profileComment.getPostTitle());
+            ((ProfileCommentContract.View.ViewHolder) viewHolderInterface)
+                    .setPostTitle(profileComment.getPostTitle());
         }
     }
 
