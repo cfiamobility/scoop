@@ -18,8 +18,8 @@ public class FeedPostInteractor extends ProfilePostInteractor {
     }
 
     public void getFeedPosts(NetworkUtils network, String feedType) {
-        String URL = Config.baseIP + "display-post/posts/" + feedType + "/" + Config.currentUser;
-        String imageURL = Config.baseIP + "display-post/images/" + feedType + "/" + Config.currentUser;
+        String URL = Config.baseIP + "post/display-post/" + feedType + "/" + Config.currentUser;
+        String imageURL = Config.baseIP + "post/display-post-images/" + feedType + "/" + Config.currentUser;
         JsonArrayRequest feedPostRequest = newProfileJsonArrayRequest(URL, imageURL);
         Config.requestQueue.add(feedPostRequest);
 //        network.addToRequestQueue(commentRequest);

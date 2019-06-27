@@ -110,7 +110,7 @@ public class ProfileCommentInteractor {
             int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
-        String URL = Config.baseIP + "display-post/updatelikes";
+        String URL = Config.baseIP + "post/update-like-post";
         //sends a PUT request to update new likes
         StringRequest request = newLikesStringRequest(
                 Request.Method.PUT, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
@@ -135,7 +135,7 @@ public class ProfileCommentInteractor {
             int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
-        String URL = Config.baseIP + "display-post/insertlikes";
+        String URL = Config.baseIP + "post/like-post";
         String likeCount = "1";
 
         StringRequest request = newLikesStringRequest(
