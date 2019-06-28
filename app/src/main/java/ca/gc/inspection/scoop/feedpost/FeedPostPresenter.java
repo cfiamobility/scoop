@@ -78,10 +78,11 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
 
     @Override
     public void loadDataFromDatabase(NetworkUtils network, String feedType) {
-        if (feedType == "saved"){
+        if (feedType.equals("saved")){
             mFeedPostInteractor.getSavedPosts(network);
+        } else {
+            mFeedPostInteractor.getFeedPosts(network, feedType);
         }
-        mFeedPostInteractor.getFeedPosts(network, feedType);
     }
 
     @Override
