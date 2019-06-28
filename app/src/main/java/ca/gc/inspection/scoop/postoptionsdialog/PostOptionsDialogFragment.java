@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.postoptionsdialog;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class PostOptionsDialog extends BottomSheetDialogFragment {
+import ca.gc.inspection.scoop.R;
+
+public class PostOptionsDialogFragment extends BottomSheetDialogFragment {
+
+    private PostOptionsDialogPresenter mPostOptionsDialogPresenter;
 
     @Nullable
     @Override
@@ -32,6 +36,9 @@ public class PostOptionsDialog extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 Log.i("BUTTON PRESSED", "Save");
+                mPostOptionsDialogPresenter.savePost();
+
+
                 dismiss();
             }
         });

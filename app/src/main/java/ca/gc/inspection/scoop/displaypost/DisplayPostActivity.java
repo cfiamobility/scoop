@@ -26,7 +26,7 @@ import java.util.List;
 import ca.gc.inspection.scoop.CommentController;
 import ca.gc.inspection.scoop.Comments;
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.PostOptionsDialog;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -113,7 +113,7 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
         optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
+                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");

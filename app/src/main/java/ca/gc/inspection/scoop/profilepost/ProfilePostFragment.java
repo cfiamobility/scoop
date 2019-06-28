@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +15,7 @@ import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.PostOptionsDialog;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentFragment;
 import ca.gc.inspection.scoop.R;
@@ -102,7 +101,7 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
+                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");
