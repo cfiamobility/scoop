@@ -50,12 +50,11 @@ public class PostCommentInteractor {
     public void getUserCommentsAndImages(NetworkUtils network, final String userid) {
         String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
         String responseUrl = Config.baseIP + "profile/commentimagefill/" + userid;
-        JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
-        Config.requestQueue.add(commentRequest);
-//        network.addToRequestQueue(commentRequest);
+        JsonArrayRequest commentRequest = newProfileJsonArrayRequest(network, url, responseUrl);
+        network.addToRequestQueue(commentRequest);
     }
 
-    public JsonArrayRequest newProfileJsonArrayRequest(String url, String responseUrl) {
+    public JsonArrayRequest newProfileJsonArrayRequest(NetworkUtils network, String url, String responseUrl) {
         return new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(final JSONArray response) {
@@ -78,8 +77,7 @@ public class PostCommentInteractor {
                         return header;
                     }
                 };
-                Config.requestQueue.add(imageRequest);
-//                network.addToRequestQueue(imageRequest);
+                network.addToRequestQueue(imageRequest);
 
             }
         }, new Response.ErrorListener() {
@@ -118,8 +116,7 @@ public class PostCommentInteractor {
                 30000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Config.requestQueue.add(request);
-//        network.addToRequestQueue(request);
+        network.addToRequestQueue(request);
     }
 
     /**
@@ -144,8 +141,7 @@ public class PostCommentInteractor {
                 30000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Config.requestQueue.add(request);
-//        network.addToRequestQueue(request);
+        network.addToRequestQueue(request);
 
     }
 

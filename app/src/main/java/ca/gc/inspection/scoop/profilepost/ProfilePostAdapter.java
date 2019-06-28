@@ -52,11 +52,9 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
         // TODO use inheritance and call super? - NOTE that either onBind in Adapter or Presenter
         // should call super but not both as it would cause the same information to be set to the view
         // multiple times
-        mProfilePostView.setDisplayPostListener(profilePostViewHolder);
+        mProfilePostView.setDisplayPostListener(profilePostViewHolder, mProfilePostPresenter.getActivityIdByIndex(i));
+        mProfilePostView.setUserInfoListener(profilePostViewHolder, mProfilePostPresenter.getPosterIdByIndex(i));
         mProfilePostView.setLikesListener(profilePostViewHolder, i);
-        mProfilePostView.setUserInfoListener(profilePostViewHolder,
-                mProfilePostPresenter.getPosterIdByIndex(i));
-
         mProfilePostView.setPostOptionsListener(profilePostViewHolder);
     }
 

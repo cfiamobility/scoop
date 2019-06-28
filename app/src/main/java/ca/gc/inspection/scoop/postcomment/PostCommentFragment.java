@@ -18,6 +18,7 @@ import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -124,12 +125,14 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
         });
     }
 
-    public void setDisplayPostListener(PostCommentViewHolder viewHolder){
+    public void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
+                Intent intent = new Intent(v.getContext(), DisplayPostActivity.class);
+                intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
+                v.getContext().startActivity(intent);
             }
         });
     }

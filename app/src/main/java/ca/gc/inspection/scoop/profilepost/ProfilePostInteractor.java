@@ -32,9 +32,8 @@ public class ProfilePostInteractor extends ProfileCommentInteractor {
     public void getUserPosts(NetworkUtils network, final String userid) {
         String url = Config.baseIP + "profile/posttextfill/" + userid + "/" + Config.currentUser;
         String responseUrl = Config.baseIP + "profile/postimagefill/" + userid;
-        JsonArrayRequest postRequest = super.newProfileJsonArrayRequest(url, responseUrl);
-        Config.requestQueue.add(postRequest);
-//        network.addToRequestQueue(postRequest);
+        JsonArrayRequest postRequest = super.newProfileJsonArrayRequest(network, url, responseUrl);
+        network.addToRequestQueue(postRequest);
     }
 }
 
