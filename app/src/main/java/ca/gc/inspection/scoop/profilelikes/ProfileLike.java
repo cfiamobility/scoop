@@ -1,9 +1,10 @@
+package ca.gc.inspection.scoop.profilelikes;
 
 import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
 
-public class profileLike extends ProfileComment {
+public class ProfileLike extends ProfileComment {
     /**
      * Data class which stores information for a single profile post.
      * Should only interact with the Presenter as this class is a helper data class.
@@ -19,7 +20,7 @@ public class profileLike extends ProfileComment {
     public static final String PROFILE_POST_TITLE_KEY = "posttitle";
     public static final String PROFILE_POST_COMMENT_COUNT_KEY = "commentcount";
 
-    protected profileLike(JSONObject jsonPost, JSONObject jsonImage) {
+    protected ProfileLike(JSONObject jsonPost, JSONObject jsonImage) {
         super(jsonPost, jsonImage);
     }
 
