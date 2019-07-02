@@ -31,15 +31,14 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ProfilePostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String userid;
     private View view;
     private ProfilePostContract.Presenter mProfilePostPresenter;
 
-    @Override
-    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
-        mProfilePostPresenter = (ProfilePostContract.Presenter) checkNotNull(presenter);
+    public void setPresenter(@NonNull ProfilePostContract.Presenter presenter) {
+        mProfilePostPresenter = checkNotNull(presenter);
     }
 
     /**

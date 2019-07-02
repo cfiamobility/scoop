@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.MainActivity;
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;

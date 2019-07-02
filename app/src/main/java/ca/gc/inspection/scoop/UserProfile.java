@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+// TODO remove activity if not needed - this activity is not in the manifest
 public class UserProfile extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {

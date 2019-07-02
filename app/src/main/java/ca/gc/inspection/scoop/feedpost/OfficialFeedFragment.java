@@ -26,10 +26,8 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
     private View view;
     private FeedPostContract.Presenter mFeedPostPresenter;
 
-
-    @Override
-    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
-        mFeedPostPresenter = (FeedPostContract.Presenter) checkNotNull(presenter);
+    public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
+        mFeedPostPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -78,7 +76,6 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //        mRecyclerView.setAdapter(mAdapter);
     }
 
-    @Override
     public String getFeedType(){
         return "official";
     }

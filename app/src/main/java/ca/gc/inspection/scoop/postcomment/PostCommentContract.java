@@ -70,8 +70,8 @@ public interface PostCommentContract {
             void onBindViewHolderAtPosition(
                     PostCommentContract.View.ViewHolder postCommentViewHolder, int i);
             int getItemCount();
-            String getPosterIdByIndex(int i);
-            String getActivityIdByIndex(int i);
+            String getPosterIdByIndex(int i);   // TODO can move into ViewHolderAPI
+            String getActivityIdByIndex(int i); // TODO can move into ViewHolderAPI
         }
 
         interface ViewHolderAPI {

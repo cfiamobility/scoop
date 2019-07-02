@@ -35,8 +35,6 @@ public interface FeedPostContract extends ProfilePostContract {
          * explain how the Presenter is to communicate with the main View only.
          */
 
-        String getFeedType();
-
         interface Adapter extends ProfilePostContract.View.Adapter {
         }
 

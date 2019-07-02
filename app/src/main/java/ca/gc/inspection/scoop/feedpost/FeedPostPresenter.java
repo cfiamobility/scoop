@@ -50,6 +50,13 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         return mFeedPosts.get(i);
     }
 
+    /**
+     * Empty constructor called by child classes to allow them to create
+     * their own View and Interactor objects
+     */
+    protected FeedPostPresenter() {
+    }
+
     public FeedPostPresenter(@NonNull FeedPostContract.View viewInterface){
 
         setView(viewInterface);

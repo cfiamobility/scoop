@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.feedpost;
+package ca.gc.inspection.scoop.displaypost;
 
 
 import android.os.Bundle;
@@ -8,10 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
+
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.feedpost.CommunityFeedFragment;
+import ca.gc.inspection.scoop.feedpost.FeedPostAdapter;
+import ca.gc.inspection.scoop.feedpost.FeedPostContract;
+import ca.gc.inspection.scoop.feedpost.FeedPostPresenter;
+import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -20,23 +24,23 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing community feed action.
  * Responsible for creating the Presenter and Adapter
  */
-public class CommunityFeedFragment extends ProfilePostFragment implements FeedPostContract.View  {
+public class DisplayPostFragment extends CommunityFeedFragment implements DisplayPostContract.View {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
     private FeedPostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
-    private FeedPostContract.Presenter mFeedPostPresenter;
+    private DisplayPostContract.Presenter mDisplayPostPresenter;
 
-    public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
-        mFeedPostPresenter = checkNotNull(presenter);
+    public void setPresenter(@NonNull DisplayPostContract.Presenter presenter) {
+        mDisplayPostPresenter = checkNotNull(presenter);
     }
 
     /**
      * Empty Constructor for fragments
      */
-    public CommunityFeedFragment() {
+    public DisplayPostFragment() {
     }
 
 
@@ -53,7 +57,7 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_community_feed, container, false);
         setPresenter(new FeedPostPresenter(this));
-        mFeedPostPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), getFeedType());
+        mDisplayPostPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), getFeedType());
         return view;
     }
 
@@ -87,6 +91,7 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
 
     }
 
+    // TODO remove unnecessary override?
     public String getFeedType(){
         return "community";
     }
