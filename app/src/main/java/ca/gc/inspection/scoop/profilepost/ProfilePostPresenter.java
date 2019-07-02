@@ -66,7 +66,6 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     }
 
     public void setView(@NonNull ProfilePostContract.View viewInterface) {
-        super.setView(viewInterface);
         mProfilePostView = checkNotNull(viewInterface);
     }
 

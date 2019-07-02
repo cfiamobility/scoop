@@ -26,7 +26,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing profile comments action.
  * Responsible for creating the Presenter and Adapter
  */
-public class ProfileCommentFragment extends PostCommentFragment implements ProfileCommentContract.View {
+public class ProfileCommentFragment extends Fragment implements ProfileCommentContract.View {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
@@ -35,7 +35,7 @@ public class ProfileCommentFragment extends PostCommentFragment implements Profi
     private View view;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
 
-    public void setPresenter (@NonNull ProfileCommentContract.Presenter presenter){
+    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
         mProfileCommentPresenter = checkNotNull(presenter);
     }
 
@@ -86,7 +86,9 @@ public class ProfileCommentFragment extends PostCommentFragment implements Profi
         commentsRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setting the custom adapter for the recycler view
-        mAdapter = new ProfileCommentAdapter(this, (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter);
+        mAdapter = new ProfileCommentAdapter(this,
+                (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter,
+                NetworkUtils.getInstance(getContext()));
         commentsRecyclerView.setAdapter(mAdapter);
     }
 }

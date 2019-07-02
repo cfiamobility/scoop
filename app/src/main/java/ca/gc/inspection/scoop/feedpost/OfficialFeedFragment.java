@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.feedpost;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing official feed action.
  * Responsible for creating the Presenter and Adapter
  */
-public class OfficialFeedFragment extends ProfilePostFragment implements FeedPostContract.View {
+public class OfficialFeedFragment extends Fragment implements FeedPostContract.View {
 
     // recycler view widget
     private RecyclerView mRecyclerView;
@@ -62,7 +63,6 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
         // TODO add setRecyclerView
     }
 
-    @Override
     public void setRecyclerView(){
 //
 //        // initializing the recycler view

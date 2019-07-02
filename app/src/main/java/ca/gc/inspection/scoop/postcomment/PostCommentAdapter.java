@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
 public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHolder>
         implements PostCommentContract.View.Adapter {
@@ -18,6 +19,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
 
     private PostCommentContract.Presenter.AdapterAPI mPostCommentPresenter;
     private PostCommentFragment mPostCommentView;
+    private NetworkUtils mNetworkUtil;
 
     /**
      * Constructor for the adapter.
@@ -25,10 +27,13 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
      * @param postCommentView    The fragment instead of view contract can be taken in as both are considered part of the view. (see Contract documentation)
      * @param presenter             The presenter is passed in as the contract which specifies View-Presenter interaction.
      */
-    public PostCommentAdapter(PostCommentFragment postCommentView, PostCommentContract.Presenter.AdapterAPI presenter) {
+    public PostCommentAdapter(PostCommentFragment postCommentView,
+                              PostCommentContract.Presenter.AdapterAPI presenter,
+                              NetworkUtils network) {
         mPostCommentView = postCommentView;
         mPostCommentPresenter = presenter;
         mPostCommentPresenter.setAdapter(this);
+        mNetworkUtil = network;
     }
 
     /**
@@ -57,9 +62,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
     @Override
     public void onBindViewHolder(@NonNull PostCommentViewHolder postCommentViewHolder, int i) {
         mPostCommentPresenter.onBindViewHolderAtPosition(postCommentViewHolder, i);
-        mPostCommentView.setDisplayPostListener(postCommentViewHolder);
-        mPostCommentView.setLikesListener(postCommentViewHolder, i);
-        mPostCommentView.setUserInfoListener(postCommentViewHolder,
+        PostCommentFragment.setDisplayPostListener(postCommentViewHolder);
+        PostCommentFragment.setLikesListener(mNetworkUtil, postCommentViewHolder, i);
+        PostCommentFragment.setUserInfoListener(postCommentViewHolder,
                 mPostCommentPresenter.getPosterIdByIndex(i));
     }
 
