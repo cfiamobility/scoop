@@ -9,9 +9,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -34,11 +34,11 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     private FeedPostContract.View.Adapter mAdapter;
     private FeedPostInteractor mFeedPostInteractor;
 
-    // TODO extend JSONArray mComments, mImages, and ArrayList mProfileComments from parent
+    // TODO extend JSONArray mComments, mImages, and ArrayList mPostComments from parent
     // - currently assume mComments stores only community feed fragment data
     private ArrayList<FeedPost> mFeedPosts;
 
-    // TODO replace overriding method by creating a DataCache object in ProfileCommentPresenter and overriding it here
+    // TODO replace overriding method by creating a DataCache object in PostCommentPresenter and overriding it here
     @Override
     protected ProfileComment getProfileCommentByIndex(int i) {
         return getFeedPostByIndex(i);
@@ -116,7 +116,7 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     }
 
     @Override
-    public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
+    public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         super.onBindViewHolderAtPosition(viewHolderInterface, i);
         FeedPost feedPost = getFeedPostByIndex(i);
         if (feedPost != null) {

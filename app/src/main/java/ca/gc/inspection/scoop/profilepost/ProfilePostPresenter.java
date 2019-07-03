@@ -8,9 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -33,14 +34,11 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     private ProfilePostContract.View mProfilePostView;
     private ProfilePostContract.View.Adapter mAdapter;
     private ProfilePostInteractor mProfilePostInteractor;
-    // TODO extend JSONArray mComments, mImages, and ArrayList mProfileComments from parent
+    // TODO extend JSONArray mComments, mImages, and ArrayList mPostComments from parent
     // - currently using mComments with extra commentsCount field
     private ArrayList<ProfilePost> mProfilePosts;
 
-    // for bundle and savedpost
-    String posterId;
-
-    // TODO replace overriding method by creating a DataCache object in ProfileCommentPresenter and overriding it here
+    // TODO replace overriding method by creating a DataCache object in PostCommentPresenter and overriding it here
     @Override
     protected ProfileComment getProfileCommentByIndex(int i) {
         return getProfilePostByIndex(i);
@@ -68,7 +66,6 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     }
 
     public void setView(@NonNull ProfilePostContract.View viewInterface) {
-        super.setView(viewInterface);
         mProfilePostView = checkNotNull(viewInterface);
     }
 
@@ -117,7 +114,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     }
 
     @Override
-    public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
+    public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         super.onBindViewHolderAtPosition(viewHolderInterface, i);
         // need to manually call overriden setPostTitle method due to super method casting viewHolderInterface down
         ProfilePost profilePost = getProfilePostByIndex(i);
@@ -141,11 +138,6 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     // TODO refactor when DataCache object is implemented
     @Override
     public String getPosterIdByIndex(int i) {
-        posterId = getProfileCommentByIndex(i).getPosterId();
-        return posterId;
-    }
-
-    public String getPosterIdSavePost(){
-        return posterId;
+        return getProfileCommentByIndex(i).getPosterId();
     }
 }

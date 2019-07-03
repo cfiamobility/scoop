@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.postcomment.LikeState;
+import ca.gc.inspection.scoop.postcomment.PostCommentInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
@@ -25,12 +27,10 @@ import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMME
 import static ca.gc.inspection.scoop.profilecomment.ProfileComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class ProfileCommentInteractor {
+public class ProfileCommentInteractor extends PostCommentInteractor {
     /**
      * Interactor used to send requests to the network
      */
-
-    protected ProfileCommentPresenter mPresenter;
 
     /**
      * Empty constructor called by child classes (ie. ProfilePostInteractor) to allow them to set
@@ -41,162 +41,6 @@ public class ProfileCommentInteractor {
 
     public ProfileCommentInteractor(ProfileCommentPresenter presenter){
         mPresenter = checkNotNull(presenter);
-    }
-
-    /**
-     * HTTPRequests for comments and profile images
-     * @param userid: userid
-     */
-    public void getUserCommentsAndImages(NetworkUtils network, final String userid) {
-        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
-        String responseUrl = Config.baseIP + "profile/commentimagefill/" + userid;
-        JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
-        Config.requestQueue.add(commentRequest);
-//        network.addToRequestQueue(commentRequest);
-    }
-
-    public JsonArrayRequest newProfileJsonArrayRequest(String url, String responseUrl) {
-        return new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(final JSONArray response) {
-                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, responseUrl, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray imagesResponse) {
-                        // if called by ProfilePostInteractor or FeedPostInteractor, setData calls the overridden method
-                        mPresenter.setData(response, imagesResponse);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", String.valueOf(error));
-                    }
-                }) {
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        // inserting the token into the response header that will be sent to the server
-                        Map<String, String> header = new HashMap<>();
-                        header.put("authorization", Config.token);
-                        return header;
-                    }
-                };
-                Config.requestQueue.add(imageRequest);
-//                network.addToRequestQueue(imageRequest);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }) {
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                // inserting the token into the response header that will be sent to the server
-                Map<String, String> header = new HashMap<>();
-                header.put("authorization", Config.token);
-                return header;
-            }
-        };
-    }
-
-    /**
-     * Description: updates likes in table and adds notifications if like type is 1
-     * @param likeType : current like type
-     * @param activityid : activity id of post
-     * @param posterid : user id of poster of post
-     * @param viewHolderInterface
-     * @throws JSONException
-     */
-    public void updateLikes(
-            NetworkUtils network, LikeState likeType, String likeCount, final String activityid, final String posterid,
-            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
-
-        Log.i("hello", "should be here");
-        String URL = Config.baseIP + "post/update-like-post";
-        //sends a PUT request to update new likes
-        StringRequest request = newLikesStringRequest(
-                Request.Method.PUT, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                30000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Config.requestQueue.add(request);
-//        network.addToRequestQueue(request);
-    }
-
-    /**
-     * Description: inserts likes in table and adds notifications if like type is 1
-     * @param likeType : current like type
-     * @param activityid : activity id of post
-     * @param posterid : user id of poster of post
-     * @param viewHolderInterface
-     * @throws JSONException
-     */
-    public void insertLikes(
-            NetworkUtils network, LikeState likeType, final String activityid, final String posterid,
-            int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
-
-        Log.i("hello", "should be here");
-        String URL = Config.baseIP + "post/like-post";
-        String likeCount = "1";
-
-        StringRequest request = newLikesStringRequest(
-                Request.Method.POST, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                30000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Config.requestQueue.add(request);
-//        network.addToRequestQueue(request);
-
-    }
-
-    /**
-     * Helper method which creates a POST request to insert new likes
-     * @param requestMethod
-     * @param URL
-     * @param likeType
-     * @param activityid
-     * @param posterid
-     * @param i
-     * @param viewHolderInterface
-     * @return
-     */
-    private StringRequest newLikesStringRequest(
-            int requestMethod, String URL, LikeState likeType, String likeCount, final String activityid,
-            final String posterid, int i, ProfileCommentContract.View.ViewHolder viewHolderInterface) {
-
-        return new StringRequest(requestMethod, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i("response", response);
-                // TODO update the likestate/likecount UI based on database response -> need fast database response
-//                mPresenter.updateLikeState(viewHolderInterface, i, likeType);
-//                mPresenter.updateLikeCount(viewHolderInterface, i, likeCount);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams(){
-                Log.i("ProfileCommentInteractor", "getParams for insert/updateLikes");
-                Map<String, String> params = new HashMap<>();
-                params.put(PROFILE_COMMENT_LIKE_TYPE_KEY, likeType.getDatabaseValue());
-                params.put(PROFILE_COMMENT_ACTIVITYID_KEY, activityid);
-                // See ProfileComment documentation for disambiguation between posterId and userId
-                params.put(PROFILE_COMMENT_LIKE_POSTERID_KEY, posterid);
-                params.put(USERID_KEY, Config.currentUser);
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                // inserting the token into the response header that will be sent to the server
-                Map<String, String> header = new HashMap<>();
-                header.put("authorization", Config.token);
-                return header;
-            }
-        };
     }
 
 }

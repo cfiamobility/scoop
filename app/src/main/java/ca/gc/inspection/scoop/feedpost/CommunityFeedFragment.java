@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop.feedpost;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing community feed action.
  * Responsible for creating the Presenter and Adapter
  */
-public class CommunityFeedFragment extends ProfilePostFragment implements FeedPostContract.View  {
+public class CommunityFeedFragment extends Fragment implements FeedPostContract.View  {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -72,7 +73,6 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
     /**
      * Sets the recycler view
      */
-    @Override
     public void setRecyclerView() {
         // setting up the recycler view
         mRecyclerView = view.findViewById(R.id.fragment_community_feed_rv);
@@ -83,7 +83,9 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // using the custom adapter for the recycler view
-        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
+        mAdapter = new FeedPostAdapter(this,
+                (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter,
+                NetworkUtils.getInstance(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 
     }

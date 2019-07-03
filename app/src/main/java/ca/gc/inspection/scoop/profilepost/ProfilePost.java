@@ -25,7 +25,7 @@ public class ProfilePost extends ProfileComment {
     }
 
     /**
-     * Overrides getPostTitle in ProfileComment to return the appropriate title for a post
+     * Overrides getPostTitle in PostComment to return the appropriate title for a post
      * @return post title string
      */
     @Override

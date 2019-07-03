@@ -24,8 +24,7 @@ public interface ProfilePostContract extends ProfileCommentContract {
      * If communication is required within the View only or Presenter only, the object itself should be passed in
      * to avoid leaking access to internal methods in the contract.
      *
-     * ProfileCommentContract is the base contract and is extended by ProfilePostContract which
-     * is further extended by FeedPostContract.
+     * See PostCommentContract for inheritance hierarchy for Posts/Comments
      */
 
     interface View extends ProfileCommentContract.View {

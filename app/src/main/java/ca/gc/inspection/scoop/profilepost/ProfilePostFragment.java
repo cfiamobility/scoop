@@ -28,7 +28,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing profile post action.
  * Responsible for creating the Presenter and Adapter
  */
-public class ProfilePostFragment extends ProfileCommentFragment implements ProfilePostContract.View {
+public class ProfilePostFragment extends Fragment implements ProfilePostContract.View {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -82,7 +82,6 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
     /**
      * Sets the recycler view
      */
-    @Override
     public void setRecyclerView() {
         // initializing the recycler view
         postRecyclerView = view.findViewById(R.id.fragment_profile_posts_rv);
@@ -93,11 +92,13 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
         postRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting the custom adapter for the recycler view
-        mAdapter = new ProfilePostAdapter(this, (ProfilePostContract.Presenter.AdapterAPI) mProfilePostPresenter);
+        mAdapter = new ProfilePostAdapter(this,
+                (ProfilePostContract.Presenter.AdapterAPI) mProfilePostPresenter,
+                NetworkUtils.getInstance(getContext()));
         postRecyclerView.setAdapter(mAdapter);
     }
 
-    public void setPostOptionsListener(ProfilePostViewHolder viewHolder){
+    public static void setPostOptionsListener(ProfilePostViewHolder viewHolder){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,7 +18,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing official feed action.
  * Responsible for creating the Presenter and Adapter
  */
-public class OfficialFeedFragment extends ProfilePostFragment implements FeedPostContract.View {
+public class OfficialFeedFragment extends Fragment implements FeedPostContract.View {
 
     // recycler view widget
     private RecyclerView mRecyclerView;
@@ -63,7 +63,6 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
         // TODO add setRecyclerView
     }
 
-    @Override
     public void setRecyclerView(){
 //
 //        // initializing the recycler view
@@ -89,7 +88,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * FROM ADAPTER
 //     */
 //    @Override
-//    public void setPostText(String postText, ProfileCommentViewHolder holder) {
+//    public void setPostText(String postText, PostCommentViewHolder holder) {
 //        holder.postText.setText(postText);
 //    }
 //
@@ -99,7 +98,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * @param holder: viewholder of item
 //     */
 //    @Override
-//    public void setPostTitle(String postTitle, ProfileCommentViewHolder holder) {
+//    public void setPostTitle(String postTitle, PostCommentViewHolder holder) {
 //        holder.postTitle.setText(postTitle);
 //    }
 //
@@ -119,7 +118,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * @param holder: viewholder of item
 //     */
 //    @Override
-//    public void setUserImage(Bitmap image, ProfileCommentViewHolder holder) {
+//    public void setUserImage(Bitmap image, PostCommentViewHolder holder) {
 //        holder.profileImage.setImageBitmap(image);
 //    }
 //
@@ -129,7 +128,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * @param holder: viewholder of item
 //     */
 //    @Override
-//    public void setUserName(String userName, ProfileCommentViewHolder holder) {
+//    public void setUserName(String userName, PostCommentViewHolder holder) {
 //        holder.username.setText(userName);
 //    }
 //
@@ -139,7 +138,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * @param holder: viewholder of item
 //     */
 //    @Override
-//    public void setLikeCount(String likeCount, ProfileCommentViewHolder holder) {
+//    public void setLikeCount(String likeCount, PostCommentViewHolder holder) {
 //        holder.likeCount.setText(likeCount);
 //    }
 //
@@ -149,7 +148,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * @param holder: viewholder of item
 //     */
 //    @Override
-//    public void setDate(String date, ProfileCommentViewHolder holder) {
+//    public void setDate(String date, PostCommentViewHolder holder) {
 //        holder.date.setText(date);
 //    }
 //
@@ -158,7 +157,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * @param holder: viewholder of item
 //     */
 //    @Override
-//    public void setLikeNeutralState(ProfileCommentViewHolder holder) {
+//    public void setLikeNeutralState(PostCommentViewHolder holder) {
 //        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
 //        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
 //    }
@@ -168,7 +167,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * @param holder: viewholder of item
 //     */
 //    @Override
-//    public void setLikeUpvoteState(ProfileCommentViewHolder holder) {
+//    public void setLikeUpvoteState(PostCommentViewHolder holder) {
 //        holder.upvote.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP); //sets upvote color to red
 //        holder.downvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets downvote color to black
 //    }
@@ -178,7 +177,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * @param holder: viewholder of item
 //     */
 //    @Override
-//    public void setLikeDownvoteState(ProfileCommentViewHolder holder) {
+//    public void setLikeDownvoteState(PostCommentViewHolder holder) {
 //        holder.upvote.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP); //sets upvote color to black
 //        holder.downvote.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP); //sets downvote color to blue
 //    }
@@ -207,7 +206,7 @@ public class OfficialFeedFragment extends ProfilePostFragment implements FeedPos
 //     * @param holder: viewholder of item
 //     */
 //    @Override
-//    public void hideDate(ProfileCommentViewHolder holder) {
+//    public void hideDate(PostCommentViewHolder holder) {
 //        holder.date.setVisibility(View.GONE);
 //    }
 }
