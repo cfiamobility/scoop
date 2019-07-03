@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,9 +103,18 @@ public class ProfilePostFragment extends ProfileCommentFragment implements Profi
             @Override
             public void onClick(View v) {
                 PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
+                // bundle
+                Bundle bundle = new Bundle();
+                Log.i("post I am clicking: ", mProfilePostPresenter.getPosterIdSavePost());
+//                bundle.putString("posterId", mProfilePostPresenter.getPosterIdSavePost());
+                bottomSheetDialog.setArguments(bundle);
+
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");
+
+
+
             }
         });
     }

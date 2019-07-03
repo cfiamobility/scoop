@@ -11,16 +11,38 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
-public class PostOptionsDialogFragment extends BottomSheetDialogFragment {
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-    private PostOptionsDialogPresenter mPostOptionsDialogPresenter;
+public class PostOptionsDialogFragment extends BottomSheetDialogFragment implements PostOptionsDialogContract.View {
+
+    private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
+
+
+    public void setPresenter (@NonNull PostOptionsDialogContract.Presenter presenter){
+        mPostOptionsDialogPresenter = checkNotNull(presenter);
+    }
+
+    /**
+     * Empty Constructor for Fragment
+     */
+    public PostOptionsDialogFragment(){
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_post_options, container, false);
+
+        setPresenter(new PostOptionsDialogPresenter(this));
+//        mPostOptionsDialogPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), Config.currentUser);
+
+        //from profilepost bundle
+        String posterId = savedInstanceState.getString("posterId");
 
         // initializing all of the buttons
         Button saveButton = view.findViewById(R.id.dialog_post_options_btn_save);
@@ -36,8 +58,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 Log.i("BUTTON PRESSED", "Save");
-                mPostOptionsDialogPresenter.savePost();
-
+                //if breaks might be b/c of context
+                Log.i("poster id:", posterId);
+                mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), posterId, Config.currentUser);
 
                 dismiss();
             }

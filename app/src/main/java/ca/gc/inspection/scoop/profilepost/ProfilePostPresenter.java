@@ -37,6 +37,9 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     // - currently using mComments with extra commentsCount field
     private ArrayList<ProfilePost> mProfilePosts;
 
+    // for bundle and savedpost
+    String posterId;
+
     // TODO replace overriding method by creating a DataCache object in ProfileCommentPresenter and overriding it here
     @Override
     protected ProfileComment getProfileCommentByIndex(int i) {
@@ -138,6 +141,11 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     // TODO refactor when DataCache object is implemented
     @Override
     public String getPosterIdByIndex(int i) {
-        return getProfileCommentByIndex(i).getPosterId();
+        posterId = getProfileCommentByIndex(i).getPosterId();
+        return posterId;
+    }
+
+    public String getPosterIdSavePost(){
+        return posterId;
     }
 }
