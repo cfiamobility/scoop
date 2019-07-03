@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.profilepost.ProfilePost;
 
-class FeedPost extends ProfilePost {
+public class FeedPost extends ProfilePost {
     /**
      * Data class which stores information for a single feed post.
      * Should only interact with the Presenter as this class is a helper data class.

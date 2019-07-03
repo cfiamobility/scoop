@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop.feedpost;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.R;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -20,7 +20,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing community feed action.
  * Responsible for creating the Presenter and Adapter
  */
-public class CommunityFeedFragment extends ProfilePostFragment implements FeedPostContract.View  {
+public class CommunityFeedFragment extends Fragment implements FeedPostContract.View  {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -52,8 +52,8 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_community_feed, container, false);
-        setPresenter(new FeedPostPresenter(this));
-        mFeedPostPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), getFeedType());
+        setPresenter(new FeedPostPresenter(this, NetworkUtils.getInstance(getContext())));
+        mFeedPostPresenter.loadDataFromDatabase(getFeedType());
         return view;
     }
 
@@ -71,7 +71,6 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
     /**
      * Sets the recycler view
      */
-    @Override
     public void setRecyclerView() {
         // setting up the recycler view
         mRecyclerView = view.findViewById(R.id.fragment_community_feed_rv);
@@ -82,7 +81,8 @@ public class CommunityFeedFragment extends ProfilePostFragment implements FeedPo
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // using the custom adapter for the recycler view
-        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
+        mAdapter = new FeedPostAdapter(this,
+                (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
         mRecyclerView.setAdapter(mAdapter);
 
     }

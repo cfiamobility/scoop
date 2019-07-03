@@ -25,7 +25,8 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
      * @param postCommentView    The fragment instead of view contract can be taken in as both are considered part of the view. (see Contract documentation)
      * @param presenter             The presenter is passed in as the contract which specifies View-Presenter interaction.
      */
-    public PostCommentAdapter(PostCommentFragment postCommentView, PostCommentContract.Presenter.AdapterAPI presenter) {
+    public PostCommentAdapter(PostCommentFragment postCommentView,
+                              PostCommentContract.Presenter.AdapterAPI presenter) {
         mPostCommentView = postCommentView;
         mPostCommentPresenter = presenter;
         mPostCommentPresenter.setAdapter(this);
@@ -57,9 +58,10 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
     @Override
     public void onBindViewHolder(@NonNull PostCommentViewHolder postCommentViewHolder, int i) {
         mPostCommentPresenter.onBindViewHolderAtPosition(postCommentViewHolder, i);
-        mPostCommentView.setDisplayPostListener(postCommentViewHolder, mPostCommentPresenter.getActivityIdByIndex(i));
-        mPostCommentView.setUserInfoListener(postCommentViewHolder, mPostCommentPresenter.getPosterIdByIndex(i));
-        mPostCommentView.setLikesListener(postCommentViewHolder, i);
+        PostCommentFragment.setDisplayPostListener(postCommentViewHolder);
+        PostCommentFragment.setLikesListener(postCommentViewHolder, i);
+        PostCommentFragment.setUserInfoListener(postCommentViewHolder,
+                mPostCommentPresenter.getPosterIdByIndex(i));
     }
 
     /**

@@ -7,11 +7,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Objects;
 
-import ca.gc.inspection.scoop.postcomment.PostComment;
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentPresenter;
+import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -33,35 +32,28 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     private ProfileCommentContract.View mProfileCommentView;
     private ProfileCommentContract.View.Adapter mAdapter;
     private ProfileCommentInteractor mProfileCommentInteractor;
-    protected ArrayList<ProfileComment> mProfileComments;
 
-    @Override
-    protected PostComment getPostCommentByIndex(int i) {
-        return getProfileCommentByIndex(i);
-    }
-
-    protected ProfileComment getProfileCommentByIndex(int i) {
-        if (mProfileComments == null)
+    private ProfileComment getItemByIndex(int i) {
+        if (mDataCache == null)
             return null;
-        return mProfileComments.get(i);
+        return mDataCache.getProfileCommentByIndex(i);
     }
 
     /**
      * Empty constructor called by child classes (ie. ProfilePostPresenter) to allow them to create
      * their own View and Interactor objects
      */
-    public ProfileCommentPresenter() {
+    protected ProfileCommentPresenter() {
     }
 
-    ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewInterface){
+    ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewInterface, NetworkUtils network){
 
         setView(viewInterface);
-        setInteractor(new ProfileCommentInteractor(this));
+        setInteractor(new ProfileCommentInteractor(this, network));
 
     }
 
     public void setView(@NonNull ProfileCommentContract.View viewInterface) {
-        super.setView(viewInterface);
         mProfileCommentView = checkNotNull(viewInterface);
     }
 
@@ -76,14 +68,13 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     }
 
     @Override
-    public void loadDataFromDatabase(NetworkUtils network, String currentUser) {
-        mProfileCommentInteractor.getUserCommentsAndImages(network, currentUser);
+    public void loadDataFromDatabase(String currentUser) {
+        mProfileCommentInteractor.getPostComments(currentUser);
     }
 
+    @Override
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
-        mComments = commentsResponse;
-        mImages = imagesResponse;
-        mProfileComments = new ArrayList<>();
+        mDataCache = PostDataCache.createWithType(ProfileComment.class);
 
         if ((commentsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of commentsReponse != imagesResponse");
@@ -92,40 +83,34 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
             JSONObject jsonComment = null;
             JSONObject jsonImage = null;
             try {
-                jsonComment = mComments.getJSONObject(i);
-                jsonImage = mImages.getJSONObject(i);
+                jsonComment = commentsResponse.getJSONObject(i);
+                jsonImage = imagesResponse.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             ProfileComment profileComment = new ProfileComment(jsonComment, jsonImage);
-            mProfileComments.add(profileComment);
+            mDataCache.getProfileCommentList().add(profileComment);
         }
 
         mAdapter.refreshAdapter();
-        // TODO if adapter has not been set - wait until it has been set and call refreshAdapter?
     }
 
-    public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
-        super.onBindViewHolderAtPosition(viewHolderInterface, i);
-
-        ProfileComment profileComment = getProfileCommentByIndex(i);
-        if (profileComment != null) {
-            ((ProfileCommentContract.View.ViewHolder) viewHolderInterface)
-                    .setPostTitle(profileComment.getPostTitle());
-        }
-    }
-
-    /**
-     * Gets the item Count of the comments JSONArray
-     * @return the length
-     */
     @Override
-    public int getItemCount() {
-        return super.getItemCount();
+    public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
+        ProfileComment profileComment = getItemByIndex(i);
+        bindProfileCommentDataToViewHolder(viewHolderInterface, profileComment);
+    }
+
+    public static void bindProfileCommentDataToViewHolder(
+            ProfileCommentContract.View.ViewHolder viewHolderInterface, ProfileComment profileComment) {
+        if (profileComment != null) {
+            bindPostCommentDataToViewHolder(viewHolderInterface, profileComment);
+            viewHolderInterface.setPostTitle(profileComment.getPostTitle());
+        }
     }
 
     @Override
     public String getPosterIdByIndex(int i) {
-        return getProfileCommentByIndex(i).getPosterId();
+        return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
     }
 }

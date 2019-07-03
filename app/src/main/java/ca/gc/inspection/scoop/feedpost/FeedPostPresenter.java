@@ -7,11 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
+import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.profilecomment.ProfileComment;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -34,20 +31,10 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     private FeedPostContract.View.Adapter mAdapter;
     private FeedPostInteractor mFeedPostInteractor;
 
-    // TODO extend JSONArray mComments, mImages, and ArrayList mPostComments from parent
-    // - currently assume mComments stores only community feed fragment data
-    private ArrayList<FeedPost> mFeedPosts;
-
-    // TODO replace overriding method by creating a DataCache object in PostCommentPresenter and overriding it here
-    @Override
-    protected ProfileComment getProfileCommentByIndex(int i) {
-        return getFeedPostByIndex(i);
-    }
-
-    private FeedPost getFeedPostByIndex(int i) {
-        if (mFeedPosts == null)
+    private FeedPost getItemByIndex(int i) {
+        if (mDataCache == null)
             return null;
-        return mFeedPosts.get(i);
+        return mDataCache.getFeedPostByIndex(i);
     }
 
     /**
@@ -57,10 +44,10 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     protected FeedPostPresenter() {
     }
 
-    public FeedPostPresenter(@NonNull FeedPostContract.View viewInterface){
+    public FeedPostPresenter(@NonNull FeedPostContract.View viewInterface, NetworkUtils network){
 
         setView(viewInterface);
-        setInteractor(new FeedPostInteractor(this));
+        setInteractor(new FeedPostInteractor(this, network));
 
     }
 
@@ -84,15 +71,13 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     }
 
     @Override
-    public void loadDataFromDatabase(NetworkUtils network, String feedType) {
-        mFeedPostInteractor.getFeedPosts(network, feedType);
+    public void loadDataFromDatabase(String feedType) {
+        mFeedPostInteractor.getFeedPosts(feedType);
     }
 
     @Override
     public void setData(JSONArray feedPostsResponse, JSONArray imagesResponse) {
-        mComments = feedPostsResponse;
-        mImages = imagesResponse;
-        mFeedPosts = new ArrayList<>();
+        mDataCache = PostDataCache.createWithType(FeedPost.class);
 
         if ((feedPostsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of feedPostsResponse != imagesResponse; some users may not have profile images");
@@ -101,13 +86,13 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
             JSONObject jsonFeedPost = null;
             JSONObject jsonImage = null;
             try {
-                jsonFeedPost = mComments.getJSONObject(i);
-                jsonImage = mImages.getJSONObject(i);
+                jsonFeedPost = feedPostsResponse.getJSONObject(i);
+                jsonImage = imagesResponse.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             FeedPost feedPost = new FeedPost(jsonFeedPost, jsonImage);
-            mFeedPosts.add(feedPost);
+            mDataCache.getFeedPostList().add(feedPost);
         }
 
         try {
@@ -119,28 +104,22 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     }
 
     @Override
-    public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
-        super.onBindViewHolderAtPosition(viewHolderInterface, i);
-        FeedPost feedPost = getFeedPostByIndex(i);
+    public void onBindViewHolderAtPosition(FeedPostContract.View.ViewHolder viewHolderInterface, int i) {
+        FeedPost feedPost = getItemByIndex(i);
+        bindFeedPostDataToViewHolder(viewHolderInterface, feedPost);
+    }
+
+    public static void bindFeedPostDataToViewHolder(
+            FeedPostContract.View.ViewHolder viewHolderInterface, FeedPost feedPost) {
+        bindProfilePostDataToViewHolder(viewHolderInterface, feedPost);
         if (feedPost != null) {
-            ((FeedPostContract.View.ViewHolder) viewHolderInterface).setPostImageFromString(feedPost.getFeedPostImagePath());
+            viewHolderInterface.setPostImageFromString(feedPost.getFeedPostImagePath());
         }
     }
 
-    /**
-     * Gets the item Count of the feedposts JSONArray
-     * @return the length
-     */
-    // TODO refactor when DataCache object is implemented
-    @Override
-    public int getItemCount() {
-        return super.getItemCount();
-    }
-
-    // TODO refactor when DataCache object is implemented
     @Override
     public String getPosterIdByIndex(int i) {
-        return getFeedPostByIndex(i).getPosterId();
-    }
 
+        return getItemByIndex(i).getPosterId();
+    }
 }

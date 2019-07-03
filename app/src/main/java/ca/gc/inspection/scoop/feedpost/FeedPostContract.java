@@ -2,7 +2,6 @@ package ca.gc.inspection.scoop.feedpost;
 
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
 
-
 public interface FeedPostContract extends ProfilePostContract {
     /**
      * A contract between the View (layer) and Presenter for the viewing feed post
@@ -46,8 +45,12 @@ public interface FeedPostContract extends ProfilePostContract {
 
     interface Presenter extends ProfilePostContract.Presenter {
 
+        void loadDataFromDatabase(String feedType);
+
         interface AdapterAPI extends ProfilePostContract.Presenter.AdapterAPI {
             void setAdapter(FeedPostContract.View.Adapter adapter);
+            void onBindViewHolderAtPosition(
+                    FeedPostContract.View.ViewHolder postCommentViewHolder, int i);
         }
 
         interface ViewHolderAPI extends ProfilePostContract.Presenter.ViewHolderAPI {

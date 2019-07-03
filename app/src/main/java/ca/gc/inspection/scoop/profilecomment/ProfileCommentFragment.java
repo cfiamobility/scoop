@@ -1,7 +1,5 @@
 package ca.gc.inspection.scoop.profilecomment;
 
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,10 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
-import ca.gc.inspection.scoop.MainActivity;
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
-import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
@@ -27,7 +21,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing profile comments action.
  * Responsible for creating the Presenter and Adapter
  */
-public class ProfileCommentFragment extends PostCommentFragment implements ProfileCommentContract.View {
+public class ProfileCommentFragment extends Fragment implements ProfileCommentContract.View {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
@@ -36,7 +30,7 @@ public class ProfileCommentFragment extends PostCommentFragment implements Profi
     private View view;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
 
-    public void setPresenter (@NonNull ProfileCommentContract.Presenter presenter){
+    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
         mProfileCommentPresenter = checkNotNull(presenter);
     }
 
@@ -58,8 +52,8 @@ public class ProfileCommentFragment extends PostCommentFragment implements Profi
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
-        setPresenter(new ProfileCommentPresenter(this));
-        mProfileCommentPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), Config.currentUser);
+        setPresenter(new ProfileCommentPresenter(this, NetworkUtils.getInstance(getContext())));
+        mProfileCommentPresenter.loadDataFromDatabase(Config.currentUser);
         return view;
     }
 
@@ -87,7 +81,8 @@ public class ProfileCommentFragment extends PostCommentFragment implements Profi
         commentsRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setting the custom adapter for the recycler view
-        mAdapter = new ProfileCommentAdapter(this, (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter);
+        mAdapter = new ProfileCommentAdapter(this,
+                (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter);
         commentsRecyclerView.setAdapter(mAdapter);
     }
 }

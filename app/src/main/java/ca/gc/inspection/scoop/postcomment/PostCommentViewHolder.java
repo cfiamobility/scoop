@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ca.gc.inspection.scoop.util.CameraUtils;
-import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
 /**
@@ -153,18 +152,18 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
         return this;
     }
 
-    public void changeUpvoteLikeState(NetworkUtils instance, PostCommentViewHolder viewHolder, int i) {
+    public void changeUpvoteLikeState(PostCommentViewHolder viewHolder, int i) {
         try {
-            mPresenter.changeUpvoteLikeState(instance, viewHolder, i);
+            mPresenter.changeUpvoteLikeState(viewHolder, i);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void changeDownvoteLikeState(NetworkUtils instance, PostCommentViewHolder viewHolder, int i) {
+    public void changeDownvoteLikeState(PostCommentViewHolder viewHolder, int i) {
         try {
-            mPresenter.changeDownvoteLikeState(instance, viewHolder, i);
+            mPresenter.changeDownvoteLikeState(viewHolder, i);
         }
         catch (Exception e) {
             e.printStackTrace();

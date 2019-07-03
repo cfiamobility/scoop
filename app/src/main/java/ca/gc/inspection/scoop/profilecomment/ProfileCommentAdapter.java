@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 
 public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder>
         implements ProfileCommentContract.View.Adapter {
@@ -24,7 +25,8 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
      * @param profileCommentView    The fragment instead of view contract can be taken in as both are considered part of the view. (see Contract documentation)
      * @param presenter             The presenter is passed in as the contract which specifies View-Presenter interaction.
      */
-    public ProfileCommentAdapter(ProfileCommentFragment profileCommentView, ProfileCommentContract.Presenter.AdapterAPI presenter) {
+    public ProfileCommentAdapter(ProfileCommentFragment profileCommentView,
+                                 ProfileCommentContract.Presenter.AdapterAPI presenter) {
         mProfileCommentView = profileCommentView;
         mProfileCommentPresenter = presenter;
         mProfileCommentPresenter.setAdapter(this);
@@ -56,9 +58,10 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     @Override
     public void onBindViewHolder(@NonNull ProfileCommentViewHolder profileCommentViewHolder, int i) {
         mProfileCommentPresenter.onBindViewHolderAtPosition(profileCommentViewHolder, i);
-        mProfileCommentView.setDisplayPostListener(profileCommentViewHolder, mProfileCommentPresenter.getActivityIdByIndex(i));
-        mProfileCommentView.setUserInfoListener(profileCommentViewHolder, mProfileCommentPresenter.getPosterIdByIndex(i));
-        mProfileCommentView.setLikesListener(profileCommentViewHolder, i);
+        PostCommentFragment.setDisplayPostListener(profileCommentViewHolder);
+        PostCommentFragment.setLikesListener(profileCommentViewHolder, i);
+        PostCommentFragment.setUserInfoListener(profileCommentViewHolder,
+                mProfileCommentPresenter.getPosterIdByIndex(i));
     }
 
     /**

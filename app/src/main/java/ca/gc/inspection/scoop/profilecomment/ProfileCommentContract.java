@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.profilecomment;
 
+import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
 /**
@@ -28,7 +29,7 @@ import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
 public interface ProfileCommentContract extends PostCommentContract {
 
-    interface View extends PostCommentContract.View {
+    interface View extends BaseView<Presenter> {
         /**
          * Implemented by the main View (ie. PostCommentFragment).
          * Methods specified here in the View but not in the nested View.Adapter and View.ViewHolder interfaces
@@ -47,6 +48,8 @@ public interface ProfileCommentContract extends PostCommentContract {
 
         interface AdapterAPI extends PostCommentContract.Presenter.AdapterAPI {
             void setAdapter(ProfileCommentContract.View.Adapter adapter);
+            void onBindViewHolderAtPosition(
+                    ProfileCommentContract.View.ViewHolder postCommentViewHolder, int i);
         }
 
         interface ViewHolderAPI extends PostCommentContract.Presenter.ViewHolderAPI {

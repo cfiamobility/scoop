@@ -1,14 +1,7 @@
 package ca.gc.inspection.scoop.profilecomment;
 
-import android.util.Log;
-
 import org.json.JSONObject;
-
-import ca.gc.inspection.scoop.postcomment.LikeState;
 import ca.gc.inspection.scoop.postcomment.PostComment;
-
-import static ca.gc.inspection.scoop.Config.USERID_KEY;
-import static ca.gc.inspection.scoop.postcomment.LikeState.NULL;
 
 public class ProfileComment extends PostComment {
     /**

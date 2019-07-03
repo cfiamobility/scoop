@@ -4,7 +4,6 @@ import org.json.JSONException;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
  * A contract between the View (layer) and Presenter for the replying to a post
@@ -63,7 +62,7 @@ public interface PostCommentContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadDataFromDatabase(NetworkUtils network, String currentUser);
+        void loadDataFromDatabase(String currentUser);
 
         interface AdapterAPI {
             void setAdapter(PostCommentContract.View.Adapter adapter);
@@ -75,8 +74,8 @@ public interface PostCommentContract {
         }
 
         interface ViewHolderAPI {
-            void changeUpvoteLikeState(NetworkUtils network, View.ViewHolder viewHolderInterface, int i) throws JSONException;
-            void changeDownvoteLikeState(NetworkUtils network, View.ViewHolder viewHolderInterface, int i) throws JSONException;
+            void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
+            void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
         }
 
     }

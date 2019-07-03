@@ -40,12 +40,6 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
     }
 
     /**
-     * Empty Constructor for fragments
-     */
-    public PostCommentFragment() {
-    }
-
-    /**
      * When the fragment initializes
      * @param inflater: inflates the view
      * @param container: contains the view
@@ -57,8 +51,8 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
-        setPresenter(new PostCommentPresenter(this));
-        mPostCommentPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), Config.currentUser);
+        setPresenter(new PostCommentPresenter(this, NetworkUtils.getInstance(getContext())));
+        mPostCommentPresenter.loadDataFromDatabase(Config.currentUser);
         return view;
     }
 
@@ -86,29 +80,29 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
         commentsRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setting the custom adapter for the recycler view
-        mAdapter = new PostCommentAdapter(this, (PostCommentContract.Presenter.AdapterAPI) mPostCommentPresenter);
+        mAdapter = new PostCommentAdapter(this,
+                (PostCommentContract.Presenter.AdapterAPI) mPostCommentPresenter);
         commentsRecyclerView.setAdapter(mAdapter);
     }
 
-    public void setLikesListener(PostCommentViewHolder viewHolder, int i) {
+    public static void setLikesListener(PostCommentViewHolder viewHolder, int i) {
 
         viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHolder.changeUpvoteLikeState(
-                        NetworkUtils.getInstance(getContext()), viewHolder, i); //changes upvote state on click
+                viewHolder.changeUpvoteLikeState(viewHolder, i); //changes upvote state on click
             }
         });
 
         viewHolder.downvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHolder.changeDownvoteLikeState(NetworkUtils.getInstance(getContext()), viewHolder, i); //changes downvote state on click
+                viewHolder.changeDownvoteLikeState(viewHolder, i); //changes downvote state on click
             }
         });
     }
 
-    public void setUserInfoListener(PostCommentViewHolder viewHolder, String posterId) {
+    public static void setUserInfoListener(PostCommentViewHolder viewHolder, String posterId) {
         // tapping on profile picture will bring user to poster's profile page
         viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +119,7 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
         });
     }
 
-    public void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
+    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
