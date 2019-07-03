@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.feedpost;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +16,7 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class SavedPostFragment extends ProfilePostFragment implements FeedPostContract.View{
+public class SavedPostFragment extends Fragment implements FeedPostContract.View{
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -68,7 +69,7 @@ public class SavedPostFragment extends ProfilePostFragment implements FeedPostCo
     /**
      * Sets the recycler view
      */
-    @Override
+    //TODO: what order do we want to display saved posts?
     public void setRecyclerView() {
         // setting up the recycler view
         mRecyclerView = view.findViewById(R.id.fragment_saved_post_rv);
@@ -79,7 +80,9 @@ public class SavedPostFragment extends ProfilePostFragment implements FeedPostCo
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // using the custom adapter for the recycler view
-        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
+        mAdapter = new FeedPostAdapter(this,
+                (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter,
+                NetworkUtils.getInstance(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 
     }

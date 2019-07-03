@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.postcomment;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -47,6 +48,7 @@ public class PostCommentPresenter implements
     protected PostComment getPostCommentByIndex(int i) {
         if (mPostComments == null)
             return null;
+
         return mPostComments.get(i);
     }
 

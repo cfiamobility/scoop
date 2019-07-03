@@ -45,10 +45,9 @@ public interface ProfilePostContract extends ProfileCommentContract {
 
     interface Presenter extends ProfileCommentContract.Presenter {
 
-        String getPosterIdSavePost();
-
         interface AdapterAPI extends ProfileCommentContract.Presenter.AdapterAPI {
             void setAdapter(ProfilePostContract.View.Adapter adapter);
+            String getActivityIdByIndex(int i);
         }
 
         interface ViewHolderAPI extends ProfileCommentContract.Presenter.ViewHolderAPI {

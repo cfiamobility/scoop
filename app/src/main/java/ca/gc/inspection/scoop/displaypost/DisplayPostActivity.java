@@ -114,6 +114,13 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
             @Override
             public void onClick(View v) {
                 PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
+                //TODO: get activityid of post and store into bundle for PostOptionsDialogFragment
+                // bundle for save post
+//                Bundle bundle = new Bundle();
+//                Log.i("post I am clicking: ", activityid);
+//                bundle.putString("ACTIVITY_ID", activityid);
+//                bottomSheetDialog.setArguments(bundle);
+
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");

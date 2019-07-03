@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -98,16 +99,18 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
         postRecyclerView.setAdapter(mAdapter);
     }
 
-    public static void setPostOptionsListener(ProfilePostViewHolder viewHolder){
+    public static void setPostOptionsListener(ProfilePostViewHolder viewHolder, String activityid){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
                 // bundle
                 Bundle bundle = new Bundle();
-                Log.i("post I am clicking: ", mProfilePostPresenter.getPosterIdSavePost());
-//                bundle.putString("posterId", mProfilePostPresenter.getPosterIdSavePost());
+                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
+
+                //gets the activity id and stores in bundle to be fetched in PostOptionsDialogFragment
+                Log.i("post I am clicking: ", activityid);
+                bundle.putString("ACTIVITY_ID", activityid);
                 bottomSheetDialog.setArguments(bundle);
 
                 final Context context = v.getContext();

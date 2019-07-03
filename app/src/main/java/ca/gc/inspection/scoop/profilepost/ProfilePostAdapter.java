@@ -59,7 +59,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
         PostCommentFragment.setUserInfoListener(profilePostViewHolder,
                 mProfilePostPresenter.getPosterIdByIndex(i));
 
-        ProfilePostFragment.setPostOptionsListener(profilePostViewHolder);
+        ProfilePostFragment.setPostOptionsListener(profilePostViewHolder, mProfilePostPresenter.getActivityIdByIndex(i));
     }
 
 	@Override
