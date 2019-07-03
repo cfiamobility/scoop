@@ -53,8 +53,8 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_community_feed, container, false);
-        setPresenter(new FeedPostPresenter(this));
-        mFeedPostPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), getFeedType());
+        setPresenter(new FeedPostPresenter(this, NetworkUtils.getInstance(getContext())));
+        mFeedPostPresenter.loadDataFromDatabase(getFeedType());
         return view;
     }
 
@@ -83,8 +83,7 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
 
         // using the custom adapter for the recycler view
         mAdapter = new FeedPostAdapter(this,
-                (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter,
-                NetworkUtils.getInstance(getContext()));
+                (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
         mRecyclerView.setAdapter(mAdapter);
 
     }

@@ -52,8 +52,8 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
-        setPresenter(new ProfileCommentPresenter(this));
-        mProfileCommentPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), Config.currentUser);
+        setPresenter(new ProfileCommentPresenter(this, NetworkUtils.getInstance(getContext())));
+        mProfileCommentPresenter.loadDataFromDatabase(Config.currentUser);
         return view;
     }
 
@@ -82,8 +82,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
 
         // Setting the custom adapter for the recycler view
         mAdapter = new ProfileCommentAdapter(this,
-                (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter,
-                NetworkUtils.getInstance(getContext()));
+                (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter);
         commentsRecyclerView.setAdapter(mAdapter);
     }
 }

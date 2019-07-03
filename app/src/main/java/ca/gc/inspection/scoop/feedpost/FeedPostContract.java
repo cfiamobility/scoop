@@ -1,8 +1,6 @@
 package ca.gc.inspection.scoop.feedpost;
 
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
-import ca.gc.inspection.scoop.util.NetworkUtils;
-
 
 public interface FeedPostContract extends ProfilePostContract {
     /**
@@ -49,7 +47,7 @@ public interface FeedPostContract extends ProfilePostContract {
 
     interface Presenter extends ProfilePostContract.Presenter {
 
-        void loadDataFromDatabase(NetworkUtils network, String feedType);
+        void loadDataFromDatabase(String feedType);
 
         interface AdapterAPI extends ProfilePostContract.Presenter.AdapterAPI {
             void setAdapter(FeedPostContract.View.Adapter adapter);

@@ -46,10 +46,10 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     protected ProfileCommentPresenter() {
     }
 
-    ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewInterface){
+    ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewInterface, NetworkUtils network){
 
         setView(viewInterface);
-        setInteractor(new ProfileCommentInteractor(this));
+        setInteractor(new ProfileCommentInteractor(this, network));
 
     }
 
@@ -68,8 +68,8 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     }
 
     @Override
-    public void loadDataFromDatabase(NetworkUtils network, String currentUser) {
-        mProfileCommentInteractor.getPostComments(network, currentUser);
+    public void loadDataFromDatabase(String currentUser) {
+        mProfileCommentInteractor.getPostComments(currentUser);
     }
 
     @Override

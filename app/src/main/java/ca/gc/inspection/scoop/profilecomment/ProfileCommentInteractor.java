@@ -1,6 +1,8 @@
 package ca.gc.inspection.scoop.profilecomment;
 
 import ca.gc.inspection.scoop.postcomment.PostCommentInteractor;
+import ca.gc.inspection.scoop.util.NetworkUtils;
+
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfileCommentInteractor extends PostCommentInteractor {
@@ -15,8 +17,9 @@ public class ProfileCommentInteractor extends PostCommentInteractor {
     public ProfileCommentInteractor() {
     }
 
-    public ProfileCommentInteractor(ProfileCommentPresenter presenter){
+    public ProfileCommentInteractor(ProfileCommentPresenter presenter, NetworkUtils network){
         mPresenter = checkNotNull(presenter);
+        mNetwork = network;
     }
 
 }

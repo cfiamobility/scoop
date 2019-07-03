@@ -62,8 +62,8 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
         view = inflater.inflate(R.layout.fragment_profile_posts, container, false);
         Bundle bundle = getArguments();
         userid = bundle.getString("userid");
-        setPresenter(new ProfilePostPresenter(this));
-        mProfilePostPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), Config.currentUser);
+        setPresenter(new ProfilePostPresenter(this, NetworkUtils.getInstance(getContext())));
+        mProfilePostPresenter.loadDataFromDatabase(Config.currentUser);
         return view;
     }
 
@@ -92,8 +92,7 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
 
         // setting the custom adapter for the recycler view
         mAdapter = new ProfilePostAdapter(this,
-                (ProfilePostContract.Presenter.AdapterAPI) mProfilePostPresenter,
-                NetworkUtils.getInstance(getContext()));
+                (ProfilePostContract.Presenter.AdapterAPI) mProfilePostPresenter);
         postRecyclerView.setAdapter(mAdapter);
     }
 

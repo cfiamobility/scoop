@@ -19,7 +19,7 @@ public class PostDataCache {
         mPostDataType = postDataType;
         mDataCache = null;
         if (mPostDataType == PostComment.class)
-            mDataCache = new DataCache<PostComment>();
+            mDataCache = new DataCache<>();
         else if (mPostDataType == ProfileComment.class)
             mDataCache = new DataCache<ProfileComment>();
         else if (mPostDataType == ProfilePost.class)
@@ -28,52 +28,61 @@ public class PostDataCache {
             mDataCache = new DataCache<FeedPost>();
     }
 
+    @SuppressWarnings("unchecked")
     public PostComment getPostCommentByIndex(int i) {
         if (PostComment.class.isAssignableFrom(mPostDataType))
             return ((DataCache<PostComment>) mDataCache).getItemByIndex(i);
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public ProfileComment getProfileCommentByIndex(int i) {
         if (ProfileComment.class.isAssignableFrom(mPostDataType))
             return ((DataCache<ProfileComment>) mDataCache).getItemByIndex(i);
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public ProfilePost getProfilePostByIndex(int i) {
         if (ProfilePost.class.isAssignableFrom(mPostDataType))
             return ((DataCache<ProfilePost>) mDataCache).getItemByIndex(i);
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public FeedPost getFeedPostByIndex(int i) {
         if (FeedPost.class.isAssignableFrom(mPostDataType))
             return ((DataCache<FeedPost>) mDataCache).getItemByIndex(i);
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public int getItemCount() {
         return ((DataCache<PostComment>) mDataCache).getItemCount();
     }
 
+    @SuppressWarnings("unchecked")
     public ArrayList<PostComment> getPostCommentList() {
         if (PostComment.class.isAssignableFrom(mPostDataType))
             return ((DataCache<PostComment>) mDataCache).mList;
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public ArrayList<ProfileComment> getProfileCommentList() {
         if (ProfileComment.class.isAssignableFrom(mPostDataType))
             return ((DataCache<ProfileComment>) mDataCache).mList;
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public ArrayList<ProfilePost> getProfilePostList() {
         if (ProfilePost.class.isAssignableFrom(mPostDataType))
             return ((DataCache<ProfilePost>) mDataCache).mList;
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public ArrayList<FeedPost> getFeedPostList() {
         if (FeedPost.class.isAssignableFrom(mPostDataType))
             return ((DataCache<FeedPost>) mDataCache).mList;

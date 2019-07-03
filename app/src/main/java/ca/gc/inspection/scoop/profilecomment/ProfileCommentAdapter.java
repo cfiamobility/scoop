@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
-import ca.gc.inspection.scoop.util.NetworkUtils;
 
 public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder>
         implements ProfileCommentContract.View.Adapter {
@@ -19,7 +18,6 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
 
     private ProfileCommentContract.Presenter.AdapterAPI mProfileCommentPresenter;
     private ProfileCommentFragment mProfileCommentView;
-    private NetworkUtils mNetworkUtil;
 
     /**
      * Constructor for the adapter.
@@ -28,12 +26,10 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
      * @param presenter             The presenter is passed in as the contract which specifies View-Presenter interaction.
      */
     public ProfileCommentAdapter(ProfileCommentFragment profileCommentView,
-                                 ProfileCommentContract.Presenter.AdapterAPI presenter,
-                                 NetworkUtils network) {
+                                 ProfileCommentContract.Presenter.AdapterAPI presenter) {
         mProfileCommentView = profileCommentView;
         mProfileCommentPresenter = presenter;
         mProfileCommentPresenter.setAdapter(this);
-        mNetworkUtil = network;
     }
 
     /**
@@ -63,7 +59,7 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     public void onBindViewHolder(@NonNull ProfileCommentViewHolder profileCommentViewHolder, int i) {
         mProfileCommentPresenter.onBindViewHolderAtPosition(profileCommentViewHolder, i);
         PostCommentFragment.setDisplayPostListener(profileCommentViewHolder);
-        PostCommentFragment.setLikesListener(mNetworkUtil, profileCommentViewHolder, i);
+        PostCommentFragment.setLikesListener(profileCommentViewHolder, i);
         PostCommentFragment.setUserInfoListener(profileCommentViewHolder,
                 mProfileCommentPresenter.getPosterIdByIndex(i));
     }

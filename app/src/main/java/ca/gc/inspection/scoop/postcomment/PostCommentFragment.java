@@ -50,8 +50,8 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
-        setPresenter(new PostCommentPresenter(this));
-        mPostCommentPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), Config.currentUser);
+        setPresenter(new PostCommentPresenter(this, NetworkUtils.getInstance(getContext())));
+        mPostCommentPresenter.loadDataFromDatabase(Config.currentUser);
         return view;
     }
 
@@ -80,24 +80,23 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
 
         // Setting the custom adapter for the recycler view
         mAdapter = new PostCommentAdapter(this,
-                (PostCommentContract.Presenter.AdapterAPI) mPostCommentPresenter,
-                NetworkUtils.getInstance(getContext()));
+                (PostCommentContract.Presenter.AdapterAPI) mPostCommentPresenter);
         commentsRecyclerView.setAdapter(mAdapter);
     }
 
-    public static void setLikesListener(NetworkUtils network, PostCommentViewHolder viewHolder, int i) {
+    public static void setLikesListener(PostCommentViewHolder viewHolder, int i) {
 
         viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHolder.changeUpvoteLikeState(network, viewHolder, i); //changes upvote state on click
+                viewHolder.changeUpvoteLikeState(viewHolder, i); //changes upvote state on click
             }
         });
 
         viewHolder.downvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHolder.changeDownvoteLikeState(network, viewHolder, i); //changes downvote state on click
+                viewHolder.changeDownvoteLikeState(viewHolder, i); //changes downvote state on click
             }
         });
     }

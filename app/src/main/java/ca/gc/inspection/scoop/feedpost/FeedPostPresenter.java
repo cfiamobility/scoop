@@ -44,10 +44,10 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     protected FeedPostPresenter() {
     }
 
-    public FeedPostPresenter(@NonNull FeedPostContract.View viewInterface){
+    public FeedPostPresenter(@NonNull FeedPostContract.View viewInterface, NetworkUtils network){
 
         setView(viewInterface);
-        setInteractor(new FeedPostInteractor(this));
+        setInteractor(new FeedPostInteractor(this, network));
 
     }
 
@@ -71,8 +71,8 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     }
 
     @Override
-    public void loadDataFromDatabase(NetworkUtils network, String feedType) {
-        mFeedPostInteractor.getFeedPosts(network, feedType);
+    public void loadDataFromDatabase(String feedType) {
+        mFeedPostInteractor.getFeedPosts(feedType);
     }
 
     @Override

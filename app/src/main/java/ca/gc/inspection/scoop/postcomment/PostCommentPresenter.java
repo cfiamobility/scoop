@@ -49,10 +49,10 @@ public class PostCommentPresenter implements
     protected PostCommentPresenter() {
     }
 
-    PostCommentPresenter(@NonNull PostCommentContract.View viewInterface){
+    PostCommentPresenter(@NonNull PostCommentContract.View viewInterface, NetworkUtils network){
 
         setView(viewInterface);
-        setInteractor(new PostCommentInteractor(this));
+        setInteractor(new PostCommentInteractor(this, network));
 
     }
 
@@ -70,8 +70,8 @@ public class PostCommentPresenter implements
     }
 
     @Override
-    public void loadDataFromDatabase(NetworkUtils network, String currentUser) {
-        mPostCommentInteractor.getPostComments(network, currentUser);
+    public void loadDataFromDatabase(String currentUser) {
+        mPostCommentInteractor.getPostComments(currentUser);
     }
 
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
@@ -101,7 +101,7 @@ public class PostCommentPresenter implements
      * @param viewHolderInterface
      * @throws JSONException
      */
-    public void changeUpvoteLikeState(NetworkUtils network, PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException{
+    public void changeUpvoteLikeState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException{
         PostComment postComment = getItemByIndex(i);
 
         if (getItemByIndex(i) != null) {
@@ -116,28 +116,28 @@ public class PostCommentPresenter implements
                     likeCount -= 1;
                     updateLikeState(viewHolderInterface, i, NEUTRAL);
                     updateLikeCount(viewHolderInterface, i, String.valueOf(likeCount));
-                    mPostCommentInteractor.updateLikes(network, NEUTRAL, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
+                    mPostCommentInteractor.updateLikes(NEUTRAL, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                     break;
                 case DOWNVOTE: //if it's downvoted, it'll be set to upvote state
                     likeCount += 2;
                     updateLikeState(viewHolderInterface, i, UPVOTE);
                     updateLikeCount(viewHolderInterface, i, String.valueOf(likeCount));
-                    mPostCommentInteractor.updateLikes(network, UPVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
+                    mPostCommentInteractor.updateLikes(UPVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                     break;
                 case NEUTRAL: //if it's neutral, it'll be set to upvote state
                     likeCount += 1;
                     updateLikeState(viewHolderInterface, i, UPVOTE);
                     updateLikeCount(viewHolderInterface, i, String.valueOf(likeCount));
                     if (likeCount == 1)
-                        mPostCommentInteractor.insertLikes(network, UPVOTE, activityid, posterid, i, viewHolderInterface); //will insert the like for the first time
+                        mPostCommentInteractor.insertLikes(UPVOTE, activityid, posterid, i, viewHolderInterface); //will insert the like for the first time
                     else
-                        mPostCommentInteractor.updateLikes(network, UPVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
+                        mPostCommentInteractor.updateLikes(UPVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                     break;
                 default: //default will be upvote state, if liketype is null
                     likeCount += 1;
                     updateLikeState(viewHolderInterface, i, UPVOTE);
                     updateLikeCount(viewHolderInterface, i, String.valueOf(likeCount));
-                    mPostCommentInteractor.insertLikes(network, UPVOTE, activityid, posterid, i, viewHolderInterface); //will insert the like for the first time
+                    mPostCommentInteractor.insertLikes(UPVOTE, activityid, posterid, i, viewHolderInterface); //will insert the like for the first time
                     break;
             }
             Log.i("likecount1", String.valueOf(likeCount));
@@ -149,7 +149,7 @@ public class PostCommentPresenter implements
      * @param viewHolderInterface
      * @throws JSONException
      */
-    public void changeDownvoteLikeState(NetworkUtils network, PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException {
+    public void changeDownvoteLikeState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException {
         PostComment postComment = getItemByIndex(i);
 
         if (getItemByIndex(i) != null) {
@@ -164,28 +164,28 @@ public class PostCommentPresenter implements
                     likeCount -= 2;
                     updateLikeState(viewHolderInterface, i, DOWNVOTE);
                     updateLikeCount(viewHolderInterface, i, String.valueOf(likeCount));
-                    mPostCommentInteractor.updateLikes(network, DOWNVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
+                    mPostCommentInteractor.updateLikes(DOWNVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                     break;
                 case DOWNVOTE: //if it's downvoted, it'll be set to neutral state
                     likeCount += 1;
                     updateLikeState(viewHolderInterface, i, NEUTRAL);
                     updateLikeCount(viewHolderInterface, i, String.valueOf(likeCount));
-                    mPostCommentInteractor.updateLikes(network, NEUTRAL, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
+                    mPostCommentInteractor.updateLikes(NEUTRAL, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                     break;
                 case NEUTRAL: //if it's neutral state, it'll be set to downvote state
                     likeCount -= 1;
                     updateLikeState(viewHolderInterface, i, DOWNVOTE);
                     updateLikeCount(viewHolderInterface, i, String.valueOf(likeCount));
                     if (likeCount == -1)
-                        mPostCommentInteractor.insertLikes(network, DOWNVOTE, activityid, posterid, i, viewHolderInterface); //will insert the downvote for the first time
+                        mPostCommentInteractor.insertLikes(DOWNVOTE, activityid, posterid, i, viewHolderInterface); //will insert the downvote for the first time
                     else
-                        mPostCommentInteractor.updateLikes(network, DOWNVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
+                        mPostCommentInteractor.updateLikes(DOWNVOTE, String.valueOf(likeCount), activityid, posterid, i, viewHolderInterface);
                     break;
                 default: //default will be downvote state, if liketype is null
                     likeCount -= 1;
                     updateLikeState(viewHolderInterface, i, DOWNVOTE);
                     updateLikeCount(viewHolderInterface, i, String.valueOf(likeCount));
-                    mPostCommentInteractor.insertLikes(network, DOWNVOTE, activityid, posterid, i, viewHolderInterface); //will insert the downvote for the first time
+                    mPostCommentInteractor.insertLikes(DOWNVOTE, activityid, posterid, i, viewHolderInterface); //will insert the downvote for the first time
                     break;
             }
             Log.i("likecount2", String.valueOf(likeCount));
