@@ -29,7 +29,7 @@ public class ProfilePostInteractor extends ProfileCommentInteractor {
      * HTTP Requests to get all the user posts infos
      * @param userid: passes the userid of the profile clicked on
      */
-    public void getUserPosts(NetworkUtils network, final String userid) {
+    public void getProfilePosts(NetworkUtils network, final String userid) {
         String url = Config.baseIP + "profile/posttextfill/" + userid + "/" + Config.currentUser;
         String responseUrl = Config.baseIP + "profile/postimagefill/" + userid;
         JsonArrayRequest postRequest = super.newProfileJsonArrayRequest(url, responseUrl);

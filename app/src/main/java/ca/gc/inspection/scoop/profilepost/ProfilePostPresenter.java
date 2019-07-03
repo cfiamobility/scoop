@@ -7,11 +7,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Objects;
 
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
+import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.profilecomment.ProfileComment;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -34,21 +33,11 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     private ProfilePostContract.View mProfilePostView;
     private ProfilePostContract.View.Adapter mAdapter;
     private ProfilePostInteractor mProfilePostInteractor;
-    // TODO extend JSONArray mComments, mImages, and ArrayList mPostComments from parent
-    // - currently using mComments with extra commentsCount field
-    private ArrayList<ProfilePost> mProfilePosts;
 
-    // TODO replace overriding method by creating a DataCache object in PostCommentPresenter and overriding it here
-    @Override
-    protected ProfileComment getProfileCommentByIndex(int i) {
-        return getProfilePostByIndex(i);
-    }
-
-    private ProfilePost getProfilePostByIndex(int i) {
-
-        if (mProfilePosts == null)
+    private ProfilePost getItemByIndex(int i) {
+        if (mDataCache == null)
             return null;
-        return mProfilePosts.get(i);
+        return mDataCache.getProfilePostByIndex(i);
     }
 
     /**
@@ -85,14 +74,12 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
 
     @Override
     public void loadDataFromDatabase(NetworkUtils network, String currentUser) {
-        mProfilePostInteractor.getUserPosts(network, currentUser);
+        mProfilePostInteractor.getProfilePosts(network, currentUser);
     }
 
     @Override
     public void setData(JSONArray postsResponse, JSONArray imagesResponse) {
-        mComments = postsResponse;
-        mImages = imagesResponse;
-        mProfilePosts = new ArrayList<>();
+        mDataCache = PostDataCache.createWithType(ProfilePost.class);
 
         if ((postsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of postsResponse != imagesResponse");
@@ -101,43 +88,37 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
             JSONObject jsonPost = null;
             JSONObject jsonImage = null;
             try {
-                jsonPost = mComments.getJSONObject(i);
-                jsonImage = mImages.getJSONObject(i);
+                jsonPost = postsResponse.getJSONObject(i);
+                jsonImage = imagesResponse.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             ProfilePost profilePost = new ProfilePost(jsonPost, jsonImage);
-            mProfilePosts.add(profilePost);
+            mDataCache.getProfilePostList().add(profilePost);
         }
 
         mAdapter.refreshAdapter();
     }
 
     @Override
-    public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
-        super.onBindViewHolderAtPosition(viewHolderInterface, i);
-        // need to manually call overriden setPostTitle method due to super method casting viewHolderInterface down
-        ProfilePost profilePost = getProfilePostByIndex(i);
+    public void onBindViewHolderAtPosition(ProfilePostContract.View.ViewHolder viewHolderInterface, int i) {
+        ProfilePost profilePost = getItemByIndex(i);
+        bindProfilePostDataToViewHolder(viewHolderInterface, profilePost);
+    }
+
+    public static void bindProfilePostDataToViewHolder(
+            ProfilePostContract.View.ViewHolder viewHolderInterface, ProfilePost profilePost) {
+        // call bindPostCommentDataToViewHolder instead of bindProfileCommentDataToViewHolder as we are setting a different title
+        bindPostCommentDataToViewHolder(viewHolderInterface, profilePost);
         if (profilePost != null) {
-            ((ProfilePostContract.View.ViewHolder) viewHolderInterface)
+            viewHolderInterface
                     .setPostTitle(profilePost.getPostTitle())
                     .setCommentCount(profilePost.getCommentCount());
         }
     }
 
-    /**
-     * Gets the item Count of the posts JSONArray
-     * @return the length
-     */
-    // TODO refactor when DataCache object is implemented
-    @Override
-    public int getItemCount() {
-        return super.getItemCount();
-    }
-
-    // TODO refactor when DataCache object is implemented
     @Override
     public String getPosterIdByIndex(int i) {
-        return getProfileCommentByIndex(i).getPosterId();
+        return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
     }
 }

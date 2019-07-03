@@ -43,18 +43,6 @@ public class PostCommentInteractor {
         mPresenter = checkNotNull(presenter);
     }
 
-    /**
-     * HTTPRequests for comments and profile images
-     * @param userid: userid
-     */
-    public void getUserCommentsAndImages(NetworkUtils network, final String userid) {
-        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
-        String responseUrl = Config.baseIP + "profile/commentimagefill/" + userid;
-        JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
-        Config.requestQueue.add(commentRequest);
-//        network.addToRequestQueue(commentRequest);
-    }
-
     public JsonArrayRequest newProfileJsonArrayRequest(String url, String responseUrl) {
         return new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -160,7 +148,7 @@ public class PostCommentInteractor {
      * @param viewHolderInterface
      * @return
      */
-    private StringRequest newLikesStringRequest(
+    public StringRequest newLikesStringRequest(
             int requestMethod, String URL, LikeState likeType, String likeCount, final String activityid,
             final String posterid, int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
@@ -199,4 +187,14 @@ public class PostCommentInteractor {
         };
     }
 
+    /**
+     * HTTPRequests for comments and profile images
+     * @param userid: userid
+     */
+    public void getPostComments(NetworkUtils network, final String userid) {
+        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
+        String responseUrl = Config.baseIP + "profile/commentimagefill/" + userid;
+        JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
+        Config.requestQueue.add(commentRequest);
+    }
 }

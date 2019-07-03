@@ -7,7 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Objects;
 
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -34,20 +34,19 @@ public class PostCommentPresenter implements
     private PostCommentContract.View mPostCommentView;
     private PostCommentContract.View.Adapter mAdapter;
     private PostCommentInteractor mPostCommentInteractor;
-    protected JSONArray mComments, mImages;   // TODO encapsulate into DataCache class to allow inheritance
-    protected ArrayList<PostComment> mPostComments;
+    protected PostDataCache mDataCache;
 
-    /**
-     * Empty constructor called by child classes (ie. ProfilePostPresenter) to allow them to create
-     * their own View and Interactor objects
-     */
-    public PostCommentPresenter() {
+    private PostComment getItemByIndex(int i) {
+        if (mDataCache == null)
+            return null;
+        return mDataCache.getPostCommentByIndex(i);
     }
 
-    protected PostComment getPostCommentByIndex(int i) {
-        if (mPostComments == null)
-            return null;
-        return mPostComments.get(i);
+    /**
+     * Empty constructor called by child classes (ie. ProfileCommentPresenter) to allow them to create
+     * their own View and Interactor objects
+     */
+    protected PostCommentPresenter() {
     }
 
     PostCommentPresenter(@NonNull PostCommentContract.View viewInterface){
@@ -72,13 +71,11 @@ public class PostCommentPresenter implements
 
     @Override
     public void loadDataFromDatabase(NetworkUtils network, String currentUser) {
-        mPostCommentInteractor.getUserCommentsAndImages(network, currentUser);
+        mPostCommentInteractor.getPostComments(network, currentUser);
     }
 
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
-        mComments = commentsResponse;
-        mImages = imagesResponse;
-        mPostComments = new ArrayList<>();
+        mDataCache = PostDataCache.createWithType(PostComment.class);
 
         if ((commentsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of commentsResponse != imagesResponse");
@@ -87,17 +84,16 @@ public class PostCommentPresenter implements
             JSONObject jsonComment = null;
             JSONObject jsonImage = null;
             try {
-                jsonComment = mComments.getJSONObject(i);
-                jsonImage = mImages.getJSONObject(i);
+                jsonComment = commentsResponse.getJSONObject(i);
+                jsonImage = imagesResponse.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             PostComment postComment = new PostComment(jsonComment, jsonImage);
-            mPostComments.add(postComment);
+            mDataCache.getPostCommentList().add(postComment);
         }
 
         mAdapter.refreshAdapter();
-        // TODO if adapter has not been set - wait until it has been set and call refreshAdapter?
     }
 
     /**
@@ -106,9 +102,9 @@ public class PostCommentPresenter implements
      * @throws JSONException
      */
     public void changeUpvoteLikeState(NetworkUtils network, PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException{
-        PostComment postComment = getPostCommentByIndex(i);
+        PostComment postComment = getItemByIndex(i);
 
-        if (getPostCommentByIndex(i) != null) {
+        if (getItemByIndex(i) != null) {
             String activityid = postComment.getActivityId();
             String posterid = postComment.getPosterId();
             LikeState likeState = postComment.getLikeState();
@@ -154,9 +150,9 @@ public class PostCommentPresenter implements
      * @throws JSONException
      */
     public void changeDownvoteLikeState(NetworkUtils network, PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException {
-        PostComment postComment = getPostCommentByIndex(i);
+        PostComment postComment = getItemByIndex(i);
 
-        if (getPostCommentByIndex(i) != null) {
+        if (getItemByIndex(i) != null) {
             String activityid = postComment.getActivityId();
             String posterid = postComment.getPosterId();
             LikeState likeState = postComment.getLikeState();
@@ -202,9 +198,9 @@ public class PostCommentPresenter implements
      * @param likeCount
      * @throws JSONException
      */
-    public void updateLikeCount(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String likeCount) {
-        if (getPostCommentByIndex(i) != null) {
-            getPostCommentByIndex(i).setLikeCount(likeCount);
+    private void updateLikeCount(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String likeCount) {
+        if (getItemByIndex(i) != null) {
+            getItemByIndex(i).setLikeCount(likeCount);
             viewHolderInterface.setLikeCount(likeCount); //sets like count to new total
         }
     }
@@ -216,16 +212,21 @@ public class PostCommentPresenter implements
      * @param i
      * @param likeState
      */
-    public void updateLikeState(PostCommentContract.View.ViewHolder viewHolderInterface, int i, LikeState likeState) {
-        if (getPostCommentByIndex(i) != null) {
-            getPostCommentByIndex(i).setLikeState(likeState);
+    private void updateLikeState(PostCommentContract.View.ViewHolder viewHolderInterface, int i, LikeState likeState) {
+        if (getItemByIndex(i) != null) {
+            getItemByIndex(i).setLikeState(likeState);
             viewHolderInterface.setLikeState(likeState);
         }
     }
 
+    @Override
     public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
-        PostComment postComment = getPostCommentByIndex(i);
+        PostComment postComment = getItemByIndex(i);
+        bindPostCommentDataToViewHolder(viewHolderInterface, postComment);
+    }
 
+    public static void bindPostCommentDataToViewHolder(
+            PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment) {
         if (postComment != null) {
             viewHolderInterface.setDate(postComment.getDate())
                     .setLikeCount(postComment.getLikeCount())
@@ -237,18 +238,18 @@ public class PostCommentPresenter implements
     }
 
     /**
-     * Gets the item Count of the comments JSONArray
-     * @return the length
+     * Gets the number of items in the DataCache
+     * @return the count
      */
     @Override
     public int getItemCount() {
-        if (mComments == null)
+        if (mDataCache == null)
             return 0;
-        return mComments.length();
+        return mDataCache.getItemCount();
     }
 
     @Override
     public String getPosterIdByIndex(int i) {
-        return getPostCommentByIndex(i).getPosterId();
+        return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
     }
 }
