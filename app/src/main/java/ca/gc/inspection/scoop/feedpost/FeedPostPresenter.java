@@ -116,9 +116,4 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         }
     }
 
-    @Override
-    public String getPosterIdByIndex(int i) {
-
-        return getItemByIndex(i).getPosterId();
-    }
 }

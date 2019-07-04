@@ -63,7 +63,7 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
         Bundle bundle = getArguments();
         userid = bundle.getString("userid");
         setPresenter(new ProfilePostPresenter(this, NetworkUtils.getInstance(getContext())));
-        mProfilePostPresenter.loadDataFromDatabase(Config.currentUser);
+        mProfilePostPresenter.loadDataFromDatabase(userid);
         return view;
     }
 

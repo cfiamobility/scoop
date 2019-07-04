@@ -8,7 +8,10 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +24,12 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 class DisplayPostInteractor extends FeedPostInteractor {
 
+    private DisplayPostPresenter mDisplayPostPresenter;
+
     DisplayPostInteractor(@NonNull DisplayPostPresenter presenter, NetworkUtils network) {
+        // Need to set mPresenter of superclass
         mPresenter = checkNotNull(presenter);
+        mDisplayPostPresenter = checkNotNull(presenter);
         mNetwork = network;
     }
 
@@ -44,7 +51,7 @@ class DisplayPostInteractor extends FeedPostInteractor {
                         Log.d("Response", response);
                         if (response.contains("Success")){
                             Log.i("Info", "We good");
-//                            DisplayPostActivity.updateCommentList();
+                            mDisplayPostPresenter.updateDisplay();
                         }
                     }
                 },
@@ -84,5 +91,56 @@ class DisplayPostInteractor extends FeedPostInteractor {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         mNetwork.addToRequestQueue(postRequest);
+    }
+
+    public JsonArrayRequest newSingleDisplayPostJsonArrayRequest(String url, String responseUrl) {
+        return new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(final JSONArray response) {
+                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, responseUrl, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray imagesResponse) {
+                        mDisplayPostPresenter.setDetailedPostData(response, imagesResponse);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", String.valueOf(error));
+                    }
+                }) {
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        // inserting the token into the response header that will be sent to the server
+                        Map<String, String> header = new HashMap<>();
+                        header.put("authorization", Config.token);
+                        return header;
+                    }
+                };
+                mNetwork.addToRequestQueue(imageRequest);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }) {
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+    }
+
+    /**
+     * HTTPRequests for post comments and images
+     * @param activityId: activityId of Post
+     */
+    public void getDetailedPost(String activityId, String posterId) {
+        String url = Config.baseIP + "display-post/detailedpost/text/" + activityId + "/" + Config.currentUser;
+        String responseUrl = Config.baseIP + "display-post/detailedpost/image/" + activityId + "/" + posterId;
+        JsonArrayRequest commentRequest = newSingleDisplayPostJsonArrayRequest(url, responseUrl);
+        mNetwork.addToRequestQueue(commentRequest);
     }
 }

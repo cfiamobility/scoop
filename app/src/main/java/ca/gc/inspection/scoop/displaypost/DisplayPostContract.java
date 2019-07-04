@@ -43,7 +43,7 @@ public interface DisplayPostContract extends FeedPostContract {
 
     interface View extends BaseView<Presenter> {
 
-        interface Fragment extends BaseView<Presenter> {
+        interface Fragment extends BaseView<Presenter.FragmentAPI> {
 
             interface Adapter extends FeedPostContract.View.Adapter {
             }
@@ -61,7 +61,8 @@ public interface DisplayPostContract extends FeedPostContract {
         void addPostComment(String currentUserId, String commentText, String activityId);
 
         interface FragmentAPI extends FeedPostContract.Presenter {
-            void loadDataFromDatabase(String feedType);
+            void setFragmentView(DisplayPostContract.View.Fragment fragmentView);
+            void loadDataFromDatabase(String activityId, String posterId);
 
             interface AdapterAPI extends FeedPostContract.Presenter.AdapterAPI {
                 void setAdapter(DisplayPostContract.View.Fragment.Adapter adapter);
@@ -69,8 +70,8 @@ public interface DisplayPostContract extends FeedPostContract {
                 // One for the post and another for the comments on the post
                 void onBindViewHolderAtPosition(
                         PostCommentContract.View.ViewHolder postCommentViewHolder, int i);
-                void onBindViewHolderAtPosition(
-                        FeedPostContract.View.ViewHolder feedPostViewHolder, int i);
+                void onBindViewHolder(
+                        FeedPostContract.View.ViewHolder feedPostViewHolder);
             }
 
             interface PostViewHolderAPI extends FeedPostContract.Presenter.ViewHolderAPI {

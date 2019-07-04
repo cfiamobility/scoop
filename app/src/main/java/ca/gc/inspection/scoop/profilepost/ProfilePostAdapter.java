@@ -51,7 +51,8 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
     public void onBindViewHolder(@NonNull ProfilePostViewHolder profilePostViewHolder, int i) {
         mProfilePostPresenter.onBindViewHolderAtPosition(profilePostViewHolder, i);
         PostCommentFragment.setDisplayPostListener(profilePostViewHolder,
-                mProfilePostPresenter.getActivityIdByIndex(i));
+                mProfilePostPresenter.getActivityIdByIndex(i),
+                mProfilePostPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setLikesListener(profilePostViewHolder, i);
         PostCommentFragment.setUserInfoListener(profilePostViewHolder,
                 mProfilePostPresenter.getPosterIdByIndex(i));
@@ -64,7 +65,6 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
 		return mProfilePostPresenter.getItemCount();
 	}
 
-    // TODO remove unnecessary override?
     @Override
     public void refreshAdapter() {
         notifyDataSetChanged();

@@ -32,12 +32,11 @@ public class DisplayPostFragment extends Fragment implements DisplayPostContract
     private DisplayPostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
-    private DisplayPostContract.Presenter mDisplayPostPresenter;
+    private DisplayPostContract.Presenter.FragmentAPI mDisplayPostPresenter;
+    private DisplayPostActivity mDisplayPostActivity;
 
-    public void setPresenter(@NonNull DisplayPostContract.Presenter presenter) {
+    public void setPresenter(@NonNull DisplayPostContract.Presenter.FragmentAPI presenter) {
         mDisplayPostPresenter = checkNotNull(presenter);
-//        mDisplayPostPresenter.loadDataFromDatabase(getFeedType());
-//        setRecyclerView();
     }
 
     /**
@@ -46,6 +45,9 @@ public class DisplayPostFragment extends Fragment implements DisplayPostContract
     public DisplayPostFragment() {
     }
 
+    public static DisplayPostFragment newInstance() {
+        return new DisplayPostFragment();
+    }
 
     /**
      * When the fragment initializes
@@ -57,9 +59,13 @@ public class DisplayPostFragment extends Fragment implements DisplayPostContract
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mDisplayPostActivity = (DisplayPostActivity) getActivity();
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_display_post, container, false);
-        setPresenter(((DisplayPostActivity) getActivity()).getPresenter());
+        setPresenter(mDisplayPostActivity.getPresenter());
+        mDisplayPostPresenter.setFragmentView(this);
+        mDisplayPostPresenter.loadDataFromDatabase(
+                mDisplayPostActivity.getActivityId(), mDisplayPostActivity.getPosterId());
         return view;
     }
 
@@ -71,22 +77,48 @@ public class DisplayPostFragment extends Fragment implements DisplayPostContract
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
+        setRecyclerView();
     }
 
     /**
      * Sets the recycler view
      */
-//    public void setRecyclerView() {
-//        // setting up the recycler view
-//        mRecyclerView = view.findViewById(R.id.fragment_community_feed_rv);
-//        mRecyclerView.setHasFixedSize(true);
+    public void setRecyclerView() {
+        // setting up the recycler view
+        mRecyclerView = view.findViewById(R.id.fragment_display_post_rv);
+        mRecyclerView.setHasFixedSize(true);
+
+        // setting the layout manager to the recycler view
+        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // using the custom adapter for the recycler view
+        mAdapter = new DisplayPostAdapter(this, (DisplayPostContract.Presenter.FragmentAPI.AdapterAPI) mDisplayPostPresenter);
+        mRecyclerView.setAdapter(mAdapter);
+//        setListViewHeightBasedOnChildren(listView); // this must be run after setting the mAdapter
+    }
+
+    // to set the height of the nested list view in the scroll view
+//    public static void setListViewHeightBasedOnChildren (ListView listView) {
+//        ListAdapter listAdapter = listView.getAdapter();
+//        if (listAdapter == null) {
+//            return;
+//        }
 //
-//        // setting the layout manager to the recycler view
-//        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
+//        int desiredWith = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+//        int totalHeight = 0;
+//        View view = null;
+//        for (int i = 0; i < listAdapter.getCount(); i++) {
+//            view = listAdapter.getView(i, view, listView);
+//            if (i == 0) {
+//                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWith, ViewGroup.LayoutParams.WRAP_CONTENT));
+//            }
+//            view.measure(desiredWith, View.MeasureSpec.UNSPECIFIED);
+//            totalHeight += view.getMeasuredHeight();
+//        }
 //
-//        // using the custom adapter for the recycler view
-//        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
-//        mRecyclerView.setAdapter(mAdapter);
+//        ViewGroup.LayoutParams params = listView.getLayoutParams();
+//        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() -1));
+//        listView.setLayoutParams(params);
 //    }
 }

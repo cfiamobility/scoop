@@ -19,6 +19,7 @@ import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
+import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -26,7 +27,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing profile comments action.
  * Responsible for creating the Presenter and Adapter
  */
-public class PostCommentFragment extends Fragment implements PostCommentContract.View {
+public abstract class PostCommentFragment extends Fragment implements PostCommentContract.View {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
@@ -53,7 +54,7 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
         setPresenter(new PostCommentPresenter(this, NetworkUtils.getInstance(getContext())));
-        mPostCommentPresenter.loadDataFromDatabase(Config.currentUser);
+        // No need to load data from database as this fragment is abstract
         return view;
     }
 
@@ -120,13 +121,14 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
         });
     }
 
-    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
+    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId, String posterId){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DisplayPostActivity.class);
                 intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
+                intent.putExtra(INTENT_POSTER_ID_KEY, posterId);
                 v.getContext().startActivity(intent);
             }
         });

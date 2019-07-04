@@ -24,4 +24,5 @@ public class Config {
 
     // intent data keys
     public static String INTENT_ACTIVITY_ID_KEY = "activityid";
+    public static String INTENT_POSTER_ID_KEY = "posterid";
 }

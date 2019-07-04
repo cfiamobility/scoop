@@ -108,9 +108,4 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
             viewHolderInterface.setPostTitle(profileComment.getPostTitle());
         }
     }
-
-    @Override
-    public String getPosterIdByIndex(int i) {
-        return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
-    }
 }
