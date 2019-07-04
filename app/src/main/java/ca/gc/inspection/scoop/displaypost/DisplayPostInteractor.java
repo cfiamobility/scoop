@@ -14,26 +14,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.feedpost.FeedPostInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-class DisplayPostInteractor {
+class DisplayPostInteractor extends FeedPostInteractor {
 
-    private DisplayPostPresenter mPresenter;
-
-    DisplayPostInteractor(@NonNull DisplayPostPresenter presenter) {
+    DisplayPostInteractor(@NonNull DisplayPostPresenter presenter, NetworkUtils network) {
         mPresenter = checkNotNull(presenter);
+        mNetwork = network;
     }
 
     /** simple Post command
      *
-     * @param network NetworkUtils singleton
      * @param userId current userID
      * @param comment user inputted comment
      * @param otherPostActivity the Post the current user is commenting to
      */
-    public static void sendCommentToDatabase(NetworkUtils network, final String userId, final String comment, final String otherPostActivity){
+    public void addPostComment(final String userId, final String comment, final String otherPostActivity){
         String URL = Config.baseIP + "add-comment";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
@@ -84,6 +83,6 @@ class DisplayPostInteractor {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        network.addToRequestQueue(postRequest);
+        mNetwork.addToRequestQueue(postRequest);
     }
 }

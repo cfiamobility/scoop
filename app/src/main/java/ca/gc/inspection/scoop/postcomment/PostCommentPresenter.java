@@ -255,6 +255,6 @@ public class PostCommentPresenter implements
 
     @Override
     public String getActivityIdByIndex(int i) {
-        return getPostCommentByIndex(i).getActivityId();
+        return getItemByIndex(i).getActivityId();
     }
 }

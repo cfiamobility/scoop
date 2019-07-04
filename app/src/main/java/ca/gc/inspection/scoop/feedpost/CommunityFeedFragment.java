@@ -29,6 +29,7 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
     private View view;
     private FeedPostContract.Presenter mFeedPostPresenter;
 
+    @Override
     public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
         mFeedPostPresenter = checkNotNull(presenter);
     }

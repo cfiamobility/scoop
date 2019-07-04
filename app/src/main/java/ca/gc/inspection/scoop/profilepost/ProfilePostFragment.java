@@ -37,6 +37,7 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
     private View view;
     private ProfilePostContract.Presenter mProfilePostPresenter;
 
+    @Override
     public void setPresenter(@NonNull ProfilePostContract.Presenter presenter) {
         mProfilePostPresenter = checkNotNull(presenter);
     }

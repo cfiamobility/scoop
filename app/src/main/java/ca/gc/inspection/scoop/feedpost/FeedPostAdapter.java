@@ -49,7 +49,8 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
     @Override
     public void onBindViewHolder(@NonNull FeedPostViewHolder feedPostViewHolder, int i) {
         mFeedPostPresenter.onBindViewHolderAtPosition(feedPostViewHolder, i);
-        PostCommentFragment.setDisplayPostListener(feedPostViewHolder);
+        PostCommentFragment.setDisplayPostListener(feedPostViewHolder,
+                mFeedPostPresenter.getActivityIdByIndex(i));
         PostCommentFragment.setLikesListener(feedPostViewHolder, i);
         PostCommentFragment.setUserInfoListener(feedPostViewHolder,
                 mFeedPostPresenter.getPosterIdByIndex(i));
@@ -61,7 +62,6 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
         return mFeedPostPresenter.getItemCount();
     }
 
-    // TODO remove unnecessary override?
     @Override
     public void refreshAdapter() {
         notifyDataSetChanged();

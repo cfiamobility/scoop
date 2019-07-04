@@ -35,6 +35,7 @@ public class PostCommentFragment extends Fragment implements PostCommentContract
     private View view;
     private PostCommentContract.Presenter mPostCommentPresenter;
 
+    @Override
     public void setPresenter (@NonNull PostCommentContract.Presenter presenter){
         mPostCommentPresenter = checkNotNull(presenter);
     }

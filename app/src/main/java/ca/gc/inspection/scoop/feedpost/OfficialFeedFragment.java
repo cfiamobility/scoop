@@ -27,6 +27,7 @@ public class OfficialFeedFragment extends Fragment implements FeedPostContract.V
     private View view;
     private FeedPostContract.Presenter mFeedPostPresenter;
 
+    @Override
     public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
         mFeedPostPresenter = checkNotNull(presenter);
     }

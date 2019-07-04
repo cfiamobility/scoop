@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop.displaypost;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,17 +25,19 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing community feed action.
  * Responsible for creating the Presenter and Adapter
  */
-public class DisplayPostFragment extends CommunityFeedFragment implements DisplayPostContract.View {
+public class DisplayPostFragment extends Fragment implements DisplayPostContract.View.Fragment {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
-    private FeedPostAdapter mAdapter;
+    private DisplayPostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
     private DisplayPostContract.Presenter mDisplayPostPresenter;
 
     public void setPresenter(@NonNull DisplayPostContract.Presenter presenter) {
         mDisplayPostPresenter = checkNotNull(presenter);
+//        mDisplayPostPresenter.loadDataFromDatabase(getFeedType());
+//        setRecyclerView();
     }
 
     /**
@@ -55,9 +58,8 @@ public class DisplayPostFragment extends CommunityFeedFragment implements Displa
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_community_feed, container, false);
-        setPresenter(new FeedPostPresenter(this));
-        mDisplayPostPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), getFeedType());
+        view = inflater.inflate(R.layout.fragment_display_post, container, false);
+        setPresenter(((DisplayPostActivity) getActivity()).getPresenter());
         return view;
     }
 
@@ -69,30 +71,22 @@ public class DisplayPostFragment extends CommunityFeedFragment implements Displa
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        setRecyclerView();
     }
 
     /**
      * Sets the recycler view
      */
-    @Override
-    public void setRecyclerView() {
-        // setting up the recycler view
-        mRecyclerView = view.findViewById(R.id.fragment_community_feed_rv);
-        mRecyclerView.setHasFixedSize(true);
-
-        // setting the layout manager to the recycler view
-        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // using the custom adapter for the recycler view
-        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
-        mRecyclerView.setAdapter(mAdapter);
-
-    }
-
-    // TODO remove unnecessary override?
-    public String getFeedType(){
-        return "community";
-    }
+//    public void setRecyclerView() {
+//        // setting up the recycler view
+//        mRecyclerView = view.findViewById(R.id.fragment_community_feed_rv);
+//        mRecyclerView.setHasFixedSize(true);
+//
+//        // setting the layout manager to the recycler view
+//        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+//        mRecyclerView.setLayoutManager(mLayoutManager);
+//
+//        // using the custom adapter for the recycler view
+//        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
+//        mRecyclerView.setAdapter(mAdapter);
+//    }
 }

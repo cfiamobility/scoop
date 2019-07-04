@@ -58,7 +58,8 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     @Override
     public void onBindViewHolder(@NonNull ProfileCommentViewHolder profileCommentViewHolder, int i) {
         mProfileCommentPresenter.onBindViewHolderAtPosition(profileCommentViewHolder, i);
-        PostCommentFragment.setDisplayPostListener(profileCommentViewHolder);
+        PostCommentFragment.setDisplayPostListener(profileCommentViewHolder,
+                mProfileCommentPresenter.getActivityIdByIndex(i));
         PostCommentFragment.setLikesListener(profileCommentViewHolder, i);
         PostCommentFragment.setUserInfoListener(profileCommentViewHolder,
                 mProfileCommentPresenter.getPosterIdByIndex(i));

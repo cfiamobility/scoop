@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+// TODO delete when adapters for SavedPostActivity, TopSearchResultsFragment and ProfileLikesFragment have been implemented
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
     @NonNull
     @Override

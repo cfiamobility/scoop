@@ -52,7 +52,6 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     }
 
     public void setView(@NonNull FeedPostContract.View viewInterface) {
-        super.setView(viewInterface);
         mFeedPostView = checkNotNull(viewInterface);
     }
 

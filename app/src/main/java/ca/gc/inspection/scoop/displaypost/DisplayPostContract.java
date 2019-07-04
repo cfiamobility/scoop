@@ -1,5 +1,7 @@
 package ca.gc.inspection.scoop.displaypost;
 
+import android.content.Context;
+
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
@@ -41,7 +43,7 @@ public interface DisplayPostContract extends FeedPostContract {
 
     interface View extends BaseView<Presenter> {
 
-        interface Fragment extends FeedPostContract.View {
+        interface Fragment extends BaseView<Presenter> {
 
             interface Adapter extends FeedPostContract.View.Adapter {
             }
@@ -56,7 +58,10 @@ public interface DisplayPostContract extends FeedPostContract {
 
     interface Presenter extends BasePresenter {
 
+        void addPostComment(String currentUserId, String commentText, String activityId);
+
         interface FragmentAPI extends FeedPostContract.Presenter {
+            void loadDataFromDatabase(String feedType);
 
             interface AdapterAPI extends FeedPostContract.Presenter.AdapterAPI {
                 void setAdapter(DisplayPostContract.View.Fragment.Adapter adapter);
