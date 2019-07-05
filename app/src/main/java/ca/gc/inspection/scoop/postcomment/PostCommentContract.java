@@ -62,7 +62,7 @@ public interface PostCommentContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadDataFromDatabase(String currentUser);
+        void loadDataFromDatabase(String activityId);
 
         interface AdapterAPI {
             void setAdapter(PostCommentContract.View.Adapter adapter);

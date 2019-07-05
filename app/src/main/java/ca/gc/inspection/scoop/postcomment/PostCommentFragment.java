@@ -25,7 +25,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing profile comments action.
  * Responsible for creating the Presenter and Adapter
  */
-public class PostCommentFragment extends Fragment implements PostCommentContract.View {
+public abstract class PostCommentFragment extends Fragment implements PostCommentContract.View {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;

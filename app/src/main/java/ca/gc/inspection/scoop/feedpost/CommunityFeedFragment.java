@@ -30,8 +30,8 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
     private FeedPostContract.Presenter mFeedPostPresenter;
 
     @Override
-    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
-        mFeedPostPresenter = (FeedPostContract.Presenter) checkNotNull(presenter);
+    public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
+        mFeedPostPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -88,8 +88,6 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
 
     }
 
-    // TODO remove unnecessary override?
-    @Override
     public String getFeedType(){
         return "community";
     }

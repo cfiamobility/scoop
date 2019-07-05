@@ -38,8 +38,8 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
     private ProfilePostContract.Presenter mProfilePostPresenter;
 
     @Override
-    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
-        mProfilePostPresenter = (ProfilePostContract.Presenter) checkNotNull(presenter);
+    public void setPresenter(@NonNull ProfilePostContract.Presenter presenter) {
+        mProfilePostPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -63,7 +63,7 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
         Bundle bundle = getArguments();
         userid = bundle.getString("userid");
         setPresenter(new ProfilePostPresenter(this, NetworkUtils.getInstance(getContext())));
-        mProfilePostPresenter.loadDataFromDatabase(Config.currentUser);
+        mProfilePostPresenter.loadDataFromDatabase(userid);
         return view;
     }
 

@@ -73,8 +73,8 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     }
 
     @Override
-    public void loadDataFromDatabase(String currentUser) {
-        mProfilePostInteractor.getProfilePosts(currentUser);
+    public void loadDataFromDatabase(String userId) {
+        mProfilePostInteractor.getProfilePosts(userId);
     }
 
     @Override
