@@ -76,7 +76,7 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
         recentRecyclerView.setHasFixedSize(true);
         recentLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
         recentRecyclerView.setLayoutManager(recentLayoutManager); //sets the layout manager to one chosen
-        recentAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "recent", currentTime); //instantiates the adapter
+        recentAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "recent", currentTime, getContext()); //instantiates the adapter
         recentRecyclerView.setAdapter(recentAdapter); //sets the adapter
         //notificationsScreenController.listenRecentRecyclerView(recentRecyclerView);
         mPresenter.listenRecentRecyclerView(recentRecyclerView);
@@ -96,7 +96,7 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
         todayRecyclerView.setHasFixedSize(true); //
         todayLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
         todayRecyclerView.setLayoutManager(todayLayoutManager); //sets the layout manager to one chosen
-        todayAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "today", currentTime); //instantiates the adapter
+        todayAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "today", currentTime, getContext()); //instantiates the adapter
         todayRecyclerView.setAdapter(todayAdapter); //sets the adapter
         //notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, notificationResponse);\
         mPresenter.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
