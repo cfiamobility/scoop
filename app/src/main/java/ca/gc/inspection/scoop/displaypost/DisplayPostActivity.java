@@ -17,7 +17,6 @@ import android.widget.Toast;
 import ca.gc.inspection.scoop.Config;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
-import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.ActivityUtils;
@@ -31,7 +30,6 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
     private DisplayPostAdapter mAdapter;
 
     private String mActivityId;
-    private String mPosterId;
     private EditText mAddCommentET;
     private Button mAddCommentButton;
 
@@ -53,15 +51,6 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
         else return false;
     }
 
-    public boolean setPosterIdFromIntent() {
-        Intent intent = getIntent();
-        if (intent.hasExtra(INTENT_POSTER_ID_KEY)) {
-            mPosterId = intent.getStringExtra(INTENT_POSTER_ID_KEY);
-            return true;
-        }
-        else return false;
-    }
-
     protected DisplayPostContract.Presenter.FragmentAPI getPresenter() {
         return (DisplayPostContract.Presenter.FragmentAPI) mDisplayPostPresenter;
     }
@@ -70,16 +59,12 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
         return mActivityId;
     }
 
-    protected String getPosterId() {
-        return mPosterId;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_post);
 
-        if (!setActivityIdFromIntent() || !setPosterIdFromIntent()) {
+        if (!setActivityIdFromIntent()) {
             Toast.makeText(getApplicationContext(), "Error displaying post", Toast.LENGTH_SHORT).show();
             finish();
         }

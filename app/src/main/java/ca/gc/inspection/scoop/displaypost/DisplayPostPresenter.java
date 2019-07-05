@@ -1,20 +1,18 @@
 package ca.gc.inspection.scoop.displaypost;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Objects;
 
 import ca.gc.inspection.scoop.feedpost.FeedPost;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.feedpost.FeedPostPresenter;
 import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePost;
+import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -24,32 +22,46 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         DisplayPostContract.Presenter.FragmentAPI,
         DisplayPostContract.Presenter.FragmentAPI.AdapterAPI {
 
+    private static final String TAG = "DisplayPostPresenter";
+
     private DisplayPostContract.View mActivityView;
     private DisplayPostContract.View.Fragment mFragmentView;
     private DisplayPostContract.View.Fragment.Adapter mAdapter;
-    private DisplayPostInteractor mInteractor;
-    private FeedPost mFeedPost;
+    private DisplayPostInteractor mDisplayPostInteractor;
+    private boolean wasDataSet = false;
 
     private PostComment getItemByIndex(int i) {
+        if (mDataCache == null)
+            return null;
         if (i == 0) {
-            if (mFeedPost == null)
-                return null;
-            return mFeedPost;
+            return mDataCache.getFeedPostByIndex(0);
         }
         else {
-            if (mDataCache == null)
-                return null;
-            return mDataCache.getPostCommentByIndex(i - 1);
+            return mDataCache.getPostCommentByIndex(i);
         }
     }
 
     DisplayPostPresenter(@NonNull DisplayPostContract.View activityViewInterface, NetworkUtils network) {
-        mInteractor = new DisplayPostInteractor(this, network);
-        mActivityView = checkNotNull(activityViewInterface);
+        setView(activityViewInterface);
+        setInteractor(new DisplayPostInteractor(this, network));
+        mDataCache = PostDataCache.createWithType(FeedPost.class);
+    }
+
+    public void setView(@NonNull DisplayPostContract.View viewInterface) {
+        mActivityView = checkNotNull(viewInterface);
     }
 
     public void setFragmentView(@NonNull DisplayPostContract.View.Fragment fragmentView) {
         mFragmentView = checkNotNull(fragmentView);
+    }
+
+    /**
+     * set parent interactor as a casted down version without the parent creating a new object
+     * @param interactor
+     */
+    public void setInteractor(@NonNull DisplayPostInteractor interactor) {
+        super.setInteractor(interactor);
+        mDisplayPostInteractor = checkNotNull(interactor);
     }
 
     @Override
@@ -58,8 +70,9 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     }
 
     @Override
-    public void loadDataFromDatabase(String activityId, String posterId) {
-        mInteractor.getDetailedPost(activityId, posterId);
+    public void loadDataFromDatabase(String activityId) {
+        mDisplayPostInteractor.getDetailedPost(activityId);
+        mDisplayPostInteractor.getPostComments(activityId);
     }
 
     public void setDetailedPostData(JSONArray postTextResponse, JSONArray postImageResponse) {
@@ -71,53 +84,53 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mFeedPost = new FeedPost(jsonPost, jsonImage);
+        FeedPost feedPost = new FeedPost(jsonPost, jsonImage);
+        mDataCache.getFeedPostList().add(0, feedPost);
 
-        mAdapter.refreshAdapter();
+        if (wasDataSet)
+            mAdapter.refreshAdapter();
+        wasDataSet = true;
     }
 
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
 
+        if ((commentsResponse.length() != imagesResponse.length()))
+            Log.i(TAG, "length of commentsResponse != imagesResponse");
+
+        for (int i=0; i<commentsResponse.length(); i++) {
+            JSONObject jsonComment = null;
+            JSONObject jsonImage = null;
+            try {
+                jsonComment = commentsResponse.getJSONObject(i);
+                jsonImage = imagesResponse.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            PostComment postComment = new PostComment(jsonComment, jsonImage);
+            mDataCache.getPostCommentList().add(postComment);
+        }
+
+        if (wasDataSet)
+            mAdapter.refreshAdapter();
+        wasDataSet = true;
     }
 
     public void onBindViewHolder(FeedPostContract.View.ViewHolder viewHolderInterface) {
-        bindFeedPostDataToViewHolder(viewHolderInterface, mFeedPost);
+        FeedPost feedPost = (FeedPost) getItemByIndex(0);
+        bindFeedPostDataToViewHolder(viewHolderInterface, feedPost);
     }
 
     public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
-
+        PostComment postComment = getItemByIndex(i);
+        bindPostCommentDataToViewHolder(viewHolderInterface, postComment);
     }
 
     @Override
     public void addPostComment(String currentUserId, String commentText, String activityId) {
-        mInteractor.addPostComment(currentUserId, commentText, activityId);
+        mDisplayPostInteractor.addPostComment(currentUserId, commentText, activityId);
     }
 
     public void updateDisplay() {
         mAdapter.refreshAdapter();
-    }
-
-    /**
-     * Gets the number of items
-     * @return the count
-     */
-    @Override
-    public int getItemCount() {
-        int itemCount = 0;
-        if (mFeedPost != null)
-            itemCount = 1;
-//        if (mDataCache != null)
-//            itemCount += mDataCache.getItemCount();
-        return itemCount;
-    }
-
-    @Override
-    public String getPosterIdByIndex(int i) {
-        return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
-    }
-
-    @Override
-    public String getActivityIdByIndex(int i) {
-        return getItemByIndex(i).getActivityId();
     }
 }

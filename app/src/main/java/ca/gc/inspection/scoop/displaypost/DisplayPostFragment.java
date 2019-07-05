@@ -9,15 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.feedpost.CommunityFeedFragment;
-import ca.gc.inspection.scoop.feedpost.FeedPostAdapter;
-import ca.gc.inspection.scoop.feedpost.FeedPostContract;
-import ca.gc.inspection.scoop.feedpost.FeedPostPresenter;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
-import ca.gc.inspection.scoop.util.NetworkUtils;
-
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -64,8 +56,8 @@ public class DisplayPostFragment extends Fragment implements DisplayPostContract
         view = inflater.inflate(R.layout.fragment_display_post, container, false);
         setPresenter(mDisplayPostActivity.getPresenter());
         mDisplayPostPresenter.setFragmentView(this);
-        mDisplayPostPresenter.loadDataFromDatabase(
-                mDisplayPostActivity.getActivityId(), mDisplayPostActivity.getPosterId());
+        checkNotNull(mDisplayPostActivity.getActivityId());
+        mDisplayPostPresenter.loadDataFromDatabase(mDisplayPostActivity.getActivityId());
         return view;
     }
 
@@ -95,30 +87,6 @@ public class DisplayPostFragment extends Fragment implements DisplayPostContract
         // using the custom adapter for the recycler view
         mAdapter = new DisplayPostAdapter(this, (DisplayPostContract.Presenter.FragmentAPI.AdapterAPI) mDisplayPostPresenter);
         mRecyclerView.setAdapter(mAdapter);
-//        setListViewHeightBasedOnChildren(listView); // this must be run after setting the mAdapter
     }
 
-    // to set the height of the nested list view in the scroll view
-//    public static void setListViewHeightBasedOnChildren (ListView listView) {
-//        ListAdapter listAdapter = listView.getAdapter();
-//        if (listAdapter == null) {
-//            return;
-//        }
-//
-//        int desiredWith = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-//        int totalHeight = 0;
-//        View view = null;
-//        for (int i = 0; i < listAdapter.getCount(); i++) {
-//            view = listAdapter.getView(i, view, listView);
-//            if (i == 0) {
-//                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWith, ViewGroup.LayoutParams.WRAP_CONTENT));
-//            }
-//            view.measure(desiredWith, View.MeasureSpec.UNSPECIFIED);
-//            totalHeight += view.getMeasuredHeight();
-//        }
-//
-//        ViewGroup.LayoutParams params = listView.getLayoutParams();
-//        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() -1));
-//        listView.setLayoutParams(params);
-//    }
 }

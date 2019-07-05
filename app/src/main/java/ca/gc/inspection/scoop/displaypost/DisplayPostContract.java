@@ -47,12 +47,6 @@ public interface DisplayPostContract extends FeedPostContract {
 
             interface Adapter extends FeedPostContract.View.Adapter {
             }
-
-            interface PostViewHolder extends FeedPostContract.View.ViewHolder {
-            }
-
-            interface PostCommentViewHolder extends PostCommentContract.View.ViewHolder {
-            }
         }
     }
 
@@ -62,7 +56,7 @@ public interface DisplayPostContract extends FeedPostContract {
 
         interface FragmentAPI extends FeedPostContract.Presenter {
             void setFragmentView(DisplayPostContract.View.Fragment fragmentView);
-            void loadDataFromDatabase(String activityId, String posterId);
+            void loadDataFromDatabase(String activityId);
 
             interface AdapterAPI extends FeedPostContract.Presenter.AdapterAPI {
                 void setAdapter(DisplayPostContract.View.Fragment.Adapter adapter);
@@ -72,12 +66,6 @@ public interface DisplayPostContract extends FeedPostContract {
                         PostCommentContract.View.ViewHolder postCommentViewHolder, int i);
                 void onBindViewHolder(
                         FeedPostContract.View.ViewHolder feedPostViewHolder);
-            }
-
-            interface PostViewHolderAPI extends FeedPostContract.Presenter.ViewHolderAPI {
-            }
-
-            interface PostCommentViewHolderAPI extends PostCommentContract.Presenter.ViewHolderAPI {
             }
         }
     }

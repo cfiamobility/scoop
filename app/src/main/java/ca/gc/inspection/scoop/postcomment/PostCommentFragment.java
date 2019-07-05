@@ -92,14 +92,14 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHolder.changeUpvoteLikeState(viewHolder, i); //changes upvote state on click
+                viewHolder.changeUpvoteLikeState(i); //changes upvote state on click
             }
         });
 
         viewHolder.downvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHolder.changeDownvoteLikeState(viewHolder, i); //changes downvote state on click
+                viewHolder.changeDownvoteLikeState(i); //changes downvote state on click
             }
         });
     }
@@ -128,7 +128,6 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), DisplayPostActivity.class);
                 intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
-                intent.putExtra(INTENT_POSTER_ID_KEY, posterId);
                 v.getContext().startActivity(intent);
             }
         });

@@ -193,6 +193,6 @@ public class PostCommentInteractor {
         String url = Config.baseIP + "display-post/postcomments/text/" + activityId + "/" + Config.currentUser;
         String responseUrl = Config.baseIP + "display-post/postcomments/images/" + activityId;
         JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
-//        mNetwork.addToRequestQueue(commentRequest);
+        mNetwork.addToRequestQueue(commentRequest);
     }
 }

@@ -137,9 +137,9 @@ class DisplayPostInteractor extends FeedPostInteractor {
      * HTTPRequests for post comments and images
      * @param activityId: activityId of Post
      */
-    public void getDetailedPost(String activityId, String posterId) {
+    public void getDetailedPost(String activityId) {
         String url = Config.baseIP + "display-post/detailedpost/text/" + activityId + "/" + Config.currentUser;
-        String responseUrl = Config.baseIP + "display-post/detailedpost/image/" + activityId + "/" + posterId;
+        String responseUrl = Config.baseIP + "display-post/detailedpost/image/" + activityId;
         JsonArrayRequest commentRequest = newSingleDisplayPostJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(commentRequest);
     }
