@@ -53,7 +53,7 @@ public class PostComment {
      * @param jsonComment       Contains json data of the comment data from the database
      * @param jsonImage         Contains json data of the profile image from the database
      */
-    protected PostComment(JSONObject jsonComment, JSONObject jsonImage) {
+    public PostComment(JSONObject jsonComment, JSONObject jsonImage) {
         mComment = jsonComment;
         mImage = jsonImage;
     }

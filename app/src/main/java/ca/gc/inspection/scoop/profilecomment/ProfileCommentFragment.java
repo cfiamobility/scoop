@@ -30,6 +30,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
     private View view;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
 
+    @Override
     public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
         mProfileCommentPresenter = checkNotNull(presenter);
     }

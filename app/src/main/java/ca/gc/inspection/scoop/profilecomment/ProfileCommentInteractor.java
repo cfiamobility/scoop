@@ -1,5 +1,8 @@
 package ca.gc.inspection.scoop.profilecomment;
 
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.postcomment.PostCommentInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -22,4 +25,14 @@ public class ProfileCommentInteractor extends PostCommentInteractor {
         mNetwork = network;
     }
 
+    /**
+     * HTTPRequests for comments and profile images
+     * @param userid: userid
+     */
+    public void getProfileComments(final String userid) {
+        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
+        String responseUrl = Config.baseIP + "profile/commentimagefill/" + userid;
+        JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
+        mNetwork.addToRequestQueue(commentRequest);
+    }
 }

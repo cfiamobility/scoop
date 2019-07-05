@@ -13,6 +13,13 @@ public class FeedPostInteractor extends ProfilePostInteractor {
      * such as insert/update likes.
      */
 
+    /**
+     * Empty constructor called by child classes (ie. DisplayPostInteractor) to allow them to set
+     * their own presenter
+     */
+    public FeedPostInteractor() {
+    }
+
     FeedPostInteractor(FeedPostPresenter presenter, NetworkUtils network) {
         mPresenter = presenter;
         mNetwork = network;

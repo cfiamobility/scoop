@@ -19,7 +19,7 @@ public class FeedPost extends ProfilePost {
 
     public static final String FEED_POST_IMAGE_PATH_KEY = "postimagepath";
 
-    FeedPost(JSONObject jsonFeedPost, JSONObject jsonImage) {
+    public FeedPost(JSONObject jsonFeedPost, JSONObject jsonImage) {
         super(jsonFeedPost, jsonImage);
     }
 
