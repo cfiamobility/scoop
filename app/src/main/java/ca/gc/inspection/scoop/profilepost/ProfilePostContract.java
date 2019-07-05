@@ -48,7 +48,6 @@ public interface ProfilePostContract extends ProfileCommentContract {
 
         interface AdapterAPI extends ProfileCommentContract.Presenter.AdapterAPI {
             void setAdapter(ProfilePostContract.View.Adapter adapter);
-            String getActivityIdByIndex(int i);
             void onBindViewHolderAtPosition(
                     ProfilePostContract.View.ViewHolder postCommentViewHolder, int i);
         }

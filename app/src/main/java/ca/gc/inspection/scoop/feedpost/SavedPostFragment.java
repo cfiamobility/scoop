@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -26,8 +24,8 @@ public class SavedPostFragment extends Fragment implements FeedPostContract.View
     private FeedPostContract.Presenter mFeedPostPresenter;
 
     @Override
-    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
-        mFeedPostPresenter = (FeedPostContract.Presenter) checkNotNull(presenter);
+    public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
+        mFeedPostPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -50,8 +48,8 @@ public class SavedPostFragment extends Fragment implements FeedPostContract.View
         // Inflate the layout for this fragment
         // Fragment nested inside Activity
         view = inflater.inflate(R.layout.fragment_saved_post, container, false);
-        setPresenter(new FeedPostPresenter(this));
-        mFeedPostPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), getFeedType());
+        setPresenter(new FeedPostPresenter(this, NetworkUtils.getInstance(getContext())));
+        mFeedPostPresenter.loadDataFromDatabase(getFeedType());
         return view;
     }
 
@@ -81,14 +79,11 @@ public class SavedPostFragment extends Fragment implements FeedPostContract.View
 
         // using the custom adapter for the recycler view
         mAdapter = new FeedPostAdapter(this,
-                (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter,
-                NetworkUtils.getInstance(getContext()));
+                (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
         mRecyclerView.setAdapter(mAdapter);
 
     }
 
-    // TODO remove unnecessary override?
-    @Override
     public String getFeedType(){
         return "saved";
     }

@@ -123,7 +123,4 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
         return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
     }
 
-    public String getActivityIdByIndex(int i){
-        return getProfileCommentByIndex(i).getActivityId();
-    }
 }

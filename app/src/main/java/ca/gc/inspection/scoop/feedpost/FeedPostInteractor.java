@@ -18,19 +18,17 @@ public class FeedPostInteractor extends ProfilePostInteractor {
         mNetwork = network;
     }
 
-    public void getFeedPosts(NetworkUtils network, String feedType) {
+    public void getFeedPosts(String feedType) {
         String URL = Config.baseIP + "post/display-post/" + feedType + "/" + Config.currentUser;
         String imageURL = Config.baseIP + "post/display-post-images/" + feedType + "/" + Config.currentUser;
         JsonArrayRequest feedPostRequest = newProfileJsonArrayRequest(URL, imageURL);
         mNetwork.addToRequestQueue(feedPostRequest);
-//        Config.requestQueue.add(feedPostRequest);
-        network.addToRequestQueue(feedPostRequest);
     }
 
-    public void getSavedPosts(NetworkUtils network) {
+    public void getSavedPosts() {
         String URL = Config.baseIP + "post/display-saved-post/"+ Config.currentUser;
         String imageURL = Config.baseIP + "post/display-saved-post-images/" + Config.currentUser;
         JsonArrayRequest savedPostRequest = newProfileJsonArrayRequest(URL, imageURL);
-        network.addToRequestQueue(savedPostRequest);
+        mNetwork.addToRequestQueue(savedPostRequest);
     }
 }

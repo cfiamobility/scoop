@@ -253,4 +253,8 @@ public class PostCommentPresenter implements
     public String getPosterIdByIndex(int i) {
         return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
     }
+
+    public String getActivityIdByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getActivityId();
+    }
 }

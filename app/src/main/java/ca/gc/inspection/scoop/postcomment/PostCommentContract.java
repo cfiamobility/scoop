@@ -70,6 +70,7 @@ public interface PostCommentContract {
                     PostCommentContract.View.ViewHolder postCommentViewHolder, int i);
             int getItemCount();
             String getPosterIdByIndex(int i);
+            String getActivityIdByIndex(int i);
         }
 
         interface ViewHolderAPI {
