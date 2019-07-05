@@ -1,7 +1,5 @@
 package ca.gc.inspection.scoop.displaypost;
 
-import android.content.Context;
-
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;

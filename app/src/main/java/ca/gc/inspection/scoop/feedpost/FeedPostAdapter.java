@@ -50,8 +50,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
     public void onBindViewHolder(@NonNull FeedPostViewHolder feedPostViewHolder, int i) {
         mFeedPostPresenter.onBindViewHolderAtPosition(feedPostViewHolder, i);
         PostCommentFragment.setDisplayPostListener(feedPostViewHolder,
-                mFeedPostPresenter.getActivityIdByIndex(i),
-                mFeedPostPresenter.getPosterIdByIndex(i));
+                mFeedPostPresenter.getActivityIdByIndex(i));
         PostCommentFragment.setLikesListener(feedPostViewHolder, i);
         PostCommentFragment.setUserInfoListener(feedPostViewHolder,
                 mFeedPostPresenter.getPosterIdByIndex(i));

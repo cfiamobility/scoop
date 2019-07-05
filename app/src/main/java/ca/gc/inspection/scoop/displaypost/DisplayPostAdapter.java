@@ -11,7 +11,6 @@ import ca.gc.inspection.scoop.feedpost.FeedPostViewHolder;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
-import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 
@@ -58,8 +57,7 @@ public class DisplayPostAdapter extends RecyclerView.Adapter<PostCommentViewHold
             mDisplayPostPresenter.onBindViewHolderAtPosition(viewHolder, i);
         }
         PostCommentFragment.setDisplayPostListener(viewHolder,
-                mDisplayPostPresenter.getActivityIdByIndex(i),
-                mDisplayPostPresenter.getPosterIdByIndex(i));
+                mDisplayPostPresenter.getActivityIdByIndex(i));
         PostCommentFragment.setLikesListener(viewHolder, i);
         PostCommentFragment.setUserInfoListener(viewHolder,
                 mDisplayPostPresenter.getPosterIdByIndex(i));
@@ -74,20 +72,4 @@ public class DisplayPostAdapter extends RecyclerView.Adapter<PostCommentViewHold
     public void refreshAdapter() {
         notifyDataSetChanged();
     }
-
-//    @Override
-//    public View getView (int position, View convertView, ViewGroup parent) {
-//        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View rowView = layoutInflater.inflate(R.layout.item_post_comments, parent, false);
-//
-//        TextView commentName = rowView.findViewById(R.id.commentName);
-//        TextView commentText = rowView.findViewById(R.id.commentText);
-//        TextView timeStamp = rowView.findViewById(R.id.activity_display_post_txt_time);
-//
-//        commentName.setText(comments.get(position).getCommenterName());
-//        commentText.setText(comments.get(position).getCommentText());
-//        timeStamp.setText(comments.get(position).getTimeStamp());
-//
-//        return rowView;
-//    }
 }

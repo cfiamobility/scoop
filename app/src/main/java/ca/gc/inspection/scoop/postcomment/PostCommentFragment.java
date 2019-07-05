@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.postcomment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,18 +9,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import ca.gc.inspection.scoop.Config;
+import android.widget.Toast;
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
-import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -29,6 +29,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  */
 public abstract class PostCommentFragment extends Fragment implements PostCommentContract.View {
 
+    private final static String TAG = "PostCommentFragment";
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
     private PostCommentAdapter mAdapter;
@@ -121,14 +122,19 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         });
     }
 
-    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId, String posterId){
+    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), DisplayPostActivity.class);
-                intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
-                v.getContext().startActivity(intent);
+                Context context = v.getContext();
+                if (context.getClass() == DisplayPostActivity.class)
+                    Log.d(TAG, "Already displaying post!");
+                else {
+                    Intent intent = new Intent(context, DisplayPostActivity.class);
+                    intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
+                    context.startActivity(intent);
+                }
             }
         });
     }
