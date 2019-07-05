@@ -19,7 +19,6 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentFragment;
 import ca.gc.inspection.scoop.R;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -40,8 +39,8 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
     private ProfilePostContract.Presenter mProfilePostPresenter;
 
     @Override
-    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
-        mProfilePostPresenter = (ProfilePostContract.Presenter) checkNotNull(presenter);
+    public void setPresenter(@NonNull ProfilePostContract.Presenter presenter) {
+        mProfilePostPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -64,8 +63,8 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
         view = inflater.inflate(R.layout.fragment_profile_posts, container, false);
         Bundle bundle = getArguments();
         userid = bundle.getString("userid");
-        setPresenter(new ProfilePostPresenter(this));
-        mProfilePostPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), Config.currentUser);
+        setPresenter(new ProfilePostPresenter(this, NetworkUtils.getInstance(getContext())));
+        mProfilePostPresenter.loadDataFromDatabase(userid);
         return view;
     }
 
@@ -94,8 +93,7 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
 
         // setting the custom adapter for the recycler view
         mAdapter = new ProfilePostAdapter(this,
-                (ProfilePostContract.Presenter.AdapterAPI) mProfilePostPresenter,
-                NetworkUtils.getInstance(getContext()));
+                (ProfilePostContract.Presenter.AdapterAPI) mProfilePostPresenter);
         postRecyclerView.setAdapter(mAdapter);
     }
 

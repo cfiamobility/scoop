@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.R;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -31,8 +30,8 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
     private FeedPostContract.Presenter mFeedPostPresenter;
 
     @Override
-    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
-        mFeedPostPresenter = (FeedPostContract.Presenter) checkNotNull(presenter);
+    public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
+        mFeedPostPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -54,8 +53,8 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_community_feed, container, false);
-        setPresenter(new FeedPostPresenter(this));
-        mFeedPostPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), getFeedType());
+        setPresenter(new FeedPostPresenter(this, NetworkUtils.getInstance(getContext())));
+        mFeedPostPresenter.loadDataFromDatabase(getFeedType());
         return view;
     }
 
@@ -84,14 +83,11 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
 
         // using the custom adapter for the recycler view
         mAdapter = new FeedPostAdapter(this,
-                (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter,
-                NetworkUtils.getInstance(getContext()));
+                (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
         mRecyclerView.setAdapter(mAdapter);
 
     }
 
-    // TODO remove unnecessary override?
-    @Override
     public String getFeedType(){
         return "community";
     }

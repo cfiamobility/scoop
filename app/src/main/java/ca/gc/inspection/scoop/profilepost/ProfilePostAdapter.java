@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
-import ca.gc.inspection.scoop.util.NetworkUtils;
 
 public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder>
     implements ProfilePostContract.View.Adapter {
@@ -19,18 +18,15 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
 
 	private ProfilePostContract.Presenter.AdapterAPI mProfilePostPresenter;
     private ProfilePostFragment mProfilePostView;
-    private NetworkUtils mNetworkUtil;
 
     /**
      * Constructor for the adapter
      */
 	public ProfilePostAdapter(ProfilePostFragment profileCommentView,
-                              ProfilePostContract.Presenter.AdapterAPI presenter,
-                              NetworkUtils network) {
+                              ProfilePostContract.Presenter.AdapterAPI presenter) {
         mProfilePostView = profileCommentView;
         mProfilePostPresenter = presenter;
         mProfilePostPresenter.setAdapter(this);
-        mNetworkUtil = network;
 	}
 
     /**
@@ -55,7 +51,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
     public void onBindViewHolder(@NonNull ProfilePostViewHolder profilePostViewHolder, int i) {
         mProfilePostPresenter.onBindViewHolderAtPosition(profilePostViewHolder, i);
         PostCommentFragment.setDisplayPostListener(profilePostViewHolder);
-        PostCommentFragment.setLikesListener(mNetworkUtil, profilePostViewHolder, i);
+        PostCommentFragment.setLikesListener(profilePostViewHolder, i);
         PostCommentFragment.setUserInfoListener(profilePostViewHolder,
                 mProfilePostPresenter.getPosterIdByIndex(i));
 

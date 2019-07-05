@@ -48,6 +48,8 @@ public interface ProfileCommentContract extends PostCommentContract {
 
         interface AdapterAPI extends PostCommentContract.Presenter.AdapterAPI {
             void setAdapter(ProfileCommentContract.View.Adapter adapter);
+            void onBindViewHolderAtPosition(
+                    ProfileCommentContract.View.ViewHolder postCommentViewHolder, int i);
         }
 
         interface ViewHolderAPI extends PostCommentContract.Presenter.ViewHolderAPI {

@@ -29,8 +29,8 @@ public class OfficialFeedFragment extends Fragment implements FeedPostContract.V
 
 
     @Override
-    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
-        mFeedPostPresenter = (FeedPostContract.Presenter) checkNotNull(presenter);
+    public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
+        mFeedPostPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -78,7 +78,6 @@ public class OfficialFeedFragment extends Fragment implements FeedPostContract.V
 //        mRecyclerView.setAdapter(mAdapter);
     }
 
-    @Override
     public String getFeedType(){
         return "official";
     }

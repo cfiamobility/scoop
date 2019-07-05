@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
-import ca.gc.inspection.scoop.util.NetworkUtils;
 
 public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
     implements FeedPostContract.View.Adapter {
@@ -19,20 +18,16 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
      */
 
     private FeedPostContract.Presenter.AdapterAPI mFeedPostPresenter;
-    private FeedPostContract.View mFeedPostView;    // current assumption: only implementing community feed fragment
-    private NetworkUtils mNetworkUtil;
+    private CommunityFeedFragment mFeedPostView;    // current assumption: only implementing community feed fragment
 
     /**
      * Constructor for the adapter
-     * @param feedPostView needs to be of type FeedPostContract.View for multiple feeds
      */
-    public FeedPostAdapter(FeedPostContract.View feedPostView,
-                           FeedPostContract.Presenter.AdapterAPI presenter,
-                           NetworkUtils network) {
-        mFeedPostView = feedPostView;
+    public FeedPostAdapter(CommunityFeedFragment profileCommentView,
+                           FeedPostContract.Presenter.AdapterAPI presenter) {
+        mFeedPostView = profileCommentView;
         mFeedPostPresenter = presenter;
         mFeedPostPresenter.setAdapter(this);
-        mNetworkUtil = network;
     }
 
     /**
@@ -54,12 +49,8 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
     @Override
     public void onBindViewHolder(@NonNull FeedPostViewHolder feedPostViewHolder, int i) {
         mFeedPostPresenter.onBindViewHolderAtPosition(feedPostViewHolder, i);
-
-        // TODO use inheritance and call super? - NOTE that either onBind in Adapter or Presenter
-        // should call super but not both as it would cause the same information to be set to the view
-        // multiple times
         PostCommentFragment.setDisplayPostListener(feedPostViewHolder);
-        PostCommentFragment.setLikesListener(mNetworkUtil, feedPostViewHolder, i);
+        PostCommentFragment.setLikesListener(feedPostViewHolder, i);
         PostCommentFragment.setUserInfoListener(feedPostViewHolder,
                 mFeedPostPresenter.getPosterIdByIndex(i));
         ProfilePostFragment.setPostOptionsListener(feedPostViewHolder, mFeedPostPresenter.getActivityIdByIndex(i));

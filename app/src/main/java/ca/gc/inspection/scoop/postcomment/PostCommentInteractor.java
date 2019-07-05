@@ -31,6 +31,7 @@ public class PostCommentInteractor {
      */
 
     protected PostCommentPresenter mPresenter;
+    public NetworkUtils mNetwork;
 
     /**
      * Empty constructor called by child classes (ie. ProfilePostInteractor) to allow them to set
@@ -39,20 +40,9 @@ public class PostCommentInteractor {
     public PostCommentInteractor() {
     }
 
-    public PostCommentInteractor(PostCommentPresenter presenter){
+    public PostCommentInteractor(PostCommentPresenter presenter, NetworkUtils network){
         mPresenter = checkNotNull(presenter);
-    }
-
-    /**
-     * HTTPRequests for comments and profile images
-     * @param userid: userid
-     */
-    public void getUserCommentsAndImages(NetworkUtils network, final String userid) {
-        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
-        String responseUrl = Config.baseIP + "profile/commentimagefill/" + userid;
-        JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
-        Config.requestQueue.add(commentRequest);
-//        network.addToRequestQueue(commentRequest);
+        mNetwork = network;
     }
 
     public JsonArrayRequest newProfileJsonArrayRequest(String url, String responseUrl) {
@@ -78,8 +68,7 @@ public class PostCommentInteractor {
                         return header;
                     }
                 };
-                Config.requestQueue.add(imageRequest);
-//                network.addToRequestQueue(imageRequest);
+                mNetwork.addToRequestQueue(imageRequest);
 
             }
         }, new Response.ErrorListener() {
@@ -105,8 +94,7 @@ public class PostCommentInteractor {
      * @param viewHolderInterface
      * @throws JSONException
      */
-    public void updateLikes(
-            NetworkUtils network, LikeState likeType, String likeCount, final String activityid, final String posterid,
+    public void updateLikes(LikeState likeType, String likeCount, final String activityid, final String posterid,
             int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
@@ -118,8 +106,7 @@ public class PostCommentInteractor {
                 30000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Config.requestQueue.add(request);
-//        network.addToRequestQueue(request);
+        mNetwork.addToRequestQueue(request);
     }
 
     /**
@@ -131,7 +118,7 @@ public class PostCommentInteractor {
      * @throws JSONException
      */
     public void insertLikes(
-            NetworkUtils network, LikeState likeType, final String activityid, final String posterid,
+            LikeState likeType, final String activityid, final String posterid,
             int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
@@ -144,8 +131,7 @@ public class PostCommentInteractor {
                 30000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Config.requestQueue.add(request);
-//        network.addToRequestQueue(request);
+        mNetwork.addToRequestQueue(request);
 
     }
 
@@ -160,7 +146,7 @@ public class PostCommentInteractor {
      * @param viewHolderInterface
      * @return
      */
-    private StringRequest newLikesStringRequest(
+    public StringRequest newLikesStringRequest(
             int requestMethod, String URL, LikeState likeType, String likeCount, final String activityid,
             final String posterid, int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
@@ -199,4 +185,14 @@ public class PostCommentInteractor {
         };
     }
 
+    /**
+     * HTTPRequests for comments and profile images
+     * @param userid: userid
+     */
+    public void getPostComments(final String userid) {
+        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
+        String responseUrl = Config.baseIP + "profile/commentimagefill/" + userid;
+        JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
+        mNetwork.addToRequestQueue(commentRequest);
+    }
 }

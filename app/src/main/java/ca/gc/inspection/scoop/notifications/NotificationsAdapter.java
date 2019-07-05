@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.notifications;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     private String timeType;
     private Timestamp currentTime;
+    private Context context;
 
     /**
      *
@@ -34,12 +36,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
      * @param requestQueue: represents the requestQueue used for adding future requests to
      * @param timeType: represents whether the type of time which should be displayed is for today or for recent notifications
      */
-    NotificationsAdapter(JSONArray notifs, JSONArray images, RequestQueue requestQueue, String timeType, Timestamp currentTime){
+    NotificationsAdapter(JSONArray notifs, JSONArray images, RequestQueue requestQueue, String timeType, Timestamp currentTime, Context context){
         this.notifications = notifs;
         this.images = images;
         this.requestQueue = requestQueue;
         this.timeType = timeType;
         this.currentTime = currentTime;
+        this.context = context;
     }
 
     /**
@@ -63,7 +66,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
      */
     @Override
     public void onBindViewHolder(@NonNull final NotificationsAdapter.NotificationViewHolder holder, int i) {
-        NotificationsAdapterController controller = new NotificationsAdapterController(holder, i, this, notifications, images, currentTime, timeType);
+        NotificationsAdapterController controller = new NotificationsAdapterController(holder, i, this, notifications, images, currentTime, timeType, context);
         try {
             controller.displayNotifications();
         } catch (JSONException e) {

@@ -1,7 +1,7 @@
 package ca.gc.inspection.scoop.feedpost;
 
+import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
-
 
 public interface FeedPostContract extends ProfilePostContract {
     /**
@@ -28,14 +28,12 @@ public interface FeedPostContract extends ProfilePostContract {
      * See PostCommentContract for inheritance hierarchy for Posts/Comments
      */
 
-    interface View extends ProfilePostContract.View {
+    interface View extends BaseView<Presenter> {
         /**
          * Implemented by the main View (ie. FeedPostFragment).
          * Methods specified here in the View but not in the nested View.Adapter and View.ViewHolder interfaces
          * explain how the Presenter is to communicate with the main View only.
          */
-
-        String getFeedType();
 
         interface Adapter extends ProfilePostContract.View.Adapter {
         }
@@ -48,8 +46,12 @@ public interface FeedPostContract extends ProfilePostContract {
 
     interface Presenter extends ProfilePostContract.Presenter {
 
+        void loadDataFromDatabase(String feedType);
+
         interface AdapterAPI extends ProfilePostContract.Presenter.AdapterAPI {
             void setAdapter(FeedPostContract.View.Adapter adapter);
+            void onBindViewHolderAtPosition(
+                    FeedPostContract.View.ViewHolder postCommentViewHolder, int i);
         }
 
         interface ViewHolderAPI extends ProfilePostContract.Presenter.ViewHolderAPI {

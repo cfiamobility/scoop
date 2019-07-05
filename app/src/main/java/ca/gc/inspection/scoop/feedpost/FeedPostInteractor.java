@@ -13,14 +13,16 @@ public class FeedPostInteractor extends ProfilePostInteractor {
      * such as insert/update likes.
      */
 
-    FeedPostInteractor(FeedPostPresenter presenter) {
+    FeedPostInteractor(FeedPostPresenter presenter, NetworkUtils network) {
         mPresenter = presenter;
+        mNetwork = network;
     }
 
     public void getFeedPosts(NetworkUtils network, String feedType) {
         String URL = Config.baseIP + "post/display-post/" + feedType + "/" + Config.currentUser;
         String imageURL = Config.baseIP + "post/display-post-images/" + feedType + "/" + Config.currentUser;
         JsonArrayRequest feedPostRequest = newProfileJsonArrayRequest(URL, imageURL);
+        mNetwork.addToRequestQueue(feedPostRequest);
 //        Config.requestQueue.add(feedPostRequest);
         network.addToRequestQueue(feedPostRequest);
     }
