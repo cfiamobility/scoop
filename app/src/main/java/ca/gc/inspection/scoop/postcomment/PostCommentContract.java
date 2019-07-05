@@ -1,7 +1,9 @@
-package ca.gc.inspection.scoop.profilecomment;
+package ca.gc.inspection.scoop.postcomment;
 
+import org.json.JSONException;
+
+import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
 /**
  * A contract between the View (layer) and Presenter for the replying to a post
@@ -24,10 +26,17 @@ import ca.gc.inspection.scoop.postcomment.PostCommentContract;
  * If communication is required within the View only or Presenter only, the object itself should be passed in
  * to avoid leaking access to internal methods in the contract.
  *
- * See PostCommentContract for inheritance hierarchy for Posts/Comments
+ * Inheritance hierarchy for Posts/Comments:
+ *      PostComment - base comment containing profile image, username, text, like/dislike functionality
+ *      ^
+ *      ProfileComment - extends above but with post title
+ *      ^
+ *      ProfilePost - extends above but overrides post title and contains comment count
+ *      ^
+ *      FeedPost - extends above but contains
  */
 
-public interface ProfileCommentContract extends PostCommentContract {
+public interface PostCommentContract {
 
     interface View extends BaseView<Presenter> {
         /**
@@ -36,23 +45,37 @@ public interface ProfileCommentContract extends PostCommentContract {
          * explain how the Presenter is to communicate with the main View only.
          */
 
-        interface Adapter extends PostCommentContract.View.Adapter {
+        interface Adapter {
+            void refreshAdapter();
         }
 
-        interface ViewHolder extends PostCommentContract.View.ViewHolder {
-            ViewHolder setPostTitle(String postTitle);
+        interface ViewHolder {
+            ViewHolder setPostText(String postText);
+            ViewHolder setUserName(String userName);
+            ViewHolder setLikeCount(String likeCount);
+            ViewHolder setDate(String date);
+            ViewHolder setLikeState(LikeState likeState);
+            ViewHolder setUserImageFromString(String image);
+            ViewHolder hideDate();
         }
     }
 
-    interface Presenter extends PostCommentContract.Presenter {
+    interface Presenter extends BasePresenter {
 
-        interface AdapterAPI extends PostCommentContract.Presenter.AdapterAPI {
-            void setAdapter(ProfileCommentContract.View.Adapter adapter);
+        void loadDataFromDatabase(String activityId);
+
+        interface AdapterAPI {
+            void setAdapter(PostCommentContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
-                    ProfileCommentContract.View.ViewHolder postCommentViewHolder, int i);
+                    PostCommentContract.View.ViewHolder postCommentViewHolder, int i);
+            int getItemCount();
+            String getPosterIdByIndex(int i);
         }
 
-        interface ViewHolderAPI extends PostCommentContract.Presenter.ViewHolderAPI {
+        interface ViewHolderAPI {
+            void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
+            void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
         }
+
     }
 }

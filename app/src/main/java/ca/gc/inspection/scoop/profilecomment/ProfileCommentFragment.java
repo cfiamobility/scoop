@@ -1,7 +1,5 @@
 package ca.gc.inspection.scoop.profilecomment;
 
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
-import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
@@ -34,7 +30,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
     private View view;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
 
-    public void setPresenter (@NonNull ProfileCommentContract.Presenter presenter){
+    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
         mProfileCommentPresenter = checkNotNull(presenter);
     }
 
@@ -56,8 +52,8 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
-        setPresenter(new ProfileCommentPresenter(this));
-        mProfileCommentPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), Config.currentUser);
+        setPresenter(new ProfileCommentPresenter(this, NetworkUtils.getInstance(getContext())));
+        mProfileCommentPresenter.loadDataFromDatabase(Config.currentUser);
         return view;
     }
 
@@ -85,52 +81,8 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
         commentsRecyclerView.setLayoutManager(mLayoutManager);
 
         // Setting the custom adapter for the recycler view
-        mAdapter = new ProfileCommentAdapter(this, (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter);
+        mAdapter = new ProfileCommentAdapter(this,
+                (ProfileCommentContract.Presenter.AdapterAPI) mProfileCommentPresenter);
         commentsRecyclerView.setAdapter(mAdapter);
-    }
-
-    public void setProfileCommentLikesListener(ProfileCommentViewHolder viewHolder, int i) {
-
-        viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewHolder.changeUpvoteLikeState(
-                        NetworkUtils.getInstance(getContext()), viewHolder, i); //changes upvote state on click
-            }
-        });
-
-        viewHolder.downvote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewHolder.changeDownvoteLikeState(NetworkUtils.getInstance(getContext()), viewHolder, i); //changes downvote state on click
-            }
-        });
-    }
-
-    public void setProfileCommentUserInfoListener(ProfileCommentViewHolder viewHolder, String posterId) {
-        // tapping on profile picture will bring user to poster's profile page
-        viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.otherUserClicked(posterId);
-            }
-        });
-
-        viewHolder.username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.otherUserClicked(posterId);
-            }
-        });
-    }
-
-    public void setProfileCommentImageListener(ProfileCommentViewHolder viewHolder){
-        // tapping on any item from the view holder will go to the display post activity
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
-            }
-        });
     }
 }

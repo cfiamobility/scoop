@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.profilecomment;
+package ca.gc.inspection.scoop.postcomment;
 
 import java.util.HashMap;
 

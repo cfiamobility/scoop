@@ -1,35 +1,35 @@
-package ca.gc.inspection.scoop.profilecomment;
+package ca.gc.inspection.scoop.postcomment;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 
-public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentViewHolder>
-        implements ProfileCommentContract.View.Adapter {
+import ca.gc.inspection.scoop.R;
+
+public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHolder>
+        implements PostCommentContract.View.Adapter {
 
     /**
      * Adapter used to create ViewHolders and bind new data to them for a RecyclerView.
      * Considered to be part of the View.
      */
 
-    private ProfileCommentContract.Presenter.AdapterAPI mProfileCommentPresenter;
-    private ProfileCommentFragment mProfileCommentView;
+    private PostCommentContract.Presenter.AdapterAPI mPostCommentPresenter;
+    private PostCommentFragment mPostCommentView;
 
     /**
      * Constructor for the adapter.
      *
-     * @param profileCommentView    The fragment instead of view contract can be taken in as both are considered part of the view. (see Contract documentation)
+     * @param postCommentView    The fragment instead of view contract can be taken in as both are considered part of the view. (see Contract documentation)
      * @param presenter             The presenter is passed in as the contract which specifies View-Presenter interaction.
      */
-    public ProfileCommentAdapter(ProfileCommentFragment profileCommentView,
-                                 ProfileCommentContract.Presenter.AdapterAPI presenter) {
-        mProfileCommentView = profileCommentView;
-        mProfileCommentPresenter = presenter;
-        mProfileCommentPresenter.setAdapter(this);
+    public PostCommentAdapter(PostCommentFragment postCommentView,
+                              PostCommentContract.Presenter.AdapterAPI presenter) {
+        mPostCommentView = postCommentView;
+        mPostCommentPresenter = presenter;
+        mPostCommentPresenter.setAdapter(this);
     }
 
     /**
@@ -41,10 +41,10 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
      */
     @NonNull
     @Override
-    public ProfileCommentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_profile_comments, viewGroup, false);
+    public PostCommentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_post_comments, viewGroup, false);
         // Pass in the presenter as a Presenter.ViewHolderAPI to provide the minimum required methods
-        return new ProfileCommentViewHolder(v, (ProfileCommentContract.Presenter.ViewHolderAPI) mProfileCommentPresenter);
+        return new PostCommentViewHolder(v, (PostCommentContract.Presenter.ViewHolderAPI) mPostCommentPresenter);
     }
 
     /**
@@ -52,16 +52,16 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
      * Calls the Presenter (interface) to retrieve the data and update the ViewHolder through the View.ViewHolder contract.
      * Calls the View object to set the listeners for the ViewHolders - contract not necessary as this is intra-View communication.
      *
-     * @param profileCommentViewHolder  ViewHolder automatically passed in by Android
+     * @param postCommentViewHolder  ViewHolder automatically passed in by Android
      * @param i                         Index of the item to be bound
      */
     @Override
-    public void onBindViewHolder(@NonNull ProfileCommentViewHolder profileCommentViewHolder, int i) {
-        mProfileCommentPresenter.onBindViewHolderAtPosition(profileCommentViewHolder, i);
-        PostCommentFragment.setDisplayPostListener(profileCommentViewHolder);
-        PostCommentFragment.setLikesListener(profileCommentViewHolder, i);
-        PostCommentFragment.setUserInfoListener(profileCommentViewHolder,
-                mProfileCommentPresenter.getPosterIdByIndex(i));
+    public void onBindViewHolder(@NonNull PostCommentViewHolder postCommentViewHolder, int i) {
+        mPostCommentPresenter.onBindViewHolderAtPosition(postCommentViewHolder, i);
+        PostCommentFragment.setDisplayPostListener(postCommentViewHolder);
+        PostCommentFragment.setLikesListener(postCommentViewHolder, i);
+        PostCommentFragment.setUserInfoListener(postCommentViewHolder,
+                mPostCommentPresenter.getPosterIdByIndex(i));
     }
 
     /**
@@ -70,7 +70,7 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
      */
     @Override
     public int getItemCount() {
-        return mProfileCommentPresenter.getItemCount();
+        return mPostCommentPresenter.getItemCount();
     }
 
     /**
