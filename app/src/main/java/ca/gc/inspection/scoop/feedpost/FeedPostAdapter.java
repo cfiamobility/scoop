@@ -18,12 +18,12 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
      */
 
     private FeedPostContract.Presenter.AdapterAPI mFeedPostPresenter;
-    private CommunityFeedFragment mFeedPostView;    // current assumption: only implementing community feed fragment
+    private FeedPostContract.View mFeedPostView;    // current assumption: only implementing community feed fragment
 
     /**
      * Constructor for the adapter
      */
-    public FeedPostAdapter(CommunityFeedFragment profileCommentView,
+    public FeedPostAdapter(FeedPostContract.View profileCommentView,
                            FeedPostContract.Presenter.AdapterAPI presenter) {
         mFeedPostView = profileCommentView;
         mFeedPostPresenter = presenter;
@@ -54,7 +54,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
         PostCommentFragment.setLikesListener(feedPostViewHolder, i);
         PostCommentFragment.setUserInfoListener(feedPostViewHolder,
                 mFeedPostPresenter.getPosterIdByIndex(i));
-        ProfilePostFragment.setPostOptionsListener(feedPostViewHolder);
+        ProfilePostFragment.setPostOptionsListener(feedPostViewHolder, mFeedPostPresenter.getActivityIdByIndex(i));
     }
 
     @Override

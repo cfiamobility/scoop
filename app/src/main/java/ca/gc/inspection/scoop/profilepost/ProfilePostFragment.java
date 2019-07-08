@@ -10,13 +10,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.PostOptionsDialog;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.R;
 
@@ -96,15 +97,26 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
         postRecyclerView.setAdapter(mAdapter);
     }
 
-    public static void setPostOptionsListener(ProfilePostViewHolder viewHolder){
+    public static void setPostOptionsListener(ProfilePostViewHolder viewHolder, String activityid){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
+                // bundle
+                Bundle bundle = new Bundle();
+                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
+
+                //gets the activity id and stores in bundle to be fetched in PostOptionsDialogFragment
+                Log.i("post I am clicking: ", activityid);
+                bundle.putString("ACTIVITY_ID", activityid);
+                bottomSheetDialog.setArguments(bundle);
+
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");
+
+
+
             }
         });
     }

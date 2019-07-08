@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.postcomment;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -254,7 +255,7 @@ public class PostCommentPresenter implements
     }
 
     @Override
-    public String getActivityIdByIndex(int i) {
-        return getItemByIndex(i).getActivityId();
+    public String getActivityIdByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getActivityId();
     }
 }

@@ -40,6 +40,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
         return mDataCache.getProfilePostByIndex(i);
     }
 
+
     /**
      * Empty constructor called by child classes (ie. FeedPostPresenter) to allow them to create
      * their own View and Interactor objects

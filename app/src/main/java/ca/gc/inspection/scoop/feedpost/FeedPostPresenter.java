@@ -69,9 +69,18 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         mAdapter = adapter;
     }
 
+    /**
+     * Provides information to the Interactor and invokes different methods based on given feed type
+     * @param network Allows save post information to be added to singleton request queue
+     * @param feedType Type of feed (Community/Official vs Saved)
+     */
     @Override
     public void loadDataFromDatabase(String feedType) {
-        mFeedPostInteractor.getFeedPosts(feedType);
+        if (feedType.equals("saved")){
+            mFeedPostInteractor.getSavedPosts();
+        } else {
+            mFeedPostInteractor.getFeedPosts(feedType);
+        }
     }
 
     @Override
