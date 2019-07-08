@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.profilepost;
 
+import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 
 public interface ProfilePostContract extends ProfileCommentContract {
@@ -24,11 +25,10 @@ public interface ProfilePostContract extends ProfileCommentContract {
      * If communication is required within the View only or Presenter only, the object itself should be passed in
      * to avoid leaking access to internal methods in the contract.
      *
-     * ProfileCommentContract is the base contract and is extended by ProfilePostContract which
-     * is further extended by FeedPostContract.
+     * See PostCommentContract for inheritance hierarchy for Posts/Comments
      */
 
-    interface View extends ProfileCommentContract.View {
+    interface View extends BaseView<Presenter> {
         /**
          * Implemented by the main View (ie. ProfilePostFragment).
          * Methods specified here in the View but not in the nested View.Adapter and View.ViewHolder interfaces
@@ -45,8 +45,11 @@ public interface ProfilePostContract extends ProfileCommentContract {
     }
 
     interface Presenter extends ProfileCommentContract.Presenter {
+
         interface AdapterAPI extends ProfileCommentContract.Presenter.AdapterAPI {
             void setAdapter(ProfilePostContract.View.Adapter adapter);
+            void onBindViewHolderAtPosition(
+                    ProfilePostContract.View.ViewHolder postCommentViewHolder, int i);
         }
 
         interface ViewHolderAPI extends ProfileCommentContract.Presenter.ViewHolderAPI {

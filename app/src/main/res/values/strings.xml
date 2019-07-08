@@ -102,4 +102,12 @@
     <string name="facebookETText">facebook.com/YOUR-FACEBOOK</string>
     <string name="invalidNameEntry">Please enter a first and last name.</string>
     <string name="liked">liked</string>
+
+    <!-- Notifications -->
+    <string name="just_now">just now</string>
+    <string name="minute_ago">minute ago</string>
+    <string name="minutes_ago">minutes ago</string>
+    <string name="hour_ago">hour ago</string>
+    <string name="hours_ago">hours ago</string>
+
 </resources>

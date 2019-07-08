@@ -42,10 +42,10 @@
         android:elevation="5dp"
         android:background="?android:attr/listDivider" />
 
-    <ScrollView
-        android:id="@+id/activity_display_post_sv_post"
+    <FrameLayout
+        android:id="@+id/activity_display_post_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/activity_display_post_et_add_comment"
         android:layout_below="@+id/divider18"
         android:layout_alignParentStart="true"
@@ -54,179 +54,18 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="2dp">
+    </FrameLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/activity_display_post_img_profile"
-                android:layout_width="52dp"
-                android:layout_height="49dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="19dp"
-                android:layout_marginTop="10dp"
-                app:srcCompat="@drawable/ic_account_circle_black_24dp" />
-
-            <TextView
-                android:id="@+id/activity_display_post_txt_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="9dp"
-                android:layout_marginTop="21dp"
-                android:layout_marginEnd="20dp"
-                android:layout_toStartOf="@+id/activity_display_post_txt_time"
-                android:layout_toEndOf="@+id/activity_display_post_img_profile"
-                android:fontFamily="@font/roboto"
-                android:textColor="@color/black"
-                android:text="@string/name"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/activity_display_post_txt_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="2dp"
-                android:layout_toStartOf="@+id/activity_display_post_img_options"
-                android:fontFamily="@font/roboto"
-                android:textSize="13sp"
-                android:text="2019-01-01" />
-
-            <ImageView
-                android:id="@+id/activity_display_post_img_options"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="21dp"
-                android:layout_marginEnd="9dp"
-                app:srcCompat="@drawable/ic_more_vert_secondary_24dp" />
-
-            <TextView
-                android:id="@+id/activity_display_post_txt_post_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/activity_display_post_img_profile"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="30dp"
-                android:fontFamily="@font/roboto"
-                android:textColor="@color/black"
-                android:text="@string/title"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/activity_display_post_txt_post_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/activity_display_post_txt_post_title"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="30dp"
-                android:fontFamily="@font/open_sans"
-                android:text="TextView" />
-
-            <ImageView
-                android:id="@+id/activity_display_post_img_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/activity_display_post_txt_post_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="0dp"
-                android:visibility="gone"
-                app:srcCompat="@drawable/linkedin" />
-
-
-            <ImageView
-                android:id="@+id/activity_display_post_img_up_vote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/activity_display_post_img_post"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="15dp"
-                app:srcCompat="@drawable/ic_expand_less_secondary_24dp" />
-
-            <ImageView
-                android:id="@+id/activity_display_post_img_down_vote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/activity_display_post_img_post"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_toEndOf="@+id/activity_display_post_img_up_vote"
-                app:srcCompat="@drawable/ic_expand_more_secondary_24dp" />
-
-            <TextView
-                android:id="@+id/activity_display_post_txt_vote_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/activity_display_post_img_post"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="16dp"
-                android:layout_toEndOf="@+id/activity_display_post_img_down_vote"
-                android:fontFamily="@font/roboto"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:text="3" />
-
-            <ImageView
-                android:id="@+id/activity_display_post_img_comment"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/activity_display_post_img_post"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_toStartOf="@+id/activity_display_post_txt_comment_count"
-                app:srcCompat="@drawable/ic_mode_comment_secondary_24dp" />
-
-            <TextView
-                android:id="@+id/activity_display_post_txt_comment_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/activity_display_post_img_post"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="30dp"
-                android:fontFamily="@font/roboto"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:text="5" />
-
-            <View
-                android:id="@+id/divider19"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/activity_display_post_img_up_vote"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="0dp"
-                android:background="?android:attr/listDivider" />
-
-            <ListView
-                android:id="@+id/activity_display_post_lv_comments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/divider19"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginBottom="0dp" />
-
-        </RelativeLayout>
-    </ScrollView>
+    <View
+        android:id="@+id/divider21"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/activity_display_post_rv"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:elevation="50dp"
+        android:background="?android:attr/listDivider" />
 
     <EditText
         android:id="@+id/activity_display_post_et_add_comment"
@@ -257,17 +96,5 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/ic_send_secondary_24dp"
         android:backgroundTint="@color/secondary"/>
-
-    <View
-        android:id="@+id/divider21"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/activity_display_post_sv_post"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:elevation="50dp"
-        android:background="?android:attr/listDivider" />
-
 
 </RelativeLayout>

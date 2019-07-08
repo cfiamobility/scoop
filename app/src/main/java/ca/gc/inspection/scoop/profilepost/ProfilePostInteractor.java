@@ -10,7 +10,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class ProfilePostInteractor extends ProfileCommentInteractor {
     /**
-     * Interactor used to send requests to the network. Inherits from ProfileCommentInteractor
+     * Interactor used to send requests to the network. Inherits from PostCommentInteractor
      * so that Profile post has access to methods such as insert/update likes.
      */
 
@@ -21,20 +21,20 @@ public class ProfilePostInteractor extends ProfileCommentInteractor {
     public ProfilePostInteractor() {
     }
 
-    ProfilePostInteractor(ProfilePostPresenter presenter) {
+    ProfilePostInteractor(ProfilePostPresenter presenter, NetworkUtils network) {
         mPresenter = checkNotNull(presenter);
+        mNetwork = network;
     }
 
     /**
      * HTTP Requests to get all the user posts infos
      * @param userid: passes the userid of the profile clicked on
      */
-    public void getUserPosts(NetworkUtils network, final String userid) {
+    public void getProfilePosts(final String userid) {
         String url = Config.baseIP + "profile/posttextfill/" + userid + "/" + Config.currentUser;
         String responseUrl = Config.baseIP + "profile/postimagefill/" + userid;
         JsonArrayRequest postRequest = super.newProfileJsonArrayRequest(url, responseUrl);
-        Config.requestQueue.add(postRequest);
-//        network.addToRequestQueue(postRequest);
+        mNetwork.addToRequestQueue(postRequest);
     }
 }
 

@@ -264,6 +264,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
             }
             mPresenter.sendPostToDatabase(NetworkUtils.getInstance(this), Config.currentUser, postTitle, postText, imageBitmap);
 
+            //TODO: Might have bug - activity did not finish after creating post but sent to database
             finish();
         }
     }

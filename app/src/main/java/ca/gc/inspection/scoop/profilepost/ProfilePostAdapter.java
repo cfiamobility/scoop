@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 
 public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder>
     implements ProfilePostContract.View.Adapter {
@@ -21,7 +22,8 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
     /**
      * Constructor for the adapter
      */
-	public ProfilePostAdapter(ProfilePostFragment profileCommentView, ProfilePostContract.Presenter.AdapterAPI presenter) {
+	public ProfilePostAdapter(ProfilePostFragment profileCommentView,
+                              ProfilePostContract.Presenter.AdapterAPI presenter) {
         mProfilePostView = profileCommentView;
         mProfilePostPresenter = presenter;
         mProfilePostPresenter.setAdapter(this);
@@ -48,16 +50,13 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
     @Override
     public void onBindViewHolder(@NonNull ProfilePostViewHolder profilePostViewHolder, int i) {
         mProfilePostPresenter.onBindViewHolderAtPosition(profilePostViewHolder, i);
-
-        // TODO use inheritance and call super? - NOTE that either onBind in Adapter or Presenter
-        // should call super but not both as it would cause the same information to be set to the view
-        // multiple times
-        mProfilePostView.setProfileCommentImageListener(profilePostViewHolder);
-        mProfilePostView.setProfileCommentLikesListener(profilePostViewHolder, i);
-        mProfilePostView.setProfileCommentUserInfoListener(profilePostViewHolder,
+        PostCommentFragment.setDisplayPostListener(profilePostViewHolder,
+                mProfilePostPresenter.getActivityIdByIndex(i));
+        PostCommentFragment.setLikesListener(profilePostViewHolder, i);
+        PostCommentFragment.setUserInfoListener(profilePostViewHolder,
                 mProfilePostPresenter.getPosterIdByIndex(i));
 
-        mProfilePostView.setPostOptionsListener(profilePostViewHolder);
+        ProfilePostFragment.setPostOptionsListener(profilePostViewHolder, mProfilePostPresenter.getActivityIdByIndex(i));
     }
 
 	@Override
@@ -65,7 +64,6 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
 		return mProfilePostPresenter.getItemCount();
 	}
 
-    // TODO remove unnecessary override?
     @Override
     public void refreshAdapter() {
         notifyDataSetChanged();

@@ -33,7 +33,7 @@ public class CreatePostInteractor {
      * @param imageBitmap   Bitmap in String format
      */
     public void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
-        String url = Config.baseIP + "add-Post";
+        String url = Config.baseIP + "post/add-post";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()

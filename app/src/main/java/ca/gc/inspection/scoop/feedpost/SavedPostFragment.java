@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop.feedpost;
 
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,21 +8,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import ca.gc.inspection.scoop.util.NetworkUtils;
+
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-
-/**
- * Fragment which acts as the main view for the viewing community feed action.
- * Responsible for creating the Presenter and Adapter
- */
-public class CommunityFeedFragment extends Fragment implements FeedPostContract.View  {
+public class SavedPostFragment extends Fragment implements FeedPostContract.View{
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
-    private FeedPostAdapter mAdapter;
+    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
     private FeedPostContract.Presenter mFeedPostPresenter;
@@ -36,7 +31,7 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
     /**
      * Empty Constructor for fragments
      */
-    public CommunityFeedFragment() {
+    public SavedPostFragment() {
     }
 
 
@@ -51,7 +46,8 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_community_feed, container, false);
+        // Fragment nested inside Activity
+        view = inflater.inflate(R.layout.fragment_saved_post, container, false);
         setPresenter(new FeedPostPresenter(this, NetworkUtils.getInstance(getContext())));
         mFeedPostPresenter.loadDataFromDatabase(getFeedType());
         return view;
@@ -71,9 +67,10 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
     /**
      * Sets the recycler view
      */
+    //TODO: what order do we want to display saved posts?
     public void setRecyclerView() {
         // setting up the recycler view
-        mRecyclerView = view.findViewById(R.id.fragment_community_feed_rv);
+        mRecyclerView = view.findViewById(R.id.fragment_saved_post_rv);
         mRecyclerView.setHasFixedSize(true);
 
         // setting the layout manager to the recycler view
@@ -88,6 +85,7 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
     }
 
     public String getFeedType(){
-        return "community";
+        return "saved";
     }
+
 }

@@ -24,7 +24,7 @@
         <activity android:name=".info.InfoActivity" />
         <activity android:name=".settings.SettingsActivity" />
         <activity android:name=".editprofile.EditProfileActivity" />
-        <activity android:name=".savedpost.SavedPostActivity" />
+        <activity android:name=".feedpost.SavedPostActivity" />
         <activity
             android:name=".createpost.CreatePostActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
