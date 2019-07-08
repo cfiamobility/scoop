@@ -22,20 +22,20 @@ public class ProfileLikesInteractor extends ProfileCommentInteractor {
     public ProfileLikesInteractor() {
     }
 
-    ProfileLikesInteractor(ProfileLikesPresenter presenter) {
+    ProfileLikesInteractor(ProfileLikesPresenter presenter,NetworkUtils network) {
         mPresenter = checkNotNull(presenter);
+        mNetwork = network;
     }
 
     /**
      * HTTP Requests to get all the user posts infos
      * @param userid: passes the userid of the profile clicked on
      */
-    public void getUserPosts(NetworkUtils network, final String userid) {
+    public void getProfileLikes(final String userid) {
         String url = Config.baseIP + "profile/getlikes/" + userid + "/" + Config.currentUser;
         String responseUrl = Config.baseIP + "profile/postimagefill/" + userid;
         JsonArrayRequest postRequest = super.newProfileJsonArrayRequest(url, responseUrl);
-        Config.requestQueue.add(postRequest);
-//        network.addToRequestQueue(postRequest);
+        mNetwork.addToRequestQueue(postRequest);
     }
 }
 

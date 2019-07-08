@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
+import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 
 public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHolder>
         implements ProfileLikesContract.View.Adapter {
@@ -24,7 +22,8 @@ public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHo
     /**
      * Constructor for the adapter
      */
-    public ProfileLikesAdapter(ProfileLikesFragment profileCommentView, ProfileLikesContract.Presenter.AdapterAPI presenter) {
+    public ProfileLikesAdapter(ProfileLikesFragment profileCommentView,
+                              ProfileLikesContract.Presenter.AdapterAPI presenter) {
         mProfileLikesView = profileCommentView;
         mProfileLikesPresenter = presenter;
         mProfileLikesPresenter.setAdapter(this);
@@ -51,16 +50,13 @@ public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHo
     @Override
     public void onBindViewHolder(@NonNull ProfileLikesViewHolder profilePostViewHolder, int i) {
         mProfileLikesPresenter.onBindViewHolderAtPosition(profilePostViewHolder, i);
-
-        // TODO use inheritance and call super? - NOTE that either onBind in Adapter or Presenter
-        // should call super but not both as it would cause the same information to be set to the view
-        // multiple times
-        mProfileLikesView.setProfileCommentImageListener(profilePostViewHolder);
-        mProfileLikesView.setProfileCommentLikesListener(profilePostViewHolder, i);
-        mProfileLikesView.setProfileCommentUserInfoListener(profilePostViewHolder,
+        PostCommentFragment.setDisplayPostListener(profilePostViewHolder,
+                mProfileLikesPresenter.getActivityIdByIndex(i));
+        PostCommentFragment.setLikesListener(profilePostViewHolder, i);
+        PostCommentFragment.setUserInfoListener(profilePostViewHolder,
                 mProfileLikesPresenter.getPosterIdByIndex(i));
 
-        mProfileLikesView.setPostOptionsListener(profilePostViewHolder);
+        ProfileLikesFragment.setPostOptionsListener(profilePostViewHolder, mProfileLikesPresenter.getActivityIdByIndex(i));
     }
 
     @Override
@@ -68,7 +64,6 @@ public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHo
         return mProfileLikesPresenter.getItemCount();
     }
 
-    // TODO remove unnecessary override?
     @Override
     public void refreshAdapter() {
         notifyDataSetChanged();

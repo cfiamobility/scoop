@@ -1,5 +1,4 @@
 package ca.gc.inspection.scoop.profilelikes;
-
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -7,14 +6,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Objects;
 
+import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.profilelikes.ProfileLike;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.profilecomment.ProfileComment;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -37,22 +35,13 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
     private ProfileLikesContract.View mProfileLikesView;
     private ProfileLikesContract.View.Adapter mAdapter;
     private ProfileLikesInteractor mProfileLikesInteractor;
-    // TODO extend JSONArray mComments, mImages, and ArrayList mProfileComments from parent
-    // - currently using mComments with extra commentsCount field
-    private ArrayList<ProfileLike> mProfileLikess;
 
-    // TODO replace overriding method by creating a DataCache object in ProfileCommentPresenter and overriding it here
-    @Override
-    protected ProfileComment getProfileCommentByIndex(int i) {
-        return getProfileLikesByIndex(i);
-    }
-
-    private ProfileLike getProfileLikesByIndex(int i) {
-
-        if (mProfileLikess == null)
+    private ProfileLike getItemByIndex(int i) {
+        if (mDataCache == null)
             return null;
-        return mProfileLikess.get(i);
+        return mDataCache.getProfileLikesByIndex(i);
     }
+
 
     /**
      * Empty constructor called by child classes (ie. FeedPostPresenter) to allow them to create
@@ -61,15 +50,14 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
     protected ProfileLikesPresenter() {
     }
 
-    ProfileLikesPresenter(@NonNull ProfileLikesContract.View viewInterface){
+    ProfileLikesPresenter(@NonNull ProfileLikesContract.View viewInterface, NetworkUtils network){
 
         setView(viewInterface);
-        setInteractor(new ProfileLikesInteractor(this));
+        setInteractor(new ProfileLikesInteractor(this, network));
 
     }
 
     public void setView(@NonNull ProfileLikesContract.View viewInterface) {
-        super.setView(viewInterface);
         mProfileLikesView = checkNotNull(viewInterface);
     }
 
@@ -88,15 +76,13 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
     }
 
     @Override
-    public void loadDataFromDatabase(NetworkUtils network, String currentUser) {
-        mProfileLikesInteractor.getUserPosts(network, currentUser);
+    public void loadDataFromDatabase(String userId) {
+        mProfileLikesInteractor.getProfileLikes(userId);
     }
 
     @Override
     public void setData(JSONArray postsResponse, JSONArray imagesResponse) {
-        mComments = postsResponse;
-        mImages = imagesResponse;
-        mProfileLikess = new ArrayList<>();
+        mDataCache = PostDataCache.createWithType(ProfileLike.class);
 
         if ((postsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of postsResponse != imagesResponse");
@@ -105,43 +91,32 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
             JSONObject jsonPost = null;
             JSONObject jsonImage = null;
             try {
-                jsonPost = mComments.getJSONObject(i);
-                jsonImage = mImages.getJSONObject(i);
+                jsonPost = postsResponse.getJSONObject(i);
+                jsonImage = imagesResponse.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            ProfileLike profilePost = new ProfileLike(jsonPost, jsonImage);
-            mProfileLikess.add(profilePost);
+            ProfileLike profileLike = new ProfileLike(jsonPost, jsonImage);
+            mDataCache.getProfileLikesList().add(profileLike);
         }
 
         mAdapter.refreshAdapter();
     }
 
     @Override
-    public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
-        super.onBindViewHolderAtPosition(viewHolderInterface, i);
-        // need to manually call overriden setPostTitle method due to super method casting viewHolderInterface down
-        ProfileLike profilePost = getProfileLikesByIndex(i);
+    public void onBindViewHolderAtPosition(ProfileLikesContract.View.ViewHolder viewHolderInterface, int i) {
+        ProfileLike profilePost = getItemByIndex(i);
+        bindProfileLikesDataToViewHolder(viewHolderInterface, profilePost);
+    }
+
+    public static void bindProfileLikesDataToViewHolder(
+            ProfileLikesContract.View.ViewHolder viewHolderInterface, ProfileLike profilePost) {
+        // call bindPostCommentDataToViewHolder instead of bindProfileCommentDataToViewHolder as we are setting a different title
+        bindPostCommentDataToViewHolder(viewHolderInterface, profilePost);
         if (profilePost != null) {
-            ((ProfileLikesContract.View.ViewHolder) viewHolderInterface)
+            viewHolderInterface
                     .setPostTitle(profilePost.getPostTitle())
                     .setCommentCount(profilePost.getCommentCount());
         }
-    }
-
-    /**
-     * Gets the item Count of the posts JSONArray
-     * @return the length
-     */
-    // TODO refactor when DataCache object is implemented
-    @Override
-    public int getItemCount() {
-        return super.getItemCount();
-    }
-
-    // TODO refactor when DataCache object is implemented
-    @Override
-    public String getPosterIdByIndex(int i) {
-        return getProfileCommentByIndex(i).getPosterId();
     }
 }

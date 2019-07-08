@@ -1,7 +1,9 @@
 package ca.gc.inspection.scoop.profilelikes;
 
 
+import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
+
 
 public interface ProfileLikesContract extends ProfileCommentContract {
     /**
@@ -29,7 +31,7 @@ public interface ProfileLikesContract extends ProfileCommentContract {
      * is further extended by FeedPostContract.
      */
 
-    interface View extends ProfileCommentContract.View {
+    interface View extends BaseView<Presenter> {
         /**
          * Implemented by the main View (ie. ProfileLikesFragment).
          * Methods specified here in the View but not in the nested View.Adapter and View.ViewHolder interfaces
@@ -48,6 +50,8 @@ public interface ProfileLikesContract extends ProfileCommentContract {
     interface Presenter extends ProfileCommentContract.Presenter {
         interface AdapterAPI extends ProfileCommentContract.Presenter.AdapterAPI {
             void setAdapter(ProfileLikesContract.View.Adapter adapter);
+            void onBindViewHolderAtPosition(
+                    ProfileLikesContract.View.ViewHolder postCommentViewHolder, int i);
         }
 
         interface ViewHolderAPI extends ProfileCommentContract.Presenter.ViewHolderAPI {

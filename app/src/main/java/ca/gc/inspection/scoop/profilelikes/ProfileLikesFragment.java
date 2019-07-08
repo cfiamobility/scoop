@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop.profilelikes;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +20,8 @@ import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesPresenter;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.PostOptionsDialog;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentFragment;
 import ca.gc.inspection.scoop.R;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -32,19 +31,19 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing profile post action.
  * Responsible for creating the Presenter and Adapter
  */
-public class ProfileLikesFragment extends ProfileCommentFragment implements ProfileLikesContract.View {
+public class ProfileLikesFragment extends Fragment implements ProfileLikesContract.View {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ProfileLikesAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String userid;
     private View view;
     private ProfileLikesContract.Presenter mProfileLikesPresenter;
 
     @Override
-    public void setPresenter(@NonNull ProfileCommentContract.Presenter presenter) {
-        mProfileLikesPresenter = (ProfileLikesContract.Presenter) checkNotNull(presenter);
+    public void setPresenter(@NonNull ProfileLikesContract.Presenter presenter) {
+        mProfileLikesPresenter = checkNotNull(presenter);
     }
 
     /**
@@ -67,8 +66,8 @@ public class ProfileLikesFragment extends ProfileCommentFragment implements Prof
         view = inflater.inflate(R.layout.fragment_profile_posts, container, false);
         Bundle bundle = getArguments();
         userid = bundle.getString("userid");
-        setPresenter(new ProfileLikesPresenter(this));
-        mProfileLikesPresenter.loadDataFromDatabase(NetworkUtils.getInstance(getContext()), Config.currentUser);
+        setPresenter(new ProfileLikesPresenter(this, NetworkUtils.getInstance(getContext())));
+        mProfileLikesPresenter.loadDataFromDatabase(userid);
         return view;
     }
 
@@ -86,7 +85,6 @@ public class ProfileLikesFragment extends ProfileCommentFragment implements Prof
     /**
      * Sets the recycler view
      */
-    @Override
     public void setRecyclerView() {
         // initializing the recycler view
         postRecyclerView = view.findViewById(R.id.fragment_profile_posts_rv);
@@ -97,21 +95,34 @@ public class ProfileLikesFragment extends ProfileCommentFragment implements Prof
         postRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting the custom adapter for the recycler view
-        mAdapter = new ProfileLikesAdapter(this, (ProfileLikesContract.Presenter.AdapterAPI) mProfileLikesPresenter);
+        mAdapter = new ProfileLikesAdapter(this,
+                (ProfileLikesContract.Presenter.AdapterAPI) mProfileLikesPresenter);
         postRecyclerView.setAdapter(mAdapter);
     }
 
-    public void setPostOptionsListener(ProfileLikesViewHolder viewHolder){
+    public static void setPostOptionsListener(ProfileLikesViewHolder viewHolder, String activityid){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostOptionsDialog bottomSheetDialog = new PostOptionsDialog();
+                // bundle
+                Bundle bundle = new Bundle();
+                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
+
+                //gets the activity id and stores in bundle to be fetched in PostOptionsDialogFragment
+                Log.i("post I am clicking: ", activityid);
+                bundle.putString("ACTIVITY_ID", activityid);
+                bottomSheetDialog.setArguments(bundle);
+
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");
+
+
+
             }
         });
     }
+
 
 }
