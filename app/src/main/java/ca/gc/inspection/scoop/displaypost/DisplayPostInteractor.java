@@ -33,7 +33,7 @@ class DisplayPostInteractor extends FeedPostInteractor {
         mNetwork = network;
     }
 
-    /** simple Post command
+    /** add post comment to a d
      *
      * @param userId current userID
      * @param comment user inputted comment
@@ -93,6 +93,12 @@ class DisplayPostInteractor extends FeedPostInteractor {
         mNetwork.addToRequestQueue(postRequest);
     }
 
+    /**
+     * Create JsonArrayRequest to get the post (excluding comments)
+     * @param url
+     * @param responseUrl
+     * @return
+     */
     public JsonArrayRequest newSingleDisplayPostJsonArrayRequest(String url, String responseUrl) {
         return new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -134,12 +140,12 @@ class DisplayPostInteractor extends FeedPostInteractor {
     }
 
     /**
-     * HTTPRequests for post comments and images
+     * HTTPRequest to get the post (excluding comments)
      * @param activityId: activityId of Post
      */
     public void getDetailedPost(String activityId) {
-        String url = Config.baseIP + "display-post/detailedpost/text/" + activityId + "/" + Config.currentUser;
-        String responseUrl = Config.baseIP + "display-post/detailedpost/image/" + activityId;
+        String url = Config.baseIP + "post/detailed-post/text/" + activityId + "/" + Config.currentUser;
+        String responseUrl = Config.baseIP + "post/detailed-post/image/" + activityId;
         JsonArrayRequest commentRequest = newSingleDisplayPostJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(commentRequest);
     }

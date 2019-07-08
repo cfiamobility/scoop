@@ -4,7 +4,7 @@ import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
 /**
- * A contract between the View (layer) and Presenter for the replying to a post
+ * A contract between the View (layer) and Presenter for the viewing profile comments
  * action. This contract communicates the how the View and Presenter will
  * interact with each other.
  *
