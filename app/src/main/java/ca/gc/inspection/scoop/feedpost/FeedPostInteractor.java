@@ -26,8 +26,8 @@ public class FeedPostInteractor extends ProfilePostInteractor {
     }
 
     public void getFeedPosts(String feedType) {
-        String URL = Config.baseIP + "post/display-post/" + feedType + "/" + Config.currentUser;
-        String imageURL = Config.baseIP + "post/display-post-images/" + feedType + "/" + Config.currentUser;
+        String URL = Config.baseIP + "post/feed-text/" + feedType + "/" + Config.currentUser;
+        String imageURL = Config.baseIP + "post/feed-images/" + feedType + "/" + Config.currentUser;
         JsonArrayRequest feedPostRequest = newProfileJsonArrayRequest(URL, imageURL);
         mNetwork.addToRequestQueue(feedPostRequest);
     }

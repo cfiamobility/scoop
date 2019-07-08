@@ -98,7 +98,7 @@ public class PostCommentInteractor {
             int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
-        String URL = Config.baseIP + "display-post/updatelikes";
+        String URL = Config.baseIP + "post/update-like";
         //sends a PUT request to update new likes
         StringRequest request = newLikesStringRequest(
                 Request.Method.PUT, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
@@ -122,7 +122,7 @@ public class PostCommentInteractor {
             int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
         Log.i("hello", "should be here");
-        String URL = Config.baseIP + "display-post/insertlikes";
+        String URL = Config.baseIP + "post/insert-like";
         String likeCount = "1";
 
         StringRequest request = newLikesStringRequest(
@@ -190,8 +190,8 @@ public class PostCommentInteractor {
      * @param activityId: activityId of Post
      */
     public void getPostComments(String activityId) {
-        String url = Config.baseIP + "display-post/postcomments/text/" + activityId + "/" + Config.currentUser;
-        String responseUrl = Config.baseIP + "display-post/postcomments/images/" + activityId;
+        String url = Config.baseIP + "post/display-comments/text/" + activityId + "/" + Config.currentUser;
+        String responseUrl = Config.baseIP + "post/display-comments/images/" + activityId;
         JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(commentRequest);
     }
