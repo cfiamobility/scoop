@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.postcomment;
 
 import java.util.ArrayList;
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
+import ca.gc.inspection.scoop.profilelikes.ProfileLike;
 import ca.gc.inspection.scoop.profilepost.ProfilePost;
 import ca.gc.inspection.scoop.feedpost.FeedPost;
 
@@ -26,6 +27,8 @@ public class PostDataCache {
             mDataCache = new DataCache<ProfilePost>();
         else if (mPostDataType == FeedPost.class)
             mDataCache = new DataCache<FeedPost>();
+        else if (mPostDataType == ProfileLike.class)
+            mDataCache = new DataCache<ProfileLike>();
     }
 
     @SuppressWarnings("unchecked")
@@ -46,6 +49,13 @@ public class PostDataCache {
     public ProfilePost getProfilePostByIndex(int i) {
         if (ProfilePost.class.isAssignableFrom(mPostDataType))
             return ((DataCache<ProfilePost>) mDataCache).getItemByIndex(i);
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public ProfileLike getProfileLikesByIndex(int i) {
+        if (ProfileLike.class.isAssignableFrom(mPostDataType))
+            return ((DataCache<ProfileLike>) mDataCache).getItemByIndex(i);
         return null;
     }
 
@@ -79,6 +89,13 @@ public class PostDataCache {
     public ArrayList<ProfilePost> getProfilePostList() {
         if (ProfilePost.class.isAssignableFrom(mPostDataType))
             return ((DataCache<ProfilePost>) mDataCache).mList;
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<ProfileLike> getProfileLikesList() {
+        if (ProfileLike.class.isAssignableFrom(mPostDataType))
+            return ((DataCache<ProfileLike>) mDataCache).mList;
         return null;
     }
 
