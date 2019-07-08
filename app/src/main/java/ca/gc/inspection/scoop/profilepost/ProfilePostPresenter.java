@@ -117,10 +117,4 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
                     .setCommentCount(profilePost.getCommentCount());
         }
     }
-
-    @Override
-    public String getPosterIdByIndex(int i) {
-        return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
-    }
-
 }

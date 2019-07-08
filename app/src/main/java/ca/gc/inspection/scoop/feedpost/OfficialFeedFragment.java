@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.R;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -26,7 +24,6 @@ public class OfficialFeedFragment extends Fragment implements FeedPostContract.V
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
     private FeedPostContract.Presenter mFeedPostPresenter;
-
 
     @Override
     public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {

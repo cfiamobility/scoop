@@ -32,7 +32,7 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ProfilePostAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String userid;
     private View view;

@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO refactor Profile into MVP architecture
+// these methods can be in an Interactor
 class ProfileScreenController {
 
 	// Request to get the current user's profile information

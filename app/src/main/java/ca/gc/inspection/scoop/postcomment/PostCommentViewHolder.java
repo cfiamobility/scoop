@@ -152,18 +152,18 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
         return this;
     }
 
-    public void changeUpvoteLikeState(PostCommentViewHolder viewHolder, int i) {
+    public void changeUpvoteLikeState(int i) {
         try {
-            mPresenter.changeUpvoteLikeState(viewHolder, i);
+            mPresenter.changeUpvoteLikeState(this, i);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void changeDownvoteLikeState(PostCommentViewHolder viewHolder, int i) {
+    public void changeDownvoteLikeState(int i) {
         try {
-            mPresenter.changeDownvoteLikeState(viewHolder, i);
+            mPresenter.changeDownvoteLikeState(this, i);
         }
         catch (Exception e) {
             e.printStackTrace();

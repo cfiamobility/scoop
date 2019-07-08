@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.postcomment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,16 +9,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import ca.gc.inspection.scoop.Config;
+import android.widget.Toast;
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -27,6 +29,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  */
 public abstract class PostCommentFragment extends Fragment implements PostCommentContract.View {
 
+    private final static String TAG = "PostCommentFragment";
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
     private PostCommentAdapter mAdapter;
@@ -34,6 +37,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
     private View view;
     private PostCommentContract.Presenter mPostCommentPresenter;
 
+    @Override
     public void setPresenter (@NonNull PostCommentContract.Presenter presenter){
         mPostCommentPresenter = checkNotNull(presenter);
     }
@@ -51,7 +55,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
         setPresenter(new PostCommentPresenter(this, NetworkUtils.getInstance(getContext())));
-        mPostCommentPresenter.loadDataFromDatabase(Config.currentUser);
+        // No need to load data from database as this fragment is abstract
         return view;
     }
 
@@ -89,14 +93,14 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHolder.changeUpvoteLikeState(viewHolder, i); //changes upvote state on click
+                viewHolder.changeUpvoteLikeState(i); //changes upvote state on click
             }
         });
 
         viewHolder.downvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHolder.changeDownvoteLikeState(viewHolder, i); //changes downvote state on click
+                viewHolder.changeDownvoteLikeState(i); //changes downvote state on click
             }
         });
     }
@@ -118,12 +122,19 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         });
     }
 
-    public static void setDisplayPostListener(PostCommentViewHolder viewHolder){
+    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.getContext().startActivity(new Intent(v.getContext(), DisplayPostActivity.class));
+                Context context = v.getContext();
+                if (context.getClass() == DisplayPostActivity.class)
+                    Log.d(TAG, "Already displaying post!");
+                else {
+                    Intent intent = new Intent(context, DisplayPostActivity.class);
+                    intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
+                    context.startActivity(intent);
+                }
             }
         });
     }

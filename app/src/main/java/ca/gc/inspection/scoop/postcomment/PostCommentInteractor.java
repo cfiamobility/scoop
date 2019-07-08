@@ -186,12 +186,12 @@ public class PostCommentInteractor {
     }
 
     /**
-     * HTTPRequests for comments and profile images
-     * @param userid: userid
+     * HTTPRequests for post comments and images
+     * @param activityId: activityId of Post
      */
-    public void getPostComments(final String userid) {
-        String url = Config.baseIP + "profile/commenttextfill/" + userid + "/" + Config.currentUser;
-        String responseUrl = Config.baseIP + "profile/commentimagefill/" + userid;
+    public void getPostComments(String activityId) {
+        String url = Config.baseIP + "display-post/postcomments/text/" + activityId + "/" + Config.currentUser;
+        String responseUrl = Config.baseIP + "display-post/postcomments/images/" + activityId;
         JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(commentRequest);
     }
