@@ -51,7 +51,7 @@ public class DisplayPostAdapter extends RecyclerView.Adapter<PostCommentViewHold
     public void onBindViewHolder(@NonNull PostCommentViewHolder viewHolder, int i) {
         if (viewHolder.getItemViewType() == 0) {
             mDisplayPostPresenter.onBindViewHolder((FeedPostContract.View.ViewHolder) viewHolder);
-            ProfilePostFragment.setPostOptionsListener((ProfilePostViewHolder) viewHolder);
+//            ProfilePostFragment.setPostOptionsListener((ProfilePostViewHolder) viewHolder);
         }
         else {
             mDisplayPostPresenter.onBindViewHolderAtPosition(viewHolder, i);
