@@ -1,12 +1,9 @@
 package ca.gc.inspection.scoop.profile;
 
-
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -18,23 +15,22 @@ import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
 import java.util.HashMap;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.editprofile.EditProfileActivity;
-import ca.gc.inspection.scoop.splashscreen.SplashScreenContract;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * - ProfileFragment is the screen that is displayed when the profile tab is clicked in the navigation bar
+ * - It holds the profile information as well as a frame (ViewPagerAdapater) to display the three profile tabs and the respective fragments
+ * - This is one of two Views for the Profile action case
  */
-public class ProfileFragment extends Fragment implements ProfileContract.View {
+public class ProfileFragment extends OtherUserFragment {
 
     // UI Declarations
     static CircleImageView profileImageIV;
@@ -48,27 +44,39 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     // reference to the Presenter
     private ProfileContract.Presenter mProfilePresenter;
 
-
     public ProfileFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Invoked by the View in onCreateView in which it constructs the Presenter
+     * @param presenter Presenter to be associated with the View and access later
+     */
     public void setPresenter(ProfileContract.Presenter presenter) {
         mProfilePresenter = presenter;
     }
 
-
+    /**
+     * Creates the View and populates it with the associate Android Views of the Profile Screen
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         setPresenter(new ProfilePresenter(this, NetworkUtils.getInstance(getContext())));
 
+        //Getting the user's information
+        mProfilePresenter.getUserInfo(Config.currentUser);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Getting the activity from the view
-        activity = (Activity) view.getContext();
+//        // Getting the activity from the view
+//        activity = (Activity) view.getContext();
 
         // ImageView Definitions
         profileImageIV = view.findViewById(R.id.fragment_profile_img_profile);
@@ -132,21 +140,21 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
             }
         });
 
-        //Getting the user's information
-        mProfilePresenter.getUserInfo();
-
         return view;
     }
 
-
+    /**
+     * Invoked by the Presenter and stores all profile information pulled from database into respective Views
+     * @param profileInfoFields HashMap of profile information for each field
+     */
     public void setProfileInfoFields(HashMap<String, String> profileInfoFields) {
         fullNameTV.setText(profileInfoFields.get("fullname"));
         profileImageIV.setImageBitmap(CameraUtils.stringToBitmap(profileInfoFields.get("profileImageEncoded")));
 
-        displaySocialMediaTR(profileInfoFields.get("twitterURL"), twitterTR, twitterTV);
-        displaySocialMediaTR(profileInfoFields.get("linkedinURL"), linkedinTR, linkedinTV);
-        displaySocialMediaTR(profileInfoFields.get("facebookURL"), facebookTR, facebookTV);
-        displaySocialMediaTR(profileInfoFields.get("instagramURL"), instagramTR, instagramTV);
+        displaySocialMediaTR(profileInfoFields.get("twitterURL"), twitterTR, twitterTV, "twitter");
+        displaySocialMediaTR(profileInfoFields.get("linkedinURL"), linkedinTR, linkedinTV, "linkedin");
+        displaySocialMediaTR(profileInfoFields.get("facebookURL"), facebookTR, facebookTV, "facebook");
+        displaySocialMediaTR(profileInfoFields.get("instagramURL"), instagramTR, instagramTV, "instagram");
 
         if (profileInfoFields.get("role").equals("")) {
             roleTV.setVisibility(View.GONE);
@@ -159,38 +167,6 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
             locationTV.setVisibility(View.GONE);
         } else {
             locationTV.setText(profileInfoFields.get("location"));
-        }
-    }
-
-    protected void displaySocialMediaTR(String socialMediaUrl, TableRow socialMediaTR, TextView socialMediaTV) {
-        if (socialMediaUrl.equals("null")) {
-            socialMediaTR.setVisibility(View.GONE);
-        } else {
-            socialMediaTV.setText(socialMediaUrl);
-            SocialClicked(socialMediaUrl, socialMediaTR);
-        }
-    }
-
-    /**
-     * Setting onclick listeners for the social media text views
-     *
-     * @param url
-     * @param tableRow
-     */
-    //TODO setup activity properly to open apps/prompt app store
-    protected void SocialClicked(final String url, final TableRow tableRow) {
-        if (url != null) {
-            tableRow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Opens social media on chosen application
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    intent.setData(Uri.parse(url));
-                    activity.startActivity(intent);
-                }
-            });
         }
     }
 

@@ -177,19 +177,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
      */
 	public static void otherUserClicked(String userid) {
         if (userid != null) {
-            // Initializing the other user's fragment
-            Fragment otherUserFragment = new OtherUserFragment();
-
-            // Passing the userid to the other user fragment using bundles
-            Bundle bundle = new Bundle();
-            bundle.putString("userid", userid);
-            otherUserFragment.setArguments(bundle);
-
-            // Fragment transaction, adds the other user's profile fragment onto the framelayout
-            FragmentTransaction fragmentTransaction = manager.beginTransaction();
-            fragmentTransaction.add(R.id.main, otherUserFragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+//            // Initializing the other user's fragment
+//            Fragment otherUserFragment = new OtherUserFragment();
+//
+//            // Passing the userid to the other user fragment using bundles
+//            Bundle bundle = new Bundle();
+//            bundle.putString("userid", userid);
+//            otherUserFragment.setArguments(bundle);
+//
+//            // Fragment transaction, adds the other user's profile fragment onto the framelayout
+//            FragmentTransaction fragmentTransaction = manager.beginTransaction();
+//            fragmentTransaction.add(R.id.main, otherUserFragment);
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
         }
     }
 

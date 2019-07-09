@@ -125,7 +125,8 @@
 
         <TableRow
             android:id="@+id/fragment_other_user_tr_instagram"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            >
 
             <ImageView
                 android:id="@+id/fragment_other_user_img_instagram"
