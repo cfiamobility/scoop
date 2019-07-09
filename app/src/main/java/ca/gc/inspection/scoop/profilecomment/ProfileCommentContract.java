@@ -50,6 +50,7 @@ public interface ProfileCommentContract extends PostCommentContract {
             void setAdapter(ProfileCommentContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
                     ProfileCommentContract.View.ViewHolder postCommentViewHolder, int i);
+            String getReferenceIdByIndex(int i);
         }
 
         interface ViewHolderAPI extends PostCommentContract.Presenter.ViewHolderAPI {
