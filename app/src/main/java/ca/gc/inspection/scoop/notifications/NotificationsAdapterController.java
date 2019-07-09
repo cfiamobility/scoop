@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.MyApplication;
+import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.*;
-import ca.gc.inspection.scoop.Post;
 
 /**
  * Controls logic of notifications recyclerView items/view holders
@@ -92,17 +92,17 @@ public class NotificationsAdapterController {
     }
 
     /**
-     * Description: gets when the notification was created and returns in proper string format
+     * Description: gets when the notification was created/modified and returns in proper string format
      *
      * @return time string or null if there isn't a proper date
      */
     private String setTodayTime() {
         try {
-            String createdDate = notification.getString("createddate"); //gets when the notification was created
+            String modifiedDate = notification.getString("modifieddate"); //gets when the notification was created/modified
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // set timezone format of timestamp from server to UTC.
                 // NOTE: time zone of database is EDT, but, when queried, the database returns timestamps in UTC
-            Date parsedDate = dateFormat.parse(createdDate); //parses the created date to be in specified date format
+            Date parsedDate = dateFormat.parse(modifiedDate); //parses the created date to be in specified date format
             SimpleDateFormat currentTimeFormat = new SimpleDateFormat();
             TimeZone gmtTime = TimeZone.getTimeZone("GMT");
             currentTimeFormat.setTimeZone(gmtTime);
@@ -144,13 +144,13 @@ public class NotificationsAdapterController {
     }
 
     /**
-     * Description: gets when notification was created and returns in proper string format
+     * Description: gets when notification was created/modified and returns in proper string format
      *
      * @return time string or null if there isn't a proper date
      */
     private String setRecentTime() {
         try {
-            String time = notification.getString("createddate"); //gets when notification was created
+            String time = notification.getString("modifieddate"); //gets when notification was created/modified
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
             Date parsedDate = dateFormat.parse(time); //parses the created date to be in specified date format
             DateFormat properDateFormat = new SimpleDateFormat("MMMM d 'at' h:mm a"); //formats the date to be how we want it to output
@@ -167,7 +167,8 @@ public class NotificationsAdapterController {
      * @throws JSONException
      */
     private void setActivity() throws JSONException {
-        final String[] actionTypeResponses = new String[]{"X", "posted", "commented on"}; //the possible actionType responses for activityid
+        // first "liked" is for posts, second "liked is for comments
+        final String[] actionTypeResponses = new String[]{"X", "liked", "liked"}; //the possible actionType responses for activityid
         final String referenceActivityId = notification.getString("activityactivityreference"); //gets the id for which the activity is referencing towards
         final int activityType = Integer.parseInt(notification.getString("activityactivitytype")); //gets the activity's activity type
         ids.put("userid", notification.getString("userid")); //puts the corresponding user id into the map
@@ -212,7 +213,7 @@ public class NotificationsAdapterController {
      * @param ids: representing the user id and the activity id
      */
     private void goToPost(Map<String, String> ids) {
-        Intent intent = new Intent(MyApplication.getContext(), Post.class);
+        Intent intent = new Intent(MyApplication.getContext(), DisplayPostActivity.class);
         intent.putExtra("activityid", ids.get("activityid")); //puts the activity id into the intent
         MyApplication.getContext().startActivity(intent); //changes to the Post activity
     }
@@ -225,7 +226,7 @@ public class NotificationsAdapterController {
      * @throws JSONException
      */
     private void checkReferenceActivityId(String referenceActivityId, JSONObject activityResponse) throws JSONException {
-        final String[] activityTypeResponses = new String[]{"your post", "a new post"}; //the possible activityType responses for activityid
+        final String[] activityTypeResponses = new String[]{"your comment", "your post"}; //the possible activityType responses for activityid
         if (!referenceActivityId.equals("null")) { //if there is a reference activity id (the activity is not a post)
             notificationsAdapterInterface.setActivityType(activityTypeResponses[0], holder); //sets the activity type response
             ids.put("activityid", activityResponse.getString("activityactivityreference")); //puts the activity reference id into the ids map

@@ -47,10 +47,8 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     }
 
     ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewInterface, NetworkUtils network){
-
         setView(viewInterface);
         setInteractor(new ProfileCommentInteractor(this, network));
-
     }
 
     public void setView(@NonNull ProfileCommentContract.View viewInterface) {
@@ -69,7 +67,11 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
 
     @Override
     public void loadDataFromDatabase(String currentUser) {
-        mProfileCommentInteractor.getPostComments(currentUser);
+        mProfileCommentInteractor.getProfileComments(currentUser);
+    }
+
+    public String getReferenceIdByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getReferenceID();
     }
 
     @Override
