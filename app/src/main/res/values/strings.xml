@@ -28,6 +28,11 @@
     <string name="twitter">Twitter</string>
     <string name="facebook">Facebook</string>
     <string name="instagram">Instagram</string>
+    <string name="linkedURL">linkedin.com/in/</string>
+    <string name="twitterURL">twitter.com/</string>
+    <string name="facebookURL">facebook.com/</string>
+    <string name="instagramURL">instagram.com/</string>
+    <string name="username">username</string>
     <string name="city">City</string>
     <string name="province">Province</string>
     <string name="save">Save</string>
