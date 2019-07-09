@@ -456,7 +456,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 				Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 
 				// saves the file here
-				File f = new File(currentPhotoPath);
+				File f = new File(CameraUtils.currentPhotoPath);
 				Uri contentUri = Uri.fromFile(f);
 				mediaScanIntent.setData(contentUri);
 				// Literally don't know what this does but itll break if you touch any of this. Copied most of this method from the documentation, goodluck.
@@ -467,7 +467,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 				int targetH = previewProfilePic.getHeight();
 				BitmapFactory.Options bmOptions = new BitmapFactory.Options();
 				bmOptions.inJustDecodeBounds = true;
-				BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+				BitmapFactory.decodeFile(CameraUtils.currentPhotoPath, bmOptions);
 				int photoW = bmOptions.outWidth;
 				int photoH = bmOptions.outHeight;
 				int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
@@ -476,10 +476,10 @@ public class EditProfileActivity extends AppCompatActivity implements
 				bmOptions.inPurgeable = true;
 
 				// getting the bitmap to be corrected
-				Bitmap oldBitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+				Bitmap oldBitmap = BitmapFactory.decodeFile(CameraUtils.currentPhotoPath, bmOptions);
 
 				// correcting the bitmap
-				bitmap = imageOrientationValidator(oldBitmap, currentPhotoPath);
+				bitmap = imageOrientationValidator(oldBitmap, CameraUtils.currentPhotoPath);
 
 				// Setting the image
 				previewProfilePic.setImageBitmap(bitmap);
