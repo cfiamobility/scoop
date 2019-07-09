@@ -128,9 +128,6 @@ public class PostCommentInteractor {
             @Override
             public void onResponse(String response) {
                 Log.i("response", response);
-                // TODO update the likestate/likecount UI based on database response -> need fast database response
-//                mPresenter.updateLikeState(viewHolderInterface, i, likeType);
-//                mPresenter.updateLikeCount(viewHolderInterface, i, likeCount);
             }
         }, new Response.ErrorListener() {
             @Override

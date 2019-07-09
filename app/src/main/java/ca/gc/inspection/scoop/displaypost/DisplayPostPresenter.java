@@ -44,7 +44,6 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     DisplayPostPresenter(@NonNull DisplayPostContract.View activityViewInterface, NetworkUtils network) {
         setView(activityViewInterface);
         setInteractor(new DisplayPostInteractor(this, network));
-        mDataCache = PostDataCache.createWithType(FeedPost.class);
     }
 
     public void setView(@NonNull DisplayPostContract.View viewInterface) {
@@ -71,6 +70,11 @@ class DisplayPostPresenter extends FeedPostPresenter implements
 
     @Override
     public void loadDataFromDatabase(String activityId) {
+        if (mDataCache == null)
+            mDataCache = PostDataCache.createWithType(FeedPost.class);
+        else mDataCache.getFeedPostList().clear();
+        wasDataSet = false;
+        Log.d(TAG, "data cache length = "+getItemCount());
         mDisplayPostInteractor.getDetailedPost(activityId);
         mDisplayPostInteractor.getPostComments(activityId);
     }
@@ -130,7 +134,9 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         mDisplayPostInteractor.addPostComment(currentUserId, commentText, activityId);
     }
 
-    public void updateDisplay() {
-        mAdapter.refreshAdapter();
+    public void onAddPostComment(boolean success, String activityId) {
+        if (success)
+            loadDataFromDatabase(activityId);
+        mActivityView.onAddPostComment(success);
     }
 }

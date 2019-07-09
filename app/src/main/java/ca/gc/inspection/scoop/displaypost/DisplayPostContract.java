@@ -41,6 +41,8 @@ public interface DisplayPostContract extends FeedPostContract {
 
     interface View extends BaseView<Presenter> {
 
+        void onAddPostComment(boolean success);
+
         interface Fragment extends BaseView<Presenter.FragmentAPI> {
 
             interface Adapter extends FeedPostContract.View.Adapter {
