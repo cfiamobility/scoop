@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.MyApplication;
+import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.*;
-import ca.gc.inspection.scoop.Post;
 
 /**
  * Controls logic of notifications recyclerView items/view holders
@@ -212,7 +212,7 @@ public class NotificationsAdapterController {
      * @param ids: representing the user id and the activity id
      */
     private void goToPost(Map<String, String> ids) {
-        Intent intent = new Intent(MyApplication.getContext(), Post.class);
+        Intent intent = new Intent(MyApplication.getContext(), DisplayPostActivity.class);
         intent.putExtra("activityid", ids.get("activityid")); //puts the activity id into the intent
         MyApplication.getContext().startActivity(intent); //changes to the Post activity
     }

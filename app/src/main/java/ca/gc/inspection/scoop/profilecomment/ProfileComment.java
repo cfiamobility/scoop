@@ -35,4 +35,16 @@ public class ProfileComment extends PostComment {
     public String getPostTitle() {
         return "Replying to " + getPostFirstName() + " " + getPostLastName() + "'s post";
     }
+
+    public static final String PROFILE_COMMENT_REFERENCE_ID = "activityreference";
+
+    public String getReferenceID() {
+        try {
+            return mComment.getString(PROFILE_COMMENT_REFERENCE_ID);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 }
