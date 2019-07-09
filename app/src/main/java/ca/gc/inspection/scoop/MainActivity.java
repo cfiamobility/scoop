@@ -26,6 +26,7 @@ import android.view.View;
 import ca.gc.inspection.scoop.createpost.CreatePostActivity;
 import ca.gc.inspection.scoop.info.InfoActivity;
 import ca.gc.inspection.scoop.feedpost.SavedPostActivity;
+import ca.gc.inspection.scoop.profile.OtherUserFragment;
 import ca.gc.inspection.scoop.search.SearchActivity;
 import ca.gc.inspection.scoop.settings.SettingsActivity;
 import ca.gc.inspection.scoop.splashscreen.SplashScreenActivity;

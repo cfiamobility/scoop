@@ -1,6 +1,7 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.profile;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -15,21 +16,33 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO refactor Profile into MVP architecture
-// these methods can be in an Interactor
-class ProfileScreenController {
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
-	// Request to get the current user's profile information
-	public static void getUserInfo(Context context) {
-		RequestQueue requestQueue = Volley.newRequestQueue(context);
+public class ProfileInteractor {
 
+    protected ProfilePresenter mPresenter;
+    public NetworkUtils mNetwork;
+
+    protected ProfileInteractor(){
+
+    }
+
+    ProfileInteractor(ProfilePresenter presenter, NetworkUtils network){
+        mPresenter = presenter;
+        mNetwork = network;
+    }
+
+
+    // Request to get the current user's profile information
+	public void getUserInfo() {
 		String url = Config.baseIP + "profile/initialfill/" + Config.currentUser;
 
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
 				// Sending the response back to be decomposed
-				ProfileFragment.informationRespone(response);
+				mPresenter.informationResponse(response);
 			}
 		}, new Response.ErrorListener() {
 			@Override
@@ -44,20 +57,21 @@ class ProfileScreenController {
 			}
 		};
 		// submitting the request
-		requestQueue.add(jsonObjectRequest);
+		mNetwork.addToRequestQueue(jsonObjectRequest);
 	}
 
-	// Request to get the clicked on user's profile information
-	public static void getOtherUserInfo(Context context, String userid) {
-		RequestQueue requestQueue = Volley.newRequestQueue(context);
 
+
+
+	// Request to get the clicked on user's profile information
+	public void getOtherUserInfo(String userid) {
 		String url = Config.baseIP + "profile/initialfill/" + userid;
 
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
 				// Sending the response back to be decomposed
-				OtherUserFragment.otherInformationRespone(response);
+				mPresenter.informationResponse(response);
 			}
 		}, new Response.ErrorListener() {
 			@Override
@@ -72,6 +86,7 @@ class ProfileScreenController {
 			}
 		};
 		// submitting the request
-		requestQueue.add(jsonObjectRequest);
+        mNetwork.addToRequestQueue(jsonObjectRequest);
 	}
+
 }
