@@ -71,7 +71,6 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
 
     /**
      * Provides information to the Interactor and invokes different methods based on given feed type
-     * @param network Allows save post information to be added to singleton request queue
      * @param feedType Type of feed (Community/Official vs Saved)
      */
     @Override

@@ -100,6 +100,12 @@ public class ProfileLikesFragment extends Fragment implements ProfileLikesContra
         postRecyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mProfileLikesPresenter.loadDataFromDatabase(userid);
+    }
+
     public static void setPostOptionsListener(ProfileLikesViewHolder viewHolder, String activityid){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {

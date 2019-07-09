@@ -35,6 +35,7 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
     private ProfileCommentAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
+    private String userid;
     private ProfileCommentContract.Presenter mProfileCommentPresenter;
 
     @Override
@@ -60,8 +61,10 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profile_comments, container, false);
+        Bundle bundle = getArguments();
+        userid = bundle.getString("userid");
         setPresenter(new ProfileCommentPresenter(this, NetworkUtils.getInstance(getContext())));
-        mProfileCommentPresenter.loadDataFromDatabase(Config.currentUser);
+        mProfileCommentPresenter.loadDataFromDatabase(userid);
         return view;
     }
 
@@ -74,6 +77,12 @@ public class ProfileCommentFragment extends Fragment implements ProfileCommentCo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setRecyclerView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mProfileCommentPresenter.loadDataFromDatabase(userid);
     }
 
     /**

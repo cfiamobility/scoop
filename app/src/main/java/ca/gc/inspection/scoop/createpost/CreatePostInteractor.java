@@ -17,9 +17,9 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 public class CreatePostInteractor {
 
-    private CreatePostContract.Presenter mPresenter;
+    private CreatePostPresenter mPresenter;
 
-    CreatePostInteractor(CreatePostContract.Presenter presenter) {
+    CreatePostInteractor(CreatePostPresenter presenter) {
         mPresenter = presenter;
     }
 
@@ -44,6 +44,10 @@ public class CreatePostInteractor {
                         Log.d("Response", response);
                         if (response.contains("Success")){
                             Log.i("Info", "We good");
+                            mPresenter.onPostCreated(true);
+                        }
+                        else {
+                            mPresenter.onPostCreated(false);
                         }
                     }
                 },
@@ -53,6 +57,7 @@ public class CreatePostInteractor {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", String.valueOf(error));
+                        mPresenter.onPostCreated(false);
                     }
                 }
         ) {

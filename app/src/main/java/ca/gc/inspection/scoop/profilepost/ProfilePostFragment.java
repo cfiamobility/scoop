@@ -97,6 +97,12 @@ public class ProfilePostFragment extends Fragment implements ProfilePostContract
         postRecyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mProfilePostPresenter.loadDataFromDatabase(userid);
+    }
+
     public static void setPostOptionsListener(ProfilePostViewHolder viewHolder, String activityid){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {

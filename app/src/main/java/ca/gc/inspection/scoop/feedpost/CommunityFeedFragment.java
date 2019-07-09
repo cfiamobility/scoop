@@ -87,6 +87,12 @@ public class CommunityFeedFragment extends Fragment implements FeedPostContract.
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mFeedPostPresenter.loadDataFromDatabase(getFeedType());
+    }
+
     public String getFeedType(){
         return "community";
     }

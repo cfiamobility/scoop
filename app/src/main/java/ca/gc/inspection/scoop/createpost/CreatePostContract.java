@@ -11,6 +11,7 @@ public interface CreatePostContract {
 
     interface View extends BaseView<Presenter> {
 
+        void onPostCreated(boolean success);
     }
 
     interface Presenter extends BasePresenter {
