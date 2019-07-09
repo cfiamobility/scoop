@@ -125,7 +125,7 @@ public class ProfileFragment extends OtherUserFragment {
 
         // a select listener to display the right tab fragment
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
@@ -142,6 +142,7 @@ public class ProfileFragment extends OtherUserFragment {
 
         return view;
     }
+
 
     /**
      * Invoked by the Presenter and stores all profile information pulled from database into respective Views
