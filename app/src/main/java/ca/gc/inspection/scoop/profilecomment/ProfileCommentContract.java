@@ -36,6 +36,9 @@ public interface ProfileCommentContract extends PostCommentContract {
          * explain how the Presenter is to communicate with the main View only.
          */
 
+        void onLoadedDataFromDatabase();
+
+
         interface Adapter extends PostCommentContract.View.Adapter {
         }
 

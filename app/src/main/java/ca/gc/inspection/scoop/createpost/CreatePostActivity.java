@@ -63,6 +63,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         public void afterTextChanged(Editable s) {
         }
     };
+    private boolean creatingPost = false;
 
     public void returnToPrevious (View view) {
         finish();
@@ -256,21 +257,29 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
             Toast.makeText(this, "Add a title to continue", Toast.LENGTH_SHORT).show();
         } else if (postText.isEmpty()) {
             Toast.makeText(this, "Add a message to continue", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if (!creatingPost) {
+            creatingPost = true;
             String imageBitmap = "";
             if (postImage != null) {
                 imageBitmap = CameraUtils.bitmapToString(((BitmapDrawable) postImage).getBitmap());
                 Log.i("bitmap", imageBitmap);
             }
             mPresenter.sendPostToDatabase(NetworkUtils.getInstance(this), Config.currentUser, postTitle, postText, imageBitmap);
-
-            //TODO: Might have bug - activity did not finish after creating post but sent to database
-            finish();
         }
     }
 
     public void setBitmapWithLayout(ViewGroup.LayoutParams layoutParams, Bitmap newBitmap) {
         postImage.setLayoutParams(layoutParams);
         postImage.setImageBitmap(newBitmap);
+    }
+
+    public void onPostCreated(boolean success) {
+        String toastMessage;
+        if (success)
+            toastMessage = "Post created!";
+        else
+            toastMessage = "Failed to create post";
+        Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

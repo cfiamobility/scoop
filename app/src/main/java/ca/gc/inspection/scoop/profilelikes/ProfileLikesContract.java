@@ -38,6 +38,9 @@ public interface ProfileLikesContract extends ProfileCommentContract {
          * explain how the Presenter is to communicate with the main View only.
          */
 
+        void onLoadedDataFromDatabase();
+
+
         interface Adapter extends ProfileCommentContract.View.Adapter {
         }
 

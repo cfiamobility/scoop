@@ -21,6 +21,9 @@ public interface NotificationsContract {
      * interface to be implemented by the NotificationsFragment class
      */
     interface View extends BaseView<Presenter> {
+
+        void onLoadedDataFromDatabase();
+
         void setRecentRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notifications, JSONArray images);
 
         void setTodayRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notifications, JSONArray images);

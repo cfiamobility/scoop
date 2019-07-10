@@ -29,6 +29,7 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     private DisplayPostContract.View.Fragment.Adapter mAdapter;
     private DisplayPostInteractor mDisplayPostInteractor;
     private boolean wasDataSet = false;
+    private boolean refreshingData = false;
 
     private PostComment getItemByIndex(int i) {
         if (mDataCache == null)
@@ -71,8 +72,14 @@ class DisplayPostPresenter extends FeedPostPresenter implements
 
     @Override
     public void loadDataFromDatabase(String activityId) {
-        mDisplayPostInteractor.getDetailedPost(activityId);
-        mDisplayPostInteractor.getPostComments(activityId);
+        if (!refreshingData) {
+            refreshingData = true;
+            mDataCache.getFeedPostList().clear();
+            wasDataSet = false;
+            Log.d(TAG, "data cache length = " + getItemCount());
+            mDisplayPostInteractor.getDetailedPost(activityId);
+            mDisplayPostInteractor.getPostComments(activityId);
+        }
     }
 
     public void setDetailedPostData(JSONArray postTextResponse, JSONArray postImageResponse) {
@@ -87,8 +94,11 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         FeedPost feedPost = new FeedPost(jsonPost, jsonImage);
         mDataCache.getFeedPostList().add(0, feedPost);
 
-        if (wasDataSet)
+        if (wasDataSet) {
+            refreshingData = false;
             mAdapter.refreshAdapter();
+            mFragmentView.onLoadedDataFromDatabase();
+        }
         wasDataSet = true;
     }
 
@@ -110,8 +120,11 @@ class DisplayPostPresenter extends FeedPostPresenter implements
             mDataCache.getPostCommentList().add(postComment);
         }
 
-        if (wasDataSet)
+        if (wasDataSet) {
+            refreshingData = false;
             mAdapter.refreshAdapter();
+            mFragmentView.onLoadedDataFromDatabase();
+        }
         wasDataSet = true;
     }
 
@@ -130,7 +143,9 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         mDisplayPostInteractor.addPostComment(currentUserId, commentText, activityId);
     }
 
-    public void updateDisplay() {
-        mAdapter.refreshAdapter();
+    public void onAddPostComment(boolean success, String activityId) {
+        if (success)
+            loadDataFromDatabase(activityId);
+        mActivityView.onAddPostComment(success);
     }
 }

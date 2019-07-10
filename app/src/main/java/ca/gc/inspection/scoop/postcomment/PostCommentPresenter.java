@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import ca.gc.inspection.scoop.feedpost.FeedPost;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;
@@ -72,11 +73,14 @@ public class PostCommentPresenter implements
 
     @Override
     public void loadDataFromDatabase(String currentUser) {
+        if (mDataCache == null)
+            mDataCache = PostDataCache.createWithType(PostComment.class);
+        else mDataCache.getPostCommentList().clear();
+
         mPostCommentInteractor.getPostComments(currentUser);
     }
 
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
-        mDataCache = PostDataCache.createWithType(PostComment.class);
 
         if ((commentsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of commentsResponse != imagesResponse");
@@ -95,6 +99,8 @@ public class PostCommentPresenter implements
         }
 
         mAdapter.refreshAdapter();
+        mPostCommentView.onLoadedDataFromDatabase();
+
     }
 
     /**

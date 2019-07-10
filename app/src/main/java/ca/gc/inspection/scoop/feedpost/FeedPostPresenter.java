@@ -30,6 +30,7 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     private FeedPostContract.View mFeedPostView;
     private FeedPostContract.View.Adapter mAdapter;
     private FeedPostInteractor mFeedPostInteractor;
+    private boolean refreshingData = false;
 
     private FeedPost getItemByIndex(int i) {
         if (mDataCache == null)
@@ -71,21 +72,27 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
 
     /**
      * Provides information to the Interactor and invokes different methods based on given feed type
-     * @param network Allows save post information to be added to singleton request queue
      * @param feedType Type of feed (Community/Official vs Saved)
      */
     @Override
     public void loadDataFromDatabase(String feedType) {
-        if (feedType.equals("saved")){
-            mFeedPostInteractor.getSavedPosts();
-        } else {
-            mFeedPostInteractor.getFeedPosts(feedType);
+        if (!refreshingData) {
+            refreshingData = true;
+
+            if (mDataCache == null)
+                mDataCache = PostDataCache.createWithType(FeedPost.class);
+            else mDataCache.getFeedPostList().clear();
+
+            if (feedType.equals("saved")) {
+                mFeedPostInteractor.getSavedPosts();
+            } else {
+                mFeedPostInteractor.getFeedPosts(feedType);
+            }
         }
     }
 
     @Override
     public void setData(JSONArray feedPostsResponse, JSONArray imagesResponse) {
-        mDataCache = PostDataCache.createWithType(FeedPost.class);
 
         if ((feedPostsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of feedPostsResponse != imagesResponse; some users may not have profile images");
@@ -109,6 +116,8 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         catch (Exception e) {
             e.printStackTrace();
         }
+        refreshingData = false;
+        mFeedPostView.onLoadedDataFromDatabase();
     }
 
     @Override
