@@ -35,6 +35,7 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
     private ProfileLikesContract.View mProfileLikesView;
     private ProfileLikesContract.View.Adapter mAdapter;
     private ProfileLikesInteractor mProfileLikesInteractor;
+    private boolean refreshingData = false;
 
     private ProfileLike getItemByIndex(int i) {
         if (mDataCache == null)
@@ -77,11 +78,15 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
 
     @Override
     public void loadDataFromDatabase(String userId) {
-        if (mDataCache == null)
-            mDataCache = PostDataCache.createWithType(ProfileLike.class);
-        else mDataCache.getProfileLikesList().clear();
+        if (!refreshingData) {
+            refreshingData = true;
 
-        mProfileLikesInteractor.getProfileLikes(userId);
+            if (mDataCache == null)
+                mDataCache = PostDataCache.createWithType(ProfileLike.class);
+            else mDataCache.getProfileLikesList().clear();
+
+            mProfileLikesInteractor.getProfileLikes(userId);
+        }
     }
 
     @Override
@@ -104,6 +109,7 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
         }
 
         mAdapter.refreshAdapter();
+        refreshingData = false;
         mProfileLikesView.onLoadedDataFromDatabase();
     }
 

@@ -29,6 +29,7 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     private DisplayPostContract.View.Fragment.Adapter mAdapter;
     private DisplayPostInteractor mDisplayPostInteractor;
     private boolean wasDataSet = false;
+    private boolean refreshingData = false;
 
     private PostComment getItemByIndex(int i) {
         if (mDataCache == null)
@@ -71,11 +72,14 @@ class DisplayPostPresenter extends FeedPostPresenter implements
 
     @Override
     public void loadDataFromDatabase(String activityId) {
-        mDataCache.getFeedPostList().clear();
-        wasDataSet = false;
-        Log.d(TAG, "data cache length = "+getItemCount());
-        mDisplayPostInteractor.getDetailedPost(activityId);
-        mDisplayPostInteractor.getPostComments(activityId);
+        if (!refreshingData) {
+            refreshingData = true;
+            mDataCache.getFeedPostList().clear();
+            wasDataSet = false;
+            Log.d(TAG, "data cache length = " + getItemCount());
+            mDisplayPostInteractor.getDetailedPost(activityId);
+            mDisplayPostInteractor.getPostComments(activityId);
+        }
     }
 
     public void setDetailedPostData(JSONArray postTextResponse, JSONArray postImageResponse) {
@@ -91,6 +95,7 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         mDataCache.getFeedPostList().add(0, feedPost);
 
         if (wasDataSet) {
+            refreshingData = false;
             mAdapter.refreshAdapter();
             mFragmentView.onLoadedDataFromDatabase();
         }
@@ -116,6 +121,7 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         }
 
         if (wasDataSet) {
+            refreshingData = false;
             mAdapter.refreshAdapter();
             mFragmentView.onLoadedDataFromDatabase();
         }

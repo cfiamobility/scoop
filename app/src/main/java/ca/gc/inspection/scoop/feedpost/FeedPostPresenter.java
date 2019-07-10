@@ -30,6 +30,7 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     private FeedPostContract.View mFeedPostView;
     private FeedPostContract.View.Adapter mAdapter;
     private FeedPostInteractor mFeedPostInteractor;
+    private boolean refreshingData = false;
 
     private FeedPost getItemByIndex(int i) {
         if (mDataCache == null)
@@ -75,14 +76,18 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
      */
     @Override
     public void loadDataFromDatabase(String feedType) {
-        if (mDataCache == null)
-            mDataCache = PostDataCache.createWithType(FeedPost.class);
-        else mDataCache.getFeedPostList().clear();
+        if (!refreshingData) {
+            refreshingData = true;
 
-        if (feedType.equals("saved")){
-            mFeedPostInteractor.getSavedPosts();
-        } else {
-            mFeedPostInteractor.getFeedPosts(feedType);
+            if (mDataCache == null)
+                mDataCache = PostDataCache.createWithType(FeedPost.class);
+            else mDataCache.getFeedPostList().clear();
+
+            if (feedType.equals("saved")) {
+                mFeedPostInteractor.getSavedPosts();
+            } else {
+                mFeedPostInteractor.getFeedPosts(feedType);
+            }
         }
     }
 
@@ -111,6 +116,7 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         catch (Exception e) {
             e.printStackTrace();
         }
+        refreshingData = false;
         mFeedPostView.onLoadedDataFromDatabase();
     }
 
