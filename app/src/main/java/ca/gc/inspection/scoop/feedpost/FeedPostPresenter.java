@@ -75,6 +75,10 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
      */
     @Override
     public void loadDataFromDatabase(String feedType) {
+        if (mDataCache == null)
+            mDataCache = PostDataCache.createWithType(FeedPost.class);
+        else mDataCache.getFeedPostList().clear();
+
         if (feedType.equals("saved")){
             mFeedPostInteractor.getSavedPosts();
         } else {
@@ -84,7 +88,6 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
 
     @Override
     public void setData(JSONArray feedPostsResponse, JSONArray imagesResponse) {
-        mDataCache = PostDataCache.createWithType(FeedPost.class);
 
         if ((feedPostsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of feedPostsResponse != imagesResponse; some users may not have profile images");
@@ -108,6 +111,7 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         catch (Exception e) {
             e.printStackTrace();
         }
+        mFeedPostView.onLoadedDataFromDatabase();
     }
 
     @Override

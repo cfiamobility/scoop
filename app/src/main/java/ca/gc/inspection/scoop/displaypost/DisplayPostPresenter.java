@@ -73,6 +73,7 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         if (mDataCache == null)
             mDataCache = PostDataCache.createWithType(FeedPost.class);
         else mDataCache.getFeedPostList().clear();
+
         wasDataSet = false;
         Log.d(TAG, "data cache length = "+getItemCount());
         mDisplayPostInteractor.getDetailedPost(activityId);
@@ -91,8 +92,10 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         FeedPost feedPost = new FeedPost(jsonPost, jsonImage);
         mDataCache.getFeedPostList().add(0, feedPost);
 
-        if (wasDataSet)
+        if (wasDataSet) {
             mAdapter.refreshAdapter();
+            mFragmentView.onLoadedDataFromDatabase();
+        }
         wasDataSet = true;
     }
 
@@ -114,8 +117,10 @@ class DisplayPostPresenter extends FeedPostPresenter implements
             mDataCache.getPostCommentList().add(postComment);
         }
 
-        if (wasDataSet)
+        if (wasDataSet) {
             mAdapter.refreshAdapter();
+            mFragmentView.onLoadedDataFromDatabase();
+        }
         wasDataSet = true;
     }
 

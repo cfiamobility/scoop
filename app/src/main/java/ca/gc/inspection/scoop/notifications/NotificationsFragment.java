@@ -3,8 +3,10 @@ package ca.gc.inspection.scoop.notifications;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +27,9 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 /**
  * View for the notifications controller
  */
-public class NotificationsFragment extends Fragment implements NotificationsContract.View{
-
+public class NotificationsFragment extends Fragment implements
+        NotificationsContract.View,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView todayRecyclerView, recentRecyclerView;
     private RecyclerView.Adapter todayAdapter, recentAdapter;
@@ -35,7 +38,7 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
     //private NotificationsPresenter notificationsScreenController;
     private NotificationsContract.Presenter mPresenter;
     private View view;
-
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     @Override
@@ -62,6 +65,28 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
 
     }
 
+    /**
+     * To implement SwipeRefreshLayout.OnRefreshListener
+     */
+    @Override
+    public void onRefresh() {
+        new TodayTask().execute(); //executes async task for today notifications
+        new RecentTask().execute(); //executes async task for recent notifications
+    }
+
+    @Override
+    public void onLoadedDataFromDatabase() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    @Override
+    public void onResume() {
+        Log.d("NotificationsFragment", "on resume");
+        super.onResume();
+        new TodayTask().execute(); //executes async task for today notifications
+        new RecentTask().execute(); //executes async task for recent notifications
+    }
 
     /**
      * Description: sets the recycler view for recent notifications

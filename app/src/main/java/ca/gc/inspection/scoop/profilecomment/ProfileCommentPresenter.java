@@ -67,6 +67,10 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
 
     @Override
     public void loadDataFromDatabase(String currentUser) {
+        if (mDataCache == null)
+            mDataCache = PostDataCache.createWithType(ProfileComment.class);
+        else mDataCache.getProfileCommentList().clear();
+
         mProfileCommentInteractor.getProfileComments(currentUser);
     }
 
@@ -76,7 +80,6 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
 
     @Override
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
-        mDataCache = PostDataCache.createWithType(ProfileComment.class);
 
         if ((commentsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of commentsReponse != imagesResponse");
@@ -95,6 +98,7 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
         }
 
         mAdapter.refreshAdapter();
+        mProfileCommentView.onLoadedDataFromDatabase();
     }
 
     @Override

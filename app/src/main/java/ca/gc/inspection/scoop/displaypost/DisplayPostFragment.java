@@ -4,12 +4,17 @@ package ca.gc.inspection.scoop.displaypost;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
+
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_3;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -17,7 +22,9 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing community feed action.
  * Responsible for creating the Presenter and Adapter
  */
-public class DisplayPostFragment extends Fragment implements DisplayPostContract.View.Fragment {
+public class DisplayPostFragment extends Fragment implements
+        DisplayPostContract.View.Fragment,
+        SwipeRefreshLayout.OnRefreshListener {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -26,6 +33,7 @@ public class DisplayPostFragment extends Fragment implements DisplayPostContract
     private View view;
     private DisplayPostContract.Presenter.FragmentAPI mDisplayPostPresenter;
     private DisplayPostActivity mDisplayPostActivity;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public void setPresenter(@NonNull DisplayPostContract.Presenter.FragmentAPI presenter) {
         mDisplayPostPresenter = checkNotNull(presenter);
@@ -57,7 +65,8 @@ public class DisplayPostFragment extends Fragment implements DisplayPostContract
         setPresenter(mDisplayPostActivity.getPresenter());
         mDisplayPostPresenter.setFragmentView(this);
         checkNotNull(mDisplayPostActivity.getActivityId());
-        mDisplayPostPresenter.loadDataFromDatabase(mDisplayPostActivity.getActivityId());
+        setSwipeRefreshLayout(view);
+        loadDataFromDatabase();
         return view;
     }
 
@@ -71,6 +80,41 @@ public class DisplayPostFragment extends Fragment implements DisplayPostContract
         super.onViewCreated(view, savedInstanceState);
         setRecyclerView();
     }
+    private void setSwipeRefreshLayout(View view) {
+        mSwipeRefreshLayout = view.findViewById(R.id.fragment_display_post_swipe);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                SWIPE_REFRESH_COLOUR_1,
+                SWIPE_REFRESH_COLOUR_2,
+                SWIPE_REFRESH_COLOUR_3);
+
+        // Used to show Swipe Refresh animation on activity create
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                loadDataFromDatabase();
+            }
+        });
+    }
+
+    /**
+     * To implement SwipeRefreshLayout.OnRefreshListener
+     */
+    @Override
+    public void onRefresh() {
+        loadDataFromDatabase();
+    }
+
+    @Override
+    public void onLoadedDataFromDatabase() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void loadDataFromDatabase() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        mDisplayPostPresenter.loadDataFromDatabase(mDisplayPostActivity.getActivityId());
+    }
+
 
     /**
      * Sets the recycler view

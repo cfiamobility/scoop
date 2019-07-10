@@ -15,8 +15,6 @@ public class Config {
     public static int postType = 1;
     public static int commentType = 2;
 
-    public static RequestQueue requestQueue =  Volley.newRequestQueue(MyApplication.getContext());
-
     // token
     public static String token = "";
 
@@ -25,4 +23,10 @@ public class Config {
     // intent data keys
     public static String INTENT_ACTIVITY_ID_KEY = "activityid";
     public static String INTENT_POSTER_ID_KEY = "posterid";
+
+    // swipe refresh colours
+    public static int SWIPE_REFRESH_COLOUR_1 = android.R.color.holo_green_dark;
+    public static int SWIPE_REFRESH_COLOUR_2 = android.R.color.holo_orange_dark;
+    public static int SWIPE_REFRESH_COLOUR_3 = android.R.color.holo_blue_dark;
+
 }

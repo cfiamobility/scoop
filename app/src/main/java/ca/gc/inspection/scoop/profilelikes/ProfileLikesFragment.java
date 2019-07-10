@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,9 @@ import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.R;
 
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_3;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -31,7 +35,9 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing profile post action.
  * Responsible for creating the Presenter and Adapter
  */
-public class ProfileLikesFragment extends Fragment implements ProfileLikesContract.View {
+public class ProfileLikesFragment extends Fragment implements
+        ProfileLikesContract.View,
+        SwipeRefreshLayout.OnRefreshListener {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -40,6 +46,7 @@ public class ProfileLikesFragment extends Fragment implements ProfileLikesContra
     private String userid;
     private View view;
     private ProfileLikesContract.Presenter mProfileLikesPresenter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void setPresenter(@NonNull ProfileLikesContract.Presenter presenter) {
@@ -63,11 +70,12 @@ public class ProfileLikesFragment extends Fragment implements ProfileLikesContra
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_profile_posts, container, false);
+        view = inflater.inflate(R.layout.fragment_profile_likes, container, false);
         Bundle bundle = getArguments();
         userid = bundle.getString("userid");
         setPresenter(new ProfileLikesPresenter(this, NetworkUtils.getInstance(getContext())));
-        mProfileLikesPresenter.loadDataFromDatabase(userid);
+        setSwipeRefreshLayout(view);
+        loadDataFromDatabase();
         return view;
     }
 
@@ -87,7 +95,7 @@ public class ProfileLikesFragment extends Fragment implements ProfileLikesContra
      */
     public void setRecyclerView() {
         // initializing the recycler view
-        postRecyclerView = view.findViewById(R.id.fragment_profile_posts_rv);
+        postRecyclerView = view.findViewById(R.id.fragment_profile_likes_rv);
         postRecyclerView.setHasFixedSize(true);
 
         // setting the layout manager for the recycler view
@@ -98,6 +106,41 @@ public class ProfileLikesFragment extends Fragment implements ProfileLikesContra
         mAdapter = new ProfileLikesAdapter(this,
                 (ProfileLikesContract.Presenter.AdapterAPI) mProfileLikesPresenter);
         postRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void setSwipeRefreshLayout(View view) {
+        mSwipeRefreshLayout = view.findViewById(R.id.fragment_profile_likes_swipe);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                SWIPE_REFRESH_COLOUR_1,
+                SWIPE_REFRESH_COLOUR_2,
+                SWIPE_REFRESH_COLOUR_3);
+
+        // Used to show Swipe Refresh animation on activity create
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                loadDataFromDatabase();
+            }
+        });
+    }
+
+    /**
+     * To implement SwipeRefreshLayout.OnRefreshListener
+     */
+    @Override
+    public void onRefresh() {
+        loadDataFromDatabase();
+    }
+
+    @Override
+    public void onLoadedDataFromDatabase() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void loadDataFromDatabase() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        mProfileLikesPresenter.loadDataFromDatabase(userid);
     }
 
     @Override

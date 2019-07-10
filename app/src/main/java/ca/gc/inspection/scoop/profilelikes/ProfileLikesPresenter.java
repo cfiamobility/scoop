@@ -77,12 +77,15 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
 
     @Override
     public void loadDataFromDatabase(String userId) {
+        if (mDataCache == null)
+            mDataCache = PostDataCache.createWithType(ProfileLike.class);
+        else mDataCache.getProfileLikesList().clear();
+
         mProfileLikesInteractor.getProfileLikes(userId);
     }
 
     @Override
     public void setData(JSONArray postsResponse, JSONArray imagesResponse) {
-        mDataCache = PostDataCache.createWithType(ProfileLike.class);
 
         if ((postsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of postsResponse != imagesResponse");
@@ -101,6 +104,7 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
         }
 
         mAdapter.refreshAdapter();
+        mProfileLikesView.onLoadedDataFromDatabase();
     }
 
     @Override

@@ -45,6 +45,8 @@ public interface DisplayPostContract extends FeedPostContract {
 
         interface Fragment extends BaseView<Presenter.FragmentAPI> {
 
+            void onLoadedDataFromDatabase();
+
             interface Adapter extends FeedPostContract.View.Adapter {
             }
         }
