@@ -134,7 +134,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      * @param context Context of the current View that holds the listener
      * @param posterId id of the User whose profile/image is being clicked on
      */
-    private static void startFragmentOrActivity(Context context, String posterId){
+    public static void startFragmentOrActivity(Context context, String posterId){
         if (context.getClass() == OtherUserActivity.class)
             OtherUserActivity.startCorrectFragment(posterId);
         else {
