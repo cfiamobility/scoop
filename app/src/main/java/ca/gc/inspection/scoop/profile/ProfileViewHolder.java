@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.profile;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

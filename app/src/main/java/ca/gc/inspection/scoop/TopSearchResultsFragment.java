@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.gc.inspection.scoop.profile.ProfileAdapter;
+
 
 /**
  * A simple {@link Fragment} subclass.

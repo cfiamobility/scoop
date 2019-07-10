@@ -18,9 +18,11 @@ import android.widget.Toast;
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
+import ca.gc.inspection.scoop.profile.OtherUserActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
+import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -111,14 +113,31 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.otherUserClicked(posterId);
+                Context context = v.getContext();
+                if (context.getClass() == OtherUserActivity.class)
+                    Log.d(TAG, "Already displaying post!");
+                else {
+                    Intent intent = new Intent(context, OtherUserActivity.class);
+                    intent.putExtra(INTENT_POSTER_ID_KEY, posterId);
+                    Log.i("INTENT_POSTER_ID_KEY", posterId);
+                    context.startActivity(intent);
+                }
             }
         });
 
         viewHolder.username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.otherUserClicked(posterId);
+//                MainActivity.otherUserClicked(posterId);
+                Context context = v.getContext();
+                if (context.getClass() == OtherUserActivity.class)
+                    Log.d(TAG, "Already displaying post!");
+                else {
+                    Intent intent = new Intent(context, OtherUserActivity.class);
+                    intent.putExtra(INTENT_POSTER_ID_KEY, posterId);
+                    Log.i("INTENT_POSTER_ID_KEY", posterId);
+                    context.startActivity(intent);
+                }
             }
         });
     }
