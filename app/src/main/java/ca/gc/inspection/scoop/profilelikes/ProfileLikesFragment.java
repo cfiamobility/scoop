@@ -75,7 +75,6 @@ public class ProfileLikesFragment extends Fragment implements
         userid = bundle.getString("userid");
         setPresenter(new ProfileLikesPresenter(this, NetworkUtils.getInstance(getContext())));
         setSwipeRefreshLayout(view);
-        loadDataFromDatabase();
         return view;
     }
 
@@ -146,7 +145,8 @@ public class ProfileLikesFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        mProfileLikesPresenter.loadDataFromDatabase(userid);
+        if (!mSwipeRefreshLayout.isRefreshing())
+            loadDataFromDatabase();
     }
 
     public static void setPostOptionsListener(ProfileLikesViewHolder viewHolder, String activityid){

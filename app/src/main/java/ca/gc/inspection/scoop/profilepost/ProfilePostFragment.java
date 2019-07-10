@@ -72,7 +72,6 @@ public class ProfilePostFragment extends Fragment implements
         userid = bundle.getString("userid");
         setPresenter(new ProfilePostPresenter(this, NetworkUtils.getInstance(getContext())));
         setSwipeRefreshLayout(view);
-        loadDataFromDatabase();
         return view;
     }
 
@@ -143,7 +142,8 @@ public class ProfilePostFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        loadDataFromDatabase();
+        if (!mSwipeRefreshLayout.isRefreshing())
+            loadDataFromDatabase();
     }
 
     public static void setPostOptionsListener(ProfilePostViewHolder viewHolder, String activityid){

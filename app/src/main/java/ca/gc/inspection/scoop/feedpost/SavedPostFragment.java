@@ -57,7 +57,6 @@ public class SavedPostFragment extends Fragment implements
         view = inflater.inflate(R.layout.fragment_saved_post, container, false);
         setPresenter(new FeedPostPresenter(this, NetworkUtils.getInstance(getContext())));
         setSwipeRefreshLayout(view);
-        loadDataFromDatabase();
         return view;
     }
 
@@ -105,6 +104,13 @@ public class SavedPostFragment extends Fragment implements
     private void loadDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(true);
         mFeedPostPresenter.loadDataFromDatabase(getFeedType());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!mSwipeRefreshLayout.isRefreshing())
+            loadDataFromDatabase();
     }
 
     /**

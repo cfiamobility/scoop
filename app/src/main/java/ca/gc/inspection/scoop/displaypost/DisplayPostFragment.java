@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,6 @@ public class DisplayPostFragment extends Fragment implements
         mDisplayPostPresenter.setFragmentView(this);
         checkNotNull(mDisplayPostActivity.getActivityId());
         setSwipeRefreshLayout(view);
-        loadDataFromDatabase();
         return view;
     }
 
@@ -115,6 +115,13 @@ public class DisplayPostFragment extends Fragment implements
         mDisplayPostPresenter.loadDataFromDatabase(mDisplayPostActivity.getActivityId());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!mSwipeRefreshLayout.isRefreshing()) {
+            loadDataFromDatabase();
+        }
+    }
 
     /**
      * Sets the recycler view

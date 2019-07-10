@@ -72,7 +72,6 @@ public class ProfileCommentFragment extends Fragment implements
         userid = bundle.getString("userid");
         setPresenter(new ProfileCommentPresenter(this, NetworkUtils.getInstance(getContext())));
         setSwipeRefreshLayout(view);
-        loadDataFromDatabase();
         return view;
     }
 
@@ -125,7 +124,8 @@ public class ProfileCommentFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        mProfileCommentPresenter.loadDataFromDatabase(userid);
+        if (!mSwipeRefreshLayout.isRefreshing())
+            loadDataFromDatabase();
     }
 
     /**

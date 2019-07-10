@@ -64,7 +64,6 @@ public class NotificationsFragment extends Fragment implements
         recent = (TextView) view.findViewById(R.id.fragment_notifications_txt_recent); //instantiating the recent textview
 
         setSwipeRefreshLayout(view);
-        loadDataFromDatabase();
     }
 
     private void setSwipeRefreshLayout(View view) {
@@ -105,7 +104,8 @@ public class NotificationsFragment extends Fragment implements
     public void onResume() {
         Log.d("NotificationsFragment", "on resume");
         super.onResume();
-        loadDataFromDatabase();
+        if (!mSwipeRefreshLayout.isRefreshing())
+            loadDataFromDatabase();
     }
 
     /**

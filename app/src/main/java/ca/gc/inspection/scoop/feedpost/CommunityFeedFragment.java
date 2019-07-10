@@ -61,7 +61,6 @@ public class CommunityFeedFragment extends Fragment implements
         view = inflater.inflate(R.layout.fragment_community_feed, container, false);
         setPresenter(new FeedPostPresenter(this, NetworkUtils.getInstance(getContext())));
         setSwipeRefreshLayout(view);
-        loadDataFromDatabase();
         return view;
     }
 
@@ -133,7 +132,8 @@ public class CommunityFeedFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        mFeedPostPresenter.loadDataFromDatabase(getFeedType());
+        if (!mSwipeRefreshLayout.isRefreshing())
+            loadDataFromDatabase();
     }
 
     public String getFeedType(){
