@@ -35,6 +35,8 @@ public interface FeedPostContract extends ProfilePostContract {
          * explain how the Presenter is to communicate with the main View only.
          */
 
+        void onLoadedDataFromDatabase();
+
         interface Adapter extends ProfilePostContract.View.Adapter {
         }
 

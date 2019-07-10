@@ -57,6 +57,7 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
      */
     public void getTodayNotificationsCallBack(JSONArray notificationResponse, JSONArray imageResponse){
         notificationsContract.setTodayRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse);
+        notificationsContract.onLoadedDataFromDatabase();
     }
 
 
@@ -75,6 +76,7 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
      */
     public void getRecentNotificationsCallBack(JSONArray notificationResponse, JSONArray imageResponse){
         notificationsContract.setRecentRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse); //calls notificationInterface to set the recent recycler view
+        notificationsContract.onLoadedDataFromDatabase();
     }
 
 

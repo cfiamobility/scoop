@@ -5,8 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".profilepost.ProfilePostFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_profile_posts_rv"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fragment_profile_posts_swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_profile_posts_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

@@ -32,6 +32,7 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
     private String mActivityId;
     private EditText mAddCommentET;
     private Button mAddCommentButton;
+    private boolean canPostComment;
 
     public void goBack (View view) {
         finish();
@@ -107,20 +108,36 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
             @Override
             public void onClick(View v) {
                 String commentText = mAddCommentET.getText().toString();
-                if (commentText.isEmpty()){
-                    Toast.makeText(DisplayPostActivity.this, "Please add comment message", Toast.LENGTH_SHORT).show();
-                    Log.i("comment", commentText);
-                } else {
-                    mDisplayPostPresenter.addPostComment(Config.currentUser, commentText, getActivityId());
+                if (canPostComment) {
+                    if (commentText.isEmpty()) {
+                        Toast.makeText(DisplayPostActivity.this, "Please add comment message", Toast.LENGTH_SHORT).show();
+                        Log.i("comment", commentText);
+                    } else {
+                        canPostComment = false;
 
-                    //clear comment box
-                    mAddCommentET.getText().clear();
+                        //clear comment box
+                        mAddCommentET.getText().clear();
 
-                    //hide keyboard
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                        mDisplayPostPresenter.addPostComment(Config.currentUser, commentText, getActivityId());
+
+                        //hide keyboard
+                        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    }
                 }
             }
         });
+        canPostComment = true;
+    }
+
+    @Override
+    public void onAddPostComment(boolean success) {
+        canPostComment = true;
+        String toastMessage;
+        if (success)
+            toastMessage = "Comment posted!";
+        else
+            toastMessage = "Failed to post comment";
+        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
     }
 }

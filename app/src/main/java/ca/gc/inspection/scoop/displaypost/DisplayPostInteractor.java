@@ -51,7 +51,10 @@ class DisplayPostInteractor extends FeedPostInteractor {
                         Log.d("Response", response);
                         if (response.contains("Success")){
                             Log.i("Info", "We good");
-                            mDisplayPostPresenter.updateDisplay();
+                            mDisplayPostPresenter.onAddPostComment(true, otherPostActivity);
+                        }
+                        else {
+                            mDisplayPostPresenter.onAddPostComment(false, null);
                         }
                     }
                 },
@@ -61,6 +64,7 @@ class DisplayPostInteractor extends FeedPostInteractor {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", String.valueOf(error));
+                        mDisplayPostPresenter.onAddPostComment(false, null);
                     }
                 }
         ) {

@@ -4,13 +4,7 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +15,9 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 public class CreatePostInteractor {
 
-    private CreatePostContract.Presenter mPresenter;
+    private CreatePostPresenter mPresenter;
 
-    CreatePostInteractor(CreatePostContract.Presenter presenter) {
+    CreatePostInteractor(CreatePostPresenter presenter) {
         mPresenter = presenter;
     }
 
@@ -38,17 +32,23 @@ public class CreatePostInteractor {
      */
     public void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
         String url = Config.baseIP + "post/add-post";
+
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     // response
                     Log.d("Response", response);
                     if (response.contains("Success")){
                         Log.i("Info", "We good");
+                        mPresenter.onPostCreated(true);
+                    }
+                    else {
+                        mPresenter.onPostCreated(false);
                     }
                 },
                 error -> {
                     // error
                     Log.d("Error.Response", String.valueOf(error));
+                    mPresenter.onPostCreated(false);
                 }
         ) {
             @Override
@@ -62,6 +62,7 @@ public class CreatePostInteractor {
                 params.put("postimage", imageBitmap);
                 return params;
             }
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 // inserting the token into the response header that will be sent to the server

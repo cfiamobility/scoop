@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop.feedpost;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,9 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing official feed action.
  * Responsible for creating the Presenter and Adapter
  */
-public class OfficialFeedFragment extends Fragment implements FeedPostContract.View {
+public class OfficialFeedFragment extends Fragment implements
+        FeedPostContract.View,
+        SwipeRefreshLayout.OnRefreshListener {
 
     // recycler view widget
     private RecyclerView mRecyclerView;
@@ -24,6 +27,7 @@ public class OfficialFeedFragment extends Fragment implements FeedPostContract.V
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
     private FeedPostContract.Presenter mFeedPostPresenter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void setPresenter(@NonNull FeedPostContract.Presenter presenter) {
@@ -73,6 +77,17 @@ public class OfficialFeedFragment extends Fragment implements FeedPostContract.V
 //        // setting up the custom adapter for the recycler view
 //        mAdapter = new FeedPostAdapter(this, (FeedPostContract.Presenter.AdapterAPI) mFeedPostPresenter);
 //        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    /**
+     * To implement SwipeRefreshLayout.OnRefreshListener
+     */
+    @Override
+    public void onRefresh() {
+    }
+
+    @Override
+    public void onLoadedDataFromDatabase() {
     }
 
     public String getFeedType(){

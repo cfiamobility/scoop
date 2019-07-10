@@ -30,7 +30,7 @@ public class ProfileCommentInteractor extends PostCommentInteractor {
      * @param userid: userid
      */
     public void getProfileComments(final String userid) {
-        String url = Config.baseIP + "profile/comment-message/" + userid + "/" + Config.currentUser;
+        String url = Config.baseIP + "profile/comment-message/" + userid + "/" + userid;
         String responseUrl = Config.baseIP + "profile/comment-profile-image/" + userid;
         JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(commentRequest);
