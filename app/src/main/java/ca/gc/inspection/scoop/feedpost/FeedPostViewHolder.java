@@ -35,6 +35,7 @@ public class FeedPostViewHolder extends ProfilePostViewHolder
             Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
             Log.i("image", image);
             postImage.setImageBitmap(bitmap);
+            showPostImage();
         }
         else hidePostImage();
         return this;
@@ -45,6 +46,13 @@ public class FeedPostViewHolder extends ProfilePostViewHolder
      */
     private void hidePostImage() {
         postImage.setVisibility(View.GONE);
+    }
+
+    /**
+     * Description: show post image if there is one
+     */
+    private void showPostImage() {
+        postImage.setVisibility(View.VISIBLE);
     }
 
 }
