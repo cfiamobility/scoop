@@ -15,14 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesAdapter;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesPresenter;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.R;
 
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;

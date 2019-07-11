@@ -179,8 +179,10 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 //gets the activity id and posterd id and stores in bundle to be fetched in PostOptionsDialogFragment
                 Log.i("post I am clicking: ", activityId);
                 bundle.putString("ACTIVITY_ID", activityId);
-                Log.i("post I am clicking: ", posterId);
+                Log.i("poster id I am clicking: ", posterId);
                 bundle.putString("POSTER_ID", posterId);
+                Log.i("viewholder: ", viewHolder.getClass().toString());
+                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
                 bottomSheetDialog.setArguments(bundle);
 
                 final Context context = v.getContext();

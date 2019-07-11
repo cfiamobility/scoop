@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.postoptionsdialog;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
@@ -18,6 +20,7 @@ import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -26,6 +29,10 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * - This is the View for the Post Options Dialog action case
  */
 public class PostOptionsDialogFragment extends BottomSheetDialogFragment implements PostOptionsDialogContract.View {
+
+    //UI Declarations
+    Button saveButton, shareButton, deleteButton, reportButton, unsaveButton;
+    TableRow saveTR, shareTR, deleteTR, reportTR, unsaveTR;
 
     //reference to the presenter
     private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
@@ -64,30 +71,27 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         //contains activity id and posterid of the specific post in the Recycler View in which its options menu was clicked
         final String activityid = getArguments().getString("ACTIVITY_ID");
         final String posterid = getArguments().getString("POSTER_ID");
+        final String viewHolderType = getArguments().getString("VIEWHOLDER_TYPE");
+        Log.i("POSTER_ID IN DIALOG FRAGMENT", posterid);
+        Log.i("CURRENT USER", Config.currentUser);
 
         setPresenter(new PostOptionsDialogPresenter(this));
 
         // initializing all of the buttons
-        Button saveButton = view.findViewById(R.id.dialog_post_options_btn_save);
-        Button shareButton = view.findViewById(R.id.dialog_post_options_btn_share);
-        Button deleteButton = view.findViewById(R.id.dialog_post_options_btn_delete);
-        Button reportButton = view.findViewById(R.id.dialog_post_options_btn_report);
+        shareButton = view.findViewById(R.id.dialog_post_options_btn_share);
+        saveButton = view.findViewById(R.id.dialog_post_options_btn_save);
+        unsaveButton = view.findViewById(R.id.dialog_post_options_btn_unsave);
+        deleteButton = view.findViewById(R.id.dialog_post_options_btn_delete);
+        reportButton = view.findViewById(R.id.dialog_post_options_btn_report);
 
-//        ImageView share = view.findViewById(R.id.dialog_post_options_img_share);
-//        share.setVisibility(View.VISIBLE);
+        // initializing all of the rows
+        shareTR = view.findViewById(R.id.dialog_post_options_tr_share);
+        saveTR = view.findViewById(R.id.dialog_post_options_tr_save);
+        unsaveTR = view.findViewById(R.id.dialog_post_options_tr_unsave);
+        deleteTR = view.findViewById(R.id.dialog_post_options_tr_delete);
+        reportTR = view.findViewById(R.id.dialog_post_options_tr_report);
 
-        // onClick listener for saving a post
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("BUTTON PRESSED", "Save");
-                Log.i("activity id:", activityid);
-                // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
-                currContext = getContext();
-                mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser);
-                dismiss();
-            }
-        });
+        // WILL ALWAYS BE SET - onClick listener for sharing a post
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,20 +99,75 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 dismiss();
             }
         });
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("BUTTON PRESSED", "Delete");
-                dismiss();
-            }
-        });
-        reportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("BUTTON PRESSED", "Report");
-                dismiss();
-            }
-        });
+
+        if (viewHolderType.contains("Comment")){
+            saveTR.setVisibility(View.GONE);
+            saveButton.setVisibility(View.GONE);
+            unsaveTR.setVisibility(View.GONE);
+            unsaveButton.setVisibility(View.GONE);
+            reportTR.setVisibility(View.GONE);
+            reportButton.setVisibility(View.GONE);
+        }
+
+        // Checks if the post is already saved
+        if (false){
+            saveTR.setVisibility(View.GONE);
+            saveButton.setVisibility(View.GONE);
+
+            unsaveButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Log.i("BUTTON PRESSED", "Save");
+                    Log.i("activity id:", activityid);
+                    // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
+                    currContext = getContext();
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser);
+                    dismiss();
+                }
+            });
+        } else {
+            unsaveTR.setVisibility(View.GONE);
+            unsaveButton.setVisibility(View.GONE);
+
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("BUTTON PRESSED", "Save");
+                    Log.i("activity id:", activityid);
+                    // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
+                    currContext = getContext();
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser);
+                    dismiss();
+                }
+            });
+        }
+
+
+        //Checks if the post is the current users or other users and sets features based on this
+        if (posterid.equals(Config.currentUser)){
+            reportTR.setVisibility(View.GONE);
+            reportButton.setVisibility(View.GONE);
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("BUTTON PRESSED", "Delete");
+                    dismiss();
+                }
+            });
+
+        } else {
+            deleteTR.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.GONE);
+
+            reportButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("BUTTON PRESSED", "Report");
+                    dismiss();
+                }
+            });
+        }
 
         return view;
     }
@@ -121,5 +180,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     public void setSaveResponseMessage(String message){
         Toast.makeText(currContext,message,Toast.LENGTH_SHORT).show();
     }
+
+
+
+
 
 }
