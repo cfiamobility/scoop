@@ -1,6 +1,6 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.searchposts;
 
-
+import ca.gc.inspection.scoop.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +38,7 @@ public class TopSearchResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_top_search_results, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_posts, container, false);
 
         // initializing the test array
         test.add("TOP 1");
@@ -46,7 +46,7 @@ public class TopSearchResultsFragment extends Fragment {
         test.add("TOP 3");
 
         // initializing the recycler view
-        recyclerView = view.findViewById(R.id.fragment_top_search_results_rv);
+        recyclerView = view.findViewById(R.id.fragment_search_posts_rv);
         recyclerView.setHasFixedSize(true);
 
         // setting up the layout manager for the recycler view

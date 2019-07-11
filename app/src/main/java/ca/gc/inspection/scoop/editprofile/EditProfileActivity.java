@@ -1,6 +1,6 @@
 package ca.gc.inspection.scoop.editprofile;
 
-import ca.gc.inspection.scoop.*;
+import ca.gc.inspection.scoop.R;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;

@@ -1,6 +1,6 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.searchpeople;
 
-
+import ca.gc.inspection.scoop.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,7 +35,7 @@ public class PeopleSearchResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_people_search_results, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_people, container, false);
 
         // initializing the test array
         test.add("PERSON 1");
@@ -44,7 +44,7 @@ public class PeopleSearchResultsFragment extends Fragment {
         test.add("PERSON 4");
 
         // initializing the recycler view
-        recyclerView = view.findViewById(R.id.fragment_people_search_results_rv);
+        recyclerView = view.findViewById(R.id.fragment_search_people_rv);
         recyclerView.setHasFixedSize(true);
 
         // setting up the layout manager for the recycler view

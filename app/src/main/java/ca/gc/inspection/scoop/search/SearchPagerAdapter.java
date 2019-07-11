@@ -4,13 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import ca.gc.inspection.scoop.PeopleSearchResultsFragment;
-import ca.gc.inspection.scoop.TopSearchResultsFragment;
+import ca.gc.inspection.scoop.searchpeople.PeopleSearchResultsFragment;
+import ca.gc.inspection.scoop.searchposts.TopSearchResultsFragment;
 
-public class SearchAdapter extends FragmentStatePagerAdapter {
-    int mNumOfTabs;
+public class SearchPagerAdapter extends FragmentStatePagerAdapter {
+    private int mNumOfTabs;
 
-    public SearchAdapter(FragmentManager fm, int NumOfTabs) {
+    SearchPagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
     }

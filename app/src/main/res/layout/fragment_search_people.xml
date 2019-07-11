@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PeopleSearchResultsFragment">
+    tools:context=".searchpeople.PeopleSearchResultsFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_people_search_results_rv"
+        android:id="@+id/fragment_search_people_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

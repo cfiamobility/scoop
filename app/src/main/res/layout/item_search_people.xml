@@ -10,7 +10,7 @@
 
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/item_people_search_results_img_profile"
+            android:id="@+id/item_search_people_img_profile"
             android:layout_width="54dp"
             android:layout_height="48dp"
             android:layout_alignParentStart="true"
@@ -20,15 +20,15 @@
             app:srcCompat="@drawable/ic_account_circle_black_24dp" />
 
         <TextView
-            android:id="@+id/item_people_search_results_txt_name"
+            android:id="@+id/item_search_people_txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="27dp"
             android:layout_marginTop="40dp"
-            android:layout_toEndOf="@+id/item_people_search_results_img_profile"
+            android:layout_toEndOf="@+id/item_search_people_img_profile"
             android:fontFamily="@font/roboto"
-            android:text="Timmy Truong"
+            android:text="Name"
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textSize="14sp" />
@@ -37,7 +37,7 @@
             android:id="@+id/divider17"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/item_people_search_results_img_profile"
+            android:layout_below="@+id/item_search_people_img_profile"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="0dp"
