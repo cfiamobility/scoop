@@ -18,7 +18,7 @@ import ca.gc.inspection.scoop.profile.ProfileAdapter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TopSearchResultsFragment extends Fragment {
+public class SearchPostsFragment extends Fragment {
 
     // recycler view widgets
     private RecyclerView recyclerView;
@@ -29,7 +29,7 @@ public class TopSearchResultsFragment extends Fragment {
     private List<String> test = new ArrayList<>();
 
 
-    public TopSearchResultsFragment() {
+    public SearchPostsFragment() {
         // Required empty public constructor
     }
 
