@@ -26,6 +26,8 @@ import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.*;
 
+import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
+
 /**
  * Controls logic of notifications recyclerView items/view holders
  */
@@ -202,8 +204,8 @@ public class NotificationsAdapterController {
         holder.profileImage.setOnClickListener(new View.OnClickListener() { //on click for the image
             @Override
             public void onClick(View view) {
-                MainActivity.otherUserClicked(ids.get("userid"));
-            }
+                Context context = view.getContext();
+                startFragmentOrActivity(context, ids.get("userid"));            }
         });
     }
 
@@ -326,7 +328,8 @@ public class NotificationsAdapterController {
             holder.fullName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MainActivity.otherUserClicked(ids.get("userid"));
+                    Context context = view.getContext();
+                    startFragmentOrActivity(context, ids.get("userid"));
                 }
             });
         }
