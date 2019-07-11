@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
@@ -35,6 +36,10 @@ public class FeedPostViewHolder extends ProfilePostViewHolder
             Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
             Log.i("image", image);
             postImage.setImageBitmap(bitmap);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.addRule(RelativeLayout.BELOW, R.id.post_text);
+            layoutParams.setMargins(0, 10, 0, 0);
+            postImage.setLayoutParams(layoutParams);
             showPostImage();
         }
         else hidePostImage();
