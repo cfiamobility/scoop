@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -60,8 +61,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         super.onCreate(savedInstanceState);
 
         //from ProfilePostFragment bundle
-        //contains activity id of the specific post in the Recycler View in which its options menu was clicked
+        //contains activity id and posterid of the specific post in the Recycler View in which its options menu was clicked
         final String activityid = getArguments().getString("ACTIVITY_ID");
+        final String posterid = getArguments().getString("POSTER_ID");
 
         setPresenter(new PostOptionsDialogPresenter(this));
 
@@ -71,8 +73,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         Button deleteButton = view.findViewById(R.id.dialog_post_options_btn_delete);
         Button reportButton = view.findViewById(R.id.dialog_post_options_btn_report);
 
-        ImageView share = view.findViewById(R.id.dialog_post_options_img_share);
-        share.setVisibility(View.VISIBLE);
+//        ImageView share = view.findViewById(R.id.dialog_post_options_img_share);
+//        share.setVisibility(View.VISIBLE);
 
         // onClick listener for saving a post
         saveButton.setOnClickListener(new View.OnClickListener() {

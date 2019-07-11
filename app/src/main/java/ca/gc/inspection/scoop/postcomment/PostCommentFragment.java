@@ -167,7 +167,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         });
     }
 
-    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityid){
+    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityId, String posterId){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,9 +176,11 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 Bundle bundle = new Bundle();
                 PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
 
-                //gets the activity id and stores in bundle to be fetched in PostOptionsDialogFragment
-                Log.i("post I am clicking: ", activityid);
-                bundle.putString("ACTIVITY_ID", activityid);
+                //gets the activity id and posterd id and stores in bundle to be fetched in PostOptionsDialogFragment
+                Log.i("post I am clicking: ", activityId);
+                bundle.putString("ACTIVITY_ID", activityId);
+                Log.i("post I am clicking: ", posterId);
+                bundle.putString("POSTER_ID", posterId);
                 bottomSheetDialog.setArguments(bundle);
 
                 final Context context = v.getContext();
