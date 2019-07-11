@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.profilecomment;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.R;
@@ -16,6 +17,7 @@ public class ProfileCommentViewHolder extends PostCommentViewHolder
     ProfileCommentContract.Presenter.ViewHolderAPI mPresenter;
 
     public TextView postTitle;
+
 
     public ProfileCommentViewHolder(View v, ProfileCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v, presenter);

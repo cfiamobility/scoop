@@ -145,28 +145,4 @@ public class ProfilePostFragment extends Fragment implements
         if (!mSwipeRefreshLayout.isRefreshing())
             loadDataFromDatabase();
     }
-
-    public static void setPostOptionsListener(ProfilePostViewHolder viewHolder, String activityid){
-        // to get the options menu to appear
-        viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // bundle
-                Bundle bundle = new Bundle();
-                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
-
-                //gets the activity id and stores in bundle to be fetched in PostOptionsDialogFragment
-                Log.i("post I am clicking: ", activityid);
-                bundle.putString("ACTIVITY_ID", activityid);
-                bottomSheetDialog.setArguments(bundle);
-
-                final Context context = v.getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                bottomSheetDialog.show(fragmentManager, "bottomSheet");
-
-
-
-            }
-        });
-    }
 }

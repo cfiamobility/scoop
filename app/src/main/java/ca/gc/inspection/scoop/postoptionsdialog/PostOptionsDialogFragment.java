@@ -111,6 +111,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         return view;
     }
 
+
     /**
      * Displays toast message based on the response received from the database
      * @param message Message that is set in the Presenter

@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +20,9 @@ import android.widget.Toast;
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.profile.OtherUserActivity;
+import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
@@ -162,4 +166,30 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
             }
         });
     }
+
+    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityid){
+        // to get the options menu to appear
+        viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // bundle
+                Bundle bundle = new Bundle();
+                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
+
+                //gets the activity id and stores in bundle to be fetched in PostOptionsDialogFragment
+                Log.i("post I am clicking: ", activityid);
+                bundle.putString("ACTIVITY_ID", activityid);
+                bottomSheetDialog.setArguments(bundle);
+
+                final Context context = v.getContext();
+                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                bottomSheetDialog.show(fragmentManager, "bottomSheet");
+
+
+
+            }
+        });
+    }
+
+
 }

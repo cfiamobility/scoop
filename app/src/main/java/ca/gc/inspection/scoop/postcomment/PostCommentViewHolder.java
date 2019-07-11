@@ -29,6 +29,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
 
     public TextView username, date, postText, likeCount;
     public ImageView profileImage, upvote, downvote;
+    public ImageView optionsMenu;
+
 
     public PostCommentViewHolder(View v, PostCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v);
@@ -39,6 +41,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
         likeCount = v.findViewById(R.id.vote_count);
         upvote = v.findViewById(R.id.up_vote);
         downvote = v.findViewById(R.id.down_vote);
+        optionsMenu = v.findViewById(R.id.options_menu);
+
 
         mPresenter = presenter;
     }

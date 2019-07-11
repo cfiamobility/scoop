@@ -26,13 +26,13 @@ public class ProfileLikesViewHolder extends ProfileCommentViewHolder
     ProfileLikesContract.Presenter.ViewHolderAPI mPresenter;
 
     public TextView commentCount;
-    public ImageView optionsMenu;
+//    public ImageView optionsMenu;
 
 
     public ProfileLikesViewHolder(View v, ProfileLikesContract.Presenter.ViewHolderAPI presenter) {
         super(v, presenter);
         commentCount = v.findViewById(R.id.comment_count);
-        optionsMenu = v.findViewById(R.id.options_menu);
+//        optionsMenu = v.findViewById(R.id.options_menu);
 
         mPresenter = presenter;
     }
