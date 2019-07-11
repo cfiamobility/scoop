@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchposts;
+package ca.gc.inspection.scoop.searchpost;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -8,11 +8,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
-import static ca.gc.inspection.scoop.profilepost.ProfilePostPresenter.bindProfilePostDataToViewHolder;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -108,7 +106,7 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
 
         mAdapter.refreshAdapter();
         refreshingData = false;
-        mSearchPostView.onLoadedDataFromDatabase();
+//        mSearchPostView.onLoadedDataFromDatabase();
     }
 
     @Override

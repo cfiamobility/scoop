@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import ca.gc.inspection.scoop.searchpeople.PeopleSearchResultsFragment;
-import ca.gc.inspection.scoop.searchposts.TopSearchResultsFragment;
+import ca.gc.inspection.scoop.searchpost.SearchPostFragment;
 
 public class SearchPagerAdapter extends FragmentStatePagerAdapter {
     private int mNumOfTabs;
@@ -19,7 +19,7 @@ public class SearchPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         switch (i) {
             case 0:
-                TopSearchResultsFragment tab1 = new TopSearchResultsFragment();
+                SearchPostFragment tab1 = new SearchPostFragment();
                 return tab1;
             case 1:
                 PeopleSearchResultsFragment tab2 = new PeopleSearchResultsFragment();

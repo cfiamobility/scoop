@@ -25,6 +25,8 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     private SearchContract.Presenter mPresenter;
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
+    private TabLayout.Tab mSearchPostTab;
+    private TabLayout.Tab mSearchPeopleTab;
 
     @Override
     public void setPresenter(@NonNull SearchContract.Presenter presenter) {
@@ -61,8 +63,10 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
         // setting up the tab layout
         TabLayout tabLayout = findViewById(R.id.activity_search_tl_search);
-        tabLayout.addTab(tabLayout.newTab().setText("Posts"));
-        tabLayout.addTab(tabLayout.newTab().setText("People"));
+        mSearchPostTab = tabLayout.newTab().setText("Posts");
+        mSearchPeopleTab = tabLayout.newTab().setText("People");
+        tabLayout.addTab(mSearchPostTab);
+        tabLayout.addTab(mSearchPeopleTab);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         // setting up the viewpager for the tab layout

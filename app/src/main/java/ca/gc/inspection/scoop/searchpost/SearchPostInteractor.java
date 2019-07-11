@@ -1,9 +1,8 @@
-package ca.gc.inspection.scoop.searchposts;
+package ca.gc.inspection.scoop.searchpost;
 
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentInteractor;
 import ca.gc.inspection.scoop.profilepost.ProfilePostInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 

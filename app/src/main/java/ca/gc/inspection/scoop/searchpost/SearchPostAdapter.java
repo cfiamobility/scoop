@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchposts;
+package ca.gc.inspection.scoop.searchpost;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -17,17 +17,17 @@ public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder
      * Considered to be part of the View.
      */
 
-	private SearchPostContract.Presenter.AdapterAPI mProfilePostPresenter;
-    private ProfilePostFragment mProfilePostView;
+	private SearchPostContract.Presenter.AdapterAPI mSearchPostPresenter;
+    private SearchPostFragment mSearchPostView;
 
     /**
      * Constructor for the adapter
      */
-	public SearchPostAdapter(ProfilePostFragment profileCommentView,
+	public SearchPostAdapter(SearchPostFragment searchPostView,
                              SearchPostContract.Presenter.AdapterAPI presenter) {
-        mProfilePostView = profileCommentView;
-        mProfilePostPresenter = presenter;
-        mProfilePostPresenter.setAdapter(this);
+        mSearchPostView = searchPostView;
+        mSearchPostPresenter = presenter;
+        mSearchPostPresenter.setAdapter(this);
 	}
 
     /**
@@ -39,7 +39,7 @@ public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder
     @Override
     public SearchPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_profile_layout, viewGroup, false);
-        return new SearchPostViewHolder(v, (SearchPostContract.Presenter.ViewHolderAPI) mProfilePostPresenter);
+        return new SearchPostViewHolder(v, (SearchPostContract.Presenter.ViewHolderAPI) mSearchPostPresenter);
     }
 
     /**
@@ -50,19 +50,19 @@ public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder
      */
     @Override
     public void onBindViewHolder(@NonNull SearchPostViewHolder searchPostViewHolder, int i) {
-        mProfilePostPresenter.onBindViewHolderAtPosition(searchPostViewHolder, i);
+        mSearchPostPresenter.onBindViewHolderAtPosition(searchPostViewHolder, i);
         PostCommentFragment.setDisplayPostListener(searchPostViewHolder,
-                mProfilePostPresenter.getActivityIdByIndex(i));
+                mSearchPostPresenter.getActivityIdByIndex(i));
         PostCommentFragment.setLikesListener(searchPostViewHolder, i);
         PostCommentFragment.setUserInfoListener(searchPostViewHolder,
-                mProfilePostPresenter.getPosterIdByIndex(i));
+                mSearchPostPresenter.getPosterIdByIndex(i));
 
-        ProfilePostFragment.setPostOptionsListener(searchPostViewHolder, mProfilePostPresenter.getActivityIdByIndex(i));
+        ProfilePostFragment.setPostOptionsListener(searchPostViewHolder, mSearchPostPresenter.getActivityIdByIndex(i));
     }
 
 	@Override
 	public int getItemCount() {
-		return mProfilePostPresenter.getItemCount();
+		return mSearchPostPresenter.getItemCount();
 	}
 
     @Override

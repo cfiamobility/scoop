@@ -1,63 +1,87 @@
-package ca.gc.inspection.scoop.searchposts;
+package ca.gc.inspection.scoop.searchpost;
 
 import ca.gc.inspection.scoop.R;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ca.gc.inspection.scoop.profile.ProfileAdapter;
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchPostsFragment extends Fragment {
+public class SearchPostFragment extends Fragment implements
+        SearchPostContract.View {
 
     // recycler view widgets
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-
-    // array list to test the recycler view
-    private List<String> test = new ArrayList<>();
-
-
-    public SearchPostsFragment() {
-        // Required empty public constructor
-    }
-
+    private RecyclerView postRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private View view;
+    private SearchPostContract.Presenter mSearchPostPresenter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public void setPresenter(@NonNull SearchPostContract.Presenter presenter) {
+        mSearchPostPresenter = checkNotNull(presenter);
+    }
+
+    /**
+     * Empty Constructor for fragments
+     */
+    public SearchPostFragment() {
+    }
+
+    /**
+     * When the fragment initializes
+     * @param inflater: inflates the layout
+     * @param container: contains the layout
+     * @param savedInstanceState: ??
+     * @return - returns the view created
+     */
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search_posts, container, false);
+        view = inflater.inflate(R.layout.fragment_search_post, container, false);
 
-        // initializing the test array
-        test.add("TOP 1");
-        test.add("TOP 2");
-        test.add("TOP 3");
-
-        // initializing the recycler view
-        recyclerView = view.findViewById(R.id.fragment_search_posts_rv);
-        recyclerView.setHasFixedSize(true);
-
-        // setting up the layout manager for the recycler view
-        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // setting the adapter of the recycler view to the custom feed adapter
-        adapter = new ProfileAdapter();
-        recyclerView.setAdapter(adapter);
-
+        setPresenter(new SearchPostPresenter(this, NetworkUtils.getInstance(getContext())));
         return view;
     }
 
+    /**
+     * See - Fragment Lifecycle
+     * @param view: the view
+     * @param savedInstanceState: ??
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setRecyclerView();
+    }
+
+    /**
+     * Sets the recycler view
+     */
+    public void setRecyclerView() {
+        // initializing the recycler view
+        postRecyclerView = view.findViewById(R.id.fragment_search_post_rv);
+        postRecyclerView.setHasFixedSize(true);
+
+        // setting the layout manager for the recycler view
+        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        postRecyclerView.setLayoutManager(mLayoutManager);
+
+        // setting the custom adapter for the recycler view
+        mAdapter = new SearchPostAdapter(this,
+                (SearchPostContract.Presenter.AdapterAPI) mSearchPostPresenter);
+        postRecyclerView.setAdapter(mAdapter);
+    }
 }

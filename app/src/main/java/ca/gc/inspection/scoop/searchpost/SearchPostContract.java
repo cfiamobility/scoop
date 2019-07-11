@@ -1,7 +1,6 @@
-package ca.gc.inspection.scoop.searchposts;
+package ca.gc.inspection.scoop.searchpost;
 
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
 
 public interface SearchPostContract extends ProfilePostContract {
@@ -36,14 +35,12 @@ public interface SearchPostContract extends ProfilePostContract {
          * explain how the Presenter is to communicate with the main View only.
          */
 
-        void onLoadedDataFromDatabase();
+//        void onLoadedDataFromDatabase();
 
         interface Adapter extends ProfilePostContract.View.Adapter {
         }
 
         interface ViewHolder extends ProfilePostContract.View.ViewHolder {
-            ViewHolder setPostTitle(String postTitle);
-            ViewHolder setCommentCount(String commentCount);
         }
     }
 

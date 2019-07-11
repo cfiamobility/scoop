@@ -1,8 +1,7 @@
-package ca.gc.inspection.scoop.searchposts;
+package ca.gc.inspection.scoop.searchpost;
 
 import org.json.JSONObject;
 
-import ca.gc.inspection.scoop.profilecomment.ProfileComment;
 import ca.gc.inspection.scoop.profilepost.ProfilePost;
 
 public class SearchPost extends ProfilePost {
