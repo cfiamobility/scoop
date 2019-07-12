@@ -38,7 +38,7 @@ public class FeedPostViewHolder extends ProfilePostViewHolder
             postImage.setImageBitmap(bitmap);
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.addRule(RelativeLayout.BELOW, R.id.post_text);
-            layoutParams.setMargins(0, 10, 0, 0);
+            layoutParams.setMargins(0, 30, 0, 0);
             postImage.setLayoutParams(layoutParams);
             showPostImage();
         }
