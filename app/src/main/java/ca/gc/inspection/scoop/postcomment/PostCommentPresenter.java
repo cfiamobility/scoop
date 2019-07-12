@@ -258,4 +258,9 @@ public class PostCommentPresenter implements
     public String getActivityIdByIndex(int i){
         return Objects.requireNonNull(getItemByIndex(i)).getActivityId();
     }
+
+    public Boolean getSavedStatusByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getSavedStatus();
+    }
+
 }

@@ -73,6 +73,7 @@ public interface PostCommentContract {
             int getItemCount();
             String getPosterIdByIndex(int i);   // TODO can move into ViewHolderAPI
             String getActivityIdByIndex(int i); // TODO can move into ViewHolderAPI
+            Boolean getSavedStatusByIndex(int i);
         }
 
         interface ViewHolderAPI {

@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
@@ -142,29 +144,6 @@ public class ProfileLikesFragment extends Fragment implements
             loadDataFromDatabase();
     }
 
-//    public static void setPostOptionsListener(ProfileLikesViewHolder viewHolder, String activityid){
-//        // to get the options menu to appear
-//        viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // bundle
-//                Bundle bundle = new Bundle();
-//                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
-//
-//                //gets the activity id and stores in bundle to be fetched in PostOptionsDialogFragment
-//                Log.i("post I am clicking: ", activityid);
-//                bundle.putString("ACTIVITY_ID", activityid);
-//                bottomSheetDialog.setArguments(bundle);
-//
-//                final Context context = v.getContext();
-//                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-//                bottomSheetDialog.show(fragmentManager, "bottomSheet");
-//
-//
-//
-//            }
-//        });
-//    }
 
 
 }

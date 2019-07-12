@@ -45,6 +45,7 @@ public class PostComment {
     public static final String PROFILE_COMMENT_LIKE_TYPE_KEY = "liketype";
     public static final String PROFILE_COMMENT_LIKE_COUNT_KEY = "likecount";
     public static final String PROFILE_COMMENT_POST_TEXT_KEY = "posttext";
+    public static final String PROFILE_COMMENT_SAVED_STATUS_KEY = "savedstatus";
 
     /**
      * Constructor for the data object.
@@ -217,5 +218,14 @@ public class PostComment {
         if (!getFirstName().equals("") && !getLastName().equals(""))
             return getFirstName() + " " + getLastName();
         return getFirstName() + getLastName();
+    }
+
+    public Boolean getSavedStatus(){
+        try{
+            return Boolean.parseBoolean(mComment.getString(PROFILE_COMMENT_SAVED_STATUS_KEY));
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -72,8 +72,10 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         final String activityid = getArguments().getString("ACTIVITY_ID");
         final String posterid = getArguments().getString("POSTER_ID");
         final String viewHolderType = getArguments().getString("VIEWHOLDER_TYPE");
+        final Boolean savedStatus = getArguments().getBoolean("SAVED_STATUS");
         Log.i("POSTER_ID IN DIALOG FRAGMENT", posterid);
         Log.i("CURRENT USER", Config.currentUser);
+        Log.i("SAVED STATUS IN DIALOG FRAGMENT", savedStatus.toString());
 
         setPresenter(new PostOptionsDialogPresenter(this));
 
@@ -105,12 +107,10 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             saveButton.setVisibility(View.GONE);
             unsaveTR.setVisibility(View.GONE);
             unsaveButton.setVisibility(View.GONE);
-            reportTR.setVisibility(View.GONE);
-            reportButton.setVisibility(View.GONE);
         }
 
         // Checks if the post is already saved
-        if (false){
+        if (savedStatus){
             saveTR.setVisibility(View.GONE);
             saveButton.setVisibility(View.GONE);
 

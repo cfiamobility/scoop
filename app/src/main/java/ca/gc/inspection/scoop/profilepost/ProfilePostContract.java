@@ -1,9 +1,9 @@
 package ca.gc.inspection.scoop.profilepost;
 
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 
-public interface ProfilePostContract extends ProfileCommentContract {
+public interface ProfilePostContract extends ProfileLikesContract {
     /**
      * A contract between the View (layer) and Presenter for the viewing a profile post
      * action. This contract communicates the how the View and Presenter will
@@ -37,24 +37,25 @@ public interface ProfilePostContract extends ProfileCommentContract {
 
         void onLoadedDataFromDatabase();
 
-        interface Adapter extends ProfileCommentContract.View.Adapter {
+        interface Adapter extends ProfileLikesContract.View.Adapter {
         }
 
-        interface ViewHolder extends ProfileCommentContract.View.ViewHolder {
+        interface ViewHolder extends ProfileLikesContract.View.ViewHolder {
             ViewHolder setPostTitle(String postTitle);
             ViewHolder setCommentCount(String commentCount);
         }
     }
 
-    interface Presenter extends ProfileCommentContract.Presenter {
+    interface Presenter extends ProfileLikesContract.Presenter {
 
-        interface AdapterAPI extends ProfileCommentContract.Presenter.AdapterAPI {
+        interface AdapterAPI extends ProfileLikesContract.Presenter.AdapterAPI {
             void setAdapter(ProfilePostContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
                     ProfilePostContract.View.ViewHolder postCommentViewHolder, int i);
+
         }
 
-        interface ViewHolderAPI extends ProfileCommentContract.Presenter.ViewHolderAPI {
+        interface ViewHolderAPI extends ProfileLikesContract.Presenter.ViewHolderAPI {
         }
     }
 }

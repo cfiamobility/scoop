@@ -1,10 +1,13 @@
 package ca.gc.inspection.scoop.displaypost;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
@@ -138,6 +143,32 @@ public class DisplayPostFragment extends Fragment implements
         // using the custom adapter for the recycler view
         mAdapter = new DisplayPostAdapter(this, (DisplayPostContract.Presenter.FragmentAPI.AdapterAPI) mDisplayPostPresenter);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityId, String posterId) {
+        // to get the options menu to appear
+        viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // bundle
+                Bundle bundle = new Bundle();
+                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
+
+                //gets the activity id and posterd id and stores in bundle to be fetched in PostOptionsDialogFragment
+                Log.i("post I am clicking: ", activityId);
+                bundle.putString("ACTIVITY_ID", activityId);
+                Log.i("poster id I am clicking: ", posterId);
+                bundle.putString("POSTER_ID", posterId);
+                Log.i("viewholder: ", viewHolder.getClass().toString());
+                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
+                bottomSheetDialog.setArguments(bundle);
+
+                final Context context = v.getContext();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                bottomSheetDialog.show(fragmentManager, "bottomSheet");
+
+            }
+        });
     }
 
 }

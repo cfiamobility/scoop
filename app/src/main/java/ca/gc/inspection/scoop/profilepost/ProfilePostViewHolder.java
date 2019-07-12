@@ -6,8 +6,9 @@ import android.widget.TextView;
 
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
 
-public class ProfilePostViewHolder extends ProfileCommentViewHolder
+public class ProfilePostViewHolder extends ProfileLikesViewHolder
         implements ProfilePostContract.View.ViewHolder {
     /**
      * ViewHolder for viewing a profile post.
@@ -50,4 +51,5 @@ public class ProfilePostViewHolder extends ProfileCommentViewHolder
         super.setPostTitle(postTitle);
         return this;
     }
+
 }
