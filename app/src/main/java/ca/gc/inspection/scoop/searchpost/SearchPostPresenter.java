@@ -119,10 +119,5 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
             SearchPostContract.View.ViewHolder viewHolderInterface, SearchPost searchPost) {
         // call bindPostCommentDataToViewHolder instead of bindProfileCommentDataToViewHolder as we are setting a different title
         bindProfilePostDataToViewHolder(viewHolderInterface, searchPost);
-        if (searchPost != null) {
-            viewHolderInterface
-                    .setPostTitle(searchPost.getPostTitle())
-                    .setCommentCount(searchPost.getCommentCount());
-        }
     }
 }

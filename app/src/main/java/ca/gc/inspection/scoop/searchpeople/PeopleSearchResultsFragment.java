@@ -1,7 +1,11 @@
 package ca.gc.inspection.scoop.searchpeople;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.TabFragment;
+import ca.gc.inspection.scoop.search.SearchContract;
+
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +20,8 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PeopleSearchResultsFragment extends Fragment {
+public class PeopleSearchResultsFragment extends Fragment implements
+        SearchContract.View.Fragment {
 
     // recycler view widgets
     private RecyclerView recyclerView;
@@ -32,7 +37,7 @@ public class PeopleSearchResultsFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_people, container, false);
@@ -58,4 +63,8 @@ public class PeopleSearchResultsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void searchQuery(String query) {
+
+    }
 }

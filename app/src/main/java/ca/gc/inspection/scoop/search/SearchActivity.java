@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -17,6 +21,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import java.util.Objects;
 import ca.gc.inspection.scoop.MainActivity;
+import ca.gc.inspection.scoop.TabFragment;
+import ca.gc.inspection.scoop.searchpeople.PeopleSearchResultsFragment;
+import ca.gc.inspection.scoop.searchpost.SearchPostFragment;
+
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -24,9 +32,8 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
     private SearchContract.Presenter mPresenter;
     private ViewPager mViewPager;
-    private PagerAdapter mPagerAdapter;
-    private TabLayout.Tab mSearchPostTab;
-    private TabLayout.Tab mSearchPeopleTab;
+    private TabLayout mTabLayout;
+    private SearchPagerAdapter mPagerAdapter;
 
     @Override
     public void setPresenter(@NonNull SearchContract.Presenter presenter) {
@@ -62,34 +69,29 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         // setting up the tab layout
-        TabLayout tabLayout = findViewById(R.id.activity_search_tl_search);
-        mSearchPostTab = tabLayout.newTab().setText("Posts");
-        mSearchPeopleTab = tabLayout.newTab().setText("People");
-        tabLayout.addTab(mSearchPostTab);
-        tabLayout.addTab(mSearchPeopleTab);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        mTabLayout = findViewById(R.id.activity_search_tl_search);
+        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        setupViewPager();
+        mTabLayout.setupWithViewPager(mViewPager);
+    }
 
+    private void setupViewPager() {
         // setting up the viewpager for the tab layout
         mViewPager = findViewById(R.id.activity_search_vp_search);
-        mPagerAdapter = new SearchPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        mPagerAdapter = new SearchPagerAdapter(getSupportFragmentManager());
+        mPagerAdapter.addFragment(new SearchPostFragment(), "Post");
+        mPagerAdapter.addFragment(new PeopleSearchResultsFragment(), "People");
+
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+        mViewPager.addOnPageChangeListener(
+                new TabLayout.TabLayoutOnPageChangeListener(mTabLayout) {
+                    @Override
+                    public void onPageSelected(int position) {
+                        super.onPageSelected(position);
 
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+                    }
+                });
     }
 
     @Override
@@ -114,6 +116,25 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
                 return true;
             }
         });
+
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        Log.d("search activity", "fragment" + mViewPager.getCurrentItem());
+                        int currentItem = mViewPager.getCurrentItem();
+                        ((SearchContract.View.Fragment) mPagerAdapter.getItem(currentItem)).searchQuery(query);
+                        return false;
+                    }
+                }
+        );
         return true;
     }
 }

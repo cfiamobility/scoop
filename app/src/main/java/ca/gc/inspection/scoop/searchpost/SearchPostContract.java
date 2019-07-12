@@ -2,8 +2,9 @@ package ca.gc.inspection.scoop.searchpost;
 
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
+import ca.gc.inspection.scoop.search.SearchContract;
 
-public interface SearchPostContract extends ProfilePostContract {
+public interface SearchPostContract extends SearchContract {
     /**
      * A contract between the View (layer) and Presenter for the viewing a profile post
      * action. This contract communicates the how the View and Presenter will

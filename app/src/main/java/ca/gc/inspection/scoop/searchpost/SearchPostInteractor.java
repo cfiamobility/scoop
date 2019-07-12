@@ -1,5 +1,7 @@
 package ca.gc.inspection.scoop.searchpost;
 
+import android.util.Log;
+
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import ca.gc.inspection.scoop.Config;
@@ -32,8 +34,9 @@ public class SearchPostInteractor extends ProfilePostInteractor {
      * @param userid: passes the userid of the profile clicked on
      */
     public void getSearchPosts(final String userid, String query) {
-        String url = Config.baseIP + "post/text/" + userid + "/" + query;
-        String responseUrl = Config.baseIP + "post/images/" + query;
+        Log.d("Search Post Interactor", "getSearchPosts for "+userid+", "+query);
+        String url = Config.baseIP + "post/search/text/" + userid + "/" + query;
+        String responseUrl = Config.baseIP + "post/search/images/" + query;
         JsonArrayRequest postRequest = super.newProfileJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(postRequest);
     }
