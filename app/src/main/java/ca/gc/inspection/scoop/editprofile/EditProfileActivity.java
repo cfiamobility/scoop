@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.ImageFilePath;
+import ca.gc.inspection.scoop.searchbuilding.SearchBuildingActivity;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -65,16 +68,20 @@ public class EditProfileActivity extends AppCompatActivity implements
 	// Request codes for intents
 	public static final int TAKE_PIC_REQUEST_CODE = 0;
 	public static final int CHOOSE_PIC_REQUEST_CODE = 1;
+	public static final int CHOOSE_BUILDING_REQUEST_CODE = 2;
 	private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
 	// UI Declarations
 	AutoCompleteTextView positionET, buildingET, divisionET;
 	EditText firstNameET, lastNameET, cityET, linkedinET, twitterET, facebookET, instagramET;
-	Spinner provinceSpinner;
+	//Spinner provinceSpinner;
 	TextView changeProfilePicBTN;
 	CircleImageView previewProfilePic;
 	CircleImageView profilePreview;
 	Button saveBTN;
+
+	TextView enterBuildingBTN;
+	ImageButton deleteBuildingBTN;
 
 	// UI Support Declarations
 	ArrayAdapter<CharSequence> spinnerAdapter;
@@ -88,6 +95,9 @@ public class EditProfileActivity extends AppCompatActivity implements
 	// HashMap<String, String> positionObjects, buildingsObjects, divisionsObjects;
 	Uri mMediaUri;
 	static Bitmap bitmap;
+
+	// stored local variables
+	String mBuildingId;
 
 	// The method that runs when save is pressed
 	private View.OnClickListener save = new View.OnClickListener() {
@@ -104,13 +114,25 @@ public class EditProfileActivity extends AppCompatActivity implements
 				params.put("lastname", lastNameET.getText().toString());
 				params.put("position", positionET.getText().toString());
 				params.put("division", divisionET.getText().toString());
-				params.put("building", buildingET.getText().toString());
+				//params.put("building", buildingET.getText().toString());
+				params.put("building", enterBuildingBTN.getText().toString());
+				//params.put("buildingid", Integer.toString(getIntent().getIntExtra("buildingid", -1)));
+
+				if (mBuildingId != null){
+					params.put("buildingid", mBuildingId);
+				}
+				else{
+					params.put("buildingid", String.valueOf(-1));
+				}
+
+				Log.d("buildingid", Integer.toString(getIntent().getIntExtra("buildingid", -1)));
+
 				params.put("linkedin", linkedinET.getText().toString());
 				params.put("twitter", twitterET.getText().toString());
 				params.put("instagram", instagramET.getText().toString());
 				params.put("facebook", facebookET.getText().toString());
-				params.put("city", cityET.getText().toString());
-				params.put("province", provinceSpinner.getSelectedItem().toString());
+				//params.put("city", cityET.getText().toString());
+				//params.put("province", provinceSpinner.getSelectedItem().toString());
 				params.put("image", image);
 				mPresenter.updateUserInfo(NetworkUtils.getInstance(getApplicationContext()), params);
 			} else {
@@ -118,6 +140,42 @@ public class EditProfileActivity extends AppCompatActivity implements
 			}
 		}
 	};
+
+
+	private View.OnClickListener chooseBuilding = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(getApplicationContext(), SearchBuildingActivity.class);
+
+			/**
+			intent.putExtra("userid", userID);
+			intent.putExtra("firstname", firstNameET.getText().toString());
+			intent.putExtra("lastname", lastNameET.getText().toString());
+			intent.putExtra("position", positionET.getText().toString());
+			intent.putExtra("division", divisionET.getText().toString());
+			intent.putExtra("building", buildingET.getText().toString());
+			intent.putExtra("linkedin", linkedinET.getText().toString());
+			intent.putExtra("twitter", twitterET.getText().toString());
+			intent.putExtra("instagram", instagramET.getText().toString());
+			intent.putExtra("facebook", facebookET.getText().toString());
+			intent.putExtra("city", cityET.getText().toString());
+			intent.putExtra("image", image);
+			*/
+
+			startActivityForResult(intent, CHOOSE_BUILDING_REQUEST_CODE);
+			//startActivity(intent);
+			//finish();
+		}
+	};
+
+	private View.OnClickListener deleteBuilding = new View.OnClickListener(){
+		@Override
+		public void onClick(View v) {
+			enterBuildingBTN.setText(null);
+			mBuildingId = null;
+		}
+	};
+
 
 	// method for the back button
 	public void finishActivity(View view) {
@@ -138,6 +196,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_profile);
 
+
 		setPresenter(new EditProfilePresenter(this));
 
 		// EditText Definitions
@@ -147,12 +206,21 @@ public class EditProfileActivity extends AppCompatActivity implements
 		divisionET = findViewById(R.id.activity_edit_profile_et_division);
 		buildingET = findViewById(R.id.activity_edit_profile_et_building);
 		cityET = findViewById(R.id.activity_edit_profile_et_city);
-		provinceSpinner = findViewById(R.id.activity_edit_profile_spinner_provinces);
+		//provinceSpinner = findViewById(R.id.activity_edit_profile_spinner_provinces);
 		linkedinET = findViewById(R.id.activity_edit_profile_et_linkedin);
 		twitterET = findViewById(R.id.activity_edit_profile_et_twitter);
 		facebookET = findViewById(R.id.activity_edit_profile_et_facebook);
 		instagramET = findViewById(R.id.activity_edit_profile_et_instagram);
 		profilePreview = findViewById(R.id.activity_create_post_img_profile);
+
+		// BUILDING
+		enterBuildingBTN = findViewById(R.id.activity_edit_profile_txt_btn_choose_building);
+		enterBuildingBTN.setOnClickListener(chooseBuilding);
+
+		deleteBuildingBTN = findViewById(R.id.delete_building_button);
+		deleteBuildingBTN.setOnClickListener(deleteBuilding);
+
+
 
 		// Button Definition
 		saveBTN = findViewById(R.id.activity_edit_profile_btn_save);
@@ -167,8 +235,8 @@ public class EditProfileActivity extends AppCompatActivity implements
 		// Province Spinner Definition
 		spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.provinces_array, android.R.layout.simple_spinner_item);
 		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		provinceSpinner.setAdapter(spinnerAdapter);
-		provinceSpinner.setOnItemSelectedListener(this);
+		//provinceSpinner.setAdapter(spinnerAdapter);
+		//provinceSpinner.setOnItemSelectedListener(this);
 
 		// set the system status bar color
 		getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
@@ -189,8 +257,11 @@ public class EditProfileActivity extends AppCompatActivity implements
 		// Searches for user's info to autofill the edittext
 		mPresenter.initialFill(NetworkUtils.getInstance(this));
 
+		// get building if returning from search building activity
+		//getBuilding();
+
 		// Sets up the Position, Office Address and Division AutoCompletes
-		autoComplete();
+		//autoComplete();
 
 		// when the soft keyboard is open tapping anywhere else will close the keyboard
 		findViewById(R.id.activity_edit_profile_layout).setOnTouchListener(new View.OnTouchListener() {
@@ -203,6 +274,21 @@ public class EditProfileActivity extends AppCompatActivity implements
 		});
 	}
 
+	private void getBuilding(Intent intent) {
+		//Intent intent = getIntent();
+		String building = intent.getStringExtra("building");
+		int buildingid = intent.getIntExtra("buildingid", -1);
+		if (building == null){ // if null, then didnt return from search building activity or didnt select anything in search building activity
+			return;
+		}
+
+		enterBuildingBTN.setText(building);
+		mBuildingId = String.valueOf(buildingid);
+		Log.d("changedBuildingid", mBuildingId);
+		enterBuildingBTN.setTextColor(Color.parseColor("black"));
+		return;
+	}
+
 	// Mandatory Methods for AdapterView.OnItemSelected - OnNothingSelected is Default Spinner Selection set to AB
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -211,7 +297,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
 		// Default selection
-		provinceSpinner.setSelection(0);
+		//provinceSpinner.setSelection(0);
 	}
 
 	/**
@@ -245,18 +331,25 @@ public class EditProfileActivity extends AppCompatActivity implements
 				}// If user has already inputted an office address
 				if (!response.get("buildingid").toString().equals("null")) {
                     String buildingText = response.get("address").toString();
-					buildingET.setText(buildingText);
+					//buildingET.setText(buildingText);
+					enterBuildingBTN.setText(buildingText);
+
+					mBuildingId = response.get("buildingid").toString();
+					Log.d("setbuildingid", mBuildingId);
+
+					enterBuildingBTN.setTextColor(Color.parseColor("black"));
+					//getBuilding(); // gets building address in the case that the previous activity was "searchBuildingActivity" and the user selected a new building there
 				}
 				// If user has already inputted an office address
 				if (!response.get("city").toString().equals("null")) {
                     String cityText = response.get("city").toString();
-					cityET.setText(cityText);
+					//cityET.setText(cityText);
 				}
 				// If user has already inputted an office address
 				if (!response.get("province").toString().equals("null")) {
                     String provinceText = response.get("province").toString();
 					int spinnerSelection = spinnerAdapter.getPosition(provinceText);
-					provinceSpinner.setSelection(spinnerSelection);
+					//provinceSpinner.setSelection(spinnerSelection);
 				}
 				// If the user has already inputted a facebook url
 				if (!response.get("facebook").toString().equals("null")) {
@@ -292,7 +385,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 		addTextChangedListenerTo(positionET, EditTextType.POSITION);
 
 		// Autocomplete for office address text
-		addTextChangedListenerTo(buildingET, EditTextType.ADDRESS);
+		//addTextChangedListenerTo(buildingET, EditTextType.ADDRESS);
 		// Setting the onitemclicklistener - if a suggestion is clicked, it fills in the city and province inputs
 		buildingET.setOnItemClickListener(autoItemSelectedListener);
 
@@ -301,7 +394,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 	}
 
 	private void addTextChangedListenerTo(AutoCompleteTextView textView, EditTextType type) {
-        textView.addTextChangedListener(new EditProfileTextWatcher(textView, type));
+        //textView.addTextChangedListener(new EditProfileTextWatcher(textView, type));
     }
 
     /** Method to setup the front end of autocomplete text view for positions
@@ -352,7 +445,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 			// Setting the edit text and spinner
 			cityET.setText(cityText);
 			int spinnerSelection = spinnerAdapter.getPosition(provinceText);
-			provinceSpinner.setSelection(spinnerSelection);
+			//provinceSpinner.setSelection(spinnerSelection);
 		}
 	};
 
@@ -423,6 +516,12 @@ public class EditProfileActivity extends AppCompatActivity implements
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
+
+			if (requestCode == CHOOSE_BUILDING_REQUEST_CODE){
+				getBuilding(data);
+				return;
+			}
+
 			// This runs if the user has successfully chosen a picture from their gallery
 			if (requestCode == CHOOSE_PIC_REQUEST_CODE) {
 				// If the image is 0kb, etc, error
@@ -512,6 +611,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 		}
 	}
 
+
     private class EditProfileTextWatcher implements TextWatcher {
 	    private AutoCompleteTextView mTextView;
 	    private EditTextType mType;
@@ -557,4 +657,5 @@ public class EditProfileActivity extends AppCompatActivity implements
             // necessary to implement interface
         }
     }
+
 }

@@ -52,7 +52,7 @@ public class PostCommentInteractor {
                 final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, responseUrl, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray imagesResponse) {
-                        // if called by ProfilePostInteractor or FeedPostInteractor, setData calls the overridden method
+                        // if called by ProfilePostInteractor or FeedPostInteractor, updateData calls the overridden method
                         mPresenter.setData(response, imagesResponse);
                     }
                 }, new Response.ErrorListener() {
