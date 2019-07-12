@@ -41,15 +41,4 @@ public class PostOptionsDialogPresenter implements PostOptionsDialogContract.Pre
    }
 
 
-
-
-//    public void validSave(String response) {
-//        if (response.contains("Post already saved")) { // if the user attempts to save a post that has already been saved by them
-//            mView.setIsSaved(true);
-//        } else if (response.contains("Feel free to save post")){ // if user saves a post that is not already saved by them
-//            mView.setIsSaved(false);
-//        }
-//    }
-
-
 }

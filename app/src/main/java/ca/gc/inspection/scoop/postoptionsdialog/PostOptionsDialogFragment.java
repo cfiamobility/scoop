@@ -55,10 +55,11 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
 
     /**
-     *
+     * Initializes the buttons and tablerows for the options of the fragment and hides options/sets listeners based on
+     * the data passed from the savedInstanceState
      * @param inflater inflates the layout
      * @param container contains the layout
-     * @param savedInstanceState saved state that contains the activity ID of current post that is displaying this fragment
+     * @param savedInstanceState saved state that contains the activityid, posteride, viewholdertype, and savedstatus of current post that is displaying this fragment
      * @return fragment view of options dialog box
      */
     @Override
@@ -102,6 +103,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             }
         });
 
+        // Checks the type of the viewholder of the view - if is a comment view (e.g. postcomment or profilecomment) then hide the save/unsave options
+        // Can not save comments
         if (viewHolderType.contains("Comment")){
             saveTR.setVisibility(View.GONE);
             saveButton.setVisibility(View.GONE);
@@ -109,7 +112,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             unsaveButton.setVisibility(View.GONE);
         }
 
-        // Checks if the post is already saved
+        // Checks if the post is already saved - if saved hide the save option and set the unsaveButton listener
+        // Otherwise hide the unsave option and set the saveButton listener
         if (savedStatus){
             saveTR.setVisibility(View.GONE);
             saveButton.setVisibility(View.GONE);
@@ -143,7 +147,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         }
 
 
-        //Checks if the post is the current users or other users and sets features based on this
+        //Checks if the post is the current users or other users and sets options based on this
+        //Delete option for own user's posts/comments
+        //Report option for other user's posts/comments
         if (posterid.equals(Config.currentUser)){
             reportTR.setVisibility(View.GONE);
             reportButton.setVisibility(View.GONE);

@@ -220,6 +220,10 @@ public class PostComment {
         return getFirstName() + getLastName();
     }
 
+    /**
+     * Gets the saved status from the JSONObject and parses to a Boolean value
+     * @return the saved status of a post
+     */
     public Boolean getSavedStatus(){
         try{
             return Boolean.parseBoolean(mComment.getString(PROFILE_COMMENT_SAVED_STATUS_KEY));

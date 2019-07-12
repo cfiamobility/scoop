@@ -69,7 +69,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
     /**
      * After the view is created
      * @param view: view
-     * @param savedInstanceState: ??
+     * @param savedInstanceState: state of previous view that invoked this fragment
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -95,6 +95,11 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         commentsRecyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * Creates a listener for the upvote and downvote buttons and invokes the respective viewholder method when clicked
+     * @param viewHolder viewholder that contains the content, in this case, specifically the upvote and downvote buttons
+     * @param i index of the view being upvoted or downvoted in the recyclerview
+     */
     public static void setLikesListener(PostCommentViewHolder viewHolder, int i) {
 
         viewHolder.upvote.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +117,11 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         });
     }
 
+    /**
+     * Creates a listener for the profile image and profile name of the post and invokes a helper method when clicked
+     * @param viewHolder viewholder that contains the content, in this case, specifically the profile image and profile name
+     * @param posterId id of the User whose profile/image is being clicked on
+     */
     public static void setUserInfoListener(PostCommentViewHolder viewHolder, String posterId) {
         // tapping on profile picture will bring user to poster's profile page
         viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +159,12 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         }
     }
 
-
+    /**
+     * Creates a listener for the whole post view and launches a DisplayPostActivity when clicked
+     * The activityid is store in as an intentextra and passed to the DisplayPostActivity
+     * @param viewHolder viewholder that displays the current post
+     * @param activityId activityid of the post that the viewholder contains
+     */
     public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +182,14 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         });
     }
 
+    /**
+     * Creates a listener for the options menu icon of a post and creates a PostOptionsDialogFragment when clicked
+     * The parameters are stored in a bundle to be fetched in PostOptionsDialogFragment
+     * Invoked mainly in the adapters for comments (posts without ability to save)
+     * @param viewHolder viewholder that displays the post content, in this case, specifically the options menu
+     * @param activityId activityid of the post that the viewholder contains
+     * @param posterId posterid of the post that the viewholder contains
+     */
     public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityId, String posterId){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +199,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 Bundle bundle = new Bundle();
                 PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
 
-                //gets the activity id and posterd id and stores in bundle to be fetched in PostOptionsDialogFragment
+                //gets the activity id, posterid, viewHolderType and stores in bundle to be fetched in PostOptionsDialogFragment
                 Log.i("post I am clicking: ", activityId);
                 bundle.putString("ACTIVITY_ID", activityId);
                 Log.i("poster id I am clicking: ", posterId);
@@ -188,19 +211,17 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
                 bottomSheetDialog.show(fragmentManager, "bottomSheet");
-
-
-
             }
         });
     }
 
     /**
-     * FOR DISPLAY POST and others
-     * @param viewHolder
-     * @param activityId
-     * @param posterId
-     * @param savedStatus
+     * Overloading the method above with additional savedStatus parameter
+     * Invoked mainly in the adapters for posts (posts with ability to save)
+     * @param viewHolder viewholder that displays the post content, in this case the options menu
+     * @param activityId activityid of the post that the viewholder contains
+     * @param posterId posterid of the post that the viewholder contains
+     * @param savedStatus savedstatus of the post for the user clicking on the options menu
      */
     public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityId, String posterId, Boolean savedStatus){
         // to get the options menu to appear
@@ -211,7 +232,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 Bundle bundle = new Bundle();
                 PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
 
-                //gets the activity id and posterd id and stores in bundle to be fetched in PostOptionsDialogFragment
+                //gets the activity id, posterid, viewHolderType, and savedStatus and stores in bundle to be fetched in PostOptionsDialogFragment
                 Log.i("post I am clicking: ", activityId);
                 bundle.putString("ACTIVITY_ID", activityId);
                 Log.i("poster id I am clicking: ", posterId);

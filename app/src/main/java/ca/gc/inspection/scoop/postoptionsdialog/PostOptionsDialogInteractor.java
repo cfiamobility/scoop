@@ -77,34 +77,4 @@ class PostOptionsDialogInteractor {
         };
         network.addToRequestQueue(postRequest);
     }
-
-    void checkIfSaved(NetworkUtils network, final String activityid, final String userid){
-        Log.i("MIDDLE-TIER CHECK", "pulling data from save post table");
-        String url = Config.baseIP + "post/check-if-saved/" + activityid + "/" + userid;
-
-        StringRequest getRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-            }
-        },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", String.valueOf(error));
-                    }
-                }
-        ){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                // inserting the token into the response header that will be sent to the server
-                Map<String, String> header = new HashMap<>();
-                header.put("authorization", Config.token);
-                return header;
-            }
-        };
-        network.addToRequestQueue(getRequest);
-    }
-
 }

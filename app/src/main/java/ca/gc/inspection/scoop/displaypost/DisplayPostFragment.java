@@ -145,30 +145,4 @@ public class DisplayPostFragment extends Fragment implements
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityId, String posterId) {
-        // to get the options menu to appear
-        viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // bundle
-                Bundle bundle = new Bundle();
-                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
-
-                //gets the activity id and posterd id and stores in bundle to be fetched in PostOptionsDialogFragment
-                Log.i("post I am clicking: ", activityId);
-                bundle.putString("ACTIVITY_ID", activityId);
-                Log.i("poster id I am clicking: ", posterId);
-                bundle.putString("POSTER_ID", posterId);
-                Log.i("viewholder: ", viewHolder.getClass().toString());
-                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
-                bottomSheetDialog.setArguments(bundle);
-
-                final Context context = v.getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                bottomSheetDialog.show(fragmentManager, "bottomSheet");
-
-            }
-        });
-    }
-
 }
