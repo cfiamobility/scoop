@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpost;
+package ca.gc.inspection.scoop.searchpost.view;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
@@ -13,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ca.gc.inspection.scoop.TabFragment;
 import ca.gc.inspection.scoop.search.SearchContract;
+import ca.gc.inspection.scoop.searchpost.presenter.SearchPostPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;

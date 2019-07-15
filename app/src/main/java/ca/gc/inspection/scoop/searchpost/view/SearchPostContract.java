@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpost;
+package ca.gc.inspection.scoop.searchpost.view;
 
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;

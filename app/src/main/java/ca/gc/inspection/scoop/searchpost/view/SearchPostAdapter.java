@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpost;
+package ca.gc.inspection.scoop.searchpost.view;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

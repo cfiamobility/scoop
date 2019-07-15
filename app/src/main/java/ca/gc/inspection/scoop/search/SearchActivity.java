@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -21,9 +18,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import java.util.Objects;
 import ca.gc.inspection.scoop.MainActivity;
-import ca.gc.inspection.scoop.TabFragment;
 import ca.gc.inspection.scoop.searchpeople.PeopleSearchResultsFragment;
-import ca.gc.inspection.scoop.searchpost.SearchPostFragment;
+import ca.gc.inspection.scoop.searchpost.view.SearchPostFragment;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 

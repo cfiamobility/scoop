@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpost;
+package ca.gc.inspection.scoop.searchpost.presenter;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -7,8 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
+import ca.gc.inspection.scoop.searchpost.view.SearchPostContract;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -48,7 +52,7 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
     protected SearchPostPresenter() {
     }
 
-    SearchPostPresenter(@NonNull SearchPostContract.View viewInterface, NetworkUtils network){
+    public SearchPostPresenter(@NonNull SearchPostContract.View viewInterface, NetworkUtils network){
 
         setView(viewInterface);
         setInteractor(new SearchPostInteractor(this, network));
@@ -106,10 +110,11 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
                 e.printStackTrace();
             }
             SearchPost searchPost = new SearchPost(jsonPost, jsonImage);
-            searchPost.formatBySearchQuery(currentSearchQuery);
             searchPost.setRelevance(currentSearchQuery, MatchedWordWeighting.LOGARITHMIC);
+            searchPost.formatBySearchQuery(currentSearchQuery);
             mDataCache.getSearchPostList().add(searchPost);
         }
+        sortDataCacheByRelevance();
 
         mAdapter.refreshAdapter();
         refreshingData = false;
@@ -123,73 +128,17 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
 
     public static void bindSearchPostDataToViewHolder(
             SearchPostContract.View.ViewHolder viewHolderInterface, SearchPost searchPost) {
-        // call bindPostCommentDataToViewHolder instead of bindProfileCommentDataToViewHolder as we are setting a different title
-        bindProfilePostDataToViewHolder(viewHolderInterface, searchPost);
+        // call bindPostCommentDataToViewHolder instead of bindProfilePostDataToViewHolder as we are setting a different title/text
+        bindPostCommentDataToViewHolder(viewHolderInterface, searchPost);
+        if (searchPost != null) {
+            viewHolderInterface
+                    .setPostTitle(searchPost.getPostTitle())
+                    .setPostText(searchPost.getPostTextFormatted());
+        }
     }
 
-    public enum MatchedWordWeighting {
-        LINEAR, LOGARITHMIC, UNIQUE
-    }
-
-    public class SearchQueryParser {
-
-        private String mParsedQuery = null;
-        private String[] mWords = null;
-
-        SearchQueryParser(String query) {
-            if (query != null) {
-                StringBuilder parsedQuery = new StringBuilder();
-                mWords = query.split("\\s+");
-                for (int i = 0; i < mWords.length; i++) {
-                    mWords[i] = mWords[i].replaceAll("[^A-Za-z0-9]", "");
-                    if (!(mWords[i] == null) && !mWords[i].isEmpty()) {
-                        if (parsedQuery.length() > 0)
-                            parsedQuery.append(" & ");
-                        parsedQuery.append(mWords[i]);
-                    }
-                }
-                mParsedQuery = parsedQuery.toString();
-            }
-        }
-
-        public String getParsedQuery() {
-            return mParsedQuery;
-        }
-
-        public double getNumberOfMatchesWeightedBy(MatchedWordWeighting weighting, String text) {
-            double matches = 0;
-            if (text != null && text.length() > 0)
-                for (String mWord : mWords) {
-                    if (mWord != null && mWord.length() > 0) {
-                        String temp = text.replace(mWord, "");
-                        int wordMatches = (text.length() - temp.length()) / mWord.length();
-
-                        if (weighting == MatchedWordWeighting.UNIQUE)
-                            matches += Math.min(1, wordMatches);   // each matched word in user's query can only be counted once
-                        else if (weighting == MatchedWordWeighting.LOGARITHMIC)
-                            matches += Math.log(wordMatches + 1);   // log base e
-                        else
-                            matches += wordMatches;
-                    }
-                }
-            Log.d(TAG, "getNumberOfMatchesWeightedBy = " + matches);
-            return matches;
-        }
-
-//        private String parseQuery(String query) {
-//            if (query == null)
-//                return null;
-//            StringBuilder parsedQuery = new StringBuilder();
-//            String[] words = query.split("\\s+");
-//            for (int i = 0; i < words.length; i++) {
-//                words[i] = words[i].replaceAll("[^A-Za-z0-9]", "");
-//                if (!(words[i] == null) && !words[i].isEmpty()) {
-//                    if (parsedQuery.length() > 0)
-//                        parsedQuery.append(" <3> ");
-//                    parsedQuery.append(words[i]);
-//                }
-//            }
-//            return parsedQuery.toString();
-//        }
+    private void sortDataCacheByRelevance() {
+        mDataCache.getSearchPostList().sort(
+                (item1, item2) -> Double.compare(item2.getRelevance(), item1.getRelevance()));
     }
 }

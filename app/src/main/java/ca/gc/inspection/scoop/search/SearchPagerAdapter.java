@@ -9,10 +9,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.gc.inspection.scoop.displaypost.DisplayPostContract;
-import ca.gc.inspection.scoop.searchpeople.PeopleSearchResultsFragment;
-import ca.gc.inspection.scoop.searchpost.SearchPostFragment;
-
 public class SearchPagerAdapter extends FragmentStatePagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();

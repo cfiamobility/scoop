@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpost;
+package ca.gc.inspection.scoop.searchpost.presenter;
 
 import android.util.Log;
 

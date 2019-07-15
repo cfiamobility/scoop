@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpost;
+package ca.gc.inspection.scoop.searchpost.presenter;
 
 import android.util.Log;
 
@@ -8,6 +8,8 @@ import ca.gc.inspection.scoop.profilepost.ProfilePost;
 
 public class SearchPost extends ProfilePost {
     private static final String TAG = "SearchPost";
+    private static final String RELEVANCE_LABEL = "relevance: ";
+    private static final double LIKE_COUNT_LOGARITHMIC_WEIGHTING = 0.25;
 
     /**
      * Data class which stores information for a single search post.
@@ -22,26 +24,26 @@ public class SearchPost extends ProfilePost {
         LINEAR, LOGARITHMIC
     }
 
-    private int mRelevance = 0;
+    private double mRelevance = 0;
     private String postTextFormatted = null;
 
     protected SearchPost(JSONObject jsonPost, JSONObject jsonImage) {
         super(jsonPost, jsonImage);
     }
 
-    public void formatBySearchQuery(SearchPostPresenter.SearchQueryParser searchQueryParser) {
-
+    public void formatBySearchQuery(SearchQueryParser searchQueryParser) {
+        postTextFormatted = getPostText() + "\n" + RELEVANCE_LABEL + getRelevance();
     }
 
-    public void setRelevance(SearchPostPresenter.SearchQueryParser searchQueryParser,
-                             SearchPostPresenter.MatchedWordWeighting weighting) {
+    public void setRelevance(SearchQueryParser searchQueryParser,
+                             MatchedWordWeighting weighting) {
         double weightedLikeCount = getLikeCountWeightedBy(LikeCountWeighting.LOGARITHMIC);
 
         // Relevance based on a non-linear weighting of the number of matches and rating
-        mRelevance = (int) Math.ceil(
-                (searchQueryParser.getNumberOfMatchesWeightedBy(weighting, getPostText()) + 1) *
-                (weightedLikeCount + 1)
-        );
+        mRelevance = Math.ceil(
+                (searchQueryParser.getNumberOfMatchesWeightedBy(weighting, getPostTitle() + getPostText()) + 1) *
+                (weightedLikeCount + 1) * 100
+        )/100;
         Log.d(TAG, "relevance = " + mRelevance);
     }
 
@@ -50,18 +52,17 @@ public class SearchPost extends ProfilePost {
         if (likeCountWeighting == LikeCountWeighting.LOGARITHMIC) {
             // composite logarithmic function which is defined for negative input values
             if (likeCount >= 0)
-                return Math.log(likeCount + 1);
+                return Math.log(likeCount + 1) * LIKE_COUNT_LOGARITHMIC_WEIGHTING;
             else
-                return -Math.log(-likeCount + 1);
+                return - Math.log(-likeCount + 1) * LIKE_COUNT_LOGARITHMIC_WEIGHTING;
         }
         else
             return likeCount;
     }
 
-    public int getRelevance() {
+    public double getRelevance() {
         return mRelevance;
     }
-
 
     public String getPostTextFormatted() {
         if (postTextFormatted != null && !postTextFormatted.isEmpty())

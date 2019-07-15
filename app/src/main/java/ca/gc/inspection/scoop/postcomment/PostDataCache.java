@@ -5,7 +5,7 @@ import ca.gc.inspection.scoop.profilecomment.ProfileComment;
 import ca.gc.inspection.scoop.profilelikes.ProfileLike;
 import ca.gc.inspection.scoop.profilepost.ProfilePost;
 import ca.gc.inspection.scoop.feedpost.FeedPost;
-import ca.gc.inspection.scoop.searchpost.SearchPost;
+import ca.gc.inspection.scoop.searchpost.presenter.SearchPost;
 
 public class PostDataCache {
     private Class mPostDataType;

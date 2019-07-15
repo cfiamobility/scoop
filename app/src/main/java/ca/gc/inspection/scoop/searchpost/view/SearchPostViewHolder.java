@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpost;
+package ca.gc.inspection.scoop.searchpost.view;
 
 import android.view.View;
 import android.widget.ImageView;
