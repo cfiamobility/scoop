@@ -58,7 +58,6 @@ public class SearchPostFragment extends Fragment implements
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_search_post, container, false);
-//        mSearchPostPresenter.loadDataFromDatabase(Config.currentUser, "*");
         setPresenter(new SearchPostPresenter(this, NetworkUtils.getInstance(getContext())));
         return view;
     }
@@ -94,6 +93,7 @@ public class SearchPostFragment extends Fragment implements
 
     @Override
     public void searchQuery(String query) {
-        mSearchPostPresenter.loadDataFromDatabase(Config.currentUser, query);
+        if (mSearchPostPresenter != null)
+            mSearchPostPresenter.loadDataFromDatabase(Config.currentUser, query);
     }
 }

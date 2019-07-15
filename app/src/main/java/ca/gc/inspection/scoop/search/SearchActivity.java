@@ -29,7 +29,13 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 public class SearchActivity extends AppCompatActivity implements SearchContract.View {
+    /**
+     * Main search activity which deals with taking user input from the search box,
+     * saving and loading the most recent search,
+     * and sending the raw queries to the current SearchContract.View.Fragment being displayed
+     */
 
+    private static final int AUTO_SEARCH_MIN_LENGTH = 4;
     private SearchContract.Presenter mPresenter;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -122,19 +128,27 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextChange(String newText) {
-
+                        if (newText != null && !newText.isEmpty() && newText.length() >= AUTO_SEARCH_MIN_LENGTH) {
+                            Log.d("Search activity", " " + newText.length() + " newtext: " + newText);
+                            int currentItem = mViewPager.getCurrentItem();
+                            ((SearchContract.View.Fragment) mPagerAdapter.getItem(currentItem)).searchQuery(newText);
+                            return true;
+                        }
                         return false;
                     }
 
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-                        Log.d("search activity", "fragment" + mViewPager.getCurrentItem());
-                        int currentItem = mViewPager.getCurrentItem();
-                        ((SearchContract.View.Fragment) mPagerAdapter.getItem(currentItem)).searchQuery(query);
+                        Log.d("search activity", "fragment" + mViewPager.getCurrentItem() + " query: " + query);
+                        if (query != null && !query.isEmpty()) {
+                            int currentItem = mViewPager.getCurrentItem();
+                            ((SearchContract.View.Fragment) mPagerAdapter.getItem(currentItem)).searchQuery(query);
+                            return true;
+                        }
                         return false;
                     }
                 }
         );
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 }
