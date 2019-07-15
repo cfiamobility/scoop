@@ -56,7 +56,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
         PostCommentFragment.setLikesListener(profilePostViewHolder, i);
         PostCommentFragment.setUserInfoListener(profilePostViewHolder,
                 mProfilePostPresenter.getPosterIdByIndex(i));
-        PostCommentFragment.setPostOptionsListener(profilePostViewHolder,
+        PostCommentFragment.setPostOptionsListener(profilePostViewHolder, i,
                 mProfilePostPresenter.getActivityIdByIndex(i),mProfilePostPresenter.getPosterIdByIndex(i), mProfilePostPresenter.getSavedStatusByIndex(i));
     }
 

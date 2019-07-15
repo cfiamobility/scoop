@@ -30,7 +30,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
     public TextView username, date, postText, likeCount;
     public ImageView profileImage, upvote, downvote;
     public ImageView optionsMenu;
-
+    public Boolean savedStatus;
 
     public PostCommentViewHolder(View v, PostCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v);
@@ -173,4 +173,23 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
             e.printStackTrace();
         }
     }
+
+    public void updateSavedStatus(int i, Boolean savedStatus){
+        try {
+            mPresenter.updateSavedStatus(this, i, savedStatus);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public PostCommentContract.View.ViewHolder setSavedStatus(Boolean savedStatus) {
+        this.savedStatus = savedStatus;
+        return this;
+    }
+
+    public Boolean getSavedStatus(){
+        return savedStatus;
+    }
+
+
 }

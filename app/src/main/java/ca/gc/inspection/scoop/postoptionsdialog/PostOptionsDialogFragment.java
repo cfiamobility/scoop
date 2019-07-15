@@ -18,6 +18,7 @@ import android.widget.Toast;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostComment;
+import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
@@ -38,6 +39,15 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
     // required as context may be null outside of fragment onCreateView
     private Context currContext;
+    private PostCommentViewHolder mViewHolder;
+
+
+    //from bundle
+    String activityid;
+    String posterid;
+    String viewHolderType;
+    Boolean savedStatus;
+    int i;
 
     /**
      * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
@@ -70,10 +80,11 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
         //from ProfilePostFragment bundle
         //contains activity id and posterid of the specific post in the Recycler View in which its options menu was clicked
-        final String activityid = getArguments().getString("ACTIVITY_ID");
-        final String posterid = getArguments().getString("POSTER_ID");
-        final String viewHolderType = getArguments().getString("VIEWHOLDER_TYPE");
-        final Boolean savedStatus = getArguments().getBoolean("SAVED_STATUS");
+        activityid = getArguments().getString("ACTIVITY_ID");
+        posterid = getArguments().getString("POSTER_ID");
+        viewHolderType = getArguments().getString("VIEWHOLDER_TYPE");
+        savedStatus = getArguments().getBoolean("SAVED_STATUS");
+        i = getArguments().getInt("POST_POSITION");
         Log.i("POSTER_ID IN DIALOG FRAGMENT", posterid);
         Log.i("CURRENT USER", Config.currentUser);
         Log.i("SAVED STATUS IN DIALOG FRAGMENT", savedStatus.toString());
@@ -121,11 +132,11 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             unsaveButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    Log.i("BUTTON PRESSED", "Save");
+                    Log.i("BUTTON PRESSED", "Unsave");
                     Log.i("activity id:", activityid);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser, mViewHolder, false, i);
                     dismiss();
                 }
             });
@@ -140,7 +151,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     Log.i("activity id:", activityid);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser, mViewHolder, true, i);
                     dismiss();
                 }
             });
@@ -188,6 +199,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
 
+    public void setViewHolder(PostCommentViewHolder viewHolder){
+        mViewHolder = viewHolder;
+    }
 
 
 

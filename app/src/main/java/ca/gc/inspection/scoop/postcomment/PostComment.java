@@ -232,4 +232,14 @@ public class PostComment {
             return false;
         }
     }
+
+    public void setSavedStatus(Boolean savedStatus){
+        try {
+            mComment.put(PROFILE_COMMENT_SAVED_STATUS_KEY, savedStatus);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

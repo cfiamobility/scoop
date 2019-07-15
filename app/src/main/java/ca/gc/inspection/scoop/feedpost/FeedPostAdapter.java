@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.feedpost;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,8 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
         PostCommentFragment.setLikesListener(feedPostViewHolder, i);
         PostCommentFragment.setUserInfoListener(feedPostViewHolder,
                 mFeedPostPresenter.getPosterIdByIndex(i));
-        PostCommentFragment.setPostOptionsListener(feedPostViewHolder,
+        Log.i("feed post adapter", Boolean.toString(mFeedPostPresenter.getSavedStatusByIndex(i)));
+        PostCommentFragment.setPostOptionsListener(feedPostViewHolder, i,
                 mFeedPostPresenter.getActivityIdByIndex(i),mFeedPostPresenter.getPosterIdByIndex(i), mFeedPostPresenter.getSavedStatusByIndex(i));
     }
 

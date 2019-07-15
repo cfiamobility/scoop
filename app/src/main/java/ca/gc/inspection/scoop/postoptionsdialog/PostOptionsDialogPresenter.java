@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop.postoptionsdialog;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -31,7 +32,8 @@ public class PostOptionsDialogPresenter implements PostOptionsDialogContract.Pre
      * @param activityid ID of the activity in which the user is click on
      * @param userid ID of the user
      */
-    public void savePost(NetworkUtils network, final String activityid, final String userid){
+    public void savePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i){
+        viewHolder.updateSavedStatus(i, savedStatus);
         mInteractor.savePost(network, activityid, userid);
     }
 

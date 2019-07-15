@@ -223,7 +223,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      * @param posterId posterid of the post that the viewholder contains
      * @param savedStatus savedstatus of the post for the user clicking on the options menu
      */
-    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityId, String posterId, Boolean savedStatus){
+    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,6 +231,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 // bundle
                 Bundle bundle = new Bundle();
                 PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
+                Boolean updatedSave = viewHolder.getSavedStatus();
 
                 //gets the activity id, posterid, viewHolderType, and savedStatus and stores in bundle to be fetched in PostOptionsDialogFragment
                 Log.i("post I am clicking: ", activityId);
@@ -240,8 +241,18 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 Log.i("viewholder: ", viewHolder.getClass().toString());
                 bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
                 Log.i("saved status: ", savedStatus.toString());
-                bundle.putBoolean("SAVED_STATUS", savedStatus);
+
+
+                if (updatedSave == null){
+                    bundle.putBoolean("SAVED_STATUS", savedStatus); //saved status on response
+                } else {
+                    bundle.putBoolean("SAVED_STATUS", updatedSave); //saved status stored in the UI
+                }
+
+
+                bundle.putInt("POST_POSITION", i);
                 bottomSheetDialog.setArguments(bundle);
+                bottomSheetDialog.setViewHolder(viewHolder);
 
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
@@ -249,6 +260,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
             }
         });
     }
+
 
 
 }

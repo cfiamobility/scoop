@@ -193,6 +193,15 @@ public class PostCommentPresenter implements
         }
     }
 
+    public void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException {
+        if (getItemByIndex(i) != null) {
+            getItemByIndex(i).setSavedStatus(savedStatus);
+            viewHolderInterface.setSavedStatus(savedStatus); //sets like count to new total
+            Log.i("saved status in post comment presenter", Boolean.toString(getSavedStatusByIndex(i)));
+        }
+    }
+
+
     /**
      * Description: updates the like count to new total
      *

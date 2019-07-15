@@ -4,6 +4,7 @@ import android.net.Network;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 
@@ -25,7 +26,7 @@ public interface PostOptionsDialogContract {
      * Presenter interface implemented by PostOptionsDialogPresenter
      */
     interface Presenter extends BasePresenter {
-        void savePost(NetworkUtils network, final String activityid, final String userid);
+        void savePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i);
 
     }
 }
