@@ -14,13 +14,13 @@ public interface EditProfileContract {
 
         void setPositionETAdapter(ArrayList<String> positionAutoComplete);
 
-        void setBuildingETAdapter(ArrayList<String> buildingsAutoComplete);
+        //void setBuildingETAdapter(ArrayList<String> buildingsAutoComplete);
 
         void setDivisionETAdapter(ArrayList<String> divisionsAutoComplete);
 
         void setInitialFill(JSONObject response);
 
-        void setAddressSuggestionList(ArrayList<String> cityAL, ArrayList<String> provinceAL);
+        // void setAddressSuggestionList(ArrayList<String> cityAL, ArrayList<String> provinceAL);
 
         void finishUpdateUserInfo();
     }
@@ -31,7 +31,7 @@ public interface EditProfileContract {
 
         void getPositionAutoCompleteFromDB(NetworkUtils instance, String positionChangedCapped);
 
-        void getAddressAutoCompleteFromDB(NetworkUtils instance, String addressChangedCapitalized);
+        //void getAddressAutoCompleteFromDB(NetworkUtils instance, String addressChangedCapitalized);
 
         void getDivisionAutoCompleteFromDB(NetworkUtils instance, String divisionChangedCapitalized);
 

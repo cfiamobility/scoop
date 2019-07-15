@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
 
+/**
+ * View Holder for the recycler view in the Search Building activity
+ */
 public class BuildingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     TextView BuildingTextView;
     BuildingAdapter.ItemClickListener mClickListener;

@@ -40,10 +40,6 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
 		mInteractor.getPositionAutoCompleteFromDB(network, positionChangedCapitalized);
 	}
 
-	public void getAddressAutoCompleteFromDB(NetworkUtils network, String addressChangedCapitalized) {
-        mInteractor.getAddressAutoCompleteFromDB(network, addressChangedCapitalized);
-    }
-
     public void getDivisionAutoCompleteFromDB(NetworkUtils network, String divisionChangedCapitalized) {
         mInteractor.getDivisionAutoCompleteFromDB(network, divisionChangedCapitalized);
     }
@@ -66,34 +62,6 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
             }
 
             mView.setPositionETAdapter(positionAutoComplete);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setAddressAutoCompleteFromDB(JSONArray response) {
-        try {
-            // map/arraylists redefined everytime to clear it
-            HashMap<String, String> buildingsObjects = new HashMap<>();
-            ArrayList<String> buildingsAutoComplete = new ArrayList<>();
-            ArrayList<String> cityAL = new ArrayList<>();
-            ArrayList<String> provinceAL = new ArrayList<>();
-
-            // loops through the object
-            for (int i = 0; i < response.length(); i++) {
-                // gathering info from the object
-                String buildingid = response.getJSONObject(i).getString("buildingid");
-                String buildingaddress = response.getJSONObject(i).getString("address");
-                String buildingcity = response.getJSONObject(i).getString("city");
-                String buildingprovince = response.getJSONObject(i).getString("province");
-                // placing the info into variables
-                buildingsObjects.put(buildingid, buildingaddress);
-                buildingsAutoComplete.add(buildingaddress);
-                cityAL.add(buildingcity);
-                provinceAL.add(buildingprovince);
-            }
-            mView.setAddressSuggestionList(cityAL, provinceAL);
-            mView.setBuildingETAdapter(buildingsAutoComplete);
         } catch (Exception e) {
             e.printStackTrace();
         }

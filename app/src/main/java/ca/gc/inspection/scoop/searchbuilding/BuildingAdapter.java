@@ -16,13 +16,16 @@ import java.util.List;
 
 import ca.gc.inspection.scoop.R;
 
+/**
+ * Adapter for the recycler view in the Search Building activity
+ */
 public class BuildingAdapter extends RecyclerView.Adapter<BuildingViewHolder> implements Filterable {
 
-    private static List<String> mData;
+    private static List<String> mData;          // contains list of building addresses
     private LayoutInflater mInflator;
-    private ItemClickListener mClickListener;
+    private ItemClickListener mClickListener;   // click listener for each row in the recycler view
 
-    private MyFilter filter;
+    private MyFilter filter;    // Filter used when the user searches the recycler view for a building address
 
     BuildingAdapter(Context context, List<String> data){
         this.mInflator = LayoutInflater.from(context);
@@ -56,6 +59,10 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingViewHolder> im
         this.mClickListener = itemClickListener;
     }
 
+    /**
+     * gets filter in way that ensure there's only ever one instance of it (see singleton)
+     * @return the filter
+     */
     @Override
     public Filter getFilter() {
         if (filter == null){
@@ -68,6 +75,9 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingViewHolder> im
         void onItemClick(View view, int position);
     }
 
+    /**
+     * This class is used to filter the recycler view containing the building addresses when the user performs a search
+     */
     private static class MyFilter extends Filter {
 
         private final BuildingAdapter adapter;

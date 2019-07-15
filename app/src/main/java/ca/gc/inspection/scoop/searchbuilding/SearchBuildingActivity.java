@@ -20,15 +20,16 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.MyApplication.getContext;
 
+/**
+ * In this activity, users are presented with a list of buildings which can be filtered by typing into a search bar
+ */
 public class SearchBuildingActivity extends AppCompatActivity implements BuildingAdapter.ItemClickListener, SearchBuildingContract.View {
 
     BuildingAdapter adapter;
     ArrayList<String> buildingNames;
     private SearchBuildingContract.Presenter mPresenter;
     RecyclerView recyclerView;
-
     SearchView searchBar;
-
 
     @Override
     public void setPresenter(SearchBuildingContract.Presenter presenter) {
@@ -43,27 +44,22 @@ public class SearchBuildingActivity extends AppCompatActivity implements Buildin
 
         searchBar = findViewById(R.id.buildingSearchBar);
         searchBar.setQueryHint("Search Building");
-        searchBar.setIconifiedByDefault(false);
-        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchBar.setIconifiedByDefault(false); // search bar is expanded by default
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() { // listener is called ever time user types/deletes a character in the search bar
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String newText) { // filter results every time search bar text changes
                 adapter.getFilter().filter(newText);
                 return false;
             }
         });
 
         buildingNames = new ArrayList<>();
-
         mPresenter.populateBuildingNamesList();
-
-        //buildingNames.add("49 camelot");
-        //buildingNames.add("59 camelot");
-
 
         // set up recycler view
         recyclerView = findViewById(R.id.buildingNamesRecyclerView);
@@ -75,29 +71,33 @@ public class SearchBuildingActivity extends AppCompatActivity implements Buildin
     }
 
 
-
-
+    /**
+     * Listener that is called when the user clicks a building address
+     * Passes the building address and it's respective ID back to the edit profile activity
+     * @param view
+     * @param position
+     */
     @Override
     public void onItemClick(View view, int position) {
-        //Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-        //Intent intent = new Intent(this, EditProfileActivity.class);
-
         Intent intent = new Intent();
         intent.putExtra("building", adapter.getItem(position));
         intent.putExtra("buildingid", mPresenter.getBuildingID(adapter.getItem(position)));
-
         setResult(Activity.RESULT_OK, intent);
-
-        //startActivity(intent);
         finish();
     }
 
-
+    /**
+     * Adds building to list of building addresses
+     * @param building
+     */
     @Override
     public void addBuilding(String building) {
         buildingNames.add(building);
     }
 
+    /**
+     * updates recycler view when data set has changed
+     */
     public void updateRecyclerView(){
         adapter.notifyDataSetChanged();
     }

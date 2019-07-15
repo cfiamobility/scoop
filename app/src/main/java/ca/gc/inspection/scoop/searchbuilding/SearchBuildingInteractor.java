@@ -18,6 +18,9 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
+/**
+ * Interactor for the search building activity
+ */
 public class SearchBuildingInteractor {
 
     private SearchBuildingPresenter mPresenter;
@@ -29,6 +32,9 @@ public class SearchBuildingInteractor {
             mNetwork = checkNotNull(network);
     }
 
+    /**
+     * fetches list of all building addresses from the data base
+     */
     public void getAllBuildings() {
         String URL = Config.baseIP + "profile/getallbuildings";
 
