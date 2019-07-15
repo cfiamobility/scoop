@@ -16,7 +16,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -97,10 +97,10 @@
                 android:layout_marginEnd="23dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_txt_first_name"
                 android:background="@android:color/transparent"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
                 android:hint="@string/first_name"
                 android:importantForAutofill="no"
-                android:inputType="textPersonName"
                 android:textCursorDrawable="@color/medium_blue" />
 
             <EditText
@@ -114,10 +114,10 @@
                 android:layout_marginEnd="23dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_txt_last_name"
                 android:background="@android:color/transparent"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
                 android:hint="@string/last_name"
                 android:importantForAutofill="no"
-                android:inputType="textPersonName"
                 android:textCursorDrawable="@color/medium_blue" />
 
             <View
@@ -151,6 +151,7 @@
                 android:layout_marginEnd="23dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_txt_position"
                 android:background="@android:color/transparent"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
                 android:hint="@string/position"
                 android:textCursorDrawable="@color/medium_blue" />
@@ -176,6 +177,7 @@
                 android:layout_marginEnd="23dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_txt_division"
                 android:background="@android:color/transparent"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
                 android:hint="@string/division"
                 android:textCursorDrawable="@color/medium_blue" />
@@ -202,12 +204,16 @@
 
             <TextView
                 android:id="@+id/activity_edit_profile_txt_linkedin"
-                android:layout_width="110dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider12"
+                android:layout_above="@+id/divider13"
+                android:layout_below="@+id/divider11"
+                android:layout_alignEnd="@+id/activity_edit_profile_txt_instagram"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="0dp"
                 android:fontFamily="@font/roboto"
                 android:text="@string/linkedin"
                 android:textSize="18sp"
@@ -217,10 +223,12 @@
                 android:id="@+id/activity_edit_profile_linkedin_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider12"
+                android:layout_above="@+id/divider13"
+                android:layout_below="@+id/divider11"
                 android:layout_alignParentEnd="false"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="-2dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_txt_twitter"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/roboto"
@@ -233,11 +241,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider11"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="22dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_linkedin_url"
                 android:background="@android:color/transparent"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
                 android:hint="@string/username"
                 android:importantForAutofill="no"
@@ -287,11 +295,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider13"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="22dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_twitter_url"
                 android:background="@android:color/transparent"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
                 android:hint="@string/username"
                 android:importantForAutofill="no"
@@ -305,6 +313,16 @@
                 android:layout_below="@+id/activity_edit_profile_et_twitter"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="0dp"
+                android:background="?android:attr/listDivider" />
+
+            <View
+                android:id="@+id/divider19"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/divider14"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="41dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
@@ -329,7 +347,6 @@
                 android:layout_alignParentEnd="false"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="20dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_txt_facebook"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/roboto"
@@ -339,13 +356,15 @@
 
             <EditText
                 android:id="@+id/activity_edit_profile_et_facebook"
-                android:layout_width="match_parent"
+                android:layout_width="106dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider14"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="22dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_facebook_url"
                 android:background="@android:color/transparent"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
                 android:hint="@string/username"
                 android:importantForAutofill="no"
@@ -428,10 +447,9 @@
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="9dp"
                 android:fontFamily="@font/roboto"
-                android:textStyle="bold"
                 android:text="@string/division"
-                android:textSize="18sp" />
-
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -461,10 +479,10 @@
                 android:id="@+id/activity_edit_profile_txt_instagram"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider23"
+                android:layout_below="@+id/divider19"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/roboto"
                 android:text="@string/instagram"
                 android:textSize="18sp"
@@ -474,7 +492,7 @@
                 android:id="@+id/activity_edit_profile_instagram_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider23"
+                android:layout_below="@+id/divider19"
                 android:layout_alignParentEnd="false"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
@@ -483,19 +501,20 @@
                 android:fontFamily="@font/roboto"
                 android:text="@string/instagramURL"
                 android:textSize="18sp" />
-                android:textSize="18sp"
-                android:textStyle="bold" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/activity_edit_profile_et_instagram"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider23"
+                android:layout_below="@+id/divider19"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="22dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_instagram_url"
                 android:background="@android:color/transparent"
+                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
                 android:hint="@string/username"
                 android:importantForAutofill="no"
@@ -513,20 +532,23 @@
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider"
                 android:elevation="5dp" />
-                android:background="?android:attr/listDivider"
-                android:elevation="5dp" />
+            android:background="?android:attr/listDivider"
+            android:elevation="5dp" />
 
             <ImageButton
                 android:id="@+id/delete_building_button"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
+                android:layout_width="43dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/divider20"
+                android:layout_alignBottom="@+id/divider6"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="-44dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="16dp"
-                android:layout_toEndOf="@+id/activity_edit_profile_txt_btn_choose_building"
-                app:srcCompat="@android:drawable/btn_dialog" />
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="3dp"
+                android:tint="@color/secondary"
+                app:srcCompat="@android:drawable/ic_input_delete"
+                android:background="@android:color/transparent"
+                />
 
         </RelativeLayout>
     </ScrollView>
