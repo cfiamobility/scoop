@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop;
+package ca.gc.inspection.scoop.profile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -36,6 +36,9 @@ public interface ProfileCommentContract extends PostCommentContract {
          * explain how the Presenter is to communicate with the main View only.
          */
 
+        void onLoadedDataFromDatabase();
+
+
         interface Adapter extends PostCommentContract.View.Adapter {
         }
 
@@ -50,6 +53,7 @@ public interface ProfileCommentContract extends PostCommentContract {
             void setAdapter(ProfileCommentContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
                     ProfileCommentContract.View.ViewHolder postCommentViewHolder, int i);
+            String getReferenceIdByIndex(int i);
         }
 
         interface ViewHolderAPI extends PostCommentContract.Presenter.ViewHolderAPI {

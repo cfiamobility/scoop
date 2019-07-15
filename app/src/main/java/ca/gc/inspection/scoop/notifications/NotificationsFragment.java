@@ -3,8 +3,10 @@ package ca.gc.inspection.scoop.notifications;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +22,17 @@ import androidx.annotation.NonNull;
 import ca.gc.inspection.scoop.*;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_3;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
  * View for the notifications controller
  */
-public class NotificationsFragment extends Fragment implements NotificationsContract.View{
-
+public class NotificationsFragment extends Fragment implements
+        NotificationsContract.View,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView todayRecyclerView, recentRecyclerView;
     private RecyclerView.Adapter todayAdapter, recentAdapter;
@@ -35,7 +41,9 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
     //private NotificationsPresenter notificationsScreenController;
     private NotificationsContract.Presenter mPresenter;
     private View view;
-
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private int waitingCallbacksCount;
+    private static final String TAG = "Notifications Fragment";
 
 
     @Override
@@ -52,16 +60,53 @@ public class NotificationsFragment extends Fragment implements NotificationsCont
         //notificationsScreenController = new NotificationsPresenter(this,  NetworkUtils.getInstance(getContext())); //instantiates controller for notifications screen
         setPresenter(new NotificationsPresenter(this, NetworkUtils.getInstance(getContext())));
 
-
-        new TodayTask().execute(); //executes async task for today notifications
-        new RecentTask().execute(); //executes async task for recent notifications
-
-
         today = (TextView) view.findViewById(R.id.fragment_notifications_txt_today); //instantiating the today textview
         recent = (TextView) view.findViewById(R.id.fragment_notifications_txt_recent); //instantiating the recent textview
 
+        setSwipeRefreshLayout(view);
     }
 
+    private void setSwipeRefreshLayout(View view) {
+        mSwipeRefreshLayout = view.findViewById(R.id.fragment_notifications_swipe);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                SWIPE_REFRESH_COLOUR_1,
+                SWIPE_REFRESH_COLOUR_2,
+                SWIPE_REFRESH_COLOUR_3);
+    }
+
+    /**
+     * To implement SwipeRefreshLayout.OnRefreshListener
+     */
+    @Override
+    public void onRefresh() {
+        loadDataFromDatabase();
+    }
+
+    @Override
+    public void onLoadedDataFromDatabase() {
+        waitingCallbacksCount -= 1;
+        if (waitingCallbacksCount == 0)
+            mSwipeRefreshLayout.setRefreshing(false);
+
+        if (waitingCallbacksCount < 0)
+            Log.d(TAG, "waitingCallBacksCount < 0");
+    }
+
+    private void loadDataFromDatabase() {
+        waitingCallbacksCount = 2;
+        mSwipeRefreshLayout.setRefreshing(true);
+        new TodayTask().execute(); //executes async task for today notifications
+        new RecentTask().execute(); //executes async task for recent notifications
+    }
+
+    @Override
+    public void onResume() {
+        Log.d("NotificationsFragment", "on resume");
+        super.onResume();
+        if (!mSwipeRefreshLayout.isRefreshing())
+            loadDataFromDatabase();
+    }
 
     /**
      * Description: sets the recycler view for recent notifications

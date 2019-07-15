@@ -33,6 +33,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
     private ProfilePostContract.View mProfilePostView;
     private ProfilePostContract.View.Adapter mAdapter;
     private ProfilePostInteractor mProfilePostInteractor;
+    private boolean refreshingData = false;
 
     private ProfilePost getItemByIndex(int i) {
         if (mDataCache == null)
@@ -75,12 +76,19 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
 
     @Override
     public void loadDataFromDatabase(String userId) {
-        mProfilePostInteractor.getProfilePosts(userId);
+        if (!refreshingData) {
+            refreshingData = true;
+
+            if (mDataCache == null)
+                mDataCache = PostDataCache.createWithType(ProfilePost.class);
+            else mDataCache.getProfilePostList().clear();
+
+            mProfilePostInteractor.getProfilePosts(userId);
+        }
     }
 
     @Override
     public void setData(JSONArray postsResponse, JSONArray imagesResponse) {
-        mDataCache = PostDataCache.createWithType(ProfilePost.class);
 
         if ((postsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of postsResponse != imagesResponse");
@@ -99,6 +107,8 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
         }
 
         mAdapter.refreshAdapter();
+        refreshingData = false;
+        mProfilePostView.onLoadedDataFromDatabase();
     }
 
     @Override

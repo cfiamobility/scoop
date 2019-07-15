@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    tools:context=".ProfileFragment">
+    tools:context=".profile.ProfileFragment">
 
     <View
         android:id="@+id/fragment_profile_divider"
@@ -103,6 +103,45 @@
         android:orientation="vertical"
         android:weightSum="2">
 
+
+        <TableRow
+            android:id="@+id/fragment_profile_tr_linkedin"
+            android:layout_margin="2dp">
+
+            <ImageView
+                android:id="@+id/fragment_profile_img_linkedin"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/linkedin" />
+
+            <TextView
+                android:id="@+id/fragment_profile_txt_linkedin"
+                android:layout_marginStart="2dp"
+                android:fontFamily="@font/roboto"
+                android:text="https://www.linkedin.com"
+                android:textSize="10sp" />
+        </TableRow>
+        <TableRow
+            android:id="@+id/fragment_profile_tr_twitter"
+            android:layout_margin="2dp">
+
+            <ImageView
+                android:id="@+id/fragment_profile_img_twitter"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/twitter" />
+
+            <TextView
+                android:id="@+id/fragment_profile_txt_twitter"
+                android:layout_marginStart="2dp"
+                android:fontFamily="@font/roboto"
+                android:text="https://www.twitter.com"
+                android:textSize="10sp" />
+        </TableRow>
         <TableRow
             android:id="@+id/fragment_profile_tr_facebook"
             android:layout_margin="2dp">
@@ -143,47 +182,6 @@
                 android:textSize="10sp" />
         </TableRow>
 
-
-        <TableRow
-            android:id="@+id/fragment_profile_tr_linkedin"
-            android:layout_margin="2dp">
-
-            <ImageView
-                android:id="@+id/fragment_profile_img_linkedin"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:src="@drawable/linkedin" />
-
-            <TextView
-                android:id="@+id/fragment_profile_txt_linkedin"
-                android:layout_marginStart="2dp"
-                android:fontFamily="@font/roboto"
-                android:text="https://www.linkedin.com"
-                android:textSize="10sp" />
-        </TableRow>
-
-
-        <TableRow
-            android:id="@+id/fragment_profile_tr_twitter"
-            android:layout_margin="2dp">
-
-            <ImageView
-                android:id="@+id/fragment_profile_img_twitter"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:src="@drawable/twitter" />
-
-            <TextView
-                android:id="@+id/fragment_profile_txt_twitter"
-                android:layout_marginStart="2dp"
-                android:fontFamily="@font/roboto"
-                android:text="https://www.twitter.com"
-                android:textSize="10sp" />
-        </TableRow>
     </TableLayout>
 
     <Button

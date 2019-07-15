@@ -37,6 +37,19 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="18sp" />
 
+            <TextView
+                android:id="@+id/activity_edit_profile_txt_building"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/divider6"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="-33dp"
+                android:fontFamily="@font/roboto"
+                android:text="Building"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
             <Button
                 android:id="@+id/activity_edit_profile_btn_back"
                 android:layout_width="29dp"
@@ -187,19 +200,46 @@
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
+            <TextView
+                android:id="@+id/activity_edit_profile_txt_linkedin"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider12"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/linkedin"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/activity_edit_profile_linkedin_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider12"
+                android:layout_alignParentEnd="false"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_twitter"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto"
+                android:text="@string/linkedURL"
+                android:textSize="18sp" />
+
             <EditText
                 android:id="@+id/activity_edit_profile_et_linkedin"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider11"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="23dp"
-                android:layout_toEndOf="@+id/activity_edit_profile_txt_linkedin"
+                android:layout_marginEnd="22dp"
+                android:layout_toEndOf="@+id/activity_edit_profile_linkedin_url"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/roboto"
-                android:hint="@string/linkedin"
+                android:hint="@string/username"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
                 android:textCursorDrawable="@color/medium_blue" />
@@ -214,19 +254,46 @@
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
+            <TextView
+                android:id="@+id/activity_edit_profile_txt_twitter"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider13"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="9dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/twitter"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/activity_edit_profile_twitter_url"
+                android:layout_width="98dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider13"
+                android:layout_alignParentEnd="false"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/activity_edit_profile_txt_twitter"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto"
+                android:text="@string/twitterURL"
+                android:textSize="18sp" />
+
             <EditText
                 android:id="@+id/activity_edit_profile_et_twitter"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider13"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/activity_edit_profile_txt_twitter"
+                android:layout_marginEnd="22dp"
+                android:layout_toEndOf="@+id/activity_edit_profile_twitter_url"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/roboto"
-                android:hint="@string/twitter"
+                android:hint="@string/username"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
                 android:textCursorDrawable="@color/medium_blue" />
@@ -241,19 +308,46 @@
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
-            <EditText
-                android:id="@+id/activity_edit_profile_et_facebook"
+            <TextView
+                android:id="@+id/activity_edit_profile_txt_facebook"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider14"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/facebook"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/activity_edit_profile_facebook_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider14"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentEnd="false"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_txt_facebook"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/roboto"
-                android:hint="@string/facebook"
+                android:text="@string/facebookURL"
+                android:textSize="18sp" />
+
+
+            <EditText
+                android:id="@+id/activity_edit_profile_et_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider14"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="22dp"
+                android:layout_toEndOf="@+id/activity_edit_profile_facebook_url"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto"
+                android:hint="@string/username"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
                 android:textCursorDrawable="@color/medium_blue" />
@@ -264,7 +358,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/activity_edit_profile_txt_instagram"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider" />
 
@@ -300,19 +394,6 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/activity_edit_profile_txt_building"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/divider6"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="-33dp"
-                android:fontFamily="@font/roboto"
-                android:text="Building"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/activity_edit_profile_txt_last_name"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
@@ -332,7 +413,7 @@
                 android:layout_below="@+id/divider9"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/roboto"
                 android:text="@string/position"
                 android:textSize="18sp"
@@ -347,48 +428,11 @@
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="9dp"
                 android:fontFamily="@font/roboto"
+                android:textStyle="bold"
                 android:text="@string/division"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/activity_edit_profile_txt_linkedin"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/divider11"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/roboto"
-                android:text="@string/linkedin"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/activity_edit_profile_txt_twitter"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/divider13"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="9dp"
-                android:fontFamily="@font/roboto"
-                android:text="@string/twitter"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/activity_edit_profile_txt_facebook"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/divider14"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/roboto"
-                android:text="@string/facebook"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/activity_edit_profile_img_profile"
@@ -426,31 +470,38 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <View
-                android:id="@+id/divider23"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/activity_edit_profile_txt_facebook"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="9dp"
-                android:layout_marginEnd="0dp"
-                android:background="?android:attr/listDivider" />
-
-            <EditText
-                android:id="@+id/activity_edit_profile_et_instagram"
+            <TextView
+                android:id="@+id/activity_edit_profile_instagram_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider23"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentEnd="false"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="9dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginTop="8dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_txt_instagram"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/roboto"
-                android:hint="@string/instagram"
-                android:textCursorDrawable="@color/medium_blue"
+                android:text="@string/instagramURL"
                 android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/activity_edit_profile_et_instagram"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider23"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="22dp"
+                android:layout_toEndOf="@+id/activity_edit_profile_instagram_url"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto"
+                android:hint="@string/username"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:textCursorDrawable="@color/medium_blue" />
+
 
             <View
                 android:id="@+id/divider26"
@@ -460,6 +511,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="17dp"
                 android:layout_marginEnd="0dp"
+                android:background="?android:attr/listDivider"
+                android:elevation="5dp" />
                 android:background="?android:attr/listDivider"
                 android:elevation="5dp" />
 

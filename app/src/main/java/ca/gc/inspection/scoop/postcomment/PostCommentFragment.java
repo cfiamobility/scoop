@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,9 +18,11 @@ import android.widget.Toast;
 import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
+import ca.gc.inspection.scoop.profile.OtherUserActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
+import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -110,17 +113,38 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.otherUserClicked(posterId);
+                Context context = v.getContext();
+                startFragmentOrActivity(context, posterId);
             }
         });
 
         viewHolder.username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.otherUserClicked(posterId);
+//                MainActivity.otherUserClicked(posterId);
+                Context context = v.getContext();
+                startFragmentOrActivity(context, posterId);
             }
         });
     }
+
+    /**
+     * If the View is already in the OtherUserActivity then statically start Profile/OtherUserFragment
+     * Otherwise start the OtherUserActivity class
+     * @param context Context of the current View that holds the listener
+     * @param posterId id of the User whose profile/image is being clicked on
+     */
+    public static void startFragmentOrActivity(Context context, String posterId){
+        if (context.getClass() == OtherUserActivity.class)
+            OtherUserActivity.startCorrectFragment(posterId);
+        else {
+            Intent intent = new Intent(context, OtherUserActivity.class);
+            intent.putExtra(INTENT_POSTER_ID_KEY, posterId);
+            Log.i("INTENT_POSTER_ID_KEY", posterId);
+            context.startActivity(intent);
+        }
+    }
+
 
     public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
         // tapping on any item from the view holder will go to the display post activity

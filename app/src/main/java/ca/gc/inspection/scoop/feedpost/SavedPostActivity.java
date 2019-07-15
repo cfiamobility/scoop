@@ -12,15 +12,13 @@ import android.widget.FrameLayout;
 
 public class SavedPostActivity extends AppCompatActivity{
 
-    private static final int CONTENT_VIEW_ID = 1300021;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_post);
 
         FrameLayout frame = new FrameLayout(this);
-        frame.setId(CONTENT_VIEW_ID);
+        frame.setId(R.id.activity_saved_post_frame);
 
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));

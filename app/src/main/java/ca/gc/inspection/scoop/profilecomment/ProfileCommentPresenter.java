@@ -32,6 +32,7 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     private ProfileCommentContract.View mProfileCommentView;
     private ProfileCommentContract.View.Adapter mAdapter;
     private ProfileCommentInteractor mProfileCommentInteractor;
+    private boolean refreshingData = false;
 
     private ProfileComment getItemByIndex(int i) {
         if (mDataCache == null)
@@ -47,10 +48,8 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     }
 
     ProfileCommentPresenter(@NonNull ProfileCommentContract.View viewInterface, NetworkUtils network){
-
         setView(viewInterface);
         setInteractor(new ProfileCommentInteractor(this, network));
-
     }
 
     public void setView(@NonNull ProfileCommentContract.View viewInterface) {
@@ -69,12 +68,23 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
 
     @Override
     public void loadDataFromDatabase(String currentUser) {
-        mProfileCommentInteractor.getPostComments(currentUser);
+        if (!refreshingData) {
+            refreshingData = true;
+
+            if (mDataCache == null)
+                mDataCache = PostDataCache.createWithType(ProfileComment.class);
+            else mDataCache.getProfileCommentList().clear();
+
+            mProfileCommentInteractor.getProfileComments(currentUser);
+        }
+    }
+
+    public String getReferenceIdByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getReferenceID();
     }
 
     @Override
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
-        mDataCache = PostDataCache.createWithType(ProfileComment.class);
 
         if ((commentsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of commentsReponse != imagesResponse");
@@ -93,6 +103,8 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
         }
 
         mAdapter.refreshAdapter();
+        refreshingData = false;
+        mProfileCommentView.onLoadedDataFromDatabase();
     }
 
     @Override

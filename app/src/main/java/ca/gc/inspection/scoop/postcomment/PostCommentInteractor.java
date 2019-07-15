@@ -100,39 +100,13 @@ public class PostCommentInteractor {
         Log.i("hello", "should be here");
         String URL = Config.baseIP + "post/update-like";
         //sends a PUT request to update new likes
-        StringRequest request = newLikesStringRequest(
+        StringRequest request = newUpdateLikesStringRequest(
                 Request.Method.PUT, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
         request.setRetryPolicy(new DefaultRetryPolicy(
                 30000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         mNetwork.addToRequestQueue(request);
-    }
-
-    /**
-     * Description: inserts likes in table and adds notifications if like type is 1
-     * @param likeType : current like type
-     * @param activityid : activity id of post
-     * @param posterid : user id of poster of post
-     * @param viewHolderInterface
-     * @throws JSONException
-     */
-    public void insertLikes(
-            LikeState likeType, final String activityid, final String posterid,
-            int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
-
-        Log.i("hello", "should be here");
-        String URL = Config.baseIP + "post/insert-like";
-        String likeCount = "1";
-
-        StringRequest request = newLikesStringRequest(
-                Request.Method.POST, URL, likeType, likeCount, activityid, posterid, i, viewHolderInterface);
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                30000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        mNetwork.addToRequestQueue(request);
-
     }
 
     /**
@@ -146,7 +120,7 @@ public class PostCommentInteractor {
      * @param viewHolderInterface
      * @return
      */
-    public StringRequest newLikesStringRequest(
+    public StringRequest newUpdateLikesStringRequest(
             int requestMethod, String URL, LikeState likeType, String likeCount, final String activityid,
             final String posterid, int i, PostCommentContract.View.ViewHolder viewHolderInterface) {
 
@@ -154,9 +128,6 @@ public class PostCommentInteractor {
             @Override
             public void onResponse(String response) {
                 Log.i("response", response);
-                // TODO update the likestate/likecount UI based on database response -> need fast database response
-//                mPresenter.updateLikeState(viewHolderInterface, i, likeType);
-//                mPresenter.updateLikeCount(viewHolderInterface, i, likeCount);
             }
         }, new Response.ErrorListener() {
             @Override

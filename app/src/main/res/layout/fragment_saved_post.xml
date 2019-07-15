@@ -6,8 +6,15 @@
     android:background="@color/primary"
     tools:context=".feedpost.SavedPostFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_saved_post_rv"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fragment_saved_post_swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_saved_post_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

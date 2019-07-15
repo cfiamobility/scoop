@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import ca.gc.inspection.scoop.feedpost.CommunityFeedFragment;
 import ca.gc.inspection.scoop.feedpost.OfficialFeedFragment;
 import ca.gc.inspection.scoop.notifications.NotificationsFragment;
+import ca.gc.inspection.scoop.profile.ProfileFragment;
 
 
 public class TabFragment extends Fragment {
