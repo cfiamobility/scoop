@@ -14,7 +14,7 @@ public class SearchQueryParser {
             mWords = query.split("\\s+");
             for (int i = 0; i < mWords.length; i++) {
                 mWords[i] = mWords[i].replaceAll("[^A-Za-z0-9]", "");
-                if (!(mWords[i] == null) && !mWords[i].isEmpty()) {
+                if ((mWords[i] != null) && !(mWords[i].isEmpty())) {
                     if (parsedQuery.length() > 0)
                         parsedQuery.append(" | ");
                     parsedQuery.append(mWords[i]);
@@ -26,6 +26,10 @@ public class SearchQueryParser {
 
     public String getParsedQuery() {
         return mParsedQuery;
+    }
+
+    public String[] getQueryWords() {
+        return mWords;
     }
 
     public double getNumberOfMatchesWeightedBy(MatchedWordWeighting weighting, String text) {

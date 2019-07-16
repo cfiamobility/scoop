@@ -111,7 +111,7 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
             }
             SearchPost searchPost = new SearchPost(jsonPost, jsonImage);
             searchPost.setRelevance(currentSearchQuery, MatchedWordWeighting.LOGARITHMIC);
-            searchPost.formatBySearchQuery(currentSearchQuery);
+            searchPost.setFormatForSearchQuery(currentSearchQuery);
             mDataCache.getSearchPostList().add(searchPost);
         }
         sortDataCacheByRelevance();
@@ -133,7 +133,8 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
         if (searchPost != null) {
             viewHolderInterface
                     .setPostTitle(searchPost.getPostTitle())
-                    .setPostText(searchPost.getPostTextFormatted());
+                    .setCommentCount(searchPost.getCommentCount())
+                    .setPostTextWithFormat(searchPost.getPostText(), searchPost.getFormat());
         }
     }
 

@@ -10,12 +10,11 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-
+/**
+ * Interactor used to send requests to the network. Inherits from PostCommentInteractor
+ * so that Profile post has access to methods such as insert/update likes.
+ */
 public class SearchPostInteractor extends ProfilePostInteractor {
-    /**
-     * Interactor used to send requests to the network. Inherits from PostCommentInteractor
-     * so that Profile post has access to methods such as insert/update likes.
-     */
 
     /**
      * Empty constructor called by child classes (ie. FeedPostInteractor) to allow them to set

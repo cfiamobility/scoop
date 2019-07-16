@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.postcomment.PostTextFormat;
 import ca.gc.inspection.scoop.profilepost.ProfilePost;
 
 public class SearchPost extends ProfilePost {
@@ -25,14 +26,19 @@ public class SearchPost extends ProfilePost {
     }
 
     private double mRelevance = 0;
-    private String postTextFormatted = null;
+    private PostTextFormat mPostTextFormat = null;
 
     protected SearchPost(JSONObject jsonPost, JSONObject jsonImage) {
         super(jsonPost, jsonImage);
     }
 
-    public void formatBySearchQuery(SearchQueryParser searchQueryParser) {
-        postTextFormatted = getPostText() + "\n" + RELEVANCE_LABEL + getRelevance();
+    public void setFormatForSearchQuery(SearchQueryParser searchQueryParser) {
+        String relevanceFooter = RELEVANCE_LABEL + getRelevance();
+        mPostTextFormat = new PostTextFormat(searchQueryParser.getQueryWords(), getPostText(), relevanceFooter);
+    }
+
+    public PostTextFormat getFormat() {
+        return mPostTextFormat;
     }
 
     public void setRelevance(SearchQueryParser searchQueryParser,
@@ -62,12 +68,5 @@ public class SearchPost extends ProfilePost {
 
     public double getRelevance() {
         return mRelevance;
-    }
-
-    public String getPostTextFormatted() {
-        if (postTextFormatted != null && !postTextFormatted.isEmpty())
-            return postTextFormatted;
-        else
-            return getPostText();
     }
 }

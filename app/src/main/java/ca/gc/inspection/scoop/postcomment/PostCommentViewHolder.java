@@ -3,8 +3,15 @@ package ca.gc.inspection.scoop.postcomment;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +22,8 @@ import java.util.Date;
 
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.R;
+
+import static ca.gc.inspection.scoop.postcomment.PostTextFormat.POST_TEXT_FORMAT_BOLD_COLOUR;
 
 /**
  * ViewHolder for replying to a post action; it is the most generic View Holder
@@ -50,6 +59,30 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
     @Override
     public PostCommentContract.View.ViewHolder setPostText(String postText) {
         this.postText.setText(postText);
+        return this;
+    }
+
+    /**
+     *
+     * @param postText
+     */
+    @Override
+    public PostCommentContract.View.ViewHolder setPostTextWithFormat(String postText, PostTextFormat postTextFormat) {
+        String fullText = postText + "\n\n" + postTextFormat.getFooter();
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(fullText);
+
+        for (Pair<Integer, Integer> pair : postTextFormat.getBoldTextPositions()) {
+            spannableStringBuilder.setSpan(new StyleSpan(Typeface.BOLD),
+                    pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+            spannableStringBuilder.setSpan(new ForegroundColorSpan(POST_TEXT_FORMAT_BOLD_COLOUR),
+                    pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        }
+
+        spannableStringBuilder.setSpan(new StyleSpan(Typeface.ITALIC),
+                postText.length(), fullText.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        this.postText.setText(spannableStringBuilder);
         return this;
     }
 
