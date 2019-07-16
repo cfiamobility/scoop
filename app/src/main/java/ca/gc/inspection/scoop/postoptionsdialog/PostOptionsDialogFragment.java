@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
+import ca.gc.inspection.scoop.report.ReportDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
@@ -133,13 +135,14 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 }
             });
 
-            reportButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("BUTTON PRESSED", "Report");
-                    dismiss();
-                }
-            });
+            setReportOnClickListener();
+//            reportButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.i("BUTTON PRESSED", "Report");
+//                    dismiss();
+//                }
+//            });
 
             if (posterid.equals(Config.currentUser)){
                 reportTR.setVisibility(View.GONE);
@@ -165,13 +168,15 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             deleteTR.setVisibility(View.GONE);
             deleteButton.setVisibility(View.GONE);
 
-            reportButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("BUTTON PRESSED", "Report");
-                    dismiss();
-                }
-            });
+            setReportOnClickListener();
+
+//            reportButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.i("BUTTON PRESSED", "Report");
+//                    dismiss();
+//                }
+//            });
         }
 
 
@@ -233,5 +238,16 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
 
-
+    private void setReportOnClickListener() {
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReportDialogFragment dialog = new ReportDialogFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                dialog.show(ft, ReportDialogFragment.TAG);
+                Log.i("BUTTON PRESSED", "Report");
+                dismiss();
+            }
+        });
+    }
 }
