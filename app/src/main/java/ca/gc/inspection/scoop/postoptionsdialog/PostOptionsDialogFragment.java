@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
@@ -42,12 +43,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     private PostCommentViewHolder mViewHolder;
 
 
-    //from bundle
-    String activityid;
-    String posterid;
-    String viewHolderType;
-    Boolean savedStatus;
-    int i;
+
 
     /**
      * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
@@ -80,14 +76,12 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
         //from ProfilePostFragment bundle
         //contains activity id and posterid of the specific post in the Recycler View in which its options menu was clicked
-        activityid = getArguments().getString("ACTIVITY_ID");
-        posterid = getArguments().getString("POSTER_ID");
-        viewHolderType = getArguments().getString("VIEWHOLDER_TYPE");
-        savedStatus = getArguments().getBoolean("SAVED_STATUS");
-        i = getArguments().getInt("POST_POSITION");
-        Log.i("POSTER_ID IN DIALOG FRAGMENT", posterid);
-        Log.i("CURRENT USER", Config.currentUser);
-        Log.i("SAVED STATUS IN DIALOG FRAGMENT", savedStatus.toString());
+        String activityid = getArguments().getString("ACTIVITY_ID");
+        String posterid = getArguments().getString("POSTER_ID");
+        Boolean savedStatus = getArguments().getBoolean("SAVED_STATUS");
+        int i = getArguments().getInt("POST_POSITION");
+        String firstPosterId = getArguments().getString("FIRST_POSTER_ID");
+
 
         setPresenter(new PostOptionsDialogPresenter(this));
 
@@ -114,14 +108,73 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             }
         });
 
+        Log.i("type view holder", mViewHolder.getClass().toString());
         // Checks the type of the viewholder of the view - if is a comment view (e.g. postcomment or profilecomment) then hide the save/unsave options
         // Can not save comments
-        if (viewHolderType.contains("Comment")){
+        if (mViewHolder.getClass().toString().contains("Comment")){
             saveTR.setVisibility(View.GONE);
             saveButton.setVisibility(View.GONE);
             unsaveTR.setVisibility(View.GONE);
             unsaveButton.setVisibility(View.GONE);
         }
+
+        Log.i("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));
+        Log.i("does activity match display post", Boolean.toString(getActivity().toString().contains("DisplayPostActivity")));
+        if (getActivity().toString().contains("DisplayPostActivity") && firstPosterId.equals(Config.currentUser)){
+            deleteButton.setVisibility(View.VISIBLE);
+            deleteTR.setVisibility(View.VISIBLE);
+            reportButton.setVisibility(View.VISIBLE);
+            reportTR.setVisibility(View.VISIBLE);
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("BUTTON PRESSED", "Delete");
+                    dismiss();
+                }
+            });
+
+            reportButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("BUTTON PRESSED", "Report");
+                    dismiss();
+                }
+            });
+
+            if (posterid.equals(Config.currentUser)){
+                reportTR.setVisibility(View.GONE);
+                reportButton.setVisibility(View.GONE);
+            }
+
+            //Checks if the post is the current users or other users and sets options based on this
+            //Delete option for own user's posts/comments
+            // Report option for other user's posts/comments
+        } else if (posterid.equals(Config.currentUser)){
+            reportTR.setVisibility(View.GONE);
+            reportButton.setVisibility(View.GONE);
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("BUTTON PRESSED", "Delete");
+                    dismiss();
+                }
+            });
+
+        } else {
+            deleteTR.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.GONE);
+
+            reportButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("BUTTON PRESSED", "Report");
+                    dismiss();
+                }
+            });
+        }
+
 
         // Checks if the post is already saved - if saved hide the save option and set the unsaveButton listener
         // Otherwise hide the unsave option and set the saveButton listener
@@ -152,35 +205,6 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
                     mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser, mViewHolder, true, i);
-                    dismiss();
-                }
-            });
-        }
-
-
-        //Checks if the post is the current users or other users and sets options based on this
-        //Delete option for own user's posts/comments
-        //Report option for other user's posts/comments
-        if (posterid.equals(Config.currentUser)){
-            reportTR.setVisibility(View.GONE);
-            reportButton.setVisibility(View.GONE);
-
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("BUTTON PRESSED", "Delete");
-                    dismiss();
-                }
-            });
-
-        } else {
-            deleteTR.setVisibility(View.GONE);
-            deleteButton.setVisibility(View.GONE);
-
-            reportButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("BUTTON PRESSED", "Report");
                     dismiss();
                 }
             });

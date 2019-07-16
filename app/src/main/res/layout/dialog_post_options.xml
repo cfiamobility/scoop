@@ -14,8 +14,7 @@
 
         <TableRow
             android:id="@+id/dialog_post_options_tr_share"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="12dp">
+            android:layout_marginStart="40dp">
 
             <ImageView
                 android:id="@+id/dialog_post_options_img_share"
@@ -103,8 +102,7 @@
 
         <TableRow
             android:id="@+id/dialog_post_options_tr_delete"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="12dp">
+            android:layout_marginStart="40dp">
 
             <ImageView
                 android:id="@+id/dialog_post_options_img_delete"
@@ -133,8 +131,7 @@
 
         <TableRow
             android:id="@+id/dialog_post_options_tr_report"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="12dp">
+            android:layout_marginStart="40dp">
 
             <ImageView
                 android:id="@+id/dialog_post_options_img_report"

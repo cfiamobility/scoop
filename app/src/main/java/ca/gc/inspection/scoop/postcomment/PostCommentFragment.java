@@ -223,7 +223,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      * @param posterId posterid of the post that the viewholder contains
      * @param savedStatus savedstatus of the post for the user clicking on the options menu
      */
-    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus){
+    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus, String firstPosterId){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,8 +238,8 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 bundle.putString("ACTIVITY_ID", activityId);
                 Log.i("poster id I am clicking: ", posterId);
                 bundle.putString("POSTER_ID", posterId);
-                Log.i("viewholder: ", viewHolder.getClass().toString());
-                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
+//                Log.i("viewholder: ", viewHolder.getClass().toString());
+//                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
                 Log.i("saved status: ", savedStatus.toString());
 
 
@@ -249,8 +249,11 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                     bundle.putBoolean("SAVED_STATUS", updatedSave); //saved status stored in the UI
                 }
 
-
+                Log.i("post position: ", Integer.toString(i));
                 bundle.putInt("POST_POSITION", i);
+                Log.i("first poster id: ", firstPosterId);
+                bundle.putString("FIRST_POSTER_ID", firstPosterId);
+
                 bottomSheetDialog.setArguments(bundle);
                 bottomSheetDialog.setViewHolder(viewHolder);
 
