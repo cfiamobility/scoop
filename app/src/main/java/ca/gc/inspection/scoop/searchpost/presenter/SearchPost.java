@@ -4,13 +4,14 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import ca.gc.inspection.scoop.postcomment.PostTextFormat;
+import ca.gc.inspection.scoop.util.TextFormat;
 import ca.gc.inspection.scoop.profilepost.ProfilePost;
 
 public class SearchPost extends ProfilePost {
     private static final String TAG = "SearchPost";
     private static final String RELEVANCE_LABEL = "relevance: ";
     private static final double LIKE_COUNT_LOGARITHMIC_WEIGHTING = 0.25;
+    private static final double SEARCH_POST_TITLE_WEIGHT_MULTIPLIER = 2;
 
     /**
      * Data class which stores information for a single search post.
@@ -26,34 +27,38 @@ public class SearchPost extends ProfilePost {
     }
 
     private double mRelevance = 0;
-    private PostTextFormat mPostTitleFormat = null;
-    private PostTextFormat mPostTextFormat = null;
+    private TextFormat mPostTitleFormat = null;
+    private TextFormat mTextFormat = null;
 
     protected SearchPost(JSONObject jsonPost, JSONObject jsonImage) {
         super(jsonPost, jsonImage);
     }
 
-    public void setFormatForSearchQuery(SearchQueryParser searchQueryParser) {
+    public void setFormatForSearchQuery(SearchQuery searchQuery) {
         String relevanceFooter = RELEVANCE_LABEL + getRelevance();
-        mPostTextFormat = new PostTextFormat(searchQueryParser.getQueryWords(), getPostText(), relevanceFooter);
-        mPostTitleFormat = new PostTextFormat(searchQueryParser.getQueryWords(), getPostTitle(), null);
+        mTextFormat = new TextFormat(searchQuery.getQueryWords(), getPostText(), relevanceFooter);
+        mPostTitleFormat = new TextFormat(searchQuery.getQueryWords(), getPostTitle(), null);
     }
 
-    public PostTextFormat getTitleFormat() {
+    public TextFormat getTitleFormat() {
         return mPostTitleFormat;
     }
 
-    public PostTextFormat getTextFormat() {
-        return mPostTextFormat;
+    public TextFormat getTextFormat() {
+        return mTextFormat;
     }
 
-    public void setRelevance(SearchQueryParser searchQueryParser,
+    public void setRelevance(SearchQuery searchQuery,
                              MatchedWordWeighting weighting) {
         double weightedLikeCount = getLikeCountWeightedBy(LikeCountWeighting.LOGARITHMIC);
 
         // Relevance based on a non-linear weighting of the number of matches and rating
         mRelevance = Math.ceil(
-                (searchQueryParser.getNumberOfMatchesWeightedBy(weighting, getPostTitle() + getPostText()) + 1) *
+                (
+                        searchQuery.getNumberOfMatchesWeightedBy(weighting, getPostTitle())
+                                * SEARCH_POST_TITLE_WEIGHT_MULTIPLIER +
+                        searchQuery.getNumberOfMatchesWeightedBy(weighting, getPostText()) + 1
+                ) *
                 (weightedLikeCount + 1) * 100
         )/100;
         Log.d(TAG, "relevance = " + mRelevance);

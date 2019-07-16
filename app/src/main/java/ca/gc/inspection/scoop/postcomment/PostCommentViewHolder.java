@@ -10,7 +10,6 @@ import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -23,9 +22,10 @@ import java.util.Date;
 
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.util.TextFormat;
 
-import static ca.gc.inspection.scoop.postcomment.PostTextFormat.POST_TEXT_FORMAT_BOLD_COLOUR;
-import static ca.gc.inspection.scoop.postcomment.PostTextFormat.POST_TEXT_FORMAT_HIGHLIGHT_COLOUR;
+import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_BOLD_COLOUR;
+import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_HIGHLIGHT_COLOUR;
 
 /**
  * ViewHolder for replying to a post action; it is the most generic View Holder
@@ -69,11 +69,11 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
      * @param postText
      */
     @Override
-    public PostCommentContract.View.ViewHolder setPostTextWithFormat(String postText, PostTextFormat postTextFormat) {
-        String fullText = postText + "\n\n" + postTextFormat.getFooter();
+    public PostCommentContract.View.ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat) {
+        String fullText = postText + "\n\n" + textFormat.getFooter();
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(fullText);
 
-        for (Pair<Integer, Integer> pair : postTextFormat.getBoldTextPositions()) {
+        for (Pair<Integer, Integer> pair : textFormat.getBoldTextPositions()) {
             spannableStringBuilder.setSpan(new StyleSpan(Typeface.BOLD),
                     pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 

@@ -8,9 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collections;
-import java.util.Comparator;
-
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
 import ca.gc.inspection.scoop.searchpost.view.SearchPostContract;
@@ -37,7 +34,7 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
     private SearchPostContract.View.Adapter mAdapter;
     private SearchPostInteractor mSearchPostInteractor;
     private boolean refreshingData = false;
-    private SearchQueryParser currentSearchQuery;
+    private SearchQuery currentSearchQuery;
     private Pair<String, String> refreshRequestedWhileRefreshing = null;
 
     private SearchPost getItemByIndex(int i) {
@@ -79,6 +76,14 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
         mAdapter = adapter;
     }
 
+    /**
+     * Tries to load the searched posts from the database. If the Presenter is already waiting for
+     * a database response, set refreshRequestedWhileRefreshing to the latest search query so
+     * that it will be run when the network is available.
+     *
+     * @param userId
+     * @param search
+     */
     @Override
     public void loadDataFromDatabase(String userId, String search) {
         if (!refreshingData) {
@@ -90,7 +95,7 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
                 mDataCache = PostDataCache.createWithType(SearchPost.class);
             else mDataCache.getSearchPostList().clear();
 
-            currentSearchQuery = new SearchQueryParser(search);
+            currentSearchQuery = new SearchQuery(search);
             String parsedQuery = currentSearchQuery.getParsedQuery();
             Log.d(TAG, "parsed query: "+parsedQuery);
             if (parsedQuery != null && !parsedQuery.isEmpty())
@@ -124,10 +129,11 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
         }
         sortDataCacheByRelevance();
         mAdapter.refreshAdapter();
-        mSearchPostView.onLoadedDataFromDatabase();
+        mSearchPostView.onLoadedDataFromDatabase();     // Clear the refreshing circle from the view
         mSearchPostView.setResultsInfo(getItemCount());
-
         refreshingData = false;
+
+        // Reload data from the database if a query was made while the network was busy
         if (refreshRequestedWhileRefreshing != null) {
             String userId = refreshRequestedWhileRefreshing.first;
             String search = refreshRequestedWhileRefreshing.second;

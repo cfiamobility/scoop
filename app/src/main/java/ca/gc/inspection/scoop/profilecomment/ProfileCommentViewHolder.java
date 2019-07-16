@@ -10,13 +10,12 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.postcomment.PostTextFormat;
+import ca.gc.inspection.scoop.util.TextFormat;
 
-import static ca.gc.inspection.scoop.postcomment.PostTextFormat.POST_TEXT_FORMAT_BOLD_COLOUR;
-import static ca.gc.inspection.scoop.postcomment.PostTextFormat.POST_TEXT_FORMAT_HIGHLIGHT_COLOUR;
+import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_BOLD_COLOUR;
+import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_HIGHLIGHT_COLOUR;
 
 public class ProfileCommentViewHolder extends PostCommentViewHolder
         implements ProfileCommentContract.View.ViewHolder {
@@ -50,14 +49,14 @@ public class ProfileCommentViewHolder extends PostCommentViewHolder
     /**
      * Sets the post title with formatting
      * @param postTitle
-     * @param postTextFormat
+     * @param textFormat
      * @return
      */
     @Override
-    public ProfileCommentContract.View.ViewHolder setPostTitleWithFormat(String postTitle, PostTextFormat postTextFormat) {
+    public ProfileCommentContract.View.ViewHolder setPostTitleWithFormat(String postTitle, TextFormat textFormat) {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(postTitle);
 
-        for (Pair<Integer, Integer> pair : postTextFormat.getBoldTextPositions()) {
+        for (Pair<Integer, Integer> pair : textFormat.getBoldTextPositions()) {
             spannableStringBuilder.setSpan(new StyleSpan(Typeface.BOLD),
                     pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 

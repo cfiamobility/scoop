@@ -1,8 +1,7 @@
 package ca.gc.inspection.scoop.searchpost.view;
 
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.postcomment.PostTextFormat;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
+import ca.gc.inspection.scoop.util.TextFormat;
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
 import ca.gc.inspection.scoop.search.SearchContract;
 
@@ -45,8 +44,8 @@ public interface SearchPostContract extends SearchContract {
         }
 
         interface ViewHolder extends ProfilePostContract.View.ViewHolder {
-            SearchPostContract.View.ViewHolder setPostTitleWithFormat(String postTitle, PostTextFormat postTextFormat);
-            SearchPostContract.View.ViewHolder setPostTextWithFormat(String postText, PostTextFormat postTextFormat);
+            SearchPostContract.View.ViewHolder setPostTitleWithFormat(String postTitle, TextFormat textFormat);
+            SearchPostContract.View.ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat);
         }
     }
 

@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.postcomment;
+package ca.gc.inspection.scoop.util;
 
 import android.graphics.Color;
 import android.util.Log;
@@ -7,14 +7,14 @@ import android.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostTextFormat {
+public class TextFormat {
     public static final int POST_TEXT_FORMAT_BOLD_COLOUR = Color.BLUE;
     public static final int POST_TEXT_FORMAT_HIGHLIGHT_COLOUR = Color.WHITE;
     private String[] mBoldedWords;
     private List<Pair<Integer, Integer>> mBoldTextPositions;
     private String mFooter;
 
-    public PostTextFormat(String[] boldedWords, String text, String footer) {
+    public TextFormat(String[] boldedWords, String text, String footer) {
         mBoldTextPositions = new ArrayList<>();
         mBoldedWords = boldedWords;
         mFooter = footer;
@@ -31,11 +31,11 @@ public class PostTextFormat {
                     if (wordStart >= 0) {
                         wordEnd = wordStart + boldWord.length();
                         mBoldTextPositions.add(Pair.create(wordStart, wordEnd));
-                        Log.d("PostTextFormat", boldWord + " at index: " + wordStart + ", " + wordEnd);
+                        Log.d("TextFormat", boldWord + " at index: " + wordStart + ", " + wordEnd);
                     }
                 }
             }
-            else Log.d("PostTextFormat", "empty word!");
+            else Log.d("TextFormat", "empty word!");
         }
     }
 
