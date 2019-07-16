@@ -59,6 +59,7 @@ public interface PostCommentContract {
             ViewHolder setLikeState(LikeState likeState);
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
+            ViewHolder setSavedStatus(Boolean savedStatus);
         }
     }
 
@@ -73,11 +74,13 @@ public interface PostCommentContract {
             int getItemCount();
             String getPosterIdByIndex(int i);   // TODO can move into ViewHolderAPI
             String getActivityIdByIndex(int i); // TODO can move into ViewHolderAPI
+            Boolean getSavedStatusByIndex(int i);
         }
 
         interface ViewHolderAPI {
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
+            void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException;
         }
 
     }

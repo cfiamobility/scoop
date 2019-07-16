@@ -36,6 +36,7 @@
     <string name="city">City</string>
     <string name="province">Province</string>
     <string name="save">Save</string>
+    <string name="unsave">Unsave</string>
     <string name="change_profile_image">Change Profile Picture</string>
 
 

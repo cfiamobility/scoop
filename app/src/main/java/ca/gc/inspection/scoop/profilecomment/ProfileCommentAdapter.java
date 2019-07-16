@@ -65,6 +65,8 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
         PostCommentFragment.setLikesListener(profileCommentViewHolder, i);
         PostCommentFragment.setUserInfoListener(profileCommentViewHolder,
                 mProfileCommentPresenter.getPosterIdByIndex(i));
+        PostCommentFragment.setPostOptionsListener(profileCommentViewHolder,
+                mProfileCommentPresenter.getActivityIdByIndex(i),mProfileCommentPresenter.getPosterIdByIndex(i));
     }
 
     /**

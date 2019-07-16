@@ -1,6 +1,9 @@
 package ca.gc.inspection.scoop.postoptionsdialog;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+
+import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -29,22 +32,15 @@ public class PostOptionsDialogPresenter implements PostOptionsDialogContract.Pre
      * @param activityid ID of the activity in which the user is click on
      * @param userid ID of the user
      */
-    public void savePost(NetworkUtils network, final String activityid, final String userid){
+    public void savePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i){
+        viewHolder.updateSavedStatus(i, savedStatus);
         mInteractor.savePost(network, activityid, userid);
     }
 
 
-    /**
-     * Checks if the post being saved is valid or not based on the response from the Interactor
-     * Post already saved in the database by the user vs New post being saved by the user
-     * @param response response message from the database POST request
-     */
-    public void validSave(String response) {
-        if (response.contains("Invalid save - post already saved")) { // if the user attempts to save a post that has already been saved by them
-            mView.setSaveResponseMessage("This post is already saved!");
-        } else if (response.contains("Valid save")){ // if user saves a post that is not already saved by them
-            mView.setSaveResponseMessage("Post successfully saved!");
-        }
-    }
+   public void setSaveResponseMessage(String response){
+        mView.setSaveResponseMessage(response);
+   }
+
 
 }

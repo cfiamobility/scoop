@@ -5,104 +5,159 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/dialog_post_options_btn_share"
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:id="@+id/fragment_profile_tl_social_media"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="213dp"
-        android:background="@android:color/transparent"
-        android:fontFamily="@font/roboto"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:text="@string/share"
-        android:textAlignment="viewStart" />
+        android:orientation="vertical"
+        android:weightSum="2">
 
-    <ImageView
-        android:id="@+id/dialog_post_options_img_share"
-        android:layout_width="53dp"
-        android:layout_height="34dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="4dp"
-        android:layout_toStartOf="@+id/dialog_post_options_btn_share"
-        app:srcCompat="@drawable/ic_share_secondary_24dp" />
+        <TableRow
+            android:id="@+id/dialog_post_options_tr_share"
+            android:layout_marginStart="40dp">
 
-    <Button
-        android:id="@+id/dialog_post_options_btn_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dialog_post_options_btn_share"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="-1dp"
-        android:layout_marginEnd="213dp"
-        android:background="@android:color/transparent"
-        android:fontFamily="@font/roboto"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:text="@string/save"
-        android:textAlignment="textStart" />
+            <ImageView
+                android:id="@+id/dialog_post_options_img_share"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                app:srcCompat="@drawable/ic_share_secondary_24dp" />
 
-    <ImageView
-        android:id="@+id/dialog_post_options_img_save"
-        android:layout_width="53dp"
-        android:layout_height="34dp"
-        android:layout_below="@+id/dialog_post_options_img_share"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="2dp"
-        android:layout_toStartOf="@+id/dialog_post_options_btn_save"
-        app:srcCompat="@drawable/ic_save_secondary_24dp" />
+            <Button
+                android:id="@+id/dialog_post_options_btn_share"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
 
-    <Button
-        android:id="@+id/dialog_post_options_btn_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dialog_post_options_btn_save"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="213dp"
-        android:background="@android:color/transparent"
-        android:fontFamily="@font/roboto"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:text="@string/delete"
-        android:textAlignment="textStart" />
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="213dp"
+                android:layout_marginStart="16dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto"
+                android:text="@string/share"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+        </TableRow>
 
-    <ImageView
-        android:id="@+id/dialog_post_options_img_delete"
-        android:layout_width="53dp"
-        android:layout_height="34dp"
-        android:layout_below="@+id/dialog_post_options_img_save"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="4dp"
-        android:layout_toStartOf="@+id/dialog_post_options_btn_delete"
-        app:srcCompat="@drawable/ic_delete_secondary_24dp" />
 
-    <Button
-        android:id="@+id/dialog_post_options_btn_report"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dialog_post_options_btn_delete"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="213dp"
-        android:background="@android:color/transparent"
-        android:fontFamily="@font/roboto"
-        android:text="@string/report"
-        android:textAlignment="viewStart"
-        android:textAllCaps="false"
-        android:textSize="16sp" />
+        <TableRow
+            android:id="@+id/dialog_post_options_tr_save"
+            android:layout_marginStart="40dp">
 
-    <ImageView
-        android:id="@+id/dialog_post_options_img_report"
-        android:layout_width="53dp"
-        android:layout_height="34dp"
-        android:layout_below="@+id/dialog_post_options_img_delete"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="4dp"
-        android:layout_toStartOf="@+id/dialog_post_options_btn_report"
-        app:srcCompat="@drawable/ic_report_secondary_24dp" />
+            <ImageView
+                android:id="@+id/dialog_post_options_img_save"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                app:srcCompat="@drawable/ic_save_secondary_24dp" />
+
+            <Button
+                android:id="@+id/dialog_post_options_btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="213dp"
+                android:layout_marginStart="16dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto"
+                android:text="@string/save"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/dialog_post_options_tr_unsave"
+            android:layout_marginStart="40dp">
+
+            <ImageView
+                android:id="@+id/dialog_post_options_img_unsave"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                app:srcCompat="@drawable/ic_save_secondary_24dp" />
+
+            <Button
+                android:id="@+id/dialog_post_options_btn_unsave"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="213dp"
+                android:layout_marginStart="16dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto"
+                android:text="@string/unsave"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+        </TableRow>
+
+
+
+        <TableRow
+            android:id="@+id/dialog_post_options_tr_delete"
+            android:layout_marginStart="40dp">
+
+            <ImageView
+                android:id="@+id/dialog_post_options_img_delete"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                app:srcCompat="@drawable/ic_delete_secondary_24dp" />
+
+            <Button
+                android:id="@+id/dialog_post_options_btn_delete"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="213dp"
+                android:layout_marginStart="16dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto"
+                android:text="@string/delete"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/dialog_post_options_tr_report"
+            android:layout_marginStart="40dp">
+
+            <ImageView
+                android:id="@+id/dialog_post_options_img_report"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                app:srcCompat="@drawable/ic_report_secondary_24dp" />
+
+            <Button
+                android:id="@+id/dialog_post_options_btn_report"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="213dp"
+                android:layout_marginStart="16dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/roboto"
+                android:text="@string/report"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+        </TableRow>
+
+    </TableLayout>
 
 </RelativeLayout>
