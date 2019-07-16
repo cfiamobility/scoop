@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.profilecomment;
 
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
+import ca.gc.inspection.scoop.postcomment.PostTextFormat;
 
 /**
  * A contract between the View (layer) and Presenter for the viewing profile comments
@@ -44,6 +45,7 @@ public interface ProfileCommentContract extends PostCommentContract {
 
         interface ViewHolder extends PostCommentContract.View.ViewHolder {
             ViewHolder setPostTitle(String postTitle);
+            ViewHolder setPostTitleWithFormat(String postTitle, PostTextFormat postTextFormat);
         }
     }
 

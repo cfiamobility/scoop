@@ -11,13 +11,14 @@ public class SearchQueryParser {
     SearchQueryParser(String query) {
         if (query != null) {
             StringBuilder parsedQuery = new StringBuilder();
-            mWords = query.split("\\s+");
+            mWords = query.split("(\\s|\\.|,)+");
             for (int i = 0; i < mWords.length; i++) {
-                mWords[i] = mWords[i].replaceAll("[^A-Za-z0-9]", "");
-                if ((mWords[i] != null) && !(mWords[i].isEmpty())) {
+                mWords[i] = mWords[i].replaceAll("[^A-Za-z0-9\'\\-]", "");
+                String queryWord = mWords[i].replaceAll("['\\-]", "");
+                if (!queryWord.isEmpty()) {
                     if (parsedQuery.length() > 0)
                         parsedQuery.append(" | ");
-                    parsedQuery.append(mWords[i]);
+                    parsedQuery.append(queryWord);
                 }
             }
             mParsedQuery = parsedQuery.toString();
@@ -47,8 +48,6 @@ public class SearchQueryParser {
                     else
                         matches += wordMatches;
                     Log.d(TAG, "wordMatches = " + wordMatches + " for " + mWord);
-//                    Log.d(TAG, "temp length = " + temp.length() + "\ttext length = " + text.length() + "\tword length = " + mWord.length());
-//                    Log.d(TAG, "text = " + text + " temp = " + temp);
                 }
             }
         Log.d(TAG, "getNumberOfMatchesWeightedBy = " + matches);

@@ -1,9 +1,22 @@
 package ca.gc.inspection.scoop.profilecomment;
 
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
+
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postcomment.PostTextFormat;
+
+import static ca.gc.inspection.scoop.postcomment.PostTextFormat.POST_TEXT_FORMAT_BOLD_COLOUR;
+import static ca.gc.inspection.scoop.postcomment.PostTextFormat.POST_TEXT_FORMAT_HIGHLIGHT_COLOUR;
 
 public class ProfileCommentViewHolder extends PostCommentViewHolder
         implements ProfileCommentContract.View.ViewHolder {
@@ -34,4 +47,28 @@ public class ProfileCommentViewHolder extends PostCommentViewHolder
         return this;
     }
 
+    /**
+     * Sets the post title with formatting
+     * @param postTitle
+     * @param postTextFormat
+     * @return
+     */
+    @Override
+    public ProfileCommentContract.View.ViewHolder setPostTitleWithFormat(String postTitle, PostTextFormat postTextFormat) {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(postTitle);
+
+        for (Pair<Integer, Integer> pair : postTextFormat.getBoldTextPositions()) {
+            spannableStringBuilder.setSpan(new StyleSpan(Typeface.BOLD),
+                    pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+            spannableStringBuilder.setSpan(new ForegroundColorSpan(POST_TEXT_FORMAT_BOLD_COLOUR),
+                    pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+            spannableStringBuilder.setSpan(new BackgroundColorSpan(POST_TEXT_FORMAT_HIGHLIGHT_COLOUR),
+                    pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        }
+
+        this.postTitle.setText(spannableStringBuilder);
+        return this;
+    }
 }

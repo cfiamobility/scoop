@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.searchpost.presenter;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Pair;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +38,7 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
     private SearchPostInteractor mSearchPostInteractor;
     private boolean refreshingData = false;
     private SearchQueryParser currentSearchQuery;
+    private Pair<String, String> refreshRequestedWhileRefreshing = null;
 
     private SearchPost getItemByIndex(int i) {
         if (mDataCache == null)
@@ -80,7 +82,9 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
     @Override
     public void loadDataFromDatabase(String userId, String search) {
         if (!refreshingData) {
+            Log.d(TAG, "loadDataFromDatabase = " + userId + ", " + search);
             refreshingData = true;
+            refreshRequestedWhileRefreshing = null;
 
             if (mDataCache == null)
                 mDataCache = PostDataCache.createWithType(SearchPost.class);
@@ -91,6 +95,10 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
             Log.d(TAG, "parsed query: "+parsedQuery);
             if (parsedQuery != null && !parsedQuery.isEmpty())
                 mSearchPostInteractor.getSearchPosts(userId, parsedQuery);
+        }
+        else {
+            refreshRequestedWhileRefreshing = new Pair<>(userId, search);
+            Log.d(TAG, "refreshRequestedWhileRefreshing = " + userId + ", " + search);
         }
     }
 
@@ -115,9 +123,17 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
             mDataCache.getSearchPostList().add(searchPost);
         }
         sortDataCacheByRelevance();
-
         mAdapter.refreshAdapter();
+        mSearchPostView.onLoadedDataFromDatabase();
+        mSearchPostView.setResultsInfo(getItemCount());
+
         refreshingData = false;
+        if (refreshRequestedWhileRefreshing != null) {
+            String userId = refreshRequestedWhileRefreshing.first;
+            String search = refreshRequestedWhileRefreshing.second;
+            refreshRequestedWhileRefreshing = null;
+            loadDataFromDatabase(userId, search);
+        }
     }
 
     @Override
@@ -132,9 +148,9 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
         bindPostCommentDataToViewHolder(viewHolderInterface, searchPost);
         if (searchPost != null) {
             viewHolderInterface
-                    .setPostTitle(searchPost.getPostTitle())
                     .setCommentCount(searchPost.getCommentCount())
-                    .setPostTextWithFormat(searchPost.getPostText(), searchPost.getFormat());
+                    .setPostTitleWithFormat(searchPost.getPostTitle(), searchPost.getTitleFormat())
+                    .setPostTextWithFormat(searchPost.getPostText(), searchPost.getTextFormat());
         }
     }
 

@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
@@ -24,6 +25,7 @@ import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.R;
 
 import static ca.gc.inspection.scoop.postcomment.PostTextFormat.POST_TEXT_FORMAT_BOLD_COLOUR;
+import static ca.gc.inspection.scoop.postcomment.PostTextFormat.POST_TEXT_FORMAT_HIGHLIGHT_COLOUR;
 
 /**
  * ViewHolder for replying to a post action; it is the most generic View Holder
@@ -76,6 +78,9 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
                     pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
             spannableStringBuilder.setSpan(new ForegroundColorSpan(POST_TEXT_FORMAT_BOLD_COLOUR),
+                    pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+            spannableStringBuilder.setSpan(new BackgroundColorSpan(POST_TEXT_FORMAT_HIGHLIGHT_COLOUR),
                     pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         }
 

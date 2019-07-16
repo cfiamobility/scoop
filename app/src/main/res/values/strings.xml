@@ -116,8 +116,9 @@
     <string name="hour_ago">hour ago</string>
     <string name="hours_ago">hours ago</string>
 
-    <!-- Notifications -->
+    <!-- Search -->
     <string name="search">Search</string>
     <string name="search_hint">search</string>
+    <string name="search_post_results_info">0 Results</string>
 
 </resources>

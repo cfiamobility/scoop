@@ -9,6 +9,7 @@ import java.util.List;
 
 public class PostTextFormat {
     public static final int POST_TEXT_FORMAT_BOLD_COLOUR = Color.BLUE;
+    public static final int POST_TEXT_FORMAT_HIGHLIGHT_COLOUR = Color.WHITE;
     private String[] mBoldedWords;
     private List<Pair<Integer, Integer>> mBoldTextPositions;
     private String mFooter;
@@ -24,9 +25,9 @@ public class PostTextFormat {
         for (String boldWord : mBoldedWords) {
             if (boldWord != null && !boldWord.isEmpty()) {
                 int wordStart = 0;
-                int wordEnd = 0;
+                int wordEnd = -1;
                 while (wordStart >= 0) {
-                    wordStart = text.indexOf(boldWord, wordEnd + 1);
+                    wordStart = text.toLowerCase().indexOf(boldWord.toLowerCase(), wordEnd + 1);
                     if (wordStart >= 0) {
                         wordEnd = wordStart + boldWord.length();
                         mBoldTextPositions.add(Pair.create(wordStart, wordEnd));

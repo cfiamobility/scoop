@@ -26,6 +26,7 @@ public class SearchPost extends ProfilePost {
     }
 
     private double mRelevance = 0;
+    private PostTextFormat mPostTitleFormat = null;
     private PostTextFormat mPostTextFormat = null;
 
     protected SearchPost(JSONObject jsonPost, JSONObject jsonImage) {
@@ -35,9 +36,14 @@ public class SearchPost extends ProfilePost {
     public void setFormatForSearchQuery(SearchQueryParser searchQueryParser) {
         String relevanceFooter = RELEVANCE_LABEL + getRelevance();
         mPostTextFormat = new PostTextFormat(searchQueryParser.getQueryWords(), getPostText(), relevanceFooter);
+        mPostTitleFormat = new PostTextFormat(searchQueryParser.getQueryWords(), getPostTitle(), null);
     }
 
-    public PostTextFormat getFormat() {
+    public PostTextFormat getTitleFormat() {
+        return mPostTitleFormat;
+    }
+
+    public PostTextFormat getTextFormat() {
         return mPostTextFormat;
     }
 
