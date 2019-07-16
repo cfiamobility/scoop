@@ -108,7 +108,6 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             }
         });
 
-        Log.i("type view holder", mViewHolder.getClass().toString());
         // Checks the type of the viewholder of the view - if is a comment view (e.g. postcomment or profilecomment) then hide the save/unsave options
         // Can not save comments
         if (mViewHolder.getClass().toString().contains("Comment")){
