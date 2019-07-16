@@ -117,8 +117,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             unsaveButton.setVisibility(View.GONE);
         }
 
-        Log.i("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));
-        Log.i("does activity match display post", Boolean.toString(getActivity().toString().contains("DisplayPostActivity")));
+//        Log.i("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));
+//        Log.i("does activity match display post", Boolean.toString(getActivity().toString().contains("DisplayPostActivity")));
         if (getActivity().toString().contains("DisplayPostActivity") && firstPosterId.equals(Config.currentUser)){
             deleteButton.setVisibility(View.VISIBLE);
             deleteTR.setVisibility(View.VISIBLE);
@@ -222,6 +222,12 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
 
+    /**
+     * This setter method is used for the purposes of referencing the respective viewholder with a PostOptionsDialogFragment
+     * Allows access to setting the viewholders savedStatus variable for future access to update the UI when a post is saved
+     * Also type of viewHolder is needed for differing between comments and posts
+     * @param viewHolder from adapter that sets a PostOptionsListener
+     */
     public void setViewHolder(PostCommentViewHolder viewHolder){
         mViewHolder = viewHolder;
     }

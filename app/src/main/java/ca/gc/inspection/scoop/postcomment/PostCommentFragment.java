@@ -204,9 +204,8 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 bundle.putString("ACTIVITY_ID", activityId);
                 Log.i("poster id I am clicking: ", posterId);
                 bundle.putString("POSTER_ID", posterId);
-                Log.i("viewholder: ", viewHolder.getClass().toString());
-                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
                 bottomSheetDialog.setArguments(bundle);
+                bottomSheetDialog.setViewHolder(viewHolder);
 
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
@@ -238,8 +237,8 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 bundle.putString("ACTIVITY_ID", activityId);
                 Log.i("poster id I am clicking: ", posterId);
                 bundle.putString("POSTER_ID", posterId);
-//                Log.i("viewholder: ", viewHolder.getClass().toString());
-//                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
+                Log.i("viewholder: ", viewHolder.getClass().toString());
+                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
                 Log.i("saved status: ", savedStatus.toString());
 
 
