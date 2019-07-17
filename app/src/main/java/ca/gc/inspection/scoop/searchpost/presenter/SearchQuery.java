@@ -15,7 +15,7 @@ public class SearchQuery {
      * Parse the query in the constructor
      * @param query
      */
-    SearchQuery(String query) {
+    public SearchQuery(String query) {
         if (query != null) {
             StringBuilder parsedQuery = new StringBuilder();
             mWords = query.split("(\\s|\\.|,)+");

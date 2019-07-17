@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import java.util.Objects;
 import ca.gc.inspection.scoop.MainActivity;
-import ca.gc.inspection.scoop.searchpeople.PeopleSearchResultsFragment;
+import ca.gc.inspection.scoop.searchpeople.SearchPeopleFragment;
 import ca.gc.inspection.scoop.searchpost.view.SearchPostFragment;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -82,7 +82,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         mViewPager = findViewById(R.id.activity_search_vp_search);
         mPagerAdapter = new SearchPagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(new SearchPostFragment(), "Post");
-        mPagerAdapter.addFragment(new PeopleSearchResultsFragment(), "People");
+        mPagerAdapter.addFragment(new SearchPeopleFragment(), "People");
 
         mViewPager.setAdapter(mPagerAdapter);
 

@@ -43,7 +43,7 @@ public class SearchPostFragment extends Fragment implements
     private TextView mResultsInfo;
     private String mLastSearchQuery;
 
-    private static final String SEARCH_RESULTS_INFO_SUFFIX = " results";
+    public static final String SEARCH_RESULTS_INFO_SUFFIX = " results";
 
     @Override
     public void setPresenter(@NonNull SearchPostContract.Presenter presenter) {

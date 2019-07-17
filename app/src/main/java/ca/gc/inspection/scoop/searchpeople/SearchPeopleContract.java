@@ -1,11 +1,13 @@
-package ca.gc.inspection.scoop.searchpost.view;
+package ca.gc.inspection.scoop.searchpeople;
 
+import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.util.TextFormat;
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
 import ca.gc.inspection.scoop.search.SearchContract;
+import ca.gc.inspection.scoop.searchpost.view.SearchPostContract;
+import ca.gc.inspection.scoop.util.TextFormat;
 
-public interface SearchPostContract extends SearchContract {
+public interface SearchPeopleContract extends SearchContract {
     /**
      * A contract between the View (layer) and Presenter for the viewing a profile post
      * action. This contract communicates the how the View and Presenter will
@@ -14,11 +16,11 @@ public interface SearchPostContract extends SearchContract {
      * Since RecyclerView is being used in this package, we must additionally specify the interaction
      * between sub-Views (Adapter/ViewHolder) and the Presenter (via AdapterAPI/ViewHolderAPI).
      *
-     * View = ProfilePostFragment - is the main View responsible for creating the Presenter and Adapter
+     * View = SearchPeopleFragment - is the main View responsible for creating the Presenter and Adapter
      *      View.Adapter = SearchPostAdapter is the subview responsible for creating ViewHolders
-     *      View.ViewHolder = SearchPostViewHolder is the subview which displays an individual profile comment
+     *      View.ViewHolder = SearchPeopleViewHolder is the subview which displays an individual profile comment
      *
-     * Presenter = SearchPostPresenter - there's only one object which implements:
+     * Presenter = SearchPeoplePresenter - there's only one object which implements:
      *      Presenter.AdapterAPI - used by the Adapter to call Presenter methods
      *      Presenter.ViewHolderAPI - used by the ViewHolders to call Presenter methods
      *
@@ -32,7 +34,7 @@ public interface SearchPostContract extends SearchContract {
 
     interface View extends BaseView<Presenter> {
         /**
-         * Implemented by the main View (ie. ProfilePostFragment).
+         * Implemented by the main View (ie. SearchPeopleFragment).
          * Methods specified here in the View but not in the nested View.Adapter and View.ViewHolder interfaces
          * explain how the Presenter is to communicate with the main View only.
          */
@@ -40,26 +42,28 @@ public interface SearchPostContract extends SearchContract {
         void onLoadedDataFromDatabase();
         void setResultsInfo(int resultsCount);
 
-        interface Adapter extends ProfilePostContract.View.Adapter {
+        interface Adapter {
+            void refreshAdapter();
         }
 
-        interface ViewHolder extends ProfilePostContract.View.ViewHolder {
-            ViewHolder setPostTitleWithFormat(String postTitle, TextFormat textFormat);
-            ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat);
+        interface ViewHolder {
+//            ViewHolder setPostTitleWithFormat(String postTitle, TextFormat textFormat);
+//            ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat);
         }
     }
 
-    interface Presenter extends ProfilePostContract.Presenter {
+    interface Presenter extends BasePresenter {
 
         void loadDataFromDatabase(String userId, String search);
 
-        interface AdapterAPI extends ProfilePostContract.Presenter.AdapterAPI {
-            void setAdapter(SearchPostContract.View.Adapter adapter);
+        interface AdapterAPI {
+            void setAdapter(SearchPeopleContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
-                    SearchPostContract.View.ViewHolder postCommentViewHolder, int i);
+                    SearchPeopleContract.View.ViewHolder searchPeopleViewHolder, int i);
+            int getItemCount();
         }
 
-        interface ViewHolderAPI extends ProfilePostContract.Presenter.ViewHolderAPI {
+        interface ViewHolderAPI {
         }
     }
 }
