@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import ca.gc.inspection.scoop.searchpeople.SearchPeopleContract;
 import ca.gc.inspection.scoop.search.MatchedWordWeighting;
 import ca.gc.inspection.scoop.search.SearchQuery;
@@ -136,12 +138,19 @@ public class SearchPeoplePresenter implements
     @Override
     public void onBindViewHolderAtPosition(SearchPeopleContract.View.ViewHolder viewHolderInterface, int i) {
         SearchPeople searchPeople = getItemByIndex(i);
-        // TODO implement
+        bindSearchPeopleDataToViewHolder(viewHolderInterface, searchPeople);
     }
 
     public static void bindSearchPeopleDataToViewHolder(
             SearchPeopleContract.View.ViewHolder viewHolderInterface, SearchPeople searchPeople) {
-        // TODO implement
+        if (searchPeople != null) {
+            viewHolderInterface
+                    .setFullName(searchPeople.getValidFullName())
+                    .setPosition(searchPeople.getPosition())
+                    .setDivision(searchPeople.getDivision())
+                    .setLocation(searchPeople.getValidLocation())
+                    .setUserImageFromString(searchPeople.getProfileImageString());
+        }
     }
 
     /**
@@ -158,5 +167,10 @@ public class SearchPeoplePresenter implements
     private void sortDataCacheByRelevance() {
         mDataCache.getSearchPeopleList().sort(
                 (item1, item2) -> Double.compare(item2.getRelevance(), item1.getRelevance()));
+    }
+
+    @Override
+    public String getProfileUserIdByIndex(int i) {
+        return Objects.requireNonNull(getItemByIndex(i)).getProfileUserId();
     }
 }

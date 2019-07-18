@@ -19,6 +19,7 @@ import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.profile.OtherUserActivity;
+import ca.gc.inspection.scoop.searchpeople.UserProfileListener;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
@@ -108,9 +109,9 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         });
     }
 
-    public static void setUserInfoListener(PostCommentViewHolder viewHolder, String posterId) {
+    public static void setUserInfoListener(UserProfileListener viewHolder, String posterId) {
         // tapping on profile picture will bring user to poster's profile page
-        viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
+        viewHolder.getProfileImage().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
@@ -118,7 +119,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
             }
         });
 
-        viewHolder.username.setOnClickListener(new View.OnClickListener() {
+        viewHolder.getUserName().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                MainActivity.otherUserClicked(posterId);

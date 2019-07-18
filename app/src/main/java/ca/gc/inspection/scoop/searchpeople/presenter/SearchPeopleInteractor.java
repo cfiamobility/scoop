@@ -43,7 +43,7 @@ public class SearchPeopleInteractor {
         return new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(final JSONArray response) {
-                        mPresenter.setData(response);
+                mPresenter.setData(response);
             }
         }, new Response.ErrorListener() {
             @Override

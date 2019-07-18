@@ -8,8 +8,10 @@ import ca.gc.inspection.scoop.search.MatchedWordWeighting;
 import ca.gc.inspection.scoop.search.SearchQuery;
 import ca.gc.inspection.scoop.util.TextFormat;
 
+import static ca.gc.inspection.scoop.Config.USERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_FIRST_NAME_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LAST_NAME_KEY;
+import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_PROFILE_IMAGE_KEY;
 
 public class SearchPeople {
 
@@ -75,6 +77,19 @@ public class SearchPeople {
 
     public double getRelevance() {
         return mRelevance;
+    }
+
+    /**
+     * @return userid of this profile (not necessarily the current user)
+     */
+    public String getProfileUserId() {
+        try {
+            return mProfile.getString(USERID_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public String getFirstName() {
@@ -177,5 +192,15 @@ public class SearchPeople {
             location.append(getProvince());
         }
         return location.toString();
+    }
+
+    public String getProfileImageString() {
+        try {
+            return mProfile.getString(PROFILE_COMMENT_PROFILE_IMAGE_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }

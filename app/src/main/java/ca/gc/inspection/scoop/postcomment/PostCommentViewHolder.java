@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ca.gc.inspection.scoop.searchpeople.UserProfileListener;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.TextFormat;
@@ -33,8 +34,9 @@ import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_HIGHLIGHT_
  * related to "posting" actions. Parent View Holder for ProfilePostViewHolder.
  */
 
-public class PostCommentViewHolder extends RecyclerView.ViewHolder
-        implements PostCommentContract.View.ViewHolder {
+public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
+        PostCommentContract.View.ViewHolder,
+        UserProfileListener {
 
     PostCommentContract.Presenter.ViewHolderAPI mPresenter;
 
@@ -206,5 +208,15 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public TextView getUserName() {
+        return username;
+    }
+
+    @Override
+    public ImageView getProfileImage() {
+        return profileImage;
     }
 }

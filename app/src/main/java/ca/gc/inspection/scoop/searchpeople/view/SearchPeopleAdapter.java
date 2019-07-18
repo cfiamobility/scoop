@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.searchpeople.view;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.searchpeople.SearchPeopleContract;
 
 import android.support.annotation.NonNull;
@@ -38,7 +39,7 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleViewHo
     @NonNull
     @Override
     public SearchPeopleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_profile_layout, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_search_profile, viewGroup, false);
         return new SearchPeopleViewHolder(v, (SearchPeopleContract.Presenter.ViewHolderAPI) mSearchPeoplePresenter);
     }
 
@@ -50,7 +51,9 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleViewHo
      */
     @Override
     public void onBindViewHolder(@NonNull SearchPeopleViewHolder searchPeopleViewHolder, int i) {
-        // TODO implement
+        mSearchPeoplePresenter.onBindViewHolderAtPosition(searchPeopleViewHolder, i);
+        PostCommentFragment.setUserInfoListener(searchPeopleViewHolder,
+                mSearchPeoplePresenter.getProfileUserIdByIndex(i));
     }
 
     @Override
@@ -58,12 +61,11 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleViewHo
         return mSearchPeoplePresenter.getItemCount();
     }
 
-
     /**
      * Called by presenter when it's data is updated. This lets the adapter know when
      * binding new data to the view (without being triggered by scrolling) is necessary.
      */
-//    @Override
+    @Override
     public void refreshAdapter() {
         notifyDataSetChanged();
     }

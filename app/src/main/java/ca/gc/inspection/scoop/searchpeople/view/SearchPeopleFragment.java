@@ -109,7 +109,8 @@ public class SearchPeopleFragment extends Fragment implements
     }
 
     private void loadDataFromDatabase(String query) {
-
+        mSwipeRefreshLayout.setRefreshing(true);
+        mSearchPeoplePresenter.loadDataFromDatabase(query);
     }
 
     /**

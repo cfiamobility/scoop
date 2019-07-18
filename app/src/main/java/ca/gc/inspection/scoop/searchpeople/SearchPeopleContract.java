@@ -61,6 +61,7 @@ public interface SearchPeopleContract extends SearchContract {
             void onBindViewHolderAtPosition(
                     SearchPeopleContract.View.ViewHolder searchPeopleViewHolder, int i);
             int getItemCount();
+            String getProfileUserIdByIndex(int i);
         }
 
         interface ViewHolderAPI {
