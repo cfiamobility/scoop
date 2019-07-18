@@ -27,7 +27,6 @@ public class ReportPresenter implements ReportContract.Presenter{
 
 
     public void submitReport(String activityId, String posterId, String userId, String reportReason, String reportBody){
-
         mInteractor.submitReport(activityId, posterId, userId, reportReason, reportBody);
     }
 
@@ -36,14 +35,7 @@ public class ReportPresenter implements ReportContract.Presenter{
         mView.setReportFailMessage(message);
     }
 
-
-    void sendReportEmail(JSONObject response){
-
-
-        reportConfirmation();
-    }
-
-    private void reportConfirmation(){
+    void reportConfirmation(){
         mView.reportConfirmation();
         Log.i("REPORT CONFIRMATION", "do i need a JSON object");
     }

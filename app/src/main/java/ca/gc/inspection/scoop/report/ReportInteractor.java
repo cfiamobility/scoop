@@ -34,7 +34,7 @@ public class ReportInteractor {
     void submitReport(String activityId, String posterId, String userId, String reportReason, String reportBody){
 
         Log.i("MIDDLE-TIER CHECK", "sending data to report table");
-        String url = Config.baseIP + "post/report-post";
+        String url = Config.baseIP + "report/report-post";
 
         StringRequest submitRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -45,13 +45,13 @@ public class ReportInteractor {
                     mPresenter.reportFailMessage();
                 } else {
                     Log.i("MIDDLE-TIER CHECK", "getting data from report table");
-                    String url = Config.baseIP + "post/report-send-email/" + activityId + "/" + posterId + "/" + userId ;
+                    String url = Config.baseIP + "report/send-email/" + activityId + "/" + posterId + "/" + userId ;
 
                     JsonObjectRequest getEmailInfoRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.i("RESPONSE", response.toString());
-                            mPresenter.sendReportEmail(response);
+                            mPresenter.reportConfirmation();
 
                         }
                     }, new Response.ErrorListener()
