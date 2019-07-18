@@ -145,10 +145,10 @@ public class SearchPeoplePresenter implements
             SearchPeopleContract.View.ViewHolder viewHolderInterface, SearchPeople searchPeople) {
         if (searchPeople != null) {
             viewHolderInterface
-                    .setFullName(searchPeople.getValidFullName())
-                    .setPosition(searchPeople.getPosition())
-                    .setDivision(searchPeople.getDivision())
-                    .setLocation(searchPeople.getValidLocation())
+                    .setFullNameWithFormat(searchPeople.getFullName(), searchPeople.getFullNameFormat())
+                    .setPositionWithFormat(searchPeople.getPosition(), searchPeople.getPositionFormat())
+                    .setDivisionWithFormat(searchPeople.getDivision(), searchPeople.getDivisionFormat())
+                    .setLocationWithFormat(searchPeople.getValidLocation(), searchPeople.getLocationFormat())
                     .setUserImageFromString(searchPeople.getProfileImageString());
         }
     }

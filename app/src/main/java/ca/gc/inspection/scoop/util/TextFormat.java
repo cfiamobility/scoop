@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextFormat {
-    public static final int POST_TEXT_FORMAT_BOLD_COLOUR = Color.BLUE;
-    public static final int POST_TEXT_FORMAT_HIGHLIGHT_COLOUR = Color.WHITE;
+    public static final int POST_TEXT_FORMAT_BOLD_COLOUR = Color.BLACK;
+    public static final int POST_TEXT_FORMAT_HIGHLIGHT_COLOUR = Color.YELLOW;
+    public static final String TEXT_FORMAT_FOOTER_SEPARATOR = "\n\n";
     private String[] mBoldedWords;
     private List<Pair<Integer, Integer>> mBoldTextPositions;
     private String mFooter;

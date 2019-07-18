@@ -3,6 +3,7 @@ package ca.gc.inspection.scoop.searchpeople;
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.search.SearchContract;
+import ca.gc.inspection.scoop.util.TextFormat;
 
 public interface SearchPeopleContract extends SearchContract {
     /**
@@ -48,7 +49,13 @@ public interface SearchPeopleContract extends SearchContract {
             ViewHolder setPosition(String position);
             ViewHolder setDivision(String division);
             ViewHolder setLocation(String location);
+
             ViewHolder setUserImageFromString(String image);
+
+            ViewHolder setFullNameWithFormat(String fullName, TextFormat textFormat);
+            ViewHolder setPositionWithFormat(String position, TextFormat textFormat);
+            ViewHolder setDivisionWithFormat(String division, TextFormat textFormat);
+            ViewHolder setLocationWithFormat(String location, TextFormat textFormat);
         }
     }
 

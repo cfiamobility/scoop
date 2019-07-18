@@ -27,7 +27,7 @@ public class SearchPeople {
     public static final String SEARCH_PROFILE_PROVINCE_KEY = "province";
 
     private double mRelevance = 0;
-    private TextFormat mNameFormat = null;
+    private TextFormat mFullNameFormat = null;
     private TextFormat mPositionFormat = null;
     private TextFormat mDivisionFormat = null;
     private TextFormat mLocationFormat = null;
@@ -38,14 +38,14 @@ public class SearchPeople {
 
     public void setFormatForSearchQuery(SearchQuery searchQuery) {
         String relevanceFooter = RELEVANCE_LABEL + getRelevance();
-        mNameFormat = new TextFormat(searchQuery.getQueryWords(), getValidFullName(), null);
+        mFullNameFormat = new TextFormat(searchQuery.getQueryWords(), getFullName(), null);
         mPositionFormat = new TextFormat(searchQuery.getQueryWords(), getPosition(), null);
         mDivisionFormat = new TextFormat(searchQuery.getQueryWords(), getDivision(), null);
-        mLocationFormat = new TextFormat(searchQuery.getQueryWords(), getValidLocation(), relevanceFooter);
+        mLocationFormat = new TextFormat(searchQuery.getQueryWords(), getValidLocation(), null);
     }
 
-    public TextFormat getNameFormat() {
-        return mNameFormat;
+    public TextFormat getFullNameFormat() {
+        return mFullNameFormat;
     }
 
     public TextFormat getPositionFormat() {
@@ -66,11 +66,11 @@ public class SearchPeople {
         // Relevance based on a non-linear weighting of the number of and length of matched search words
         mRelevance = Math.ceil(
                 (
-                        searchQuery.getNumberOfMatchesWeightedBy(weighting, getValidFullName())
+                        searchQuery.getNumberOfMatchesWeightedBy(weighting, getFullName())
                                 * SEARCH_POST_NAME_WEIGHT_MULTIPLIER +
                         searchQuery.getNumberOfMatchesWeightedBy(weighting,
                                 getPosition() + getDivision() + getValidLocation())
-                )
+                ) * 100
         )/100;
         Log.d(TAG, "relevance = " + mRelevance);
     }
@@ -116,7 +116,7 @@ public class SearchPeople {
      * Description: returns a valid full name format.
      * Add spacing only if both first and last names are non empty
      */
-    public String getValidFullName() {
+    public String getFullName() {
         if (!getFirstName().equals("") && !getLastName().equals(""))
             return getFirstName() + " " + getLastName();
         return getFirstName() + getLastName();

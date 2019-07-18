@@ -14,6 +14,7 @@ import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.TextFormat;
 
+import static ca.gc.inspection.scoop.searchpeople.view.SearchPeopleViewHolder.getSpannableStringBuilderWithFormat;
 import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_BOLD_COLOUR;
 import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_HIGHLIGHT_COLOUR;
 
@@ -54,19 +55,7 @@ public class ProfileCommentViewHolder extends PostCommentViewHolder
      */
     @Override
     public ProfileCommentContract.View.ViewHolder setPostTitleWithFormat(String postTitle, TextFormat textFormat) {
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(postTitle);
-
-        for (Pair<Integer, Integer> pair : textFormat.getBoldTextPositions()) {
-            spannableStringBuilder.setSpan(new StyleSpan(Typeface.BOLD),
-                    pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-
-            spannableStringBuilder.setSpan(new ForegroundColorSpan(POST_TEXT_FORMAT_BOLD_COLOUR),
-                    pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-
-            spannableStringBuilder.setSpan(new BackgroundColorSpan(POST_TEXT_FORMAT_HIGHLIGHT_COLOUR),
-                    pair.first, pair.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        }
-
+        SpannableStringBuilder spannableStringBuilder = getSpannableStringBuilderWithFormat(postTitle, textFormat);
         this.postTitle.setText(spannableStringBuilder);
         return this;
     }

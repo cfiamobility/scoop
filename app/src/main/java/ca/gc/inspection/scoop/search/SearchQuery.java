@@ -20,7 +20,7 @@ public class SearchQuery {
             StringBuilder parsedQuery = new StringBuilder();
             mWords = query.split("(\\s|\\.|,)+");
             for (int i = 0; i < mWords.length; i++) {
-                mWords[i] = mWords[i].replaceAll("[^A-Za-z0-9\'\\-]", "");
+                mWords[i] = mWords[i].replaceAll("[^A-Za-z0-9àâçéèêëîïôûùüÿñæœ\'\\-]", "");
                 String queryWord = mWords[i].replaceAll("['\\-]", "");
                 if (!queryWord.isEmpty()) {
                     if (parsedQuery.length() > 0)
