@@ -20,7 +20,7 @@ public class SearchPeople {
     private static final String RELEVANCE_LABEL = "relevance: ";
     private static final double SEARCH_POST_NAME_WEIGHT_MULTIPLIER = 2;
 
-    public static final String SEARCH_PROFILE_POSITION_KEY = "position";
+    public static final String SEARCH_PROFILE_POSITION_KEY = "positionname";
     public static final String SEARCH_PROFILE_DIVISION_KEY = "division_en";
     public static final String SEARCH_PROFILE_ADDRESS_KEY = "address";
     public static final String SEARCH_PROFILE_CITY_KEY = "city";
@@ -123,53 +123,74 @@ public class SearchPeople {
     }
 
     public String getPosition() {
+        String position = "";
         try {
-            return mProfile.getString(SEARCH_PROFILE_POSITION_KEY);
+            position = mProfile.getString(SEARCH_PROFILE_POSITION_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
-            return "";
         }
+
+        if (position != null && !position.isEmpty() && !position.equals("null"))
+            return position;
+        else return "";
     }
 
     public String getDivision() {
+        String division = "";
         try {
-            return mProfile.getString(SEARCH_PROFILE_DIVISION_KEY);
+            division = mProfile.getString(SEARCH_PROFILE_DIVISION_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
-            return "";
         }
+
+
+        if (division != null && !division.isEmpty() && !division.equals("null"))
+            return division;
+        else return "";
     }
 
     public String getAddress() {
+        String address = "";
         try {
-            return mProfile.getString(SEARCH_PROFILE_ADDRESS_KEY);
+            address = mProfile.getString(SEARCH_PROFILE_ADDRESS_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
-            return "";
         }
+
+        if (address != null && !address.isEmpty() && !address.equals("null"))
+            return address;
+        else return "";
     }
 
     public String getCity() {
+        String city = "";
         try {
-            return mProfile.getString(SEARCH_PROFILE_CITY_KEY);
+            city = mProfile.getString(SEARCH_PROFILE_CITY_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
-            return "";
         }
+
+        if (city != null && !city.isEmpty() && !city.equals("null"))
+            return city;
+        else return "";
     }
 
     public String getProvince() {
+        String province = "";
         try {
-            return mProfile.getString(SEARCH_PROFILE_PROVINCE_KEY);
+            province = mProfile.getString(SEARCH_PROFILE_PROVINCE_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
-            return "";
         }
+
+        if (province != null && !province.isEmpty() && !province.equals("null"))
+            return province;
+        else return "";
     }
 
     /**
@@ -181,6 +202,8 @@ public class SearchPeople {
         String spacing = "";
 
         location.append(getAddress());
+        if (!getAddress().isEmpty())
+            spacing = ", ";
 
         if (!getCity().isEmpty()) {
             location.append(spacing);
