@@ -1,7 +1,6 @@
-package ca.gc.inspection.scoop.searchpeople;
+package ca.gc.inspection.scoop.searchpeople.presenter;
 
 import java.util.ArrayList;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 
 public class ProfileDataCache {
     private Class mPostDataType;

@@ -2,10 +2,7 @@ package ca.gc.inspection.scoop.searchpeople;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
 import ca.gc.inspection.scoop.search.SearchContract;
-import ca.gc.inspection.scoop.searchpost.view.SearchPostContract;
-import ca.gc.inspection.scoop.util.TextFormat;
 
 public interface SearchPeopleContract extends SearchContract {
     /**
@@ -47,14 +44,17 @@ public interface SearchPeopleContract extends SearchContract {
         }
 
         interface ViewHolder {
-//            ViewHolder setPostTitleWithFormat(String postTitle, TextFormat textFormat);
-//            ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat);
+            ViewHolder setFullName(String fullName);
+            ViewHolder setPosition(String position);
+            ViewHolder setDivision(String division);
+            ViewHolder setLocation(String location);
+            ViewHolder setUserImageFromString(String image);
         }
     }
 
     interface Presenter extends BasePresenter {
 
-        void loadDataFromDatabase(String userId, String search);
+        void loadDataFromDatabase(String search);
 
         interface AdapterAPI {
             void setAdapter(SearchPeopleContract.View.Adapter adapter);

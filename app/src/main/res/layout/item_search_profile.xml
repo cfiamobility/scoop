@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="33dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/fragment_search_profile_img"
         android:fontFamily="@font/roboto"
         android:text="Name"
@@ -42,7 +42,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/fragment_search_profile_txt_position_division"
+        android:id="@+id/fragment_search_profile_txt_position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fragment_search_profile_txt_name"
@@ -51,13 +51,25 @@
         android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/fragment_search_profile_img"
         android:fontFamily="@font/roboto"
-        android:text="Position, Division" />
+        android:text="Position" />
+
+    <TextView
+        android:id="@+id/fragment_search_profile_txt_division"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragment_search_profile_txt_position"
+        android:layout_marginStart="33dp"
+
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@+id/fragment_search_profile_img"
+        android:fontFamily="@font/roboto"
+        android:text="Division" />
 
     <TextView
         android:id="@+id/fragment_search_profile_txt_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fragment_search_profile_txt_position_division"
+        android:layout_below="@+id/fragment_search_profile_txt_division"
         android:layout_marginStart="33dp"
         android:layout_marginTop="1dp"
         android:layout_toEndOf="@+id/fragment_search_profile_img"

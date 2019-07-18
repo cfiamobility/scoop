@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
+import ca.gc.inspection.scoop.searchpost.SearchPostContract;
 
 public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder>
     implements SearchPostContract.View.Adapter {

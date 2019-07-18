@@ -4,6 +4,8 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.search.MatchedWordWeighting;
+import ca.gc.inspection.scoop.search.SearchQuery;
 import ca.gc.inspection.scoop.util.TextFormat;
 import ca.gc.inspection.scoop.profilepost.ProfilePost;
 

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ca.gc.inspection.scoop.search.SearchContract;
+import ca.gc.inspection.scoop.searchpost.SearchPostContract;
 import ca.gc.inspection.scoop.searchpost.presenter.SearchPostPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -143,8 +144,9 @@ public class SearchPostFragment extends Fragment implements
 
     @Override
     public void searchQuery(String query) {
-        if (mSearchPostPresenter != null)
+        if (mSearchPostPresenter != null) {
             mLastSearchQuery = query;
             loadDataFromDatabase(Config.currentUser, query);
+        }
     }
 }

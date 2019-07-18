@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpeople;
+package ca.gc.inspection.scoop.searchpeople.presenter;
 
 import android.util.Log;
 
@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.profilepost.ProfilePostInteractor;
-import ca.gc.inspection.scoop.searchpost.presenter.SearchPostPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -41,30 +39,11 @@ public class SearchPeopleInteractor {
         mNetwork = network;
     }
 
-    public JsonArrayRequest newJsonArrayRequest(String url, String responseUrl) {
+    public JsonArrayRequest newJsonArrayRequest(String url) {
         return new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(final JSONArray response) {
-                final JsonArrayRequest imageRequest = new JsonArrayRequest(Request.Method.GET, responseUrl, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray imagesResponse) {
-                        mPresenter.setData(response, imagesResponse);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", String.valueOf(error));
-                    }
-                }) {
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        // inserting the token into the response header that will be sent to the server
-                        Map<String, String> header = new HashMap<>();
-                        header.put("authorization", Config.token);
-                        return header;
-                    }
-                };
-                mNetwork.addToRequestQueue(imageRequest);
-
+                        mPresenter.setData(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -83,13 +62,11 @@ public class SearchPeopleInteractor {
 
     /**
      * HTTP Requests to get search profiles which match a query
-     * @param userid: passes the userid of the profile clicked on
      */
-    public void getSearchPeople(final String userid, String query) {
+    public void getSearchPeople(String query) {
         Log.d("Search People Interactor", "getSearchPeople for " + query);
-        String url = Config.baseIP + "profile/search/text/" + query;
-        String responseUrl = Config.baseIP + "profile/search/images/" + query;
-        JsonArrayRequest peopleRequest = newJsonArrayRequest(url, responseUrl);
+        String url = Config.baseIP + "profile/search/" + query;
+        JsonArrayRequest peopleRequest = newJsonArrayRequest(url);
         mNetwork.addToRequestQueue(peopleRequest);
     }
 }

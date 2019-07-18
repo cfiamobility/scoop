@@ -1,20 +1,15 @@
-package ca.gc.inspection.scoop.searchpeople;
+package ca.gc.inspection.scoop.searchpeople.presenter;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.util.Pair;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ca.gc.inspection.scoop.postcomment.PostDataCache;
-import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
-import ca.gc.inspection.scoop.searchpost.presenter.MatchedWordWeighting;
-import ca.gc.inspection.scoop.searchpost.presenter.SearchPost;
-import ca.gc.inspection.scoop.searchpost.presenter.SearchPostInteractor;
-import ca.gc.inspection.scoop.searchpost.presenter.SearchQuery;
-import ca.gc.inspection.scoop.searchpost.view.SearchPostContract;
+import ca.gc.inspection.scoop.searchpeople.SearchPeopleContract;
+import ca.gc.inspection.scoop.search.MatchedWordWeighting;
+import ca.gc.inspection.scoop.search.SearchQuery;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -31,16 +26,16 @@ public class SearchPeoplePresenter implements
         SearchPeopleContract.Presenter.AdapterAPI,
         SearchPeopleContract.Presenter.ViewHolderAPI {
 
-    private static final String TAG = "SearchPostPresenter";
+    private static final String TAG = "SearchPeoplePresenter";
 
     @NonNull
-    private SearchPeopleContract.View mSearchPostView;
+    private SearchPeopleContract.View mSearchPeopleView;
     private SearchPeopleContract.View.Adapter mAdapter;
-    private SearchPeopleInteractor mSearchPostInteractor;
+    private SearchPeopleInteractor mSearchPeopleInteractor;
     protected ProfileDataCache mDataCache;
     private boolean refreshingData = false;
     private SearchQuery currentSearchQuery;
-    private Pair<String, String> refreshRequestedWhileRefreshing = null;
+    private String refreshRequestedWhileRefreshing = null;
 
     private SearchPeople getItemByIndex(int i) {
         if (mDataCache == null)
@@ -64,7 +59,7 @@ public class SearchPeoplePresenter implements
     }
 
     public void setView(@NonNull SearchPeopleContract.View viewInterface) {
-        mSearchPostView = checkNotNull(viewInterface);
+        mSearchPeopleView = checkNotNull(viewInterface);
     }
 
     /**
@@ -72,7 +67,7 @@ public class SearchPeoplePresenter implements
      * @param interactor
      */
     public void setInteractor(@NonNull SearchPeopleInteractor interactor) {
-        mSearchPostInteractor = checkNotNull(interactor);
+        mSearchPeopleInteractor = checkNotNull(interactor);
     }
 
     @Override
@@ -85,64 +80,56 @@ public class SearchPeoplePresenter implements
      * a database response, set refreshRequestedWhileRefreshing to the latest search query so
      * that it will be run when the network is available.
      *
-     * @param userId
      * @param search
      */
     @Override
-    public void loadDataFromDatabase(String userId, String search) {
+    public void loadDataFromDatabase(String search) {
         if (!refreshingData) {
-            Log.d(TAG, "loadDataFromDatabase = " + userId + ", " + search);
+            Log.d(TAG, "loadDataFromDatabase = " + ", " + search);
             refreshingData = true;
             refreshRequestedWhileRefreshing = null;
 
             if (mDataCache == null)
-                mDataCache = ProfileDataCache.createWithType(SearchPost.class);
+                mDataCache = ProfileDataCache.createWithType(SearchPeople.class);
             else mDataCache.getSearchPeopleList().clear();
 
             currentSearchQuery = new SearchQuery(search);
             String parsedQuery = currentSearchQuery.getParsedQuery();
             Log.d(TAG, "parsed query: "+parsedQuery);
             if (parsedQuery != null && !parsedQuery.isEmpty())
-                mSearchPostInteractor.getSearchPeople(userId, parsedQuery);
+                mSearchPeopleInteractor.getSearchPeople(parsedQuery);
         }
         else {
-            refreshRequestedWhileRefreshing = new Pair<>(userId, search);
-            Log.d(TAG, "refreshRequestedWhileRefreshing = " + userId + ", " + search);
+            refreshRequestedWhileRefreshing = search;
+            Log.d(TAG, "refreshRequestedWhileRefreshing = " + ", " + search);
         }
     }
 
-    @Override
-    public void setData(JSONArray postsResponse, JSONArray imagesResponse) {
+    public void setData(JSONArray response) {
 
-        if ((postsResponse.length() != imagesResponse.length()))
-            Log.i(TAG, "length of postsResponse != imagesResponse");
-
-        for (int i=0; i<postsResponse.length(); i++) {
-            JSONObject jsonText = null;
-            JSONObject jsonImage = null;
+        for (int i=0; i<response.length(); i++) {
+            JSONObject jsonProfile = null;
             try {
-                jsonText = postsResponse.getJSONObject(i);
-                jsonImage = imagesResponse.getJSONObject(i);
+                jsonProfile = response.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            SearchPeople searchPeople = new SearchPeople(jsonText, jsonImage);
+            SearchPeople searchPeople = new SearchPeople(jsonProfile);
             searchPeople.setRelevance(currentSearchQuery, MatchedWordWeighting.LOGARITHMIC);
             searchPeople.setFormatForSearchQuery(currentSearchQuery);
             mDataCache.getSearchPeopleList().add(searchPeople);
         }
         sortDataCacheByRelevance();
         mAdapter.refreshAdapter();
-        mSearchPostView.onLoadedDataFromDatabase();     // Clear the refreshing circle from the view
-        mSearchPostView.setResultsInfo(getItemCount());
+        mSearchPeopleView.onLoadedDataFromDatabase();     // Clear the refreshing circle from the view
+        mSearchPeopleView.setResultsInfo(getItemCount());
         refreshingData = false;
 
         // Reload data from the database if a query was made while the network was busy
         if (refreshRequestedWhileRefreshing != null) {
-            String userId = refreshRequestedWhileRefreshing.first;
-            String search = refreshRequestedWhileRefreshing.second;
+            String search = refreshRequestedWhileRefreshing;
             refreshRequestedWhileRefreshing = null;
-            loadDataFromDatabase(userId, search);
+            loadDataFromDatabase(search);
         }
     }
 
@@ -152,8 +139,8 @@ public class SearchPeoplePresenter implements
         // TODO implement
     }
 
-    public static void bindSearchPostDataToViewHolder(
-            SearchPeopleContract.View.ViewHolder viewHolderInterface, SearchPost searchPost) {
+    public static void bindSearchPeopleDataToViewHolder(
+            SearchPeopleContract.View.ViewHolder viewHolderInterface, SearchPeople searchPeople) {
         // TODO implement
     }
 

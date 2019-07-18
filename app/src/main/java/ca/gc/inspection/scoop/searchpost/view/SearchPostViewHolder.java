@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.searchpost.SearchPostContract;
 import ca.gc.inspection.scoop.util.TextFormat;
 import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 

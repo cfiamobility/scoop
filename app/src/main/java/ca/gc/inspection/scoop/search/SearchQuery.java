@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpost.presenter;
+package ca.gc.inspection.scoop.search;
 
 import android.util.Log;
 
@@ -70,7 +70,7 @@ public class SearchQuery {
                     else {
                         matches += wordMatches * wordMatchWeight;
                     }
-                    Log.d(TAG, "wordMatches = " + wordMatches + " for " + mWord);
+                    Log.d(TAG, "wordMatches = " + wordMatches + ", weight = " + wordMatchWeight + " for " + mWord);
                 }
             }
         Log.d(TAG, "getNumberOfMatchesWeightedBy = " + matches);

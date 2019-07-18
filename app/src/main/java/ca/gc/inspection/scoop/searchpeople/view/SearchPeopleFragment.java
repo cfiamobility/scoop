@@ -1,8 +1,10 @@
-package ca.gc.inspection.scoop.searchpeople;
+package ca.gc.inspection.scoop.searchpeople.view;
 
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.search.SearchContract;
-import ca.gc.inspection.scoop.searchpost.view.SearchPostContract;
+import ca.gc.inspection.scoop.searchpeople.SearchPeopleContract;
+import ca.gc.inspection.scoop.searchpeople.presenter.SearchPeoplePresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import android.os.Bundle;
@@ -17,9 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
+import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_3;
 import static ca.gc.inspection.scoop.searchpost.view.SearchPostFragment.SEARCH_RESULTS_INFO_SUFFIX;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -67,7 +69,7 @@ public class SearchPeopleFragment extends Fragment implements
         view = inflater.inflate(R.layout.fragment_search_people, container, false);
         setPresenter(new SearchPeoplePresenter(this, NetworkUtils.getInstance(getContext())));
         setSwipeRefreshLayout(view);
-
+        mResultsInfo = view.findViewById(R.id.fragment_search_people_results_info);
         return view;
     }
 
@@ -85,15 +87,28 @@ public class SearchPeopleFragment extends Fragment implements
         }
     }
 
-
+    private void setSwipeRefreshLayout(View view) {
+        mSwipeRefreshLayout = view.findViewById(R.id.fragment_search_people_swipe);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                SWIPE_REFRESH_COLOUR_1,
+                SWIPE_REFRESH_COLOUR_2,
+                SWIPE_REFRESH_COLOUR_3);
+    }
 
     @Override
     public void onRefresh() {
-
+        if (mLastSearchQuery != null && !mLastSearchQuery.isEmpty())
+            loadDataFromDatabase(mLastSearchQuery);
+        else mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onLoadedDataFromDatabase() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void loadDataFromDatabase(String query) {
 
     }
 
@@ -117,7 +132,9 @@ public class SearchPeopleFragment extends Fragment implements
 
     @Override
     public void searchQuery(String query) {
-
+        if (mSearchPeoplePresenter != null) {
+            mLastSearchQuery = query;
+            loadDataFromDatabase(query);
+        }
     }
-
 }

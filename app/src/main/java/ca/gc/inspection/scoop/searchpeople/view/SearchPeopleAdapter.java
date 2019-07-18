@@ -1,6 +1,8 @@
-package ca.gc.inspection.scoop.searchpeople;
+package ca.gc.inspection.scoop.searchpeople.view;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.searchpeople.SearchPeopleContract;
+
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,9 +23,9 @@ public class SearchPeopleAdapter extends RecyclerView.Adapter<SearchPeopleViewHo
     /**
      * Constructor for the adapter
      */
-    public SearchPeopleAdapter(SearchPeopleFragment searchPostView,
+    public SearchPeopleAdapter(SearchPeopleFragment searchPeopleView,
                              SearchPeopleContract.Presenter.AdapterAPI presenter) {
-        mSearchPeopleView = searchPostView;
+        mSearchPeopleView = searchPeopleView;
         mSearchPeoplePresenter = presenter;
         mSearchPeoplePresenter.setAdapter(this);
     }

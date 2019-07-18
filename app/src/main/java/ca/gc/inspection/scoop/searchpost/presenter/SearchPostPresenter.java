@@ -10,7 +10,9 @@ import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
-import ca.gc.inspection.scoop.searchpost.view.SearchPostContract;
+import ca.gc.inspection.scoop.search.MatchedWordWeighting;
+import ca.gc.inspection.scoop.search.SearchQuery;
+import ca.gc.inspection.scoop.searchpost.SearchPostContract;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;

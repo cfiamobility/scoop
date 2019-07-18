@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpost.view;
+package ca.gc.inspection.scoop.searchpost;
 
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.util.TextFormat;

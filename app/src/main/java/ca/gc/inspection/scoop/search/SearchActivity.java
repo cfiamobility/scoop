@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import java.util.Objects;
 import ca.gc.inspection.scoop.MainActivity;
-import ca.gc.inspection.scoop.searchpeople.SearchPeopleFragment;
+import ca.gc.inspection.scoop.searchpeople.view.SearchPeopleFragment;
 import ca.gc.inspection.scoop.searchpost.view.SearchPostFragment;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;

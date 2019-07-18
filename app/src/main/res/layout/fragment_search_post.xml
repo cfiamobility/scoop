@@ -23,5 +23,5 @@
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/search_post_resuts_info"/>
+        android:background="@color/search_results_info"/>
 </FrameLayout>
