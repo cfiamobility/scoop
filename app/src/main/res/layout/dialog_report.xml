@@ -7,22 +7,81 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="400dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- YOUR CUSTOM VIEWS HERE -->
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id = "@+id/report_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="@string/reason"
+                android:textAllCaps="false"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="13sp"
+                android:layout_marginBottom="10dp"/>
+
+            <Spinner
+                android:id="@+id/report_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:textSize="15sp"
+                android:layout_marginBottom="10dp"
+                android:background="@android:color/transparent" />
+
+
+            <EditText
+                android:id="@+id/report_text"
+                android:layout_width="match_parent"
+                android:layout_height="217dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:autofillHints="@string/tell_more"
+                android:fontFamily="@font/roboto"
+                android:gravity="start"
+                android:hint="@string/tell_more"
+                android:inputType="textMultiLine|textAutoCorrect"
+                android:maxLength="300"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/dialog_report_btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textSize="15sp"
+                android:minHeight="30dp"
+                android:minWidth="70dp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="@string/submit" />
+
+
+        </LinearLayout>
+
 
     </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>
