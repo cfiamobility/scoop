@@ -6,7 +6,6 @@ import ca.gc.inspection.scoop.base.BaseView;
 
 public interface ReportContract {
 
-
     /**
      * View interface implemented by ReportFragment
      */

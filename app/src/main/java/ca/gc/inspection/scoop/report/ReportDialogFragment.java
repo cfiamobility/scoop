@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.report;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,7 +14,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Arrays;
+import java.util.List;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
@@ -44,42 +49,71 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.dialog_report, container, false);
 
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        Toolbar toolbar = view.findViewById(R.id.report_toolbar);
         toolbar.setTitle("Report");
+        toolbar.setTitleTextColor(-1);
 
         reportBodyET = view.findViewById(R.id.report_text);
         submitButton = view.findViewById(R.id.dialog_report_btn_submit);
 
         Spinner spinner = view.findViewById(R.id.report_spinner);
+        final List<String> reportList = Arrays.asList(getResources().getStringArray(R.array.report_array));
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.report_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+        android.R.layout.simple_spinner_item, reportList){
+
+            @Override
+            public boolean isEnabled(int position){
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+
+        };
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-
-                //TODO reportBodyET != null
                 String activityId = getArguments().getString("ACTIVITY_ID");
                 String posterId = getArguments().getString("POSTER_ID");
                 String reportReason = spinner.getSelectedItem().toString();
-                Log.i("REPORT_REASON", reportReason);
                 String reportBody = reportBodyET.getText().toString();
+
+                Log.i("REPORT_REASON", reportReason);
                 Log.i("REPORT_BODY", reportBody);
 
-                mPresenter.submitReport(activityId, posterId, Config.currentUser, reportReason, reportBody);
+                if (reportReason.equals("Select a reason…")){
+                    setReportFailMessage("Please select one of the reasons listed from the dropdown!");
+                } else if(reportBody.equals("")){
+                    setReportFailMessage("Please give us more details about the reason for your report!");
+                } else {
+                    mPresenter.submitReport(activityId, posterId, Config.currentUser, reportReason, reportBody);
+                }
+
             }
         });
-
-
-//        setSubmitButtonListener(activityId, Config.currentUser,
-//                reportReason, reportBody);
-
         return view;
     }
 
