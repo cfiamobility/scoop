@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import ca.gc.inspection.scoop.search.SearchActivity;
 import ca.gc.inspection.scoop.search.SearchContract;
 import ca.gc.inspection.scoop.searchpost.SearchPostContract;
 import ca.gc.inspection.scoop.searchpost.presenter.SearchPostPresenter;
@@ -39,10 +40,10 @@ public class SearchPostFragment extends Fragment implements
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
+    private SearchActivity mSearchActivity;
     private SearchPostContract.Presenter mSearchPostPresenter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mResultsInfo;
-    private String mLastSearchQuery;
 
     public static final String SEARCH_RESULTS_INFO_SUFFIX = " results";
 
@@ -69,6 +70,7 @@ public class SearchPostFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        mSearchActivity = (SearchActivity) getActivity();
         view = inflater.inflate(R.layout.fragment_search_post, container, false);
         setPresenter(new SearchPostPresenter(this, NetworkUtils.getInstance(getContext())));
         setSwipeRefreshLayout(view);
@@ -109,9 +111,21 @@ public class SearchPostFragment extends Fragment implements
      */
     @Override
     public void onRefresh() {
-        if (mLastSearchQuery != null && !mLastSearchQuery.isEmpty())
-            loadDataFromDatabase(Config.currentUser, mLastSearchQuery);
+        String query = mSearchActivity.getCurrentSearchQuery();
+        if (query != null && !query.isEmpty())
+            loadDataFromDatabase(Config.currentUser, query);
         else mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!mSwipeRefreshLayout.isRefreshing()) {
+            String query = mSearchActivity.getCurrentSearchQuery();
+            if (query != null && !query.isEmpty()) {
+                loadDataFromDatabase(Config.currentUser, query);
+            }
+        }
     }
 
     @Override
@@ -145,7 +159,6 @@ public class SearchPostFragment extends Fragment implements
     @Override
     public void searchQuery(String query) {
         if (mSearchPostPresenter != null) {
-            mLastSearchQuery = query;
             loadDataFromDatabase(Config.currentUser, query);
         }
     }

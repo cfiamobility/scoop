@@ -31,11 +31,13 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
      * and sending the raw queries to the current SearchContract.View.Fragment being displayed
      */
 
+    private static final String TAG = "SearchActivity";
     private static final int AUTO_SEARCH_MIN_LENGTH = 4;
     private SearchContract.Presenter mPresenter;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private SearchPagerAdapter mPagerAdapter;
+    private String currentSearchQuery;
 
     @Override
     public void setPresenter(@NonNull SearchContract.Presenter presenter) {
@@ -124,10 +126,10 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextChange(String newText) {
+                        currentSearchQuery = newText;
                         if (newText != null && !newText.isEmpty() && newText.length() >= AUTO_SEARCH_MIN_LENGTH) {
                             Log.d("Search activity", " " + newText.length() + " newtext: " + newText);
-                            int currentItem = mViewPager.getCurrentItem();
-                            ((SearchContract.View.Fragment) mPagerAdapter.getItem(currentItem)).searchQuery(newText);
+                            loadSearchResultsForQuery(newText);
                             return true;
                         }
                         return false;
@@ -135,10 +137,10 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
                     @Override
                     public boolean onQueryTextSubmit(String query) {
+                        currentSearchQuery = query;
                         Log.d("search activity", "fragment" + mViewPager.getCurrentItem() + " query: " + query);
                         if (query != null && !query.isEmpty()) {
-                            int currentItem = mViewPager.getCurrentItem();
-                            ((SearchContract.View.Fragment) mPagerAdapter.getItem(currentItem)).searchQuery(query);
+                            loadSearchResultsForQuery(query);
                             return true;
                         }
                         return false;
@@ -146,5 +148,15 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
                 }
         );
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void loadSearchResultsForQuery(String query) {
+        int currentItem = mViewPager.getCurrentItem();
+        ((SearchContract.View.Fragment) mPagerAdapter.getItem(currentItem)).searchQuery(query);
+    }
+
+    public String getCurrentSearchQuery() {
+        Log.d(TAG, "currentSearchQuery = " + currentSearchQuery);
+        return currentSearchQuery;
     }
 }
