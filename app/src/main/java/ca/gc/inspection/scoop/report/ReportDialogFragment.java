@@ -24,19 +24,34 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+
+/**
+ * - The ReportDialogFragment is the dialog that appears when users click "Report" from the PostOptionsDialog
+ *  It allows the users to fill out a report form and submit it
+ * - This is the View for the Report action case
+ */
 public class ReportDialogFragment extends DialogFragment implements ReportContract.View{
 
     public static String TAG = "Report Dialog Full Screen";
 
+    // UI Declarations
     Button submitButton;
     EditText reportBodyET;
 
     ReportContract.Presenter mPresenter;
 
+    /**
+     * Sets the Presenter for the View
+     * @param presenter
+     */
     public void setPresenter(ReportContract.Presenter presenter){
         mPresenter = presenter;
     }
 
+    /**
+     * Sets the style of the dialog fragment and sets the Presenter, while constructing it
+     * @param savedInstanceState state of previous instance
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +59,13 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
         setPresenter(new ReportPresenter(this, NetworkUtils.getInstance(getContext())));
     }
 
+    /**
+     * Creates the view for the dialog fragment including the edittext field, spinner, and submit button
+     * @param inflater inflates the layout for the dialog
+     * @param container container for the dialog
+     * @param savedInstanceState saved state of previous instance containing bundle for ACTIVITY_ID and POSTER_ID
+     * @return view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -94,6 +116,7 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+        //listener for the submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String activityId = getArguments().getString("ACTIVITY_ID");
@@ -104,10 +127,11 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
                 Log.i("REPORT_REASON", reportReason);
                 Log.i("REPORT_BODY", reportBody);
 
+                //sets error messages, otherwise Presenter calls submitReport with necessary parameters
                 if (reportReason.equals("Select a reason…")){
-                    setReportFailMessage("Please select one of the reasons listed from the dropdown!");
+                    setReportFailMessage("Please select one of the reasons listed from the dropdown");
                 } else if(reportBody.equals("")){
-                    setReportFailMessage("Please give us more details about the reason for your report!");
+                    setReportFailMessage("Please give us more details about the reason for your report");
                 } else {
                     mPresenter.submitReport(activityId, posterId, Config.currentUser, reportReason, reportBody);
                 }
@@ -118,6 +142,9 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
     }
 
 
+    /**
+     * Overrides and sets the ReportFragmentDialog size to match the size of display window
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -130,6 +157,9 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
     }
 
 
+    /**
+     * Invoked by the Presenter to create the ReportConfirmationDialog and dismiss the current ReportDialog
+     */
     public void reportConfirmation(){
         ReportConfirmationDialogFragment dialog = new ReportConfirmationDialogFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -138,6 +168,10 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
         dismiss();
     }
 
+    /**
+     * Method to set a toast message on report form submission error
+     * @param message error message
+     */
     public void setReportFailMessage(String message){
         Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
     }

@@ -10,10 +10,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ca.gc.inspection.scoop.R;
+
+
+/**
+ * - The ReportConfirmationDialogFragment is the dialog that appears when users submit a report from the ReportOptionsDialog
+ */
 public class ReportConfirmationDialogFragment extends DialogFragment {
 
     public static String TAG = "Report Thank You Dialog";
 
+    // UI Declarations
     Button okButton;
 
     @Override
