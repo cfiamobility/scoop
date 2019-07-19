@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpeople.presenter;
+package ca.gc.inspection.scoop.searchprofile.presenter;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-import ca.gc.inspection.scoop.searchpeople.SearchPeopleContract;
+import ca.gc.inspection.scoop.searchprofile.SearchProfileContract;
 import ca.gc.inspection.scoop.search.MatchedWordWeighting;
 import ca.gc.inspection.scoop.search.SearchQuery;
 import ca.gc.inspection.scoop.util.NetworkUtils;
@@ -23,26 +23,26 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Implements the AdapterAPI and ViewHolderAPI to allow adapter and viewHolder to communicate with
  * the presenter.
  */
-public class SearchPeoplePresenter implements
-        SearchPeopleContract.Presenter,
-        SearchPeopleContract.Presenter.AdapterAPI,
-        SearchPeopleContract.Presenter.ViewHolderAPI {
+public class SearchProfilePresenter implements
+        SearchProfileContract.Presenter,
+        SearchProfileContract.Presenter.AdapterAPI,
+        SearchProfileContract.Presenter.ViewHolderAPI {
 
-    private static final String TAG = "SearchPeoplePresenter";
+    private static final String TAG = "SearchProfilePresenter";
 
     @NonNull
-    private SearchPeopleContract.View mSearchPeopleView;
-    private SearchPeopleContract.View.Adapter mAdapter;
-    private SearchPeopleInteractor mSearchPeopleInteractor;
+    private SearchProfileContract.View mSearchProfileView;
+    private SearchProfileContract.View.Adapter mAdapter;
+    private SearchProfileInteractor mSearchProfileInteractor;
     protected ProfileDataCache mDataCache;
     private boolean refreshingData = false;
     private SearchQuery currentSearchQuery;
     private String refreshRequestedWhileRefreshing = null;
 
-    private SearchPeople getItemByIndex(int i) {
+    private SearchProfile getItemByIndex(int i) {
         if (mDataCache == null)
             return null;
-        return mDataCache.getSearchPeopleByIndex(i);
+        return mDataCache.getSearchProfileByIndex(i);
     }
 
 
@@ -50,30 +50,30 @@ public class SearchPeoplePresenter implements
      * Empty constructor called by child classes (ie. FeedPostPresenter) to allow them to create
      * their own View and Interactor objects
      */
-    protected SearchPeoplePresenter() {
+    protected SearchProfilePresenter() {
     }
 
-    public SearchPeoplePresenter(@NonNull SearchPeopleContract.View viewInterface, NetworkUtils network){
+    public SearchProfilePresenter(@NonNull SearchProfileContract.View viewInterface, NetworkUtils network){
 
         setView(viewInterface);
-        setInteractor(new SearchPeopleInteractor(this, network));
+        setInteractor(new SearchProfileInteractor(this, network));
 
     }
 
-    public void setView(@NonNull SearchPeopleContract.View viewInterface) {
-        mSearchPeopleView = checkNotNull(viewInterface);
+    public void setView(@NonNull SearchProfileContract.View viewInterface) {
+        mSearchProfileView = checkNotNull(viewInterface);
     }
 
     /**
      * set parent interactor as a casted down version without the parent creating a new object
      * @param interactor
      */
-    public void setInteractor(@NonNull SearchPeopleInteractor interactor) {
-        mSearchPeopleInteractor = checkNotNull(interactor);
+    public void setInteractor(@NonNull SearchProfileInteractor interactor) {
+        mSearchProfileInteractor = checkNotNull(interactor);
     }
 
     @Override
-    public void setAdapter(SearchPeopleContract.View.Adapter adapter) {
+    public void setAdapter(SearchProfileContract.View.Adapter adapter) {
         mAdapter = adapter;
     }
 
@@ -92,14 +92,14 @@ public class SearchPeoplePresenter implements
             refreshRequestedWhileRefreshing = null;
 
             if (mDataCache == null)
-                mDataCache = ProfileDataCache.createWithType(SearchPeople.class);
-            else mDataCache.getSearchPeopleList().clear();
+                mDataCache = ProfileDataCache.createWithType(SearchProfile.class);
+            else mDataCache.getSearchProfileList().clear();
 
             currentSearchQuery = new SearchQuery(search);
             String parsedQuery = currentSearchQuery.getParsedQuery();
             Log.d(TAG, "parsed query: "+parsedQuery);
             if (parsedQuery != null && !parsedQuery.isEmpty())
-                mSearchPeopleInteractor.getSearchPeople(parsedQuery);
+                mSearchProfileInteractor.getSearchProfile(parsedQuery);
         }
         else {
             refreshRequestedWhileRefreshing = search;
@@ -116,15 +116,15 @@ public class SearchPeoplePresenter implements
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            SearchPeople searchPeople = new SearchPeople(jsonProfile);
-            searchPeople.setRelevance(currentSearchQuery, MatchedWordWeighting.LOGARITHMIC);
-            searchPeople.setFormatForSearchQuery(currentSearchQuery);
-            mDataCache.getSearchPeopleList().add(searchPeople);
+            SearchProfile searchProfile = new SearchProfile(jsonProfile);
+            searchProfile.setRelevance(currentSearchQuery, MatchedWordWeighting.LOGARITHMIC);
+            searchProfile.setFormatForSearchQuery(currentSearchQuery);
+            mDataCache.getSearchProfileList().add(searchProfile);
         }
         sortDataCacheByRelevance();
         mAdapter.refreshAdapter();
-        mSearchPeopleView.onLoadedDataFromDatabase();     // Clear the refreshing circle from the view
-        mSearchPeopleView.setResultsInfo(getItemCount());
+        mSearchProfileView.onLoadedDataFromDatabase();     // Clear the refreshing circle from the view
+        mSearchProfileView.setResultsInfo(getItemCount());
         refreshingData = false;
 
         // Reload data from the database if a query was made while the network was busy
@@ -136,20 +136,20 @@ public class SearchPeoplePresenter implements
     }
 
     @Override
-    public void onBindViewHolderAtPosition(SearchPeopleContract.View.ViewHolder viewHolderInterface, int i) {
-        SearchPeople searchPeople = getItemByIndex(i);
-        bindSearchPeopleDataToViewHolder(viewHolderInterface, searchPeople);
+    public void onBindViewHolderAtPosition(SearchProfileContract.View.ViewHolder viewHolderInterface, int i) {
+        SearchProfile searchProfile = getItemByIndex(i);
+        bindSearchProfileDataToViewHolder(viewHolderInterface, searchProfile);
     }
 
-    public static void bindSearchPeopleDataToViewHolder(
-            SearchPeopleContract.View.ViewHolder viewHolderInterface, SearchPeople searchPeople) {
-        if (searchPeople != null) {
+    public static void bindSearchProfileDataToViewHolder(
+            SearchProfileContract.View.ViewHolder viewHolderInterface, SearchProfile searchProfile) {
+        if (searchProfile != null) {
             viewHolderInterface
-                    .setFullNameWithFormat(searchPeople.getFullName(), searchPeople.getFullNameFormat())
-                    .setPositionWithFormat(searchPeople.getPosition(), searchPeople.getPositionFormat())
-                    .setDivisionWithFormat(searchPeople.getDivision(), searchPeople.getDivisionFormat())
-                    .setLocationWithFormat(searchPeople.getValidLocation(), searchPeople.getLocationFormat())
-                    .setUserImageFromString(searchPeople.getProfileImageString());
+                    .setFullNameWithFormat(searchProfile.getFullName(), searchProfile.getFullNameFormat())
+                    .setPositionWithFormat(searchProfile.getPosition(), searchProfile.getPositionFormat())
+                    .setDivisionWithFormat(searchProfile.getDivision(), searchProfile.getDivisionFormat())
+                    .setLocationWithFormat(searchProfile.getValidLocation(), searchProfile.getLocationFormat())
+                    .setUserImageFromString(searchProfile.getProfileImageString());
         }
     }
 
@@ -165,7 +165,7 @@ public class SearchPeoplePresenter implements
     }
 
     private void sortDataCacheByRelevance() {
-        mDataCache.getSearchPeopleList().sort(
+        mDataCache.getSearchProfileList().sort(
                 (item1, item2) -> Double.compare(item2.getRelevance(), item1.getRelevance()));
     }
 

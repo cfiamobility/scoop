@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpeople.presenter;
+package ca.gc.inspection.scoop.searchprofile.presenter;
 
 import android.util.Log;
 
@@ -13,7 +13,7 @@ import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_FIR
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LAST_NAME_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_PROFILE_IMAGE_KEY;
 
-public class SearchPeople {
+public class SearchProfile {
 
     JSONObject mProfile;
     private static final String TAG = "SearchPost";
@@ -32,7 +32,7 @@ public class SearchPeople {
     private TextFormat mDivisionFormat = null;
     private TextFormat mLocationFormat = null;
 
-    protected SearchPeople(JSONObject profileData) {
+    protected SearchProfile(JSONObject profileData) {
         mProfile = profileData;
     }
 

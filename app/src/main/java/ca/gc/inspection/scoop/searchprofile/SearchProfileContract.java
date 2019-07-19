@@ -1,11 +1,11 @@
-package ca.gc.inspection.scoop.searchpeople;
+package ca.gc.inspection.scoop.searchprofile;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.search.SearchContract;
 import ca.gc.inspection.scoop.util.TextFormat;
 
-public interface SearchPeopleContract extends SearchContract {
+public interface SearchProfileContract extends SearchContract {
     /**
      * A contract between the View (layer) and Presenter for the viewing a profile post
      * action. This contract communicates the how the View and Presenter will
@@ -14,11 +14,11 @@ public interface SearchPeopleContract extends SearchContract {
      * Since RecyclerView is being used in this package, we must additionally specify the interaction
      * between sub-Views (Adapter/ViewHolder) and the Presenter (via AdapterAPI/ViewHolderAPI).
      *
-     * View = SearchPeopleFragment - is the main View responsible for creating the Presenter and Adapter
+     * View = SearchProfileFragment - is the main View responsible for creating the Presenter and Adapter
      *      View.Adapter = SearchPostAdapter is the subview responsible for creating ViewHolders
-     *      View.ViewHolder = SearchPeopleViewHolder is the subview which displays an individual profile comment
+     *      View.ViewHolder = SearchProfileViewHolder is the subview which displays an individual profile comment
      *
-     * Presenter = SearchPeoplePresenter - there's only one object which implements:
+     * Presenter = SearchProfilePresenter - there's only one object which implements:
      *      Presenter.AdapterAPI - used by the Adapter to call Presenter methods
      *      Presenter.ViewHolderAPI - used by the ViewHolders to call Presenter methods
      *
@@ -32,7 +32,7 @@ public interface SearchPeopleContract extends SearchContract {
 
     interface View extends BaseView<Presenter> {
         /**
-         * Implemented by the main View (ie. SearchPeopleFragment).
+         * Implemented by the main View (ie. SearchProfileFragment).
          * Methods specified here in the View but not in the nested View.Adapter and View.ViewHolder interfaces
          * explain how the Presenter is to communicate with the main View only.
          */
@@ -64,9 +64,9 @@ public interface SearchPeopleContract extends SearchContract {
         void loadDataFromDatabase(String search);
 
         interface AdapterAPI {
-            void setAdapter(SearchPeopleContract.View.Adapter adapter);
+            void setAdapter(SearchProfileContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
-                    SearchPeopleContract.View.ViewHolder searchPeopleViewHolder, int i);
+                    SearchProfileContract.View.ViewHolder searchProfileViewHolder, int i);
             int getItemCount();
             String getProfileUserIdByIndex(int i);
         }

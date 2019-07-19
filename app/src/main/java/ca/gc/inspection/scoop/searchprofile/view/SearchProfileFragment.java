@@ -1,11 +1,10 @@
-package ca.gc.inspection.scoop.searchpeople.view;
+package ca.gc.inspection.scoop.searchprofile.view;
 
-import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.search.SearchActivity;
 import ca.gc.inspection.scoop.search.SearchContract;
-import ca.gc.inspection.scoop.searchpeople.SearchPeopleContract;
-import ca.gc.inspection.scoop.searchpeople.presenter.SearchPeoplePresenter;
+import ca.gc.inspection.scoop.searchprofile.SearchProfileContract;
+import ca.gc.inspection.scoop.searchprofile.presenter.SearchProfilePresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import android.os.Bundle;
@@ -30,8 +29,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchPeopleFragment extends Fragment implements
-        SearchPeopleContract.View,
+public class SearchProfileFragment extends Fragment implements
+        SearchProfileContract.View,
         SearchContract.View.Fragment,
         SwipeRefreshLayout.OnRefreshListener {
 
@@ -41,19 +40,19 @@ public class SearchPeopleFragment extends Fragment implements
     private  RecyclerView.LayoutManager mLayoutManager;
     private View view;
     private SearchActivity mSearchActivity;
-    private SearchPeopleContract.Presenter mSearchPeoplePresenter;
+    private SearchProfileContract.Presenter mSearchProfilePresenter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mResultsInfo;
 
     @Override
-    public void setPresenter(@NonNull SearchPeopleContract.Presenter presenter) {
-        mSearchPeoplePresenter = checkNotNull(presenter);
+    public void setPresenter(@NonNull SearchProfileContract.Presenter presenter) {
+        mSearchProfilePresenter = checkNotNull(presenter);
     }
 
     /**
      * Empty Constructor for fragments
      */
-    public SearchPeopleFragment() {
+    public SearchProfileFragment() {
     }
 
     /**
@@ -69,7 +68,7 @@ public class SearchPeopleFragment extends Fragment implements
         mSearchActivity = (SearchActivity) getActivity();
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_search_people, container, false);
-        setPresenter(new SearchPeoplePresenter(this, NetworkUtils.getInstance(getContext())));
+        setPresenter(new SearchProfilePresenter(this, NetworkUtils.getInstance(getContext())));
         setSwipeRefreshLayout(view);
         mResultsInfo = view.findViewById(R.id.fragment_search_people_results_info);
         return view;
@@ -113,7 +112,7 @@ public class SearchPeopleFragment extends Fragment implements
 
     private void loadDataFromDatabase(String query) {
         mSwipeRefreshLayout.setRefreshing(true);
-        mSearchPeoplePresenter.loadDataFromDatabase(query);
+        mSearchProfilePresenter.loadDataFromDatabase(query);
     }
 
     @Override
@@ -140,14 +139,14 @@ public class SearchPeopleFragment extends Fragment implements
         peopleRecyclerView.setLayoutManager(mLayoutManager);
 
         // setting up the mAdapter of the recycler view to the custom people search results mAdapter
-        mAdapter = new SearchPeopleAdapter(this,
-                (SearchPeopleContract.Presenter.AdapterAPI) mSearchPeoplePresenter);
+        mAdapter = new SearchProfileAdapter(this,
+                (SearchProfileContract.Presenter.AdapterAPI) mSearchProfilePresenter);
         peopleRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void searchQuery(String query) {
-        if (mSearchPeoplePresenter != null) {
+        if (mSearchProfilePresenter != null) {
             loadDataFromDatabase(query);
         }
     }

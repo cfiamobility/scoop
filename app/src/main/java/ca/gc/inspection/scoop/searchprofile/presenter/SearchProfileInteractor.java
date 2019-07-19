@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpeople.presenter;
+package ca.gc.inspection.scoop.searchprofile.presenter;
 
 import android.util.Log;
 
@@ -22,19 +22,19 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Interactor used to send requests to the network. Inherits from PostCommentInteractor
  * so that Profile post has access to methods such as insert/update likes.
  */
-public class SearchPeopleInteractor {
+public class SearchProfileInteractor {
 
-    protected SearchPeoplePresenter mPresenter;
+    protected SearchProfilePresenter mPresenter;
     public NetworkUtils mNetwork;
 
     /**
      * Empty constructor called by child classes (ie. FeedPostInteractor) to allow them to set
      * their own presenter
      */
-    public SearchPeopleInteractor() {
+    public SearchProfileInteractor() {
     }
 
-    SearchPeopleInteractor(SearchPeoplePresenter presenter, NetworkUtils network) {
+    SearchProfileInteractor(SearchProfilePresenter presenter, NetworkUtils network) {
         mPresenter = checkNotNull(presenter);
         mNetwork = network;
     }
@@ -63,8 +63,8 @@ public class SearchPeopleInteractor {
     /**
      * HTTP Requests to get search profiles which match a query
      */
-    public void getSearchPeople(String query) {
-        Log.d("Search People Interactor", "getSearchPeople for " + query);
+    public void getSearchProfile(String query) {
+        Log.d("Search Profile Interactor", "getSearchProfile for " + query);
         String url = Config.baseIP + "profile/search/" + query;
         JsonArrayRequest peopleRequest = newJsonArrayRequest(url);
         mNetwork.addToRequestQueue(peopleRequest);

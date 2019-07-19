@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpeople.view;
+package ca.gc.inspection.scoop.searchprofile.view;
 
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -15,9 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
-import ca.gc.inspection.scoop.searchpeople.SearchPeopleContract;
-import ca.gc.inspection.scoop.searchpeople.UserProfileListener;
+import ca.gc.inspection.scoop.searchprofile.SearchProfileContract;
+import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.TextFormat;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -26,16 +25,16 @@ import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_BOLD_COLOU
 import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_HIGHLIGHT_COLOUR;
 import static ca.gc.inspection.scoop.util.TextFormat.TEXT_FORMAT_FOOTER_SEPARATOR;
 
-public class SearchPeopleViewHolder extends RecyclerView.ViewHolder implements
-        SearchPeopleContract.View.ViewHolder,
+public class SearchProfileViewHolder extends RecyclerView.ViewHolder implements
+        SearchProfileContract.View.ViewHolder,
         UserProfileListener {
 
-    SearchPeopleContract.Presenter.ViewHolderAPI mPresenter;
+    SearchProfileContract.Presenter.ViewHolderAPI mPresenter;
 
     public TextView username, position, division, location;
     public CircleImageView profileImage;
 
-    public SearchPeopleViewHolder(View v, SearchPeopleContract.Presenter.ViewHolderAPI presenter) {
+    public SearchProfileViewHolder(View v, SearchProfileContract.Presenter.ViewHolderAPI presenter) {
         super(v);
         username = v.findViewById(R.id.item_search_profile_txt_name);
         position = v.findViewById(R.id.item_search_profile_txt_position);
@@ -46,27 +45,27 @@ public class SearchPeopleViewHolder extends RecyclerView.ViewHolder implements
         mPresenter = presenter;
     }
 
-    public SearchPeopleContract.View.ViewHolder setFullName(String fullName) {
+    public SearchProfileContract.View.ViewHolder setFullName(String fullName) {
         this.username.setText(fullName);
         return this;
     }
 
-    public SearchPeopleContract.View.ViewHolder setPosition(String position) {
+    public SearchProfileContract.View.ViewHolder setPosition(String position) {
         this.position.setText(position);
         return this;
     }
 
-    public SearchPeopleContract.View.ViewHolder setDivision(String division) {
+    public SearchProfileContract.View.ViewHolder setDivision(String division) {
         this.division.setText(division);
         return this;
     }
 
-    public SearchPeopleContract.View.ViewHolder setLocation(String location) {
+    public SearchProfileContract.View.ViewHolder setLocation(String location) {
         this.location.setText(location);
         return this;
     }
 
-    public SearchPeopleContract.View.ViewHolder setUserImageFromString(String image) {
+    public SearchProfileContract.View.ViewHolder setUserImageFromString(String image) {
         if (image != null && !image.isEmpty()) {
             Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
             Log.i("image", image);
@@ -114,28 +113,28 @@ public class SearchPeopleViewHolder extends RecyclerView.ViewHolder implements
     }
 
     @Override
-    public SearchPeopleContract.View.ViewHolder setFullNameWithFormat(String fullName, TextFormat textFormat) {
+    public SearchProfileContract.View.ViewHolder setFullNameWithFormat(String fullName, TextFormat textFormat) {
         SpannableStringBuilder spannableStringBuilder = getSpannableStringBuilderWithFormat(fullName, textFormat);
         this.username.setText(spannableStringBuilder);
         return this;
     }
 
     @Override
-    public SearchPeopleContract.View.ViewHolder setPositionWithFormat(String position, TextFormat textFormat) {
+    public SearchProfileContract.View.ViewHolder setPositionWithFormat(String position, TextFormat textFormat) {
         SpannableStringBuilder spannableStringBuilder = getSpannableStringBuilderWithFormat(position, textFormat);
         this.position.setText(spannableStringBuilder);
         return this;
     }
 
     @Override
-    public SearchPeopleContract.View.ViewHolder setDivisionWithFormat(String division, TextFormat textFormat) {
+    public SearchProfileContract.View.ViewHolder setDivisionWithFormat(String division, TextFormat textFormat) {
         SpannableStringBuilder spannableStringBuilder = getSpannableStringBuilderWithFormat(division, textFormat);
         this.division.setText(spannableStringBuilder);
         return this;
     }
 
     @Override
-    public SearchPeopleContract.View.ViewHolder setLocationWithFormat(String location, TextFormat textFormat) {
+    public SearchProfileContract.View.ViewHolder setLocationWithFormat(String location, TextFormat textFormat) {
         SpannableStringBuilder spannableStringBuilder = getSpannableStringBuilderWithFormat(location, textFormat);
         this.location.setText(spannableStringBuilder);
         return this;

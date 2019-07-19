@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpeople.presenter;
+package ca.gc.inspection.scoop.searchprofile.presenter;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ public class ProfileDataCache {
     private BaseDataCache mDataCache;
 
     public static ProfileDataCache createWithType(Class postDataType) {
-        if (!SearchPeople.class.isAssignableFrom(postDataType))
+        if (!SearchProfile.class.isAssignableFrom(postDataType))
             return null;
         return new ProfileDataCache(postDataType);
     }
@@ -15,26 +15,26 @@ public class ProfileDataCache {
     private ProfileDataCache(Class postDataType) {
         mPostDataType = postDataType;
         mDataCache = null;
-        if (mPostDataType == SearchPeople.class)
+        if (mPostDataType == SearchProfile.class)
             mDataCache = new DataCache<>();
     }
 
     @SuppressWarnings("unchecked")
-    public SearchPeople getSearchPeopleByIndex(int i) {
-        if (SearchPeople.class.isAssignableFrom(mPostDataType))
-            return ((DataCache<SearchPeople>) mDataCache).getItemByIndex(i);
+    public SearchProfile getSearchProfileByIndex(int i) {
+        if (SearchProfile.class.isAssignableFrom(mPostDataType))
+            return ((DataCache<SearchProfile>) mDataCache).getItemByIndex(i);
         return null;
     }
 
     @SuppressWarnings("unchecked")
     public int getItemCount() {
-        return ((DataCache<SearchPeople>) mDataCache).getItemCount();
+        return ((DataCache<SearchProfile>) mDataCache).getItemCount();
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<SearchPeople> getSearchPeopleList() {
-        if (SearchPeople.class.isAssignableFrom(mPostDataType))
-            return ((DataCache<SearchPeople>) mDataCache).mList;
+    public ArrayList<SearchProfile> getSearchProfileList() {
+        if (SearchProfile.class.isAssignableFrom(mPostDataType))
+            return ((DataCache<SearchProfile>) mDataCache).mList;
         return null;
     }
 
@@ -42,7 +42,7 @@ public class ProfileDataCache {
 
     }
 
-    class DataCache<T extends SearchPeople> extends BaseDataCache {
+    class DataCache<T extends SearchProfile> extends BaseDataCache {
 
         ArrayList<T> mList;
         private T t;

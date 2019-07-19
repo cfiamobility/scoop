@@ -7,19 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-import ca.gc.inspection.scoop.MainActivity;
+
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.profile.OtherUserActivity;
-import ca.gc.inspection.scoop.searchpeople.UserProfileListener;
+import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;

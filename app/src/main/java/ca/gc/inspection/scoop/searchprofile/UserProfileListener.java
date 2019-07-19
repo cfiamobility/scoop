@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.searchpeople;
+package ca.gc.inspection.scoop.searchprofile;
 
 import android.widget.ImageView;
 import android.widget.TextView;
