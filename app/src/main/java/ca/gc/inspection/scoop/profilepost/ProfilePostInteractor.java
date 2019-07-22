@@ -2,13 +2,14 @@ package ca.gc.inspection.scoop.profilepost;
 
 import com.android.volley.toolbox.JsonArrayRequest;
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentInteractor;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
-public class ProfilePostInteractor extends ProfileCommentInteractor {
+public class ProfilePostInteractor extends ProfileLikesInteractor {
     /**
      * Interactor used to send requests to the network. Inherits from PostCommentInteractor
      * so that Profile post has access to methods such as insert/update likes.

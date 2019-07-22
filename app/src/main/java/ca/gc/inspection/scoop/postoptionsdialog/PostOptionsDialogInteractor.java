@@ -46,11 +46,9 @@ class PostOptionsDialogInteractor {
             @Override
             public void onResponse(String response) {
                 Log.i("RESPONSE", response);
-                // check if save was valid and invokes method to create user toast message based on given response
-                mPresenter.validSave(response);
+                mPresenter.setSaveResponseMessage(response);
             }
-        },
-                new Response.ErrorListener()
+        }, new Response.ErrorListener()
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {

@@ -2,12 +2,15 @@ package ca.gc.inspection.scoop.feedpost;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 
 public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
@@ -54,7 +57,10 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
         PostCommentFragment.setLikesListener(feedPostViewHolder, i);
         PostCommentFragment.setUserInfoListener(feedPostViewHolder,
                 mFeedPostPresenter.getPosterIdByIndex(i));
-        ProfilePostFragment.setPostOptionsListener(feedPostViewHolder, mFeedPostPresenter.getActivityIdByIndex(i));
+        Log.i("feed post adapter", Boolean.toString(mFeedPostPresenter.getSavedStatusByIndex(i)));
+        PostCommentFragment.setPostOptionsListener(feedPostViewHolder, i,
+                mFeedPostPresenter.getActivityIdByIndex(i),mFeedPostPresenter.getPosterIdByIndex(i), mFeedPostPresenter.getSavedStatusByIndex(i),
+                mFeedPostPresenter.getPosterIdByIndex(0));
     }
 
     @Override

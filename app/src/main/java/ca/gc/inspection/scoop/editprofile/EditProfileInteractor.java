@@ -84,33 +84,6 @@ public class EditProfileInteractor {
         network.addToRequestQueue(getRequest);
     }
 
-    // takes care of the requests when the text is changed in the building edittext
-    public void getAddressAutoCompleteFromDB(NetworkUtils network, String addressChangedCapitalized) {
-        // URL TO BE CHANGED - address passed as parameter to nodeJS
-        String URL = Config.baseIP + "edituser/addresschanged/" + addressChangedCapitalized;
-
-        // Asking for a JSONArray
-        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                mPresenter.setAddressAutoCompleteFromDB(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {}
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                // inserting the token into the response header that will be sent to the server
-                Map<String, String> header = new HashMap<>();
-                header.put("authorization", Config.token);
-                return header;
-            }
-        };
-        // Submitting the request
-        network.addToRequestQueue(getRequest);
-    }
-
     // takes care of the requests when the text is changed in the divisions edittext
     public void getDivisionAutoCompleteFromDB(NetworkUtils network, String divisionChangedCapitalized) {
         // Inputted division is passed as a parameter to NodeJS

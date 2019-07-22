@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
 
@@ -22,7 +23,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Implements the AdapterAPI and ViewHolderAPI to allow adapter and viewHolder to communicate with
  * the presenter.
  */
-public class ProfilePostPresenter extends ProfileCommentPresenter implements
+public class ProfilePostPresenter extends ProfileLikesPresenter implements
         ProfilePostContract.Presenter,
         ProfilePostContract.Presenter.AdapterAPI,
         ProfilePostContract.Presenter.ViewHolderAPI {
@@ -127,4 +128,7 @@ public class ProfilePostPresenter extends ProfileCommentPresenter implements
                     .setCommentCount(profilePost.getCommentCount());
         }
     }
+
+
+
 }

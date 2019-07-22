@@ -36,6 +36,7 @@
     <string name="city">City</string>
     <string name="province">Province</string>
     <string name="save">Save</string>
+    <string name="unsave">Unsave</string>
     <string name="change_profile_image">Change Profile Picture</string>
 
 
@@ -120,5 +121,28 @@
     <string name="search">Search</string>
     <string name="search_hint">search</string>
     <string name="search_post_results_info">0 Results</string>
+
+
+    <!-- Report -->
+    <string-array name="report_array">
+        <item>Select a reason&#8230;</item>
+        <item>It\'s harassing me</item>
+        <item>It\'s harassing a colleague</item>
+        <item>Spam or a scam</item>
+        <item>Sexually explicit content</item>
+        <item>Violence or harmful behaviour</item>
+        <item>Hate speech or symbols</item>
+    </string-array>
+    <string name="tell_more">Help us understand what\'s happening&#8230;</string>
+    <string name="reason">Choose a reason for reporting this post:</string>
+    <string name="submit">Submit</string>
+    <string name="OK">Ok</string>
+    <string name="thank_you_message">Thank you for helping keep the Scoop community safe
+    and fun for everyone. Remember, we don\'t reveal who submitted reports to the person
+        who created the post or comment.\n\nOur team will review the post and if it violates our Community Guidelines or Terms of Use,
+    we\'ll remove it.</string>
+    <string name="thank_you_title">Thanks for reporting this</string>
+
+
 
 </resources>

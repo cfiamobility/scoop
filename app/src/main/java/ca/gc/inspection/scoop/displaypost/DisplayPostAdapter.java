@@ -11,6 +11,9 @@ import ca.gc.inspection.scoop.feedpost.FeedPostViewHolder;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 
@@ -61,6 +64,9 @@ public class DisplayPostAdapter extends RecyclerView.Adapter<PostCommentViewHold
         PostCommentFragment.setLikesListener(viewHolder, i);
         PostCommentFragment.setUserInfoListener(viewHolder,
                 mDisplayPostPresenter.getPosterIdByIndex(i));
+        PostCommentFragment.setPostOptionsListener(viewHolder, i, mDisplayPostPresenter.getActivityIdByIndex(i),
+                mDisplayPostPresenter.getPosterIdByIndex(i), mDisplayPostPresenter.getSavedStatusByIndex(i),
+                mDisplayPostPresenter.getPosterIdByIndex(0));
     }
 
     @Override

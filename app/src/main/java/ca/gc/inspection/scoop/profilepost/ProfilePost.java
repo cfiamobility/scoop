@@ -3,8 +3,9 @@ package ca.gc.inspection.scoop.profilepost;
 import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
+import ca.gc.inspection.scoop.profilelikes.ProfileLike;
 
-public class ProfilePost extends ProfileComment {
+public class ProfilePost extends ProfileLike {
     /**
      * Data class which stores information for a single profile post.
      * Should only interact with the Presenter as this class is a helper data class.
@@ -46,4 +47,7 @@ public class ProfilePost extends ProfileComment {
             return "";
         }
     }
+
+
+
 }
