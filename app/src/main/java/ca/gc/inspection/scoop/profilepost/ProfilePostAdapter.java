@@ -23,9 +23,9 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
     /**
      * Constructor for the adapter
      */
-	public ProfilePostAdapter(ProfilePostFragment profileCommentView,
+	public ProfilePostAdapter(ProfilePostFragment profilePostView,
                               ProfilePostContract.Presenter.AdapterAPI presenter) {
-        mProfilePostView = profileCommentView;
+        mProfilePostView = profilePostView;
         mProfilePostPresenter = presenter;
         mProfilePostPresenter.setAdapter(this);
 	}

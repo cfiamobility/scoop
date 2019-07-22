@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,8 +14,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.util.TextFormat;
+
+import static ca.gc.inspection.scoop.searchprofile.view.SearchProfileViewHolder.getSpannableStringBuilderWithFormat;
 
 /**
  * ViewHolder for replying to a post action; it is the most generic View Holder
@@ -22,8 +27,9 @@ import ca.gc.inspection.scoop.R;
  * related to "posting" actions. Parent View Holder for ProfilePostViewHolder.
  */
 
-public class PostCommentViewHolder extends RecyclerView.ViewHolder
-        implements PostCommentContract.View.ViewHolder {
+public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
+        PostCommentContract.View.ViewHolder,
+        UserProfileListener {
 
     PostCommentContract.Presenter.ViewHolderAPI mPresenter;
 
@@ -54,6 +60,17 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
     @Override
     public PostCommentContract.View.ViewHolder setPostText(String postText) {
         this.postText.setText(postText);
+        return this;
+    }
+
+    /**
+     *
+     * @param postText
+     */
+    @Override
+    public PostCommentContract.View.ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat) {
+        SpannableStringBuilder spannableStringBuilder = getSpannableStringBuilderWithFormat(postText, textFormat);
+        this.postText.setText(spannableStringBuilder);
         return this;
     }
 
@@ -192,4 +209,14 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder
     }
 
 
+
+    @Override
+    public TextView getUserName() {
+        return username;
+    }
+
+    @Override
+    public ImageView getProfileImage() {
+        return profileImage;
+    }
 }

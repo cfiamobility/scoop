@@ -117,6 +117,11 @@
     <string name="hour_ago">hour ago</string>
     <string name="hours_ago">hours ago</string>
 
+    <!-- Search -->
+    <string name="search">Search</string>
+    <string name="search_hint">search</string>
+    <string name="search_post_results_info">0 Results</string>
+
 
     <!-- Report -->
     <string-array name="report_array">
