@@ -21,15 +21,15 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="361dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="362dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="20dp">
 
         <!-- YOUR CUSTOM VIEWS HERE -->
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/report_thank_you_title"
@@ -64,8 +64,6 @@
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
-
-
         </LinearLayout>
 
 
