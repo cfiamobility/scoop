@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.searchpost.SearchPostContract;
@@ -58,7 +59,10 @@ public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder
         PostCommentFragment.setUserInfoListener(searchPostViewHolder,
                 mSearchPostPresenter.getPosterIdByIndex(i));
 
-        ProfilePostFragment.setPostOptionsListener(searchPostViewHolder, mSearchPostPresenter.getActivityIdByIndex(i));
+        PostCommentFragment.setPostOptionsListener(searchPostViewHolder, i,
+                mSearchPostPresenter.getActivityIdByIndex(i),mSearchPostPresenter.getPosterIdByIndex(i), mSearchPostPresenter.getSavedStatusByIndex(i),
+                mSearchPostPresenter.getPosterIdByIndex(0));
+
     }
 
 	@Override

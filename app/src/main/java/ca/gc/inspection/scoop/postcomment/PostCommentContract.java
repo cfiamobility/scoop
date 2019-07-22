@@ -4,6 +4,7 @@ import org.json.JSONException;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.util.TextFormat;
 
 /**
  * A contract between the View (layer) and Presenter for the replying to a post
