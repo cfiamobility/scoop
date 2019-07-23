@@ -3,6 +3,8 @@ package ca.gc.inspection.scoop.signup;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
@@ -203,7 +205,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
         } else if (TextUtils.isEmpty(lastName)) { // last name field is empty
             lastNameLayout.setError("Please enter a last name");
             return false;
-        } else if (TextUtils.isEmpty(email) || !email.contains("@canada.ca")) { // if the email field is empty or if they do not enter a @canada.ca email
+        } else if (TextUtils.isEmpty(email)) { // if the email field is empty
             emailLayout.setError("Please enter valid email.");
             return false;
         } else if (TextUtils.isEmpty(password) || password.length() < 8 || !SignUpPresenter.isValidPassword(password)) { // is the password field is empty or is less than 8 characters or is not valid
@@ -242,4 +244,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
         finish();
     }
 
+
+    public void displayErrorMessage(String message) {
+        emailLayout.setError(message);
+    }
 }
