@@ -20,6 +20,7 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.feedpost.FeedPostInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 class DisplayPostInteractor extends FeedPostInteractor {
@@ -49,7 +50,7 @@ class DisplayPostInteractor extends FeedPostInteractor {
                     public void onResponse(String response) {
                         // response
                         Log.d("Response", response);
-                        if (response.contains("Success")){
+                        if (response.contains(DATABASE_RESPONSE_SUCCESS)){
                             Log.i("Info", "We good");
                             mDisplayPostPresenter.onAddPostComment(true, otherPostActivity);
                         }
