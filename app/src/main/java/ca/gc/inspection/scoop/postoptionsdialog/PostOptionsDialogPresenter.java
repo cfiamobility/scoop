@@ -38,9 +38,12 @@ public class PostOptionsDialogPresenter implements PostOptionsDialogContract.Pre
     }
 
 
-   public void setSaveResponseMessage(String response){
-        mView.setSaveResponseMessage(response);
+   public void setSavedStatusResponseMessage(String response){
+        mView.setSavedStatusResponseMessage(response);
    }
 
-
+    public void unsavePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i){
+        viewHolder.updateSavedStatus(i, savedStatus);
+        mInteractor.unsavePost(network, activityid, userid);
+    }
 }

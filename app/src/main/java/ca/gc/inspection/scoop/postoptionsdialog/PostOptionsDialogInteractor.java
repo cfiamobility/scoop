@@ -40,13 +40,13 @@ class PostOptionsDialogInteractor {
     public void savePost(NetworkUtils network, final String activityid, final String userid) {
 
         Log.i("MIDDLE-TIER CHECK", "sending data to save post table");
-        String url = Config.baseIP + "post/save-post";
+        String url = Config.baseIP + "post/save";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i("RESPONSE", response);
-                mPresenter.setSaveResponseMessage(response);
+                mPresenter.setSavedStatusResponseMessage(response);
             }
         }, new Response.ErrorListener()
                 {
@@ -77,4 +77,47 @@ class PostOptionsDialogInteractor {
         };
         network.addToRequestQueue(postRequest);
     }
+
+    public void unsavePost(NetworkUtils network, final String activityid, final String userid) {
+
+        Log.i("MIDDLE-TIER CHECK", "unsaving post");
+        String url = Config.baseIP + "post/unsave";
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("RESPONSE", response);
+                mPresenter.setSavedStatusResponseMessage(response);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // error
+                Log.d("Error.Response", String.valueOf(error));
+            }
+        }
+        ){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<>();
+                params.put("activityid", activityid);
+                params.put("userid", userid); // Post test user
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+        network.addToRequestQueue(postRequest);
+    }
+
+
 }

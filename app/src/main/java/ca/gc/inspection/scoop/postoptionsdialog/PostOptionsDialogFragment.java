@@ -41,10 +41,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     //reference to the presenter
     private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
     // required as context may be null outside of fragment onCreateView
-    private Context currContext;
     private PostCommentViewHolder mViewHolder;
-
-
+    private Context currContext;
 
 
     /**
@@ -134,15 +132,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     dismiss();
                 }
             });
-
             setReportOnClickListener(activityId, posterId);
-//            reportButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.i("BUTTON PRESSED", "Report");
-//                    dismiss();
-//                }
-//            });
+
 
             if (posterId.equals(Config.currentUser)){
                 reportTR.setVisibility(View.GONE);
@@ -167,16 +158,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         } else {
             deleteTR.setVisibility(View.GONE);
             deleteButton.setVisibility(View.GONE);
-
             setReportOnClickListener(activityId, posterId);
-
-//            reportButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.i("BUTTON PRESSED", "Report");
-//                    dismiss();
-//                }
-//            });
         }
 
 
@@ -191,9 +173,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 public void onClick(View v) {
                     Log.i("BUTTON PRESSED", "Unsave");
                     Log.i("activity id:", activityId);
-                    // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
+                    // store context as a local variable and used as a param in setSaveResponseMessage(String message) method, otherwise NULL object reference
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, false, i);
+                    mPostOptionsDialogPresenter.unsavePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, false, i);
                     dismiss();
                 }
             });
@@ -222,7 +204,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
      * Displays toast message based on the response received from the database
      * @param message Message that is set in the Presenter
      */
-    public void setSaveResponseMessage(String message){
+    public void setSavedStatusResponseMessage(String message){
         Toast.makeText(currContext,message,Toast.LENGTH_SHORT).show();
     }
 
