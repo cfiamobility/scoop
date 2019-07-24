@@ -1,7 +1,6 @@
 package ca.gc.inspection.scoop.postoptionsdialog;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,18 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
-import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -42,8 +37,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     private Context currContext;
     private PostCommentViewHolder mViewHolder;
 
+    private PostOptionsDialogReceiver mPostOptionsDialogReceiver; // Interface implemented by DisplayPostFragment (used to refresh view after comment is deleted)
 
-
+    private int postPosition;
 
     /**
      * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
@@ -57,6 +53,14 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
      * Empty Constructor for Fragment
      */
     public PostOptionsDialogFragment(){
+    }
+
+    /**
+     * Invoked by DisplayPostPresenter to pass a reference of itself to this class
+     * @param postOptionsDialogReceiver
+     */
+    public void setPostOptionsDialogReceiver(PostOptionsDialogReceiver postOptionsDialogReceiver) {
+        mPostOptionsDialogReceiver = postOptionsDialogReceiver;
     }
 
 
@@ -79,7 +83,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         String activityid = getArguments().getString("ACTIVITY_ID");
         String posterid = getArguments().getString("POSTER_ID");
         Boolean savedStatus = getArguments().getBoolean("SAVED_STATUS");
-        int i = getArguments().getInt("POST_POSITION");
+        postPosition = getArguments().getInt("POST_POSITION");
         String firstPosterId = getArguments().getString("FIRST_POSTER_ID");
 
 
@@ -117,8 +121,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             unsaveButton.setVisibility(View.GONE);
         }
 
-//        Log.i("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));
-//        Log.i("does activity match display post", Boolean.toString(getActivity().toString().contains("DisplayPostActivity")));
+//        Log.postPosition("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));
+//        Log.postPosition("does activity match display post", Boolean.toString(getActivity().toString().contains("DisplayPostActivity")));
         if (getActivity().toString().contains("DisplayPostActivity") && firstPosterId.equals(Config.currentUser)){
             deleteButton.setVisibility(View.VISIBLE);
             deleteTR.setVisibility(View.VISIBLE);
@@ -129,6 +133,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 @Override
                 public void onClick(View v) {
                     Log.i("BUTTON PRESSED", "Delete");
+                    currContext = getContext();
+                    mPostOptionsDialogPresenter.deletePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser);
                     dismiss();
                 }
             });
@@ -157,6 +163,11 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 @Override
                 public void onClick(View v) {
                     Log.i("BUTTON PRESSED", "Delete");
+                    currContext = getContext();
+                    mPostOptionsDialogPresenter.deletePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser);
+
+                    //getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
+
                     dismiss();
                 }
             });
@@ -188,7 +199,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     Log.i("activity id:", activityid);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser, mViewHolder, false, i);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser, mViewHolder, false, postPosition);
                     dismiss();
                 }
             });
@@ -203,7 +214,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     Log.i("activity id:", activityid);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser, mViewHolder, true, i);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser, mViewHolder, true, postPosition);
                     dismiss();
                 }
             });
@@ -213,11 +224,22 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
 
+
+
     /**
      * Displays toast message based on the response received from the database
      * @param message Message that is set in the Presenter
      */
     public void setSaveResponseMessage(String message){
+        Toast.makeText(currContext,message,Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * Displays toast message based on the response received from the database
+     * @param message Message that is set in the Presenter
+     */
+    public void setDeleteResponseMessage(String message) {
         Toast.makeText(currContext,message,Toast.LENGTH_SHORT).show();
     }
 
@@ -233,5 +255,17 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
 
-
+    /**
+     * Refreshes the detailed post view
+     */
+    public void refresh(){
+        boolean isPost;
+        if (postPosition == 0){
+            isPost = true;
+        }
+        else{
+            isPost = false;
+        }
+        mPostOptionsDialogReceiver.onDeletePostComment(isPost);
+    }
 }

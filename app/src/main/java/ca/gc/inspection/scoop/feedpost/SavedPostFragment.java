@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
@@ -20,7 +21,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class SavedPostFragment extends Fragment implements
         FeedPostContract.View,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        PostOptionsDialogReceiver {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -137,4 +139,8 @@ public class SavedPostFragment extends Fragment implements
         return "saved";
     }
 
+    @Override
+    public void onDeletePostComment(boolean isPost) {
+        loadDataFromDatabase();
+    }
 }

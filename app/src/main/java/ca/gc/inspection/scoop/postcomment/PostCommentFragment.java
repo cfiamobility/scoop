@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,13 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-import ca.gc.inspection.scoop.MainActivity;
+
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.profile.OtherUserActivity;
-import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
@@ -34,7 +32,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Fragment which acts as the main view for the viewing profile comments action.
  * Responsible for creating the Presenter and Adapter
  */
-public abstract class PostCommentFragment extends Fragment implements PostCommentContract.View {
+public abstract class PostCommentFragment extends Fragment implements PostCommentContract.View, PostOptionsDialogReceiver {
 
     private final static String TAG = "PostCommentFragment";
     // recycler view widgets
@@ -190,7 +188,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      * @param activityId activityid of the post that the viewholder contains
      * @param posterId posterid of the post that the viewholder contains
      */
-    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityId, String posterId){
+    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityId, String posterId, PostOptionsDialogReceiver postOptionsDialogReceiver){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +204,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 bundle.putString("POSTER_ID", posterId);
                 bottomSheetDialog.setArguments(bundle);
                 bottomSheetDialog.setViewHolder(viewHolder);
+                bottomSheetDialog.setPostOptionsDialogReceiver(postOptionsDialogReceiver);
 
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
@@ -221,7 +220,59 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      * @param activityId activityid of the post that the viewholder contains
      * @param posterId posterid of the post that the viewholder contains
      * @param savedStatus savedstatus of the post for the user clicking on the options menu
+     * @param postOptionsDialogReceiver interface needed to call the DisplayPostFragment's refresh function
      */
+    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus, String firstPosterId, PostOptionsDialogReceiver postOptionsDialogReceiver){
+        // to get the options menu to appear
+        viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // bundle
+                Bundle bundle = new Bundle();
+                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
+                Boolean updatedSave = viewHolder.getSavedStatus();
+
+                //gets the activity id, posterid, viewHolderType, and savedStatus and stores in bundle to be fetched in PostOptionsDialogFragment
+                Log.i("post I am clicking: ", activityId);
+                bundle.putString("ACTIVITY_ID", activityId);
+                Log.i("poster id I am clicking: ", posterId);
+                bundle.putString("POSTER_ID", posterId);
+                Log.i("viewholder: ", viewHolder.getClass().toString());
+                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
+                Log.i("saved status: ", savedStatus.toString());
+                bottomSheetDialog.setPostOptionsDialogReceiver(postOptionsDialogReceiver);
+
+
+                if (updatedSave == null){
+                    bundle.putBoolean("SAVED_STATUS", savedStatus); //saved status on response
+                } else {
+                    bundle.putBoolean("SAVED_STATUS", updatedSave); //saved status stored in the UI
+                }
+
+                Log.i("post position: ", Integer.toString(i));
+                bundle.putInt("POST_POSITION", i);
+                Log.i("first poster id: ", firstPosterId);
+                bundle.putString("FIRST_POSTER_ID", firstPosterId);
+
+                bottomSheetDialog.setArguments(bundle);
+                bottomSheetDialog.setViewHolder(viewHolder);
+
+                final Context context = v.getContext();
+                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                bottomSheetDialog.show(fragmentManager, "bottomSheet");
+            }
+        });
+    }
+
+    /**
+     * Just like the above function except doesn't include the interface needed to refresh the view
+     * @param viewHolder
+     * @param i
+     * @param activityId
+     * @param posterId
+     * @param savedStatus
+     * @param firstPosterId
+
     public static void setPostOptionsListener(PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus, String firstPosterId){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
@@ -262,7 +313,16 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
             }
         });
     }
+    */
 
+    /**
+     * Method called by PostOptionsDialog class when a comment is deleted
+     * @param i
+     */
+    @Override
+    public void onDeletePostComment(boolean isPost) {
+        onLoadedDataFromDatabase();
+    }
 
 
 }
