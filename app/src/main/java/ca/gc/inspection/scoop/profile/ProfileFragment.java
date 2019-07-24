@@ -171,4 +171,9 @@ public class ProfileFragment extends OtherUserFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mProfilePresenter.getUserInfo(Config.currentUser);
+    }
 }
