@@ -1,6 +1,6 @@
 package ca.gc.inspection.scoop.editprofile;
 
-import ca.gc.inspection.scoop.*;
+import ca.gc.inspection.scoop.R;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +31,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,40 +91,44 @@ public class EditProfileActivity extends AppCompatActivity implements
 	// stored local variables
 	String mBuildingId;
 
+	private boolean editingProfile = false;
+
 	// The method that runs when save is pressed
 	private View.OnClickListener save = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// changes the bitmap into a string encoded using base64
-			String image = CameraUtils.bitmapToString(bitmap);
+			if (!editingProfile) {
+				editingProfile = true;
+				// changes the bitmap into a string encoded using base64
+				String image = CameraUtils.bitmapToString(bitmap);
 
-			// putting all the edittext fields into a hashmap to be passed into nodejs
-			if (!(firstNameET.getText().toString().isEmpty()) && !(lastNameET.getText().toString().isEmpty())) {
-				Map<String, String> params = new HashMap<>();
-				params.put("userid", userID);
-				params.put("firstname", firstNameET.getText().toString());
-				params.put("lastname", lastNameET.getText().toString());
-				params.put("position", positionET.getText().toString());
-				params.put("division", divisionET.getText().toString());
-				params.put("building", enterBuildingBTN.getText().toString());
+				// putting all the edittext fields into a hashmap to be passed into nodejs
+				if (!(firstNameET.getText().toString().isEmpty()) && !(lastNameET.getText().toString().isEmpty())) {
+					Map<String, String> params = new HashMap<>();
+					params.put("userid", userID);
+					params.put("firstname", firstNameET.getText().toString());
+					params.put("lastname", lastNameET.getText().toString());
+					params.put("position", positionET.getText().toString());
+					params.put("division", divisionET.getText().toString());
+					params.put("building", enterBuildingBTN.getText().toString());
 
-				// params cant be null so we set buildingid to -1 if its empty
-				if (mBuildingId != null){
-					params.put("buildingid", mBuildingId);
+					// params cant be null so we set buildingid to -1 if its empty
+					if (mBuildingId != null) {
+						params.put("buildingid", mBuildingId);
+					} else {
+						params.put("buildingid", String.valueOf(-1));
+					}
+
+					Log.d("buildingid", Integer.toString(getIntent().getIntExtra("buildingid", -1)));
+					params.put("linkedin", linkedinET.getText().toString());
+					params.put("twitter", twitterET.getText().toString());
+					params.put("instagram", instagramET.getText().toString());
+					params.put("facebook", facebookET.getText().toString());
+					params.put("image", image);
+					mPresenter.updateUserInfo(NetworkUtils.getInstance(getApplicationContext()), params);
+				} else {
+					Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
 				}
-				else{
-					params.put("buildingid", String.valueOf(-1));
-				}
-
-				Log.d("buildingid", Integer.toString(getIntent().getIntExtra("buildingid", -1)));
-				params.put("linkedin", linkedinET.getText().toString());
-				params.put("twitter", twitterET.getText().toString());
-				params.put("instagram", instagramET.getText().toString());
-				params.put("facebook", facebookET.getText().toString());
-				params.put("image", image);
-				mPresenter.updateUserInfo(NetworkUtils.getInstance(getApplicationContext()), params);
-			} else {
-				Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
@@ -152,8 +156,15 @@ public class EditProfileActivity extends AppCompatActivity implements
 		finish();
 	}
 
-	public void finishUpdateUserInfo() {
-	    finish();
+	public void onProfileUpdated(boolean success) {
+		editingProfile = false;
+		if (success) {
+			finish();
+		}
+		else {
+			// implement retry snackbar
+			finish();
+		}
     }
 
     @Override

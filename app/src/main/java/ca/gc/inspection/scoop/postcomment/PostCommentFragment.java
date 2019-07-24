@@ -21,6 +21,8 @@ import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.profile.OtherUserActivity;
+import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
+import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
@@ -120,9 +122,9 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      * @param viewHolder viewholder that contains the content, in this case, specifically the profile image and profile name
      * @param posterId id of the User whose profile/image is being clicked on
      */
-    public static void setUserInfoListener(PostCommentViewHolder viewHolder, String posterId) {
+    public static void setUserInfoListener(UserProfileListener viewHolder, String posterId) {
         // tapping on profile picture will bring user to poster's profile page
-        viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
+        viewHolder.getProfileImage().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
@@ -130,7 +132,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
             }
         });
 
-        viewHolder.username.setOnClickListener(new View.OnClickListener() {
+        viewHolder.getUserName().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                MainActivity.otherUserClicked(posterId);

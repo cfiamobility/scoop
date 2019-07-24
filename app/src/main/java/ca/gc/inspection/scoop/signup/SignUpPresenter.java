@@ -87,4 +87,13 @@ class SignUpPresenter implements SignUpContract.Presenter{
 	public void storePreferences(String userid, String response){
 		mSignUpView.storePreferences(userid, response);
 	}
+
+	public void setErrorMessage(String response){
+		if (response.equals("ERROR_EMAIL_FORMAT")){
+			mSignUpView.displayErrorMessage("This email does not appear to be an official government email.");
+		} else if (response.equals("ERROR_EMAIL_EXISTS")){
+			mSignUpView.displayErrorMessage("An account already exists with this email.");
+		}
+	}
+
 }

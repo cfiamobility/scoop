@@ -29,4 +29,5 @@ public class Config {
     public static int SWIPE_REFRESH_COLOUR_2 = android.R.color.holo_orange_dark;
     public static int SWIPE_REFRESH_COLOUR_3 = android.R.color.holo_blue_dark;
 
+    public static final String DATABASE_RESPONSE_SUCCESS = "Success";
 }

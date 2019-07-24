@@ -44,17 +44,23 @@ public class SignUpInteractor {
             public void onResponse(String response) {
                 // the response string that is received from the user
                 Log.i("RESPONSE", response);
-                // grabbing the user id from the jwt token
-                JWT parsedJWT = new JWT(response);
-                Claim userIdMetaData = parsedJWT.getClaim("userid");
-                String userid = userIdMetaData.asString();
 
-                Log.i("TOKEN", String.valueOf(parsedJWT));
-                Log.i("USER ID", userid);
+                if (response.equals("ERROR_EMAIL_FORMAT")){
+                    mSignUpPresenter.setErrorMessage(response);
+                } else if (response.equals("ERROR_EMAIL_EXISTS")){
+                    mSignUpPresenter.setErrorMessage(response);
+                } else {
+                    // grabbing the user id from the jwt token
+                    JWT parsedJWT = new JWT(response);
+                    Claim userIdMetaData = parsedJWT.getClaim("userid");
+                    String userid = userIdMetaData.asString();
 
-                // Helper method to store token and user id into shared preferences
-                mSignUpPresenter.storePreferences(userid, response);
+                    Log.i("TOKEN", String.valueOf(parsedJWT));
+                    Log.i("USER ID", userid);
 
+                    // Helper method to store token and user id into shared preferences
+                    mSignUpPresenter.storePreferences(userid, response);
+                }
             }
         }, new Response.ErrorListener() {
             @Override

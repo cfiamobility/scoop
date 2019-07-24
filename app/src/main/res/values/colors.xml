@@ -20,4 +20,6 @@
     <color name="secondary_light">#43739a</color>
     <color name="secondary_dark">#002141</color>
     <color name="lighter_blue">#0000FF</color>
+
+    <color name="search_results_info">#C8D6E5</color>
 </resources>
