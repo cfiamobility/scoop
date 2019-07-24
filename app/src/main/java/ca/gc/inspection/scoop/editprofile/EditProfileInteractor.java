@@ -21,6 +21,7 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.TabFragment;
 
+import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class EditProfileInteractor {
@@ -119,14 +120,17 @@ public class EditProfileInteractor {
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equals("success")) {
+                if (response.equals(DATABASE_RESPONSE_SUCCESS)) {
                     TabFragment.refresh();
-                    mPresenter.finishUpdateUserInfo();
+                    mPresenter.onProfileUpdated(true);
                 }
+                else mPresenter.onProfileUpdated(false);
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {}
+            public void onErrorResponse(VolleyError error) {
+                mPresenter.onProfileUpdated(false);
+            }
         }) {
             // Inputting the hashmap into the get params method
             @Override

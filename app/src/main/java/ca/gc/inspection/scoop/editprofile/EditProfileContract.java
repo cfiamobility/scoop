@@ -22,7 +22,7 @@ public interface EditProfileContract {
 
         // void setAddressSuggestionList(ArrayList<String> cityAL, ArrayList<String> provinceAL);
 
-        void finishUpdateUserInfo();
+        void onProfileUpdated(boolean success);
     }
 
     interface Presenter extends BasePresenter {

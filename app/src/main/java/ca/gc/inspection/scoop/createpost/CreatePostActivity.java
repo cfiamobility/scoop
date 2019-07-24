@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,6 +51,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     private CreatePostContract.Presenter mPresenter;
     private EditText postTitle, postText;
     private ImageView postImage;
+    private CoordinatorLayout mCoordinatorLayout;
 
     private TextView counter;
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
@@ -100,6 +103,8 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         postImage = findViewById(R.id.activity_create_post_img_post);
 
         counter = findViewById(R.id.activity_create_post_txt_word_counter);
+
+        mCoordinatorLayout = findViewById(R.id.activity_create_post_coordinator);
 
         Button camera = findViewById(R.id.activity_create_post_btn_camera);
         Button cameraRoll = findViewById(R.id.activity_create_post_btn_image);
@@ -254,10 +259,11 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
     public void createPost(String postTitle, String postText, Drawable postImage) {
         if (postTitle.isEmpty()) {
-            Toast.makeText(this, "Add a title to continue", Toast.LENGTH_SHORT).show();
+            Snackbar.make(mCoordinatorLayout, R.string.create_post_title_empty_error, Snackbar.LENGTH_SHORT).show();
         } else if (postText.isEmpty()) {
-            Toast.makeText(this, "Add a message to continue", Toast.LENGTH_SHORT).show();
+            Snackbar.make(mCoordinatorLayout, R.string.create_post_text_empty_error, Snackbar.LENGTH_SHORT).show();
         } else if (!creatingPost) {
+            Snackbar.make(mCoordinatorLayout, R.string.create_post_in_progress, Snackbar.LENGTH_INDEFINITE).show();
             creatingPost = true;
             String imageBitmap = "";
             if (postImage != null) {
@@ -274,12 +280,22 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     }
 
     public void onPostCreated(boolean success) {
-        String toastMessage;
-        if (success)
-            toastMessage = "Post created!";
-        else
-            toastMessage = "Failed to create post";
-        Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
-        finish();
+        creatingPost = false;
+        if (success) {
+            finish();
+        }
+        else {
+            Snackbar mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.create_post_failed, Snackbar.LENGTH_INDEFINITE);
+            mSnackbar.setAction(R.string.create_post_retry, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createPost(
+                            postTitle.getText().toString(),
+                            postText.getText().toString(),
+                            postImage.getDrawable());
+                }
+            });
+            mSnackbar.show();
+        }
     }
 }

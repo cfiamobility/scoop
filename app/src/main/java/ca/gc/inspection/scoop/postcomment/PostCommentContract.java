@@ -4,6 +4,7 @@ import org.json.JSONException;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.util.TextFormat;
 
 /**
  * A contract between the View (layer) and Presenter for the replying to a post
@@ -53,6 +54,7 @@ public interface PostCommentContract {
 
         interface ViewHolder {
             ViewHolder setPostText(String postText);
+            ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat);
             ViewHolder setUserName(String userName);
             ViewHolder setLikeCount(String likeCount);
             ViewHolder setDate(String date);

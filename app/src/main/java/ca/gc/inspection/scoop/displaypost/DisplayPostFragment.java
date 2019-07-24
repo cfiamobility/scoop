@@ -85,6 +85,7 @@ public class DisplayPostFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
         setRecyclerView();
     }
+
     private void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_display_post_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);

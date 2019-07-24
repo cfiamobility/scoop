@@ -1,10 +1,15 @@
 package ca.gc.inspection.scoop.profilecomment;
 
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.util.TextFormat;
+
+import static ca.gc.inspection.scoop.searchprofile.view.SearchProfileViewHolder.getSpannableStringBuilderWithFormat;
 
 public class ProfileCommentViewHolder extends PostCommentViewHolder
         implements ProfileCommentContract.View.ViewHolder {
@@ -36,4 +41,16 @@ public class ProfileCommentViewHolder extends PostCommentViewHolder
         return this;
     }
 
+    /**
+     * Sets the post title with formatting
+     * @param postTitle
+     * @param textFormat
+     * @return
+     */
+    @Override
+    public ProfileCommentContract.View.ViewHolder setPostTitleWithFormat(String postTitle, TextFormat textFormat) {
+        SpannableStringBuilder spannableStringBuilder = getSpannableStringBuilderWithFormat(postTitle, textFormat);
+        this.postTitle.setText(spannableStringBuilder);
+        return this;
+    }
 }

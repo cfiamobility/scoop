@@ -1,30 +1,43 @@
 package ca.gc.inspection.scoop.search;
 
-import ca.gc.inspection.scoop.*;
+import ca.gc.inspection.scoop.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
+import java.util.Objects;
 import ca.gc.inspection.scoop.MainActivity;
+import ca.gc.inspection.scoop.searchprofile.view.SearchProfileFragment;
+import ca.gc.inspection.scoop.searchpost.view.SearchPostFragment;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 public class SearchActivity extends AppCompatActivity implements SearchContract.View {
+    /**
+     * Main search activity which deals with taking user input from the search box,
+     * saving and loading the most recent search,
+     * and sending the raw queries to the current SearchContract.View.Fragment being displayed
+     */
 
+    private static final String TAG = "SearchActivity";
+    private static final int AUTO_SEARCH_MIN_LENGTH = 3;
     private SearchContract.Presenter mPresenter;
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private SearchPagerAdapter mPagerAdapter;
+    private String currentSearchQuery;
 
     @Override
     public void setPresenter(@NonNull SearchContract.Presenter presenter) {
@@ -46,7 +59,10 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (inputMethodManager != null) {
+                    inputMethodManager.hideSoftInputFromWindow(
+                            Objects.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
+                }
                 return true;
             }
         });
@@ -54,35 +70,32 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         // setting up the custom toolbar in the activity
         Toolbar toolbar = findViewById(R.id.activity_search_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         // setting up the tab layout
-        TabLayout tabLayout = findViewById(R.id.activity_search_tl_search);
-        tabLayout.addTab(tabLayout.newTab().setText("Top"));
-        tabLayout.addTab(tabLayout.newTab().setText("People"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        mTabLayout = findViewById(R.id.activity_search_tl_search);
+        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        setupViewPager();
+        mTabLayout.setupWithViewPager(mViewPager);
+    }
 
+    private void setupViewPager() {
         // setting up the viewpager for the tab layout
-        final ViewPager viewPager = findViewById(R.id.activity_search_vp_search);
-        PagerAdapter adapter = new SearchAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
+        mViewPager = findViewById(R.id.activity_search_vp_search);
+        mPagerAdapter = new SearchPagerAdapter(getSupportFragmentManager());
+        mPagerAdapter.addFragment(new SearchPostFragment(), "Post");
+        mPagerAdapter.addFragment(new SearchProfileFragment(), "People");
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+        mViewPager.setAdapter(mPagerAdapter);
 
-            }
+        mViewPager.addOnPageChangeListener(
+                new TabLayout.TabLayoutOnPageChangeListener(mTabLayout) {
+                    @Override
+                    public void onPageSelected(int position) {
+                        super.onPageSelected(position);
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+                    }
+                });
     }
 
     @Override
@@ -94,7 +107,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         searchMenuItem.expandActionView();
 
         // when the back button is tapped it will return the user back to the activity_main
-        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+        searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem menuItem) {
                 return true;
@@ -107,6 +120,43 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
                 return true;
             }
         });
-        return true;
+
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        currentSearchQuery = newText;
+                        if (newText != null && !newText.isEmpty() && newText.length() >= AUTO_SEARCH_MIN_LENGTH) {
+                            Log.d("Search activity", " " + newText.length() + " newtext: " + newText);
+                            loadSearchResultsForQuery(newText);
+                            return true;
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        currentSearchQuery = query;
+                        Log.d("search activity", "fragment" + mViewPager.getCurrentItem() + " query: " + query);
+                        if (query != null && !query.isEmpty()) {
+                            loadSearchResultsForQuery(query);
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+        );
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void loadSearchResultsForQuery(String query) {
+        int currentItem = mViewPager.getCurrentItem();
+        ((SearchContract.View.Fragment) mPagerAdapter.getItem(currentItem)).searchQuery(query);
+    }
+
+    public String getCurrentSearchQuery() {
+        Log.d(TAG, "currentSearchQuery = " + currentSearchQuery);
+        return currentSearchQuery;
     }
 }

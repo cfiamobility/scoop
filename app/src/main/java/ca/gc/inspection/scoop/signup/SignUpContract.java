@@ -15,6 +15,7 @@ public interface SignUpContract {
      */
     interface View extends BaseView<SignUpContract.Presenter> {
         void storePreferences(String userid, String response);
+        void displayErrorMessage(String message);
     }
 
     /**

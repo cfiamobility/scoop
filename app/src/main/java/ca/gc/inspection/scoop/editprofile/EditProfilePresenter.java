@@ -95,7 +95,7 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
         mInteractor.updateUserInfo(network, params);
 	}
 
-    public void finishUpdateUserInfo() {
-        mView.finishUpdateUserInfo();
+    public void onProfileUpdated(boolean success) {
+        mView.onProfileUpdated(success);
     }
 }
