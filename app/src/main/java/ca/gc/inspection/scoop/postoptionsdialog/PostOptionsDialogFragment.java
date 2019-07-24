@@ -35,8 +35,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class PostOptionsDialogFragment extends BottomSheetDialogFragment implements PostOptionsDialogContract.View {
 
     //UI Declarations
-    Button saveButton, shareButton, deleteButton, reportButton, unsaveButton;
-    TableRow saveTR, shareTR, deleteTR, reportTR, unsaveTR;
+    Button saveButton, editButton, shareButton, deleteButton, reportButton, unsaveButton;
+    TableRow saveTR, editTR, shareTR, deleteTR, reportTR, unsaveTR;
 
     //reference to the presenter
     private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
@@ -98,6 +98,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
         // initializing all of the buttons
         shareButton = view.findViewById(R.id.dialog_post_options_btn_share);
+        editButton = view.findViewById(R.id.dialog_post_options_btn_edit);
         saveButton = view.findViewById(R.id.dialog_post_options_btn_save);
         unsaveButton = view.findViewById(R.id.dialog_post_options_btn_unsave);
         deleteButton = view.findViewById(R.id.dialog_post_options_btn_delete);
@@ -105,6 +106,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
         // initializing all of the rows
         shareTR = view.findViewById(R.id.dialog_post_options_tr_share);
+        editTR = view.findViewById(R.id.dialog_post_options_tr_edit);
         saveTR = view.findViewById(R.id.dialog_post_options_tr_save);
         unsaveTR = view.findViewById(R.id.dialog_post_options_tr_unsave);
         deleteTR = view.findViewById(R.id.dialog_post_options_tr_delete);
@@ -126,6 +128,15 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             saveButton.setVisibility(View.GONE);
             unsaveTR.setVisibility(View.GONE);
             unsaveButton.setVisibility(View.GONE);
+        }
+
+        if (posterId != null && posterId.equals(Config.currentUser)) {
+            editButton.setVisibility(View.VISIBLE);
+            editTR.setVisibility(View.VISIBLE);
+        }
+        else {
+            editButton.setVisibility(View.GONE);
+            editTR.setVisibility(View.GONE);
         }
 
 //        Log.i("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));

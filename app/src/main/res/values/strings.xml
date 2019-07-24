@@ -51,6 +51,7 @@
 
     <!-- Post Options -->
     <string name="share">Share</string>
+    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="report">Report</string>
 
