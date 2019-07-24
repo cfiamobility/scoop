@@ -32,8 +32,8 @@ public class ProfileLikesInteractor extends ProfileCommentInteractor {
      * @param userid: passes the userid of the profile clicked on
      */
     public void getProfileLikes(final String userid) {
-        String url = Config.baseIP + "profile/getlikes/" + userid + "/" + Config.currentUser;
-        String responseUrl = Config.baseIP + "profile/postimagefill/" + userid;
+        String url = Config.baseIP + "profile/getlikes/text/" + userid + "/" + Config.currentUser;
+        String responseUrl = Config.baseIP + "profile/getlikes/images/" + userid;
         JsonArrayRequest postRequest = super.newProfileJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(postRequest);
     }
