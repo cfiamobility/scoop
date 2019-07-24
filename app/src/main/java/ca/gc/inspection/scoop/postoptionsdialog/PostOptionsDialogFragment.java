@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.postoptionsdialog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
+import ca.gc.inspection.scoop.editpost.EditPostActivity;
 import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.report.ReportDialogFragment;
@@ -131,12 +133,16 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         }
 
         if (posterId != null && posterId.equals(Config.currentUser)) {
-            editButton.setVisibility(View.VISIBLE);
             editTR.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
+            editButton.setOnClickListener((View v) -> {
+                currContext = getContext();
+                startActivity(new Intent(currContext, EditPostActivity.class));
+            });
         }
         else {
-            editButton.setVisibility(View.GONE);
             editTR.setVisibility(View.GONE);
+            editButton.setVisibility(View.GONE);
         }
 
 //        Log.i("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));

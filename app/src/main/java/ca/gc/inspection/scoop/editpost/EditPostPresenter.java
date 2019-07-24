@@ -1,28 +1,25 @@
-package ca.gc.inspection.scoop.createpost;
+package ca.gc.inspection.scoop.editpost;
 
 import android.support.annotation.NonNull;
 
+import ca.gc.inspection.scoop.createpost.CreatePostPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class CreatePostPresenter implements CreatePostContract.Presenter {
+public class EditPostPresenter extends CreatePostPresenter implements EditPostContract.Presenter {
     /**
-     * Implements the Presenter in the CreatePostContract interface to follow MVP architecture.
+     * Implements the Presenter in the EditPostContract interface to follow MVP architecture.
      *
      */
 
-    private CreatePostInteractor mInteractor;
-    private CreatePostContract.View mView;
+    private EditPostInteractor mInteractor;
+    private EditPostContract.View mView;
 
-    protected CreatePostPresenter() {
-    }
-
-    CreatePostPresenter(@NonNull CreatePostContract.View view) {
-        mInteractor = new CreatePostInteractor(this);
+    EditPostPresenter(@NonNull EditPostContract.View view) {
+        mInteractor = new EditPostInteractor(this);
         mView = checkNotNull(view);
     }
-
 
     /*** sendPostToDatabase
      * Simple Post request to store the newly created Post to the postcomment table

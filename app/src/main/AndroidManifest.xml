@@ -48,6 +48,7 @@
         <activity
             android:name=".searchbuilding.SearchBuildingActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".editpost.EditPostActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

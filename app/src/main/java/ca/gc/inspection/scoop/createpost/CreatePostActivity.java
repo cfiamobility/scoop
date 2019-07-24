@@ -47,14 +47,15 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
      * to add an image.
      */
 
-    private static final int TEXT_CHAR_LIMIT = 255;
+    protected static final int TEXT_CHAR_LIMIT = 255;
     private CreatePostContract.Presenter mPresenter;
-    private EditText postTitle, postText;
-    private ImageView postImage;
-    private CoordinatorLayout mCoordinatorLayout;
+    protected EditText postTitle;
+    protected EditText postText;
+    protected ImageView postImage;
+    protected CoordinatorLayout mCoordinatorLayout;
 
-    private TextView counter;
-    private final TextWatcher mTextEditorWatcher = new TextWatcher() {
+    protected TextView counter;
+    protected final TextWatcher mTextEditorWatcher = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
 
@@ -66,7 +67,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         public void afterTextChanged(Editable s) {
         }
     };
-    private boolean creatingPost = false;
+    protected boolean creatingPost = false;
 
     public void returnToPrevious (View view) {
         finish();

@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.createpost;
+package ca.gc.inspection.scoop.editpost;
 
 import android.util.Log;
 
@@ -10,19 +10,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.createpost.CreatePostInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
 
 
-public class CreatePostInteractor {
+public class EditPostInteractor extends CreatePostInteractor {
 
-    private CreatePostPresenter mPresenter;
+    private EditPostPresenter mPresenter;
 
-    public CreatePostInteractor() {
-    }
-
-    CreatePostInteractor(CreatePostPresenter presenter) {
+    EditPostInteractor(EditPostPresenter presenter) {
         mPresenter = presenter;
     }
 
