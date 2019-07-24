@@ -141,7 +141,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 public void onClick(View v) {
                     Log.i("BUTTON PRESSED", "Delete");
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.deletePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser);
+                    mPostOptionsDialogPresenter.deletePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser);
                     dismiss();
                 }
             });
@@ -172,7 +172,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 public void onClick(View v) {
                     Log.i("BUTTON PRESSED", "Delete");
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.deletePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser);
+                    mPostOptionsDialogPresenter.deletePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser);
 
                     //getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
 
@@ -209,7 +209,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     Log.i("activity id:", activityId);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser, mViewHolder, false, postPosition);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, false, postPosition);
                     dismiss();
                 }
             });
@@ -224,7 +224,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     Log.i("activity id:", activityId);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityid, Config.currentUser, mViewHolder, true, postPosition);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, true, postPosition);
                     dismiss();
                 }
             });
@@ -285,7 +285,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
     /**
-     * Refreshes the detailed post view
+     * Refreshes view which implements the PostOptionsDialogReceiver
      */
     public void refresh(){
         boolean isPost;

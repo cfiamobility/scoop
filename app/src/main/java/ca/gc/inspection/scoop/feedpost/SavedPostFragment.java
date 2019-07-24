@@ -139,6 +139,10 @@ public class SavedPostFragment extends Fragment implements
         return "saved";
     }
 
+    /**
+     * Method called by PostOptionsDialog when a post is deleted
+     * @param isPost
+     */
     @Override
     public void onDeletePostComment(boolean isPost) {
         loadDataFromDatabase();

@@ -319,7 +319,6 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
 
     /**
      * Method called by PostOptionsDialog class when a comment is deleted
-     * @param i
      */
     @Override
     public void onDeletePostComment(boolean isPost) {

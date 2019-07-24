@@ -143,7 +143,6 @@ public class ProfilePostFragment extends Fragment implements
 
     /**
      * Method called by PostOptionsDialog class when a comment is deleted
-     * @param i
      */
     @Override
     public void onDeletePostComment(boolean isPost) {
