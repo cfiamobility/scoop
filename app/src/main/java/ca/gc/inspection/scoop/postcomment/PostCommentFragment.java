@@ -43,6 +43,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
     private RecyclerView.LayoutManager mLayoutManager;
     private View view;
     private PostCommentContract.Presenter mPostCommentPresenter;
+    static private Boolean updatedSave;
 
     @Override
     public void setPresenter (@NonNull PostCommentContract.Presenter presenter){
@@ -230,7 +231,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 // bundle
                 Bundle bundle = new Bundle();
                 PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
-                Boolean updatedSave = viewHolder.getSavedStatus();
+                updatedSave = viewHolder.getSavedStatus();
 
                 //gets the activity id, posterid, viewHolderType, and savedStatus and stores in bundle to be fetched in PostOptionsDialogFragment
                 Log.i("post I am clicking: ", activityId);
@@ -242,8 +243,12 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 Log.i("saved status: ", savedStatus.toString());
 
 
+                Log.i("saved status: ", "savedStatus is "+ savedStatus);
+                Log.i("saved status: ", "updatedSave is "+ updatedSave);
+
                 if (updatedSave == null){
                     bundle.putBoolean("SAVED_STATUS", savedStatus); //saved status on response
+
                 } else {
                     bundle.putBoolean("SAVED_STATUS", updatedSave); //saved status stored in the UI
                 }
