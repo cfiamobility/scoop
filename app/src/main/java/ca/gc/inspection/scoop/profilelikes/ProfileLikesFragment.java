@@ -1,22 +1,17 @@
 package ca.gc.inspection.scoop.profilelikes;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
-import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
@@ -32,7 +27,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  */
 public class ProfileLikesFragment extends Fragment implements
         ProfileLikesContract.View,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        PostOptionsDialogReceiver {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -144,6 +140,11 @@ public class ProfileLikesFragment extends Fragment implements
             loadDataFromDatabase();
     }
 
-
-
+    /**
+     * Method called by PostOptionsDialog class when a comment is deleted
+     */
+    @Override
+    public void onDeletePostComment(boolean isPost) {
+        loadDataFromDatabase();
+    }
 }

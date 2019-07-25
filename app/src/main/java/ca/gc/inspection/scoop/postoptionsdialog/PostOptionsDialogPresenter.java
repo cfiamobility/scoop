@@ -37,6 +37,11 @@ public class PostOptionsDialogPresenter implements PostOptionsDialogContract.Pre
         mInteractor.savePost(network, activityid, userid);
     }
 
+    public void deletePost(NetworkUtils network, final String activityid, final String userid){
+        Log.i("inside", "postoptionsdialogpresenter");
+        mInteractor.deletePost(network, activityid, userid);
+    }
+
 
    public void setSavedStatusResponseMessage(String response){
         mView.setSavedStatusResponseMessage(response);
@@ -45,5 +50,13 @@ public class PostOptionsDialogPresenter implements PostOptionsDialogContract.Pre
     public void unsavePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i){
         viewHolder.updateSavedStatus(i, savedStatus);
         mInteractor.unsavePost(network, activityid, userid);
+    }
+
+    public void setDeleteResponseMessage(String response) {
+        mView.setDeleteResponseMessage(response);
+    }
+
+    public void refresh(){
+        mView.refresh();
     }
 }

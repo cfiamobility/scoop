@@ -1,22 +1,17 @@
 package ca.gc.inspection.scoop.displaypost;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
-import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
@@ -27,10 +22,12 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 /**
  * Fragment which acts as the main view for the viewing community feed action.
  * Responsible for creating the Presenter and Adapter
+ * We implement PostOptionsDialogReceiver so that that the PostOptionsDialog can refresh the detailed post view when a post is deleted
  */
 public class DisplayPostFragment extends Fragment implements
         DisplayPostContract.View.Fragment,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        PostOptionsDialogReceiver {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -146,4 +143,16 @@ public class DisplayPostFragment extends Fragment implements
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * Method called by PostOptionsDialog class when a comment is deleted
+     */
+    @Override
+    public void onDeletePostComment(boolean isPost) {
+        if (isPost == true){
+            mDisplayPostActivity.goBack(view);
+        }
+        else{
+            loadDataFromDatabase();
+        }
+    }
 }

@@ -19,6 +19,10 @@ public interface PostOptionsDialogContract {
      */
 
     interface View extends BaseView<Presenter> {
+        void setDeleteResponseMessage(String message);
+
+        void refresh();
+
         void setSavedStatusResponseMessage(String message);
     }
 
@@ -28,5 +32,8 @@ public interface PostOptionsDialogContract {
     interface Presenter extends BasePresenter {
         void savePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i);
         void unsavePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i);
+
+        void deletePost(NetworkUtils network, final String activityid, final String userid);
+
     }
 }

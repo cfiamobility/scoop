@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +42,9 @@ public class OtherUserFragment extends Fragment implements ProfileContract.View 
 	public static String title;
 
     private ProfileContract.Presenter mProfilePresenter;
+    private String userid;
 
-	public OtherUserFragment() {
+    public OtherUserFragment() {
 		// Required empty public constructor
 	}
 
@@ -70,7 +72,7 @@ public class OtherUserFragment extends Fragment implements ProfileContract.View 
 
         // Getting the clicked on user's userid from the bundle set in mainscreen
 		Bundle bundle = getArguments();
-		String userid = bundle.getString("userid");
+		userid = bundle.getString("userid");
 
         // Getting the information from the database - ProfilePresenter
         mProfilePresenter.getUserInfo(userid);
@@ -210,4 +212,10 @@ public class OtherUserFragment extends Fragment implements ProfileContract.View 
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (userid != null)
+            mProfilePresenter.getUserInfo(userid);
+    }
 }

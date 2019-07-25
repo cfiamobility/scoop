@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
@@ -25,7 +27,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  */
 public class CommunityFeedFragment extends Fragment implements
         FeedPostContract.View,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        PostOptionsDialogReceiver {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -138,5 +141,13 @@ public class CommunityFeedFragment extends Fragment implements
 
     public String getFeedType(){
         return "community";
+    }
+
+    /**
+     * Method called by PostOptionsDialog class when a comment is deleted
+     */
+    @Override
+    public void onDeletePostComment(boolean isPost) {
+        loadDataFromDatabase();
     }
 }
