@@ -208,8 +208,6 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         return savedStatus;
     }
 
-
-
     @Override
     public TextView getUserName() {
         return username;

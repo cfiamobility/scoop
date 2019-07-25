@@ -280,4 +280,10 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         }
         mPostOptionsDialogReceiver.onDeletePostComment(isPost);
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mViewHolder.setSavedStatus(null);
+    }
 }
