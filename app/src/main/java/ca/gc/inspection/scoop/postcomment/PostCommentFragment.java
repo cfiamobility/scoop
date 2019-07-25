@@ -27,6 +27,8 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
+import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
+import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -190,7 +192,9 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      * @param activityId activityid of the post that the viewholder contains
      * @param posterId posterid of the post that the viewholder contains
      */
-    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, String activityId, String posterId, PostOptionsDialogReceiver postOptionsDialogReceiver){
+    public static void setPostOptionsListener(
+            PostCommentViewHolder viewHolder, String activityId, String posterId,
+            PostOptionsDialogReceiver postOptionsDialogReceiver){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,7 +228,9 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      * @param savedStatus savedstatus of the post for the user clicking on the options menu
      * @param postOptionsDialogReceiver interface needed to call the DisplayPostFragment's refresh function
      */
-    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus, String firstPosterId, PostOptionsDialogReceiver postOptionsDialogReceiver){
+    public static void setPostOptionsListener(
+            PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus,
+            String firstPosterId, String postTitle, String postText, PostOptionsDialogReceiver postOptionsDialogReceiver){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +248,8 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 Log.i("viewholder: ", viewHolder.getClass().toString());
                 bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
                 Log.i("saved status: ", savedStatus.toString());
+                bundle.putString(PROFILE_POST_TITLE_KEY, postTitle);
+                bundle.putString(PROFILE_COMMENT_POST_TEXT_KEY, postText);
                 bottomSheetDialog.setPostOptionsDialogReceiver(postOptionsDialogReceiver);
 
 

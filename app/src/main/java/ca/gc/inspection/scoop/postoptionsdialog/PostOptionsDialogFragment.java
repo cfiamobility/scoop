@@ -26,7 +26,9 @@ import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.report.ReportDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
+import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -94,6 +96,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         Boolean savedStatus = getArguments().getBoolean("SAVED_STATUS");
         postPosition = getArguments().getInt("POST_POSITION");
         String firstPosterId = getArguments().getString("FIRST_POSTER_ID");
+        String postTitle = getArguments().getString(PROFILE_POST_TITLE_KEY);
+        String postText = getArguments().getString(PROFILE_COMMENT_POST_TEXT_KEY);
 
 
         setPresenter(new PostOptionsDialogPresenter(this));
@@ -137,7 +141,10 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             editButton.setVisibility(View.VISIBLE);
             editButton.setOnClickListener((View v) -> {
                 currContext = getContext();
-                startActivity(new Intent(currContext, EditPostActivity.class));
+                Intent intent = new Intent(currContext, EditPostActivity.class);
+                intent.putExtra(PROFILE_POST_TITLE_KEY, postTitle);
+                intent.putExtra(PROFILE_COMMENT_POST_TEXT_KEY, postText);
+                startActivity(intent);
             });
         }
         else {

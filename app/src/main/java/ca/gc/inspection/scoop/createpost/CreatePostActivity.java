@@ -78,6 +78,10 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         mPresenter = checkNotNull(presenter);
     }
 
+    public CreatePostContract.Presenter newPresenter() {
+        return new CreatePostPresenter(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +90,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
-        setPresenter(new CreatePostPresenter(this));
+        setPresenter(newPresenter());
 
         /** Initialize edit texts, image view, and buttons for create Post xml
          *  postTitle: title of the Post

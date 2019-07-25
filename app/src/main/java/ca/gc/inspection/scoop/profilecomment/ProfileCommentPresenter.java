@@ -79,10 +79,6 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
         }
     }
 
-    public String getReferenceIdByIndex(int i){
-        return Objects.requireNonNull(getItemByIndex(i)).getReferenceID();
-    }
-
     @Override
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
 
@@ -119,5 +115,14 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
             bindPostCommentDataToViewHolder(viewHolderInterface, profileComment);
             viewHolderInterface.setPostTitle(profileComment.getPostTitle());
         }
+    }
+
+    public String getReferenceIdByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getReferenceID();
+    }
+
+    @Override
+    public String getPostTitleByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getPostTitle();
     }
 }

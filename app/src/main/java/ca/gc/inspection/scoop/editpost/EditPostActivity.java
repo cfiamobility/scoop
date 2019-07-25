@@ -28,12 +28,12 @@ import android.widget.TextView;
 import ca.gc.inspection.scoop.R;
 
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.ImageFilePath;
 import ca.gc.inspection.scoop.createpost.CreatePostActivity;
-import ca.gc.inspection.scoop.createpost.CreatePostContract;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
+import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class EditPostActivity extends CreatePostActivity implements EditPostContract.View {
@@ -54,14 +54,16 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
     }
 
     @Override
+    public EditPostContract.Presenter newPresenter() {
+        return new EditPostPresenter(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_post);
+        Bundle bundle = getIntent().getExtras();
 
-        // set the system status bar color
-        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
-
-        setPresenter(new EditPostPresenter(this));
+        setPresenter(newPresenter());
 
         /** Initialize edit texts, image view, and buttons for create Post xml
          *  postTitle: title of the Post
@@ -74,6 +76,9 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
         heading.setText("Edit Post");
         Button send = findViewById(R.id.activity_create_post_btn_post);
         send.setText("Save");
+
+        postTitle.setText(bundle.getString(PROFILE_POST_TITLE_KEY));
+        postText.setText(bundle.getString(PROFILE_COMMENT_POST_TEXT_KEY));
     }
 
     public void createPost(String postTitle, String postText, Drawable postImage) {
