@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.feedpost;
 
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.profilepost.ProfilePostContract;
 
 public interface FeedPostContract extends ProfilePostContract {
@@ -28,7 +29,7 @@ public interface FeedPostContract extends ProfilePostContract {
      * See PostCommentContract for inheritance hierarchy for Posts/Comments
      */
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView<Presenter>, PostOptionsDialogReceiver {
         /**
          * Implemented by the main View (ie. FeedPostFragment).
          * Methods specified here in the View but not in the nested View.Adapter and View.ViewHolder interfaces

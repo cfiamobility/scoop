@@ -94,6 +94,11 @@ public class OfficialFeedFragment extends Fragment implements
         return "official";
     }
 
+    @Override
+    public void onDeletePostComment(boolean isPost) {
+        onRefresh();
+    }
+
 
 //    /**
 //     * FROM ADAPTER

@@ -44,8 +44,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     private Context currContext;
     private PostCommentViewHolder mViewHolder;
 
+    private PostOptionsDialogReceiver mPostOptionsDialogReceiver; // Interface implemented by DisplayPostFragment (used to refresh view after comment is deleted)
 
-
+    private int postPosition;
 
     /**
      * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
@@ -59,6 +60,14 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
      * Empty Constructor for Fragment
      */
     public PostOptionsDialogFragment(){
+    }
+
+    /**
+     * Invoked by DisplayPostPresenter to pass a reference of itself to this class
+     * @param postOptionsDialogReceiver
+     */
+    public void setPostOptionsDialogReceiver(PostOptionsDialogReceiver postOptionsDialogReceiver) {
+        mPostOptionsDialogReceiver = postOptionsDialogReceiver;
     }
 
 
@@ -81,7 +90,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         String activityId = getArguments().getString("ACTIVITY_ID");
         String posterId = getArguments().getString("POSTER_ID");
         Boolean savedStatus = getArguments().getBoolean("SAVED_STATUS");
-        int i = getArguments().getInt("POST_POSITION");
+        postPosition = getArguments().getInt("POST_POSITION");
         String firstPosterId = getArguments().getString("FIRST_POSTER_ID");
 
 
@@ -131,6 +140,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 @Override
                 public void onClick(View v) {
                     Log.i("BUTTON PRESSED", "Delete");
+                    currContext = getContext();
+                    mPostOptionsDialogPresenter.deletePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser);
                     dismiss();
                 }
             });
@@ -160,6 +171,11 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 @Override
                 public void onClick(View v) {
                     Log.i("BUTTON PRESSED", "Delete");
+                    currContext = getContext();
+                    mPostOptionsDialogPresenter.deletePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser);
+
+                    //getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
+
                     dismiss();
                 }
             });
@@ -193,7 +209,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     Log.i("activity id:", activityId);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, false, i);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, false, postPosition);
                     dismiss();
                 }
             });
@@ -208,7 +224,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     Log.i("activity id:", activityId);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, true, i);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, true, postPosition);
                     dismiss();
                 }
             });
@@ -218,11 +234,22 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
 
+
+
     /**
      * Displays toast message based on the response received from the database
      * @param message Message that is set in the Presenter
      */
     public void setSaveResponseMessage(String message){
+        Toast.makeText(currContext,message,Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * Displays toast message based on the response received from the database
+     * @param message Message that is set in the Presenter
+     */
+    public void setDeleteResponseMessage(String message) {
         Toast.makeText(currContext,message,Toast.LENGTH_SHORT).show();
     }
 
@@ -255,5 +282,19 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 dismiss();
             }
         });
+    }
+
+    /**
+     * Refreshes view which implements the PostOptionsDialogReceiver
+     */
+    public void refresh(){
+        boolean isPost;
+        if (postPosition == 0){
+            isPost = true;
+        }
+        else{
+            isPost = false;
+        }
+        mPostOptionsDialogReceiver.onDeletePostComment(isPost);
     }
 }

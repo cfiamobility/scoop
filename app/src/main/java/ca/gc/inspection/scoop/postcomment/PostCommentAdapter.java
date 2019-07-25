@@ -64,7 +64,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
         PostCommentFragment.setUserInfoListener(postCommentViewHolder,
                 mPostCommentPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setPostOptionsListener(postCommentViewHolder,
-                mPostCommentPresenter.getActivityIdByIndex(i),mPostCommentPresenter.getPosterIdByIndex(i));
+                mPostCommentPresenter.getActivityIdByIndex(i),mPostCommentPresenter.getPosterIdByIndex(i), mPostCommentView);
     }
 
     /**

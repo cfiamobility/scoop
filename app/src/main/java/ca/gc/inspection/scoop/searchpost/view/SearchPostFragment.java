@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.search.SearchActivity;
 import ca.gc.inspection.scoop.search.SearchContract;
 import ca.gc.inspection.scoop.searchpost.SearchPostContract;
@@ -33,7 +34,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class SearchPostFragment extends Fragment implements
         SearchPostContract.View,
         SearchContract.View.Fragment,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        PostOptionsDialogReceiver {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -161,5 +163,14 @@ public class SearchPostFragment extends Fragment implements
         if (mSearchPostPresenter != null) {
             loadDataFromDatabase(Config.currentUser, query);
         }
+    }
+
+    /**
+     * Called by the PostOptionsDialog when a post is deleted
+     * @param isPost
+     */
+    @Override
+    public void onDeletePostComment(boolean isPost) {
+        loadDataFromDatabase(Config.currentUser, mSearchActivity.getCurrentSearchQuery());
     }
 }

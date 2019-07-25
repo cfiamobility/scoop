@@ -37,10 +37,22 @@ public class PostOptionsDialogPresenter implements PostOptionsDialogContract.Pre
         mInteractor.savePost(network, activityid, userid);
     }
 
+    public void deletePost(NetworkUtils network, final String activityid, final String userid){
+        Log.i("inside", "postoptionsdialogpresenter");
+        mInteractor.deletePost(network, activityid, userid);
+    }
+
 
    public void setSaveResponseMessage(String response){
         mView.setSaveResponseMessage(response);
    }
 
 
+    public void setDeleteResponseMessage(String response) {
+        mView.setDeleteResponseMessage(response);
+    }
+
+    public void refresh(){
+        mView.refresh();
+    }
 }
