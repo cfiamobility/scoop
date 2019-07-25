@@ -26,6 +26,7 @@ import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.report.ReportDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
 import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
@@ -98,6 +99,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         String firstPosterId = getArguments().getString("FIRST_POSTER_ID");
         String postTitle = getArguments().getString(PROFILE_POST_TITLE_KEY);
         String postText = getArguments().getString(PROFILE_COMMENT_POST_TEXT_KEY);
+        String feedPostImagePath = getArguments().getString(FEED_POST_IMAGE_PATH_KEY, "");
 
 
         setPresenter(new PostOptionsDialogPresenter(this));
@@ -144,6 +146,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 Intent intent = new Intent(currContext, EditPostActivity.class);
                 intent.putExtra(PROFILE_POST_TITLE_KEY, postTitle);
                 intent.putExtra(PROFILE_COMMENT_POST_TEXT_KEY, postText);
+                intent.putExtra(FEED_POST_IMAGE_PATH_KEY, feedPostImagePath);
                 startActivity(intent);
             });
         }

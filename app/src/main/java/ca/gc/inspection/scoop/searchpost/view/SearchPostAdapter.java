@@ -62,7 +62,8 @@ public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder
         PostCommentFragment.setPostOptionsListener(searchPostViewHolder, i,
                 mSearchPostPresenter.getActivityIdByIndex(i),mSearchPostPresenter.getPosterIdByIndex(i),
                 mSearchPostPresenter.getSavedStatusByIndex(i), mSearchPostPresenter.getPosterIdByIndex(0),
-                mSearchPostPresenter.getPostTitleByIndex(i), mSearchPostPresenter.getPostTextByIndex(i), mSearchPostView);
+                mSearchPostPresenter.getPostTitleByIndex(i), mSearchPostPresenter.getPostTextByIndex(i),
+                null, mSearchPostView);
 
     }
 

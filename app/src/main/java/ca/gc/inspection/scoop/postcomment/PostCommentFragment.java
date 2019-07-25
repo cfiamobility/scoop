@@ -27,6 +27,7 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
+import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
 import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -230,7 +231,8 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      */
     public static void setPostOptionsListener(
             PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus,
-            String firstPosterId, String postTitle, String postText, PostOptionsDialogReceiver postOptionsDialogReceiver){
+            String firstPosterId, String postTitle, String postText, String postImagePath,
+            PostOptionsDialogReceiver postOptionsDialogReceiver){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,6 +252,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 Log.i("saved status: ", savedStatus.toString());
                 bundle.putString(PROFILE_POST_TITLE_KEY, postTitle);
                 bundle.putString(PROFILE_COMMENT_POST_TEXT_KEY, postText);
+                bundle.putString(FEED_POST_IMAGE_PATH_KEY, postImagePath);
                 bottomSheetDialog.setPostOptionsDialogReceiver(postOptionsDialogReceiver);
 
 

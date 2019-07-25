@@ -67,7 +67,7 @@ public class DisplayPostAdapter extends RecyclerView.Adapter<PostCommentViewHold
         PostCommentFragment.setPostOptionsListener(viewHolder, i, mDisplayPostPresenter.getActivityIdByIndex(i),
                 mDisplayPostPresenter.getPosterIdByIndex(i), mDisplayPostPresenter.getSavedStatusByIndex(i),
                 mDisplayPostPresenter.getPosterIdByIndex(0),mDisplayPostPresenter.getPostTitleByIndex(i),
-                mDisplayPostPresenter.getPostTextByIndex(i), mDisplayPostView);
+                mDisplayPostPresenter.getPostTextByIndex(i), null, mDisplayPostView);
     }
 
     @Override

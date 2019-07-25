@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
@@ -134,4 +136,8 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         }
     }
 
+    @Override
+    public String getFeedPostImagePathByIndex(int i) {
+        return Objects.requireNonNull(getItemByIndex(i)).getFeedPostImagePath();
+    }
 }

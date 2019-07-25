@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -32,6 +33,7 @@ import ca.gc.inspection.scoop.createpost.CreatePostActivity;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
 import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -79,6 +81,12 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
 
         postTitle.setText(bundle.getString(PROFILE_POST_TITLE_KEY));
         postText.setText(bundle.getString(PROFILE_COMMENT_POST_TEXT_KEY));
+        String feedPostImagePath = bundle.getString(FEED_POST_IMAGE_PATH_KEY, "");
+
+        if (feedPostImagePath != null && !feedPostImagePath.isEmpty()) {
+            Bitmap bitmap = CameraUtils.stringToBitmap(feedPostImagePath);
+            setBitmap(bitmap);
+        }
     }
 
     public void createPost(String postTitle, String postText, Drawable postImage) {

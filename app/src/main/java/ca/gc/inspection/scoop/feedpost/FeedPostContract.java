@@ -55,6 +55,8 @@ public interface FeedPostContract extends ProfilePostContract {
             void setAdapter(FeedPostContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
                     FeedPostContract.View.ViewHolder postCommentViewHolder, int i);
+
+            String getFeedPostImagePathByIndex(int i);
         }
 
         interface ViewHolderAPI extends ProfilePostContract.Presenter.ViewHolderAPI {

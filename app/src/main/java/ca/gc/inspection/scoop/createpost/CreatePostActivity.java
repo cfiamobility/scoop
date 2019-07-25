@@ -205,6 +205,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         if (resultCode == RESULT_OK) {
             String path = null;
             Uri uri = null;
+            // Select image from camera roll
             if (requestCode == CameraUtils.CHOOSE_PIC_REQUEST_CODE) {
                 if (data == null) {
                     Toast.makeText(getApplicationContext(), "Image cannot be null!", Toast.LENGTH_LONG).show();
@@ -216,7 +217,9 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                         e.printStackTrace();
                     }
                 }
-            } else {
+            }
+            else {
+                // Create file for image from camera
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 File f = new File(CameraUtils.currentPhotoPath);
                 uri = Uri.fromFile(f);
@@ -225,6 +228,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                 path = CameraUtils.currentPhotoPath;
             }
 
+            // If image exists, update UI
             if (path != null || uri != null) {
                 BitmapFactory.Options bmOptions = new BitmapFactory.Options();
                 bmOptions.inJustDecodeBounds = true;
@@ -240,9 +244,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                 }
                 Bitmap newBitmap = CameraUtils.imageOrientationValidator(bitmap, path);
 
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
-                setBitmapWithLayout(layoutParams, newBitmap);
+                setBitmap(newBitmap);
             } else {
                 Toast.makeText(this, "Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT).show();
             }
@@ -279,7 +281,10 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
     }
 
-    public void setBitmapWithLayout(ViewGroup.LayoutParams layoutParams, Bitmap newBitmap) {
+    public void setBitmap(Bitmap newBitmap) {
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
+
         postImage.setLayoutParams(layoutParams);
         postImage.setImageBitmap(newBitmap);
     }
