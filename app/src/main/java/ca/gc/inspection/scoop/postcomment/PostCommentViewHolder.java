@@ -33,8 +33,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
 
     PostCommentContract.Presenter.ViewHolderAPI mPresenter;
 
-    public TextView username, date, postText, likeCount;
-    public ImageView profileImage, upvote, downvote;
+    public TextView username, date, postText, likeCount, editText, counter;
+    public ImageView profileImage, upvote, downvote, editButton;
     public ImageView optionsMenu;
     public Boolean savedStatus;
 
@@ -49,8 +49,30 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         downvote = v.findViewById(R.id.down_vote);
         optionsMenu = v.findViewById(R.id.options_menu);
 
+        // edit comment
+        editText = v.findViewById(R.id.edit_post_text);
+        editButton = v.findViewById(R.id.edit_post_text_btn);
+        counter = v.findViewById(R.id.edit_post_text_counter);
+
+        showEditText();
 
         mPresenter = presenter;
+    }
+
+    private void hideEditText() {
+        if (editText != null && editButton != null && counter != null) {
+            editText.setVisibility(View.GONE);
+            editButton.setVisibility(View.GONE);
+            counter.setVisibility(View.GONE);
+        }
+    }
+
+    private void showEditText() {
+        if (editText != null && editButton != null && counter != null) {
+            editText.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
+            counter.setVisibility(View.VISIBLE);
+        }
     }
 
     /**

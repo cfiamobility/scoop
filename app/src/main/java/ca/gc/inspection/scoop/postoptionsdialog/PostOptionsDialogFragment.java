@@ -159,7 +159,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
 //        Log.i("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));
 //        Log.i("does activity match display post", Boolean.toString(getActivity().toString().contains("DisplayPostActivity")));
-        if (getActivity().toString().contains("DisplayPostActivity") && firstPosterId.equals(Config.currentUser)){
+        if (getActivity().toString().contains("DisplayPostActivity") && firstPosterId!= null && firstPosterId.equals(Config.currentUser)){
             deleteButton.setVisibility(View.VISIBLE);
             deleteTR.setVisibility(View.VISIBLE);
             reportButton.setVisibility(View.VISIBLE);

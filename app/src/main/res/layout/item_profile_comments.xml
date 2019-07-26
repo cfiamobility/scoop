@@ -24,17 +24,17 @@
             android:layout_width="208dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginEnd="15dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="29dp"
-            android:layout_marginEnd="15dp"
-            android:layout_toStartOf="@+id/date"
             android:layout_toEndOf="@+id/profile_image"
+            android:layout_toStartOf="@+id/date"
             android:fontFamily="@font/roboto"
             android:text="@string/name"
             android:textAlignment="textStart"
             android:textAllCaps="false"
-            android:textSize="16sp"
             android:textColor="@color/black"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
@@ -47,15 +47,6 @@
             android:fontFamily="@font/roboto"
             android:text="01-01-2019"
             android:textSize="13sp" />
-
-        <ImageView
-            android:id="@+id/options_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="27dp"
-            android:layout_marginEnd="10dp"
-            app:srcCompat="@drawable/ic_more_vert_secondary_24dp" />
 
         <TextView
             android:id="@+id/post_title"
@@ -77,22 +68,73 @@
             android:id="@+id/post_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/post_title"
-            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/post_title"
+            android:layout_marginEnd="18dp"
             android:layout_marginStart="18dp"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="18dp"
             android:fontFamily="@font/roboto"
             android:text="TextView"
             android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edit_post_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/post_text"
+            android:layout_marginEnd="58dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:fontFamily="@font/roboto"
+            android:gravity="top"
+            android:hint="@string/post_template"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+            android:maxLength="255"
+            android:maxLines="50"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/edit_post_text_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/edit_post_text"
+            android:layout_marginStart="-58dp"
+            android:layout_toEndOf="@+id/edit_post_text"
+            android:fontFamily="@font/roboto"
+            android:text="0/255"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/edit_post_text_btn"
+            android:layout_width="29dp"
+            android:layout_height="32dp"
+            android:layout_below="@+id/edit_post_text_counter"
+            android:layout_marginStart="-58dp"
+            android:layout_toEndOf="@+id/edit_post_text"
+            android:backgroundTint="@color/secondary"
+            app:srcCompat="@drawable/ic_edit_24dp" />
+
+        <ImageView
+            android:id="@+id/options_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="27dp"
+            app:srcCompat="@drawable/ic_more_vert_secondary_24dp" />
 
         <ImageView
             android:id="@+id/up_vote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/post_text"
+            android:layout_below="@+id/edit_post_text"
             android:layout_marginStart="16dp"
             android:layout_marginTop="26dp"
             app:srcCompat="@drawable/ic_keyboard_arrow_up_black_24dp" />
@@ -101,7 +143,7 @@
             android:id="@+id/down_vote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/post_text"
+            android:layout_below="@+id/edit_post_text"
             android:layout_marginStart="6dp"
             android:layout_marginTop="26dp"
             android:layout_toEndOf="@+id/up_vote"
@@ -111,23 +153,23 @@
             android:id="@+id/vote_count"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_below="@+id/post_text"
+            android:layout_below="@+id/edit_post_text"
             android:layout_marginStart="6dp"
             android:layout_marginTop="28dp"
             android:layout_toEndOf="@+id/down_vote"
             android:fontFamily="@font/roboto"
-            android:textColor="@color/black"
             android:text="2"
+            android:textColor="@color/black"
             android:textSize="14sp" />
 
         <View
             android:id="@+id/horizontalDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/vote_count"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="22dp"
+            android:layout_below="@+id/vote_count"
             android:layout_marginEnd="0dp"
+            android:layout_marginTop="22dp"
             android:background="?android:attr/listDivider" />
     </RelativeLayout>
 </LinearLayout>
