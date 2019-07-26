@@ -37,5 +37,16 @@ public class EditPostInteractor extends CreatePostInteractor {
 
         StringRequest postRequest = newPostRequest(urlText, params);
         network.addToRequestQueue(postRequest);
+
+        if (imageBitmap != null) {
+            String urlImage = urlPrefix + "image/";
+            Map<String, String>  imageParams = new HashMap<>();
+            imageParams.put("activityid", activityId);
+            imageParams.put("userid", Config.currentUser);
+            imageParams.put("postimage", imageBitmap);
+
+            StringRequest imagePostRequest = newPostRequest(urlImage, imageParams);
+            network.addToRequestQueue(imagePostRequest);
+        }
     }
 }
