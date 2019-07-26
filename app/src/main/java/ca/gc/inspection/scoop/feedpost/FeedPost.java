@@ -1,5 +1,7 @@
 package ca.gc.inspection.scoop.feedpost;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.profilepost.ProfilePost;

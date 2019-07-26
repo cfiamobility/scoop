@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
+import ca.gc.inspection.scoop.profilelikes.ProfileLike;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment;
 
 public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder>
@@ -57,8 +58,10 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
         PostCommentFragment.setUserInfoListener(profilePostViewHolder,
                 mProfilePostPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setPostOptionsListener(profilePostViewHolder, i,
-                mProfilePostPresenter.getActivityIdByIndex(i),mProfilePostPresenter.getPosterIdByIndex(i), mProfilePostPresenter.getSavedStatusByIndex(i),
+                mProfilePostPresenter.getActivityIdByIndex(i),mProfilePostPresenter.getPosterIdByIndex(i), mProfilePostPresenter.getSavedStateByIndex(i),
                 mProfilePostPresenter.getPosterIdByIndex(0), mProfilePostView);
+        PostCommentFragment.setSaveListener(profilePostViewHolder, i);
+        PostCommentFragment.setUnsaveListener(profilePostViewHolder, i);
     }
 
 	@Override

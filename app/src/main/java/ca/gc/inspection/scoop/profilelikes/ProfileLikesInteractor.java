@@ -1,6 +1,17 @@
 package ca.gc.inspection.scoop.profilelikes;
 
+import android.util.Log;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;

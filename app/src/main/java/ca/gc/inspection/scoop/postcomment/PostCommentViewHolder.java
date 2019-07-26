@@ -14,12 +14,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.TextFormat;
 
+import static android.view.View.GONE;
 import static ca.gc.inspection.scoop.searchprofile.view.SearchProfileViewHolder.getSpannableStringBuilderWithFormat;
+import static java.lang.Boolean.TRUE;
 
 /**
  * ViewHolder for replying to a post action; it is the most generic View Holder
@@ -36,7 +39,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     public TextView username, date, postText, likeCount;
     public ImageView profileImage, upvote, downvote;
     public ImageView optionsMenu;
-    public Boolean savedStatus;
+    public ImageView saved, unsaved;
+//    public Boolean savedStatus;
 
     public PostCommentViewHolder(View v, PostCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v);
@@ -48,7 +52,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         upvote = v.findViewById(R.id.up_vote);
         downvote = v.findViewById(R.id.down_vote);
         optionsMenu = v.findViewById(R.id.options_menu);
-
+        saved = v.findViewById(R.id.item_post_img_saved);
+        unsaved = v.findViewById(R.id.item_post_img_unsaved);
 
         mPresenter = presenter;
     }
@@ -155,7 +160,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
 
     @Override
     public PostCommentContract.View.ViewHolder hideDate() {
-        date.setVisibility(View.GONE);
+        date.setVisibility(GONE);
         return this;
     }
 
@@ -169,6 +174,19 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
             Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
             Log.i("image", image);
             profileImage.setImageBitmap(bitmap);
+        }
+        return this;
+    }
+
+    public PostCommentContract.View.ViewHolder setSavedState(Boolean savedState) {
+        if(saved!=null && unsaved!=null){
+            if(savedState){
+                this.unsaved.setVisibility(GONE);
+                this.saved.setVisibility(View.VISIBLE);
+            } else {
+                this.saved.setVisibility(GONE);
+                this.unsaved.setVisibility(View.VISIBLE);
+            }
         }
         return this;
     }
@@ -191,22 +209,23 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         }
     }
 
-    public void updateSavedStatus(int i, Boolean savedStatus){
+
+    public void updateSavedState(int i){
         try {
-            mPresenter.updateSavedStatus(this, i, savedStatus);
+            mPresenter.updateSavedState(this, i);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public PostCommentContract.View.ViewHolder setSavedStatus(Boolean savedStatus) {
-        this.savedStatus = savedStatus;
-        return this;
-    }
-
-    public Boolean getSavedStatus(){
-        return savedStatus;
-    }
+//    public PostCommentContract.View.ViewHolder setSavedStatus(Boolean savedStatus) {
+//        this.savedStatus = savedStatus;
+//        return this;
+//    }
+//
+//    public Boolean getSavedStatus(){
+//        return savedStatus;
+//    }
 
     @Override
     public TextView getUserName() {

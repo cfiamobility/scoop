@@ -1,10 +1,12 @@
 package ca.gc.inspection.scoop.profilelikes;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 
@@ -16,6 +18,8 @@ import android.widget.TextView;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
+
+import static android.view.View.GONE;
 
 public class ProfileLikesViewHolder extends ProfileCommentViewHolder
         implements ProfileLikesContract.View.ViewHolder {
@@ -60,4 +64,5 @@ public class ProfileLikesViewHolder extends ProfileCommentViewHolder
         super.setPostTitle(postTitle);
         return this;
     }
+
 }

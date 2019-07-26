@@ -22,16 +22,12 @@ public interface PostOptionsDialogContract {
         void setDeleteResponseMessage(String message);
 
         void refresh();
-
-        void setSavedStatusResponseMessage(String message);
     }
 
     /**
      * Presenter interface implemented by PostOptionsDialogPresenter
      */
     interface Presenter extends BasePresenter {
-        void savePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i);
-        void unsavePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i);
 
         void deletePost(NetworkUtils network, final String activityid, final String userid);
 
