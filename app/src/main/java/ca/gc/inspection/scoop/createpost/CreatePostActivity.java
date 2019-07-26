@@ -113,6 +113,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         Button camera = findViewById(R.id.activity_create_post_btn_camera);
         Button cameraRoll = findViewById(R.id.activity_create_post_btn_image);
         Button send = findViewById(R.id.activity_create_post_btn_post);
+        Button removeImage = findViewById(R.id.activity_create_post_btn_remove_image);
 
         /** OnClickListener for the camera button that launches the native camera app.
          *  Deals with permission checks for Camera
@@ -150,6 +151,13 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                         postTitle.getText().toString(),
                         postText.getText().toString(),
                         postImage.getDrawable());
+            }
+        });
+
+        removeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postImage.setImageDrawable(null);
             }
         });
     }

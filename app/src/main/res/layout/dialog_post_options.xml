@@ -52,7 +52,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                app:srcCompat="@drawable/ic_edit_black_24dp" />
+                app:srcCompat="@drawable/ic_edit_24dp" />
 
             <Button
                 android:id="@+id/dialog_post_options_btn_edit"
