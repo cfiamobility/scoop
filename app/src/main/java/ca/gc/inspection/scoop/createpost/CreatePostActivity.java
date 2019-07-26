@@ -1,6 +1,6 @@
 package ca.gc.inspection.scoop.createpost;
 
-import ca.gc.inspection.scoop.*;
+import ca.gc.inspection.scoop.R;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,7 +22,6 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -67,7 +66,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         public void afterTextChanged(Editable s) {
         }
     };
-    protected boolean creatingPost = false;
+    protected boolean waitingForResponse = false;
 
     public void returnToPrevious (View view) {
         finish();
@@ -147,7 +146,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createPost(
+                sendPostToDatabase(
                         postTitle.getText().toString(),
                         postText.getText().toString(),
                         postImage.getDrawable());
@@ -264,14 +263,14 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
     }
 
-    public void createPost(String postTitle, String postText, Drawable postImage) {
+    public void sendPostToDatabase(String postTitle, String postText, Drawable postImage) {
         if (postTitle.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_title_empty_error, Snackbar.LENGTH_SHORT).show();
         } else if (postText.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_text_empty_error, Snackbar.LENGTH_SHORT).show();
-        } else if (!creatingPost) {
+        } else if (!waitingForResponse) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_in_progress, Snackbar.LENGTH_INDEFINITE).show();
-            creatingPost = true;
+            waitingForResponse = true;
             String imageBitmap = "";
             if (postImage != null) {
                 imageBitmap = CameraUtils.bitmapToString(((BitmapDrawable) postImage).getBitmap());
@@ -289,8 +288,8 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         postImage.setImageBitmap(newBitmap);
     }
 
-    public void onPostCreated(boolean success) {
-        creatingPost = false;
+    public void onDatabaseResponse(boolean success) {
+        waitingForResponse = false;
         if (success) {
             finish();
         }
@@ -299,7 +298,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
             mSnackbar.setAction(R.string.create_post_retry, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    createPost(
+                    sendPostToDatabase(
                             postTitle.getText().toString(),
                             postText.getText().toString(),
                             postImage.getDrawable());

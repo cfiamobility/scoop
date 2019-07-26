@@ -54,20 +54,21 @@ public class DisplayPostAdapter extends RecyclerView.Adapter<PostCommentViewHold
     public void onBindViewHolder(@NonNull PostCommentViewHolder viewHolder, int i) {
         if (viewHolder.getItemViewType() == 0) {
             mDisplayPostPresenter.onBindViewHolder((FeedPostContract.View.ViewHolder) viewHolder);
-//            ProfilePostFragment.setPostOptionsListener((ProfilePostViewHolder) viewHolder);
+            PostCommentFragment.setPostOptionsListener(viewHolder, i, mDisplayPostPresenter.getActivityIdByIndex(i),
+                    mDisplayPostPresenter.getPosterIdByIndex(i), mDisplayPostPresenter.getSavedStatusByIndex(i),
+                    mDisplayPostPresenter.getPosterIdByIndex(0),mDisplayPostPresenter.getPostTitleByIndex(i),
+                    mDisplayPostPresenter.getPostTextByIndex(i), null, mDisplayPostView);
         }
         else {
             mDisplayPostPresenter.onBindViewHolderAtPosition(viewHolder, i);
+            PostCommentFragment.setPostOptionsListener(viewHolder, mDisplayPostPresenter.getActivityIdByIndex(i),
+                    mDisplayPostPresenter.getPosterIdByIndex(i), mDisplayPostView);
         }
         PostCommentFragment.setDisplayPostListener(viewHolder,
                 mDisplayPostPresenter.getActivityIdByIndex(i));
         PostCommentFragment.setLikesListener(viewHolder, i);
         PostCommentFragment.setUserInfoListener(viewHolder,
                 mDisplayPostPresenter.getPosterIdByIndex(i));
-        PostCommentFragment.setPostOptionsListener(viewHolder, i, mDisplayPostPresenter.getActivityIdByIndex(i),
-                mDisplayPostPresenter.getPosterIdByIndex(i), mDisplayPostPresenter.getSavedStatusByIndex(i),
-                mDisplayPostPresenter.getPosterIdByIndex(0),mDisplayPostPresenter.getPostTitleByIndex(i),
-                mDisplayPostPresenter.getPostTextByIndex(i), null, mDisplayPostView);
     }
 
     @Override

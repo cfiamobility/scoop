@@ -14,7 +14,7 @@ public interface EditPostContract extends CreatePostContract {
 
     interface View extends CreatePostContract.View {
 
-        void onPostCreated(boolean success);
+        void onDatabaseResponse(boolean success);
     }
 
     interface Presenter extends CreatePostContract.Presenter {

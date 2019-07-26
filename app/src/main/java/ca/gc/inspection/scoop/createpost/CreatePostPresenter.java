@@ -39,6 +39,6 @@ public class CreatePostPresenter implements CreatePostContract.Presenter {
     }
 
     public void onPostCreated(boolean success) {
-        mView.onPostCreated(success);
+        mView.onDatabaseResponse(success);
     }
 }
