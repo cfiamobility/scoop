@@ -38,7 +38,7 @@ public class CreatePostPresenter implements CreatePostContract.Presenter {
         mInteractor.sendPostToDatabase(network, userId, title, text, imageBitmap);
     }
 
-    public void onPostCreated(boolean success) {
+    public void onDatabaseResponse(boolean success) {
         mView.onDatabaseResponse(success);
     }
 }

@@ -25,17 +25,17 @@ public class EditPostPresenter extends CreatePostPresenter implements EditPostCo
      * Simple Post request to store the newly created Post to the postcomment table
      *
      * @param network NetworkUtils
-     * @param userId    current user's userid
+     * @param activityId
      * @param title     user inputted title (Mandatory)
      * @param text      user inputted test (Mandatory)
      * @param imageBitmap   user inputted image (Optional)
      */
     @Override
-    public void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
-        mInteractor.sendPostToDatabase(network, userId, title, text, imageBitmap);
+    public void sendPostToDatabase(NetworkUtils network, final String activityId, final String title, final String text, final String imageBitmap) {
+        mInteractor.sendPostToDatabase(network, activityId, title, text, imageBitmap);
     }
 
-    public void onPostCreated(boolean success) {
+    public void onDatabaseResponse(boolean success) {
         mView.onDatabaseResponse(success);
     }
 }

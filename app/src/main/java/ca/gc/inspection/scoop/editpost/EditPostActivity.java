@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import ca.gc.inspection.scoop.R;
 
 import ca.gc.inspection.scoop.Config;
@@ -18,6 +20,7 @@ import ca.gc.inspection.scoop.createpost.CreatePostActivity;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
 import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
@@ -33,6 +36,7 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
 
     private EditPostContract.Presenter mPresenter;
     private Bitmap mInitialBitmap;
+    private String mActivityId;
 
     public void returnToPrevious (View view) {
         finish();
@@ -66,6 +70,7 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
         Button send = findViewById(R.id.activity_create_post_btn_post);
         send.setText("Save");
 
+        mActivityId = Objects.requireNonNull(bundle).getString(INTENT_ACTIVITY_ID_KEY);
         postTitle.setText(bundle.getString(PROFILE_POST_TITLE_KEY));
         postText.setText(bundle.getString(PROFILE_COMMENT_POST_TEXT_KEY));
         String feedPostImagePath = bundle.getString(FEED_POST_IMAGE_PATH_KEY, "");
@@ -90,11 +95,11 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
                 imageBitmap = CameraUtils.bitmapToString(((BitmapDrawable) postImage).getBitmap());
                 Log.i(TAG, "bitmap: "+imageBitmap);
             }
-            if (imageBitmap.equals(CameraUtils.bitmapToString(mInitialBitmap))) {
+            if (mInitialBitmap != null && imageBitmap.equals(CameraUtils.bitmapToString(mInitialBitmap))) {
                 Log.i(TAG, "bitmap equals the initial bitmap");
                 imageBitmap = null;
             }
-            mPresenter.sendPostToDatabase(NetworkUtils.getInstance(this), Config.currentUser, postTitle, postText, imageBitmap);
+            mPresenter.sendPostToDatabase(NetworkUtils.getInstance(this), mActivityId, postTitle, postText, imageBitmap);
         }
     }
 

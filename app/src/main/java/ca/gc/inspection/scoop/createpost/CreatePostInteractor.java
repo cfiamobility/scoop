@@ -22,7 +22,7 @@ public class CreatePostInteractor {
     public CreatePostInteractor() {
     }
 
-    CreatePostInteractor(CreatePostPresenter presenter) {
+    protected CreatePostInteractor(CreatePostPresenter presenter) {
         mPresenter = presenter;
     }
 
@@ -38,33 +38,41 @@ public class CreatePostInteractor {
     public void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
         String url = Config.baseIP + "post/add-post";
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        Map<String, String>  params = new HashMap<>();
+        params.put("userid", userId);
+        params.put("activitytype", Integer.toString(Config.postType));
+        params.put("posttitle", title);
+        params.put("posttext", text);
+        params.put("postimage", imageBitmap);
+
+        Log.d("CreatePostInteractor", params.toString());
+
+        StringRequest postRequest = newPostRequest(url, params);
+        network.addToRequestQueue(postRequest);
+    }
+
+    public StringRequest newPostRequest(String url, Map<String, String> params) {
+        return new StringRequest(Request.Method.POST, url,
                 response -> {
                     // response
                     Log.d("Response", response);
                     if (response.contains(DATABASE_RESPONSE_SUCCESS)){
                         Log.i("Info", "We good");
-                        mPresenter.onPostCreated(true);
+                        mPresenter.onDatabaseResponse(true);
                     }
                     else {
-                        mPresenter.onPostCreated(false);
+                        mPresenter.onDatabaseResponse(false);
                     }
                 },
                 error -> {
                     // error
                     Log.d("Error.Response", String.valueOf(error));
-                    mPresenter.onPostCreated(false);
+                    mPresenter.onDatabaseResponse(false);
                 }
         ) {
             @Override
             protected Map<String, String> getParams()
             {
-                Map<String, String>  params = new HashMap<>();
-                params.put("userid", userId); // Post test user
-                params.put("activitytype", Integer.toString(Config.postType));
-                params.put("posttitle", title);
-                params.put("posttext", text);
-                params.put("postimage", imageBitmap);
                 return params;
             }
 
@@ -76,6 +84,5 @@ public class CreatePostInteractor {
                 return header;
             }
         };
-        network.addToRequestQueue(postRequest);
     }
 }

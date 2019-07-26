@@ -26,6 +26,7 @@ import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.report.ReportDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
@@ -144,6 +145,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             editButton.setOnClickListener((View v) -> {
                 currContext = getContext();
                 Intent intent = new Intent(currContext, EditPostActivity.class);
+                intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
                 intent.putExtra(PROFILE_POST_TITLE_KEY, postTitle);
                 intent.putExtra(PROFILE_COMMENT_POST_TEXT_KEY, postText);
                 intent.putExtra(FEED_POST_IMAGE_PATH_KEY, feedPostImagePath);
