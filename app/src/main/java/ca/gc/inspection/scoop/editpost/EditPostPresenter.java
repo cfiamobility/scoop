@@ -35,6 +35,15 @@ public class EditPostPresenter extends CreatePostPresenter implements EditPostCo
         mInteractor.sendPostToDatabase(network, activityId, title, text, imageBitmap);
     }
 
+    @Override
+    public void getPostImage(NetworkUtils network, String activityId) {
+        mInteractor.getPostImage(network, activityId);
+    }
+
+    public void onDatabaseImageResponse(String image) {
+        mView.onDatabaseImageResponse(image);
+    }
+
     public void onDatabaseResponse(boolean success) {
         mView.onDatabaseResponse(success);
     }

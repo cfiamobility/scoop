@@ -2,6 +2,8 @@ package ca.gc.inspection.scoop.createpost;
 
 import android.support.annotation.NonNull;
 
+import org.json.JSONArray;
+
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;

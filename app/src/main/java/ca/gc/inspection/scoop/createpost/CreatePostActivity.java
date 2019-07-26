@@ -251,7 +251,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                 }
                 Bitmap newBitmap = CameraUtils.imageOrientationValidator(bitmap, path);
 
-                setBitmap(newBitmap);
+                setPostImageFromBitmap(newBitmap);
             } else {
                 Toast.makeText(this, "Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT).show();
             }
@@ -288,7 +288,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
     }
 
-    public void setBitmap(Bitmap newBitmap) {
+    public void setPostImageFromBitmap(Bitmap newBitmap) {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
 

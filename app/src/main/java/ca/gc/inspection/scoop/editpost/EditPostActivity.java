@@ -15,7 +15,6 @@ import java.util.Objects;
 
 import ca.gc.inspection.scoop.R;
 
-import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.createpost.CreatePostActivity;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
@@ -73,13 +72,24 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
         mActivityId = Objects.requireNonNull(bundle).getString(INTENT_ACTIVITY_ID_KEY);
         postTitle.setText(bundle.getString(PROFILE_POST_TITLE_KEY));
         postText.setText(bundle.getString(PROFILE_COMMENT_POST_TEXT_KEY));
-        String feedPostImagePath = bundle.getString(FEED_POST_IMAGE_PATH_KEY, "");
+        String feedPostImage = bundle.getString(FEED_POST_IMAGE_PATH_KEY, "");
 
-        if (feedPostImagePath != null && !feedPostImagePath.isEmpty()) {
-            mInitialBitmap = CameraUtils.stringToBitmap(feedPostImagePath);
-            setBitmap(mInitialBitmap);
+        if (feedPostImage != null && !feedPostImage.isEmpty()) {
+            mInitialBitmap = CameraUtils.stringToBitmap(feedPostImage);
+            setPostImageFromBitmap(mInitialBitmap);
             Log.d(TAG, "bitmap:"+mInitialBitmap);
         }
+        else {
+            waitingForResponse = true;
+            mPresenter.getPostImage(NetworkUtils.getInstance(this), mActivityId);
+        }
+    }
+
+    @Override
+    public void onDatabaseImageResponse(String image) {
+        waitingForResponse = false;
+        mInitialBitmap = CameraUtils.stringToBitmap(image);
+        setPostImageFromBitmap(mInitialBitmap);
     }
 
     public void sendPostToDatabase(String postTitle, String postText, Drawable postImage) {

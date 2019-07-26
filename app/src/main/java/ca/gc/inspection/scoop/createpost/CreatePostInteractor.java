@@ -6,6 +6,9 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +58,7 @@ public class CreatePostInteractor {
         return new StringRequest(Request.Method.POST, url,
                 response -> {
                     // response
-                    Log.d("Response", response);
+                    Log.d("Response", response.getClass().toString() + ": " + response);
                     if (response.contains(DATABASE_RESPONSE_SUCCESS)){
                         Log.i("Info", "We good");
                         mPresenter.onDatabaseResponse(true);

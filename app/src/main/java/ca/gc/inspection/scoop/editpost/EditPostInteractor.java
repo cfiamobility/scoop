@@ -49,4 +49,36 @@ public class EditPostInteractor extends CreatePostInteractor {
             network.addToRequestQueue(imagePostRequest);
         }
     }
+
+    public void getPostImage(NetworkUtils network, final String activityId) {
+        Log.d("EditPostInteractor", "activityId:"+activityId);
+        String url = Config.baseIP + "post/get-image/";
+
+        Map<String, String>  params = new HashMap<>();
+        params.put("activityid", activityId);
+
+        StringRequest postRequest = newImagePostRequest(url, params);
+        network.addToRequestQueue(postRequest);
+    }
+
+    public StringRequest newImagePostRequest(String url, Map<String, String> params) {
+        return new StringRequest(Request.Method.POST, url,
+                mPresenter::onDatabaseImageResponse,
+                error -> mPresenter.onDatabaseImageResponse(null)
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+    }
 }
