@@ -220,6 +220,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
             passwordLayout.setError(getString(R.string.passwords_do_not_match));
             isValid = false;
         }
+        else{
+            passwordLayout.setError("");
+        }
 
         if (isValid){
             return true;
