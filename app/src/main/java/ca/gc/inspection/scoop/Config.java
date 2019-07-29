@@ -23,6 +23,7 @@ public class Config {
     // intent data keys
     public static String INTENT_ACTIVITY_ID_KEY = "activityid";
     public static String INTENT_POSTER_ID_KEY = "posterid";
+    public static String INTENT_ACTIVITY_TYPE_KEY = "activitytype";
 
     // swipe refresh colours
     public static int SWIPE_REFRESH_COLOUR_1 = android.R.color.holo_green_dark;

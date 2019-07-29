@@ -14,6 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.R;
@@ -29,7 +30,8 @@ import static ca.gc.inspection.scoop.searchprofile.view.SearchProfileViewHolder.
 
 public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         PostCommentContract.View.ViewHolder,
-        UserProfileListener {
+        UserProfileListener,
+        PostOptionsDialogReceiver.EditCommentReceiver {
 
     PostCommentContract.Presenter.ViewHolderAPI mPresenter;
 
@@ -240,5 +242,10 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     @Override
     public ImageView getProfileImage() {
         return profileImage;
+    }
+
+    @Override
+    public void edit() {
+        showEditText();
     }
 }

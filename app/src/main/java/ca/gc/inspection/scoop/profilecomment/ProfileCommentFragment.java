@@ -28,7 +28,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class ProfileCommentFragment extends Fragment implements
         ProfileCommentContract.View,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;

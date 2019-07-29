@@ -2,7 +2,6 @@ package ca.gc.inspection.scoop.postoptionsdialog;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,23 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.editpost.EditPostActivity;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.report.ReportDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_TYPE_KEY;
 import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
-import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
 import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -50,7 +46,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     private Context currContext;
     private PostCommentViewHolder mViewHolder;
 
-    private PostOptionsDialogReceiver mPostOptionsDialogReceiver; // Interface implemented by DisplayPostFragment (used to refresh view after comment is deleted)
+    private PostOptionsDialogReceiver.DeleteCommentReceiver mDeleteCommentReceiver; // Interface implemented by DisplayPostFragment (used to refresh view after comment is deleted)
+    private PostOptionsDialogReceiver.EditCommentReceiver mEditCommentReceiver;
 
     private int postPosition;
 
@@ -70,10 +67,14 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
     /**
      * Invoked by DisplayPostPresenter to pass a reference of itself to this class
-     * @param postOptionsDialogReceiver
+     * @param deleteCommentReceiver
      */
-    public void setPostOptionsDialogReceiver(PostOptionsDialogReceiver postOptionsDialogReceiver) {
-        mPostOptionsDialogReceiver = postOptionsDialogReceiver;
+    public void setPostOptionsDialogReceiver(PostOptionsDialogReceiver.DeleteCommentReceiver deleteCommentReceiver) {
+        mDeleteCommentReceiver = deleteCommentReceiver;
+    }
+
+    public void setEditCommentReceiver(PostOptionsDialogReceiver.EditCommentReceiver editCommentReceiver) {
+        mEditCommentReceiver = editCommentReceiver;
     }
 
 
@@ -101,7 +102,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         String postTitle = getArguments().getString(PROFILE_POST_TITLE_KEY);
         String postText = getArguments().getString(PROFILE_COMMENT_POST_TEXT_KEY);
         String feedPostImagePath = getArguments().getString(FEED_POST_IMAGE_PATH_KEY, "");
-
+        int activityType = getArguments().getInt(INTENT_ACTIVITY_TYPE_KEY);
 
         setPresenter(new PostOptionsDialogPresenter(this));
 
@@ -142,15 +143,22 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         if (posterId != null && posterId.equals(Config.currentUser)) {
             editTR.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
-            editButton.setOnClickListener((View v) -> {
-                currContext = getContext();
-                Intent intent = new Intent(currContext, EditPostActivity.class);
-                intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
-                intent.putExtra(PROFILE_POST_TITLE_KEY, postTitle);
-                intent.putExtra(PROFILE_COMMENT_POST_TEXT_KEY, postText);
-                intent.putExtra(FEED_POST_IMAGE_PATH_KEY, feedPostImagePath);
-                startActivity(intent);
-            });
+            if (activityType == Config.postType) {
+                editButton.setOnClickListener((View v) -> {
+                    currContext = getContext();
+                    Intent intent = new Intent(currContext, EditPostActivity.class);
+                    intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
+                    intent.putExtra(PROFILE_POST_TITLE_KEY, postTitle);
+                    intent.putExtra(PROFILE_COMMENT_POST_TEXT_KEY, postText);
+                    intent.putExtra(FEED_POST_IMAGE_PATH_KEY, feedPostImagePath);
+                    startActivity(intent);
+                });
+            }
+            else {
+                editButton.setOnClickListener((View v) -> {
+                    mEditCommentReceiver.edit();
+                });
+            }
         }
         else {
             editTR.setVisibility(View.GONE);
@@ -314,7 +322,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
     /**
-     * Refreshes view which implements the PostOptionsDialogReceiver
+     * Refreshes view which implements the DeleteCommentReceiver
      */
     public void refresh(){
         boolean isPost;
@@ -324,6 +332,6 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         else{
             isPost = false;
         }
-        mPostOptionsDialogReceiver.onDeletePostComment(isPost);
+        mDeleteCommentReceiver.onDeletePostComment(isPost);
     }
 }
