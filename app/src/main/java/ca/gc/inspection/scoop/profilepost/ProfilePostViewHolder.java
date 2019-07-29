@@ -51,9 +51,4 @@ public class ProfilePostViewHolder extends ProfileLikesViewHolder
         super.setPostTitle(postTitle);
         return this;
     }
-
-    @Override
-    public void onEditPostComment(int i) {
-        mPresenter.editPost(i);
-    }
 }

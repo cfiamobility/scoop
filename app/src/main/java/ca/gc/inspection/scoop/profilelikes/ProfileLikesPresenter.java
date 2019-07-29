@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.profilelikes.ProfileLike;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
@@ -131,9 +132,9 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
     }
 
     @Override
-    public void editPost(int i) {
+    public EditPostData getEditPostData(int i) {
         ProfileLike profileLike = getItemByIndex(i);
-        mProfileLikesView.editPost(profileLike.getActivityId(),
+        return new EditPostData(profileLike.getActivityId(),
                 profileLike.getPostTitle(),
                 profileLike.getPostText(),
                 null);

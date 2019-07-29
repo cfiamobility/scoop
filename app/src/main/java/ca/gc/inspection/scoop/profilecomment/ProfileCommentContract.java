@@ -39,7 +39,6 @@ public interface ProfileCommentContract extends PostCommentContract {
 
         void onLoadedDataFromDatabase();
 
-
         interface Adapter extends PostCommentContract.View.Adapter {
         }
 

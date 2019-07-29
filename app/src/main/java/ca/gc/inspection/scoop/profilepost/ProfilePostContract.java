@@ -37,8 +37,6 @@ public interface ProfilePostContract extends ProfileLikesContract {
 
         void onLoadedDataFromDatabase();
 
-        void editPost(String activityId, String postTitle, String postText, String feedPostImagePath);
-
         interface Adapter extends ProfileLikesContract.View.Adapter {
         }
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.editpost.EditPostActivity;
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
@@ -133,21 +134,6 @@ public class ProfileLikesFragment extends Fragment implements
     @Override
     public void onLoadedDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void editPost(String activityId, String postTitle, String postText, String feedPostImagePath) {
-        startEditPostActivity(getContext(), activityId, postTitle, postText, feedPostImagePath);
-    }
-
-    public static void startEditPostActivity(
-            Context context, String activityId, String postTitle, String postText, String feedPostImagePath) {
-        Intent intent = new Intent(context, EditPostActivity.class);
-        intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
-        intent.putExtra(PROFILE_POST_TITLE_KEY, postTitle);
-        intent.putExtra(PROFILE_COMMENT_POST_TEXT_KEY, postText);
-        intent.putExtra(FEED_POST_IMAGE_PATH_KEY, feedPostImagePath);
-        context.startActivity(intent);
     }
 
     private void loadDataFromDatabase() {

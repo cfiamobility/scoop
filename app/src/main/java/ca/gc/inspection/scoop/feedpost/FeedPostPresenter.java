@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
@@ -142,9 +143,9 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     }
 
     @Override
-    public void editPost(int i) {
+    public EditPostData getEditPostData(int i) {
         FeedPost feedPost = getItemByIndex(i);
-        mFeedPostView.editPost(feedPost.getActivityId(),
+        return new EditPostData(feedPost.getActivityId(),
                 feedPost.getPostTitle(),
                 feedPost.getPostText(),
                 feedPost.getFeedPostImagePath());

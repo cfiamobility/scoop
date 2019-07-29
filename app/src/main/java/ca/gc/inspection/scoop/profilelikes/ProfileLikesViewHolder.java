@@ -4,10 +4,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 
 
 import ca.gc.inspection.scoop.R;
+
+import static ca.gc.inspection.scoop.editpost.EditPostActivity.startEditPostActivity;
 
 public class ProfileLikesViewHolder extends ProfileCommentViewHolder
         implements ProfileLikesContract.View.ViewHolder {
@@ -18,11 +21,13 @@ public class ProfileLikesViewHolder extends ProfileCommentViewHolder
     ProfileLikesContract.Presenter.ViewHolderAPI mPresenter;
 
     public TextView commentCount;
+    private View mView;
 //    public ImageView optionsMenu;
 
 
     public ProfileLikesViewHolder(View v, ProfileLikesContract.Presenter.ViewHolderAPI presenter) {
         super(v, presenter);
+        mView = v;
         commentCount = v.findViewById(R.id.comment_count);
 //        optionsMenu = v.findViewById(R.id.options_menu);
 
@@ -60,6 +65,7 @@ public class ProfileLikesViewHolder extends ProfileCommentViewHolder
 
     @Override
     public void onEditPostComment(int i) {
-        mPresenter.editPost(i);
+        EditPostData editPostData = mPresenter.getEditPostData(i);
+        startEditPostActivity(mView.getContext(), editPostData);
     }
 }

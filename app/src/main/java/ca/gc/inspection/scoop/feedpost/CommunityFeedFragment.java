@@ -18,7 +18,6 @@ import ca.gc.inspection.scoop.R;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_3;
-import static ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment.startEditPostActivity;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -152,8 +151,4 @@ public class CommunityFeedFragment extends Fragment implements
         loadDataFromDatabase();
     }
 
-    @Override
-    public void editPost(String activityId, String postTitle, String postText, String feedPostImagePath) {
-        startEditPostActivity(getContext(), activityId, postTitle, postText, feedPostImagePath);
-    }
 }

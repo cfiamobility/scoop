@@ -1,5 +1,7 @@
 package ca.gc.inspection.scoop.editpost;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -36,6 +38,21 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
     private EditPostContract.Presenter mPresenter;
     private Bitmap mInitialBitmap;
     private String mActivityId;
+
+    /**
+     * Used by post related action cases to start the edit post activity.
+     * @param context
+     * @param editPostData
+     */
+    public static void startEditPostActivity(
+            Context context, EditPostData editPostData) {
+        Intent intent = new Intent(context, EditPostActivity.class);
+        intent.putExtra(INTENT_ACTIVITY_ID_KEY, editPostData.getActivityId());
+        intent.putExtra(PROFILE_POST_TITLE_KEY, editPostData.getPostTitle());
+        intent.putExtra(PROFILE_COMMENT_POST_TEXT_KEY, editPostData.getPostText());
+        intent.putExtra(FEED_POST_IMAGE_PATH_KEY, editPostData.getPostImagePath());
+        context.startActivity(intent);
+    }
 
     public void returnToPrevious (View view) {
         finish();

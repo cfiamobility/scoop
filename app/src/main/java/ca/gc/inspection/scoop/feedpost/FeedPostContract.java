@@ -38,8 +38,6 @@ public interface FeedPostContract extends ProfilePostContract {
 
         void onLoadedDataFromDatabase();
 
-        void editPost(String activityId, String postTitle, String postText, String feedPostImagePath);
-
         interface Adapter extends ProfilePostContract.View.Adapter {
         }
 
