@@ -12,6 +12,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/activity_sign_up_et1_password_re-enter"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/activity_sign_up_etl_password"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="30dp"
+            android:hint="@string/retype_password"
+            android:theme="@style/TextInputLayoutAppearance">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/activity_sign_up_et_password-re-enter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPassword"
+                android:textSize="14sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
         <TextView
             android:id="@+id/activity_sign_up_txt_title"
             android:layout_width="wrap_content"
@@ -43,25 +67,27 @@
 
         <Button
             android:id="@+id/activity_sign_up_btn_sign_up"
-            android:layout_width="wrap_content"
+            android:layout_width="199dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/activity_sign_up_etl_password"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="31dp"
+            android:layout_below="@+id/activity_sign_up_et1_password_re-enter"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="107dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="104dp"
             android:background="@drawable/button_shape"
             android:fontFamily="@font/roboto"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
-            android:textSize="18sp"
             android:text="@string/sign_up"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/activity_sign_up_etl_first_name"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:theme="@style/TextInputLayoutAppearance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/activity_sign_up_txt_title"
@@ -70,15 +96,16 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="31dp"
             android:layout_marginEnd="30dp"
-            android:hint="@string/first_name">
+            android:hint="@string/first_name"
+            android:theme="@style/TextInputLayoutAppearance">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/activity_sign_up_et_first_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/roboto"
-                android:textSize="14sp"
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -103,8 +130,8 @@
                 android:layout_below="@+id/activity_sign_up_etl_last_name"
                 android:layout_alignStart="@+id/activity_sign_up_etl_last_name"
                 android:fontFamily="@font/roboto"
-                android:textSize="14sp"
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -127,8 +154,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/roboto"
-                android:textSize="14sp"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:textSize="14sp" />
 
         </android.support.design.widget.TextInputLayout>
 
