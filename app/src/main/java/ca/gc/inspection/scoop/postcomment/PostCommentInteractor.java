@@ -19,7 +19,9 @@ import java.util.Map;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
+import static ca.gc.inspection.scoop.createpost.CreatePostInteractor.newPostRequest;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_ACTIVITYID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_POSTERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
@@ -166,4 +168,17 @@ public class PostCommentInteractor {
         JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(commentRequest);
     }
+
+    public void updatePostComment(final String activityId, final String text) {
+        String url = Config.baseIP + "post/edit-post/text/";
+
+        Map<String, String>  params = new HashMap<>();
+        params.put("activityid", activityId);
+        params.put("activitytype", Integer.toString(Config.commentType));
+        params.put("posttext", text);
+
+        StringRequest postRequest = newPostRequest(mPresenter, url, params);
+        mNetwork.addToRequestQueue(postRequest);
+    }
+
 }

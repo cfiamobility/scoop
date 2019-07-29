@@ -21,7 +21,7 @@ public class Config {
     public static final String USERID_KEY = "userid";
 
     // intent data keys
-    public static String INTENT_ACTIVITY_ID_KEY = "activityid";
+    public static String INTENT_ACTIVITY_ID_KEY = "ACTIVITY_ID";
     public static String INTENT_POSTER_ID_KEY = "posterid";
     public static String INTENT_ACTIVITY_TYPE_KEY = "activitytype";
 

@@ -8,7 +8,7 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class CreatePostPresenter implements CreatePostContract.Presenter {
+public class CreatePostPresenter implements CreatePostContract.Presenter, PostRequestReceiver {
     /**
      * Implements the Presenter in the CreatePostContract interface to follow MVP architecture.
      *
@@ -40,6 +40,7 @@ public class CreatePostPresenter implements CreatePostContract.Presenter {
         mInteractor.sendPostToDatabase(network, userId, title, text, imageBitmap);
     }
 
+    @Override
     public void onDatabaseResponse(boolean success) {
         mView.onDatabaseResponse(success);
     }

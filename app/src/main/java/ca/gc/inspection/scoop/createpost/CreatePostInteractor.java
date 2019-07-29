@@ -50,27 +50,27 @@ public class CreatePostInteractor {
 
         Log.d("CreatePostInteractor", params.toString());
 
-        StringRequest postRequest = newPostRequest(url, params);
+        StringRequest postRequest = newPostRequest(mPresenter, url, params);
         network.addToRequestQueue(postRequest);
     }
 
-    public StringRequest newPostRequest(String url, Map<String, String> params) {
+    public static StringRequest newPostRequest(PostRequestReceiver postRequestReceiver, String url, Map<String, String> params) {
         return new StringRequest(Request.Method.POST, url,
                 response -> {
                     // response
                     Log.d("Response", response.getClass().toString() + ": " + response);
                     if (response.contains(DATABASE_RESPONSE_SUCCESS)){
                         Log.i("Info", "We good");
-                        mPresenter.onDatabaseResponse(true);
+                        postRequestReceiver.onDatabaseResponse(true);
                     }
                     else {
-                        mPresenter.onDatabaseResponse(false);
+                        postRequestReceiver.onDatabaseResponse(false);
                     }
                 },
                 error -> {
                     // error
                     Log.d("Error.Response", String.valueOf(error));
-                    mPresenter.onDatabaseResponse(false);
+                    postRequestReceiver.onDatabaseResponse(false);
                 }
         ) {
             @Override

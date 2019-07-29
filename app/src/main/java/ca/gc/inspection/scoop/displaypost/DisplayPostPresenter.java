@@ -7,11 +7,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.feedpost.FeedPost;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.feedpost.FeedPostPresenter;
 import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
+import ca.gc.inspection.scoop.postcomment.PostCommentPresenter;
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -147,5 +149,23 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         if (success)
             loadDataFromDatabase(activityId);
         mActivityView.onAddPostComment(success);
+    }
+
+    @Override
+    public EditPostData getEditPostData(int i) {
+        if (i == 0) {
+            FeedPost feedPost = (FeedPost) getItemByIndex(0);
+            return new EditPostData(feedPost.getActivityId(),
+                    feedPost.getPostTitle(),
+                    feedPost.getPostText(),
+                    feedPost.getFeedPostImagePath());
+        }
+        else {
+            PostComment postComment = getItemByIndex(i);
+            return new EditPostData(postComment.getActivityId(),
+                    null,
+                    postComment.getPostText(),
+                    null);
+        }
     }
 }

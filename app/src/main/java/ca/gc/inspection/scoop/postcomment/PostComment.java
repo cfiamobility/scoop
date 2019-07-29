@@ -151,6 +151,15 @@ public class PostComment {
         }
     }
 
+    public void setPostText(String text) {
+        try {
+            mComment.put(PROFILE_COMMENT_POST_TEXT_KEY, text);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getProfileImageString() {
         try {
             return mImage.getString(PROFILE_COMMENT_PROFILE_IMAGE_KEY);

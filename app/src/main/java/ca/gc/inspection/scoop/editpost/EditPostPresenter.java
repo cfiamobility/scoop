@@ -44,6 +44,7 @@ public class EditPostPresenter extends CreatePostPresenter implements EditPostCo
         mView.onDatabaseImageResponse(image);
     }
 
+    @Override
     public void onDatabaseResponse(boolean success) {
         mView.onDatabaseResponse(success);
     }

@@ -4,6 +4,7 @@ import org.json.JSONException;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.util.TextFormat;
 
 /**
@@ -84,6 +85,9 @@ public interface PostCommentContract {
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException;
+            void setPostTextByIndex(int i, String text);
+            EditPostData getEditPostData(int i);
+            void sendCommentToDatabase(EditPostData editPostData);
         }
 
     }

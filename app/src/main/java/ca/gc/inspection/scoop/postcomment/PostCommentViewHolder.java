@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.CameraUtils;
@@ -259,6 +260,15 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
 
     @Override
     public void onEditPostComment(int i) {
+        editButton.setOnClickListener(
+                view -> {
+                    String newText = editText.getText().toString();
+                    EditPostData editPostData = mPresenter.getEditPostData(i);
+                    editPostData.setPostText(newText);
+                    mPresenter.sendCommentToDatabase(editPostData);
+                    postText.setText(newText);
+                    hideEditText();
+                });
         editText.setText(postText.getText());
         showEditText();
     }

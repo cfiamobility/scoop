@@ -14,27 +14,31 @@ public class EditPostData {
         return mActivityId;
     }
 
-    public void setActivityId(String mActivityId) {
-        this.mActivityId = mActivityId;
+    public void setActivityId(String activityId) {
+        this.mActivityId = activityId;
     }
 
     public String getPostTitle() {
         return mPostTitle;
     }
 
-    public void setPostTitle(String mPostTitle) {
-        this.mPostTitle = mPostTitle;
+    public void setPostTitle(String postTitle) {
+        this.mPostTitle = postTitle;
     }
 
     public String getPostText() {
         return mPostText;
     }
 
+    public void setPostText(String postText) {
+        this.mPostText = postText;
+    }
+
     public String getPostImagePath() {
         return mPostImagePath;
     }
 
-    public void setPostImagePath(String mPostImagePath) {
-        this.mPostImagePath = mPostImagePath;
+    public void setPostImagePath(String postImagePath) {
+        this.mPostImagePath = postImagePath;
     }
 }

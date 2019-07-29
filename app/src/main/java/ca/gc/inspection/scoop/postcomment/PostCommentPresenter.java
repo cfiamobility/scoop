@@ -10,7 +10,11 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.createpost.PostRequestReceiver;
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.feedpost.FeedPost;
+import ca.gc.inspection.scoop.profilelikes.ProfileLike;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;
@@ -28,7 +32,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class PostCommentPresenter implements
         PostCommentContract.Presenter,
         PostCommentContract.Presenter.AdapterAPI,
-        PostCommentContract.Presenter.ViewHolderAPI {
+        PostCommentContract.Presenter.ViewHolderAPI, PostRequestReceiver {
 
     private static final String TAG = "PostCommentPresenter";
 
@@ -278,4 +282,25 @@ public class PostCommentPresenter implements
         return Objects.requireNonNull(getItemByIndex(i)).getPostText();
     }
 
+    @Override
+    public void setPostTextByIndex(int i, String text){
+        getItemByIndex(i).setPostText(text);
+    }
+
+    public void sendCommentToDatabase(EditPostData editPostData) {
+        mPostCommentInteractor.updatePostComment(editPostData.getActivityId(), editPostData.getPostText());
+    }
+
+    @Override
+    public void onDatabaseResponse(boolean success) {
+    }
+
+    @Override
+    public EditPostData getEditPostData(int i) {
+        PostComment postComment = getItemByIndex(i);
+        return new EditPostData(postComment.getActivityId(),
+                null,
+                postComment.getPostText(),
+                null);
+    }
 }
