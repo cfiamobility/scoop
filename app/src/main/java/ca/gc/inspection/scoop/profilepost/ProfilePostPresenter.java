@@ -130,5 +130,12 @@ public class ProfilePostPresenter extends ProfileLikesPresenter implements
     }
 
 
-
+    @Override
+    public void editPost(int i) {
+        ProfilePost profilePost = getItemByIndex(i);
+        mProfilePostView.editPost(profilePost.getActivityId(),
+                profilePost.getPostTitle(),
+                profilePost.getPostText(),
+                null);
+    }
 }

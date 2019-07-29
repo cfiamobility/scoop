@@ -1,5 +1,7 @@
 package ca.gc.inspection.scoop.profilelikes;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,13 +13,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ca.gc.inspection.scoop.editpost.EditPostActivity;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_3;
+import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
+import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
+import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -126,6 +133,21 @@ public class ProfileLikesFragment extends Fragment implements
     @Override
     public void onLoadedDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void editPost(String activityId, String postTitle, String postText, String feedPostImagePath) {
+        startEditPostActivity(getContext(), activityId, postTitle, postText, feedPostImagePath);
+    }
+
+    public static void startEditPostActivity(
+            Context context, String activityId, String postTitle, String postText, String feedPostImagePath) {
+        Intent intent = new Intent(context, EditPostActivity.class);
+        intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
+        intent.putExtra(PROFILE_POST_TITLE_KEY, postTitle);
+        intent.putExtra(PROFILE_COMMENT_POST_TEXT_KEY, postText);
+        intent.putExtra(FEED_POST_IMAGE_PATH_KEY, feedPostImagePath);
+        context.startActivity(intent);
     }
 
     private void loadDataFromDatabase() {

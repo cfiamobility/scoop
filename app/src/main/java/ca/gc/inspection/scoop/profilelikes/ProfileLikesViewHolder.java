@@ -1,21 +1,13 @@
 package ca.gc.inspection.scoop.profilelikes;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 
 
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 
 public class ProfileLikesViewHolder extends ProfileCommentViewHolder
         implements ProfileLikesContract.View.ViewHolder {
@@ -59,5 +51,15 @@ public class ProfileLikesViewHolder extends ProfileCommentViewHolder
     public ProfileLikesContract.View.ViewHolder setPostTitle(String postTitle) {
         super.setPostTitle(postTitle);
         return this;
+    }
+
+
+    @Override
+    protected void setupEditComment(View v) {
+    }
+
+    @Override
+    public void onEditPostComment(int i) {
+        mPresenter.editPost(i);
     }
 }

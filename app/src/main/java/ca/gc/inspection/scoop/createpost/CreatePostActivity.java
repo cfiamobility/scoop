@@ -54,18 +54,23 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     protected CoordinatorLayout mCoordinatorLayout;
 
     protected TextView counter;
-    protected final TextWatcher mTextEditorWatcher = new TextWatcher() {
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
+    protected TextWatcher mTextEditorWatcher;
 
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            //This sets a textview to the current length
-            counter.setText(String.valueOf(s.length()) + "/255");
-        }
+    public static TextWatcher getTextWatcher(TextView textView) {
+        return new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-        public void afterTextChanged(Editable s) {
-        }
-    };
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                textView.setText(String.valueOf(s.length()) + "/255");
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+    }
+
     protected boolean waitingForResponse = false;
 
     public void returnToPrevious (View view) {
@@ -100,13 +105,14 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
          */
         postTitle = findViewById(R.id.activity_create_post_et_title);
 
+        counter = findViewById(R.id.activity_create_post_txt_word_counter);
+        mTextEditorWatcher = getTextWatcher(counter);
+
         postText = findViewById(R.id.activity_create_post_et_post_content);
         postText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(TEXT_CHAR_LIMIT)});
         postText.addTextChangedListener(mTextEditorWatcher);
 
         postImage = findViewById(R.id.activity_create_post_img_post);
-
-        counter = findViewById(R.id.activity_create_post_txt_word_counter);
 
         mCoordinatorLayout = findViewById(R.id.activity_create_post_coordinator);
 

@@ -49,7 +49,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     private PostOptionsDialogReceiver.DeleteCommentReceiver mDeleteCommentReceiver; // Interface implemented by DisplayPostFragment (used to refresh view after comment is deleted)
     private PostOptionsDialogReceiver.EditCommentReceiver mEditCommentReceiver;
 
-    private int postPosition;
+    private int position;
 
     /**
      * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
@@ -97,7 +97,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         String activityId = getArguments().getString("ACTIVITY_ID");
         String posterId = getArguments().getString("POSTER_ID");
         Boolean savedStatus = getArguments().getBoolean("SAVED_STATUS");
-        postPosition = getArguments().getInt("POST_POSITION");
+        position = getArguments().getInt("POST_POSITION");
         String firstPosterId = getArguments().getString("FIRST_POSTER_ID");
         String postTitle = getArguments().getString(PROFILE_POST_TITLE_KEY);
         String postText = getArguments().getString(PROFILE_COMMENT_POST_TEXT_KEY);
@@ -143,22 +143,12 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         if (posterId != null && posterId.equals(Config.currentUser)) {
             editTR.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
-            if (activityType == Config.postType) {
-                editButton.setOnClickListener((View v) -> {
-                    currContext = getContext();
-                    Intent intent = new Intent(currContext, EditPostActivity.class);
-                    intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
-                    intent.putExtra(PROFILE_POST_TITLE_KEY, postTitle);
-                    intent.putExtra(PROFILE_COMMENT_POST_TEXT_KEY, postText);
-                    intent.putExtra(FEED_POST_IMAGE_PATH_KEY, feedPostImagePath);
-                    startActivity(intent);
-                });
-            }
-            else {
-                editButton.setOnClickListener((View v) -> {
-                    mEditCommentReceiver.edit();
-                });
-            }
+            editButton.setOnClickListener((View v) -> {
+                mEditCommentReceiver.onEditPostComment(position);
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().remove(this).commit();
+                }
+            });
         }
         else {
             editTR.setVisibility(View.GONE);
@@ -246,7 +236,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     Log.i("activity id:", activityId);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, false, postPosition);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, false, position);
                     dismiss();
                 }
             });
@@ -261,7 +251,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     Log.i("activity id:", activityId);
                     // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
                     currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, true, postPosition);
+                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, true, position);
                     dismiss();
                 }
             });
@@ -326,7 +316,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
      */
     public void refresh(){
         boolean isPost;
-        if (postPosition == 0){
+        if (position == 0){
             isPost = true;
         }
         else{

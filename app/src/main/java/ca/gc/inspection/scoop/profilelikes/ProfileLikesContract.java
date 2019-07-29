@@ -40,6 +40,7 @@ public interface ProfileLikesContract extends ProfileCommentContract {
 
         void onLoadedDataFromDatabase();
 
+        void editPost(String activityId, String postTitle, String postText, String feedPostImagePath);
 
         interface Adapter extends ProfileCommentContract.View.Adapter {
         }
@@ -58,6 +59,7 @@ public interface ProfileLikesContract extends ProfileCommentContract {
         }
 
         interface ViewHolderAPI extends ProfileCommentContract.Presenter.ViewHolderAPI {
+            void editPost(int i);
         }
     }
 }

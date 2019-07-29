@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 
+import static ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment.startEditPostActivity;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -101,6 +102,10 @@ public class OfficialFeedFragment extends Fragment implements
         onRefresh();
     }
 
+    @Override
+    public void editPost(String activityId, String postTitle, String postText, String feedPostImagePath) {
+        startEditPostActivity(getContext(), activityId, postTitle, postText, feedPostImagePath);
+    }
 
 //    /**
 //     * FROM ADAPTER

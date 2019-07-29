@@ -197,8 +197,8 @@ public abstract class PostCommentFragment extends Fragment implements
      * @param posterId posterid of the post that the viewholder contains
      */
     public static void setPostOptionsListener(
-            PostCommentViewHolder viewHolder, String activityId, String posterId,
-            PostOptionsDialogReceiver.DeleteCommentReceiver postOptionsDialogReceiver){
+            PostCommentViewHolder viewHolder, int i, String activityId, String posterId,
+            PostOptionsDialogReceiver.DeleteCommentReceiver deleteCommentReceiver){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,9 +213,12 @@ public abstract class PostCommentFragment extends Fragment implements
                 Log.i("poster id I am clicking: ", posterId);
                 bundle.putString("POSTER_ID", posterId);
                 bundle.putInt(INTENT_ACTIVITY_TYPE_KEY, Config.commentType);
+                bundle.putInt("POST_POSITION", i);
                 bottomSheetDialog.setArguments(bundle);
                 bottomSheetDialog.setViewHolder(viewHolder);
-                bottomSheetDialog.setPostOptionsDialogReceiver(postOptionsDialogReceiver);
+                bundle.putInt(INTENT_ACTIVITY_TYPE_KEY, Config.commentType);
+                bottomSheetDialog.setPostOptionsDialogReceiver(deleteCommentReceiver);
+                bottomSheetDialog.setEditCommentReceiver(viewHolder);
 
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
@@ -259,6 +262,7 @@ public abstract class PostCommentFragment extends Fragment implements
                 bundle.putString(FEED_POST_IMAGE_PATH_KEY, postImagePath);
                 bundle.putInt(INTENT_ACTIVITY_TYPE_KEY, Config.postType);
                 bottomSheetDialog.setPostOptionsDialogReceiver(deleteCommentReceiver);
+                bottomSheetDialog.setEditCommentReceiver(viewHolder);
 
 
                 if (updatedSave == null){

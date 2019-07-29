@@ -140,4 +140,13 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
     public String getFeedPostImagePathByIndex(int i) {
         return Objects.requireNonNull(getItemByIndex(i)).getFeedPostImagePath();
     }
+
+    @Override
+    public void editPost(int i) {
+        FeedPost feedPost = getItemByIndex(i);
+        mFeedPostView.editPost(feedPost.getActivityId(),
+                feedPost.getPostTitle(),
+                feedPost.getPostText(),
+                feedPost.getFeedPostImagePath());
+    }
 }

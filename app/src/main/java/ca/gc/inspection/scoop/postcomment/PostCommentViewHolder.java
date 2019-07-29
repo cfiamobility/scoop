@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.TextFormat;
 
+import static ca.gc.inspection.scoop.createpost.CreatePostActivity.getTextWatcher;
 import static ca.gc.inspection.scoop.searchprofile.view.SearchProfileViewHolder.getSpannableStringBuilderWithFormat;
 
 /**
@@ -36,9 +38,11 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     PostCommentContract.Presenter.ViewHolderAPI mPresenter;
 
     public TextView username, date, postText, likeCount, editText, counter;
-    public ImageView profileImage, upvote, downvote, editButton;
+    public ImageView profileImage, upvote, downvote, editButton, cancelButton;
     public ImageView optionsMenu;
     public Boolean savedStatus;
+
+    protected TextWatcher mTextEditorWatcher;
 
     public PostCommentViewHolder(View v, PostCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v);
@@ -52,17 +56,25 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         optionsMenu = v.findViewById(R.id.options_menu);
 
         // edit comment
-        editText = v.findViewById(R.id.edit_post_text);
-        editButton = v.findViewById(R.id.edit_post_text_btn);
-        counter = v.findViewById(R.id.edit_post_text_counter);
-
-        showEditText();
+        setupEditComment(v);
 
         mPresenter = presenter;
     }
 
+    protected void setupEditComment(View v) {
+        counter = v.findViewById(R.id.edit_post_text_counter);
+        mTextEditorWatcher= getTextWatcher(counter);
+        editText = v.findViewById(R.id.edit_post_text);
+        editText.addTextChangedListener(mTextEditorWatcher);
+        editButton = v.findViewById(R.id.edit_post_text_btn);
+        cancelButton = v.findViewById(R.id.edit_post_cancel_btn);
+        cancelButton.setOnClickListener(view -> hideEditText());
+        hideEditText();
+    }
+
     private void hideEditText() {
         if (editText != null && editButton != null && counter != null) {
+            postText.setVisibility(View.VISIBLE);
             editText.setVisibility(View.GONE);
             editButton.setVisibility(View.GONE);
             counter.setVisibility(View.GONE);
@@ -71,6 +83,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
 
     private void showEditText() {
         if (editText != null && editButton != null && counter != null) {
+            postText.setVisibility(View.GONE);
             editText.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
             counter.setVisibility(View.VISIBLE);
@@ -245,7 +258,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     }
 
     @Override
-    public void edit() {
+    public void onEditPostComment(int i) {
+        editText.setText(postText.getText());
         showEditText();
     }
 }
