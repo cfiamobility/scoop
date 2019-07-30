@@ -1,7 +1,6 @@
 package ca.gc.inspection.scoop.postoptionsdialog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,12 +16,10 @@ import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.editpost.EditPostActivity;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.report.ReportDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
-import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_TYPE_KEY;
 import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
@@ -48,6 +45,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
     private PostOptionsDialogReceiver.DeleteCommentReceiver mDeleteCommentReceiver; // Interface implemented by DisplayPostFragment (used to refresh view after comment is deleted)
     private PostOptionsDialogReceiver.EditCommentReceiver mEditCommentReceiver;
+    private PostOptionsDialogReceiver.EditPostReceiver mEditPostReceiver;
 
     private int position;
 
@@ -75,6 +73,10 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
     public void setEditCommentReceiver(PostOptionsDialogReceiver.EditCommentReceiver editCommentReceiver) {
         mEditCommentReceiver = editCommentReceiver;
+    }
+
+    public void setEditPostReceiver(PostOptionsDialogReceiver.EditPostReceiver editPostReceiver) {
+        mEditPostReceiver = editPostReceiver;
     }
 
 
@@ -144,7 +146,12 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             editTR.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
             editButton.setOnClickListener((View v) -> {
-                mEditCommentReceiver.onEditPostComment(position);
+                if (activityType == Config.postType) {
+                    mEditPostReceiver.onEditPost(position);
+                }
+                else {
+                    mEditCommentReceiver.onEditComment(activityId);
+                }
                 if (getFragmentManager() != null) {
                     getFragmentManager().beginTransaction().remove(this).commit();
                 }

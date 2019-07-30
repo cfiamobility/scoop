@@ -63,7 +63,7 @@ public interface PostCommentContract {
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
             ViewHolder setSavedStatus(Boolean savedStatus);
-            void onDatabaseResponse(boolean success, int i);
+            void onDatabaseResponse(boolean success, String activityId);
             void hideEditText();
         }
     }
@@ -87,8 +87,10 @@ public interface PostCommentContract {
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException;
-            EditPostData getEditPostData(int i);
-            void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, EditPostData editPostData);
+            EditCommentData getEditCommentData(String activityId);
+            void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, String activityId, String newText);
+
+            void cacheEditCommentData(EditCommentData editCommentData);
         }
 
     }

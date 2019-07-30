@@ -1,21 +1,14 @@
 package ca.gc.inspection.scoop.editpost;
 
-public class EditPostData {
-    private String mActivityId, mPostTitle, mPostText, mPostImagePath;
+import ca.gc.inspection.scoop.postcomment.EditCommentData;
+
+public class EditPostData extends EditCommentData {
+    private String mPostTitle, mPostImagePath;
 
     public EditPostData(String activityId, String postTitle, String postText, String postImagePath) {
-        mActivityId = activityId;
+        super(activityId, postText);
         mPostTitle = postTitle;
-        mPostText = postText;
         mPostImagePath = postImagePath;
-    }
-
-    public String getActivityId() {
-        return mActivityId;
-    }
-
-    public void setActivityId(String activityId) {
-        this.mActivityId = activityId;
     }
 
     public String getPostTitle() {
@@ -24,14 +17,6 @@ public class EditPostData {
 
     public void setPostTitle(String postTitle) {
         this.mPostTitle = postTitle;
-    }
-
-    public String getPostText() {
-        return mPostText;
-    }
-
-    public void setPostText(String postText) {
-        this.mPostText = postText;
     }
 
     public String getPostImagePath() {

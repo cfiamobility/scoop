@@ -262,7 +262,7 @@ public abstract class PostCommentFragment extends Fragment implements
                 bundle.putString(FEED_POST_IMAGE_PATH_KEY, postImagePath);
                 bundle.putInt(INTENT_ACTIVITY_TYPE_KEY, Config.postType);
                 bottomSheetDialog.setPostOptionsDialogReceiver(deleteCommentReceiver);
-                bottomSheetDialog.setEditCommentReceiver(viewHolder);
+                bottomSheetDialog.setEditPostReceiver((PostOptionsDialogReceiver.EditPostReceiver) viewHolder);
 
 
                 if (updatedSave == null){

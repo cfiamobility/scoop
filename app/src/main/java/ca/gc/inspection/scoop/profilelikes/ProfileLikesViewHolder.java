@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.editpost.EditPostData;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 
 
@@ -12,8 +13,9 @@ import ca.gc.inspection.scoop.R;
 
 import static ca.gc.inspection.scoop.editpost.EditPostActivity.startEditPostActivity;
 
-public class ProfileLikesViewHolder extends ProfileCommentViewHolder
-        implements ProfileLikesContract.View.ViewHolder {
+public class ProfileLikesViewHolder extends ProfileCommentViewHolder implements
+        ProfileLikesContract.View.ViewHolder,
+        PostOptionsDialogReceiver.EditPostReceiver {
     /**
      * ViewHolder for viewing a profile post.
      */
@@ -64,7 +66,7 @@ public class ProfileLikesViewHolder extends ProfileCommentViewHolder
     }
 
     @Override
-    public void onEditPostComment(int i) {
+    public void onEditPost(int i) {
         EditPostData editPostData = mPresenter.getEditPostData(i);
         startEditPostActivity(mView.getContext(), editPostData);
     }

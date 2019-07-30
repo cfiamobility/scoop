@@ -3,13 +3,13 @@ package ca.gc.inspection.scoop.postcomment;
 
 import ca.gc.inspection.scoop.createpost.InteractorBundle;
 import ca.gc.inspection.scoop.editpost.EditPostData;
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
-public class EditPostCommentBundle extends InteractorBundle {
+public class EditCommentBundle extends InteractorBundle {
     private PostCommentContract.View.ViewHolder mViewHolderInterface;
-    private int mPosition;
-    private EditPostData mEditPostData;
+    private EditCommentData mEditCommentData;
 
-    EditPostCommentBundle() {
+    EditCommentBundle() {
         super();
     }
 
@@ -21,19 +21,11 @@ public class EditPostCommentBundle extends InteractorBundle {
         return mViewHolderInterface;
     }
 
-    public void setPosition(int position) {
-        mPosition = position;
+    public void setEditCommentData(EditCommentData editPostData) {
+        mEditCommentData = editPostData;
     }
 
-    public int getPosition() {
-        return mPosition;
-    }
-
-    public void setEditPostData(EditPostData editPostData) {
-        mEditPostData = editPostData;
-    }
-
-    public EditPostData getEditPostData() {
-        return mEditPostData;
+    public EditCommentData getEditCommentData() {
+        return mEditCommentData;
     }
 }
