@@ -82,9 +82,9 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
          *
          */
         TextView heading = findViewById(R.id.activity_create_post_txt_create_post_title);
-        heading.setText("Edit Post");
+        heading.setText(getString(R.string.edit_post_title));
         Button send = findViewById(R.id.activity_create_post_btn_post);
-        send.setText("Save");
+        send.setText(getString(R.string.save));
 
         mActivityId = Objects.requireNonNull(bundle).getString(INTENT_ACTIVITY_ID_KEY);
         postTitle.setText(bundle.getString(PROFILE_POST_TITLE_KEY));
@@ -115,7 +115,7 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
         } else if (postText.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_text_empty_error, Snackbar.LENGTH_SHORT).show();
         } else if (!waitingForResponse) {
-            Snackbar.make(mCoordinatorLayout, R.string.create_post_in_progress, Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(mCoordinatorLayout, R.string.edit_post_in_progress, Snackbar.LENGTH_INDEFINITE).show();
             waitingForResponse = true;
             String imageBitmap = "";
             if (postImage != null) {
@@ -136,8 +136,8 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
             finish();
         }
         else {
-            Snackbar mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.create_post_failed, Snackbar.LENGTH_INDEFINITE);
-            mSnackbar.setAction(R.string.create_post_retry, new View.OnClickListener() {
+            Snackbar mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_post_failed, Snackbar.LENGTH_INDEFINITE);
+            mSnackbar.setAction(R.string.retry_action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     sendPostToDatabase(

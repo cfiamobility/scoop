@@ -309,7 +309,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
         else {
             Snackbar mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.create_post_failed, Snackbar.LENGTH_INDEFINITE);
-            mSnackbar.setAction(R.string.create_post_retry, new View.OnClickListener() {
+            mSnackbar.setAction(R.string.retry_action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     sendPostToDatabase(

@@ -63,7 +63,8 @@ public interface PostCommentContract {
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
             ViewHolder setSavedStatus(Boolean savedStatus);
-            void onDatabaseResponse(boolean success);
+            void onDatabaseResponse(boolean success, int i);
+            void hideEditText();
         }
     }
 

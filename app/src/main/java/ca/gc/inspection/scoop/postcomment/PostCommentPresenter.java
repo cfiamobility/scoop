@@ -293,16 +293,16 @@ public class PostCommentPresenter implements
     public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
         EditPostCommentBundle editPostCommentBundle = (EditPostCommentBundle) interactorBundle;
         int i = editPostCommentBundle.getPosition();
+        String newText = editPostCommentBundle.getEditPostData().getPostText();
         PostCommentContract.View.ViewHolder viewHolderInterface = editPostCommentBundle.getViewHolder();
 
         if (success) {
-            getItemByIndex(i).setPostText(editPostCommentBundle.getEditPostData().getPostText());
+            getItemByIndex(i).setPostText(newText);
             Log.d(TAG, "post text:" + getItemByIndex(i).getPostText());
+            viewHolderInterface.setPostText(newText);
+            viewHolderInterface.hideEditText();
         }
-        else {
-            viewHolderInterface.setPostText(getPostTextByIndex(i));
-        }
-        viewHolderInterface.onDatabaseResponse(success);
+        viewHolderInterface.onDatabaseResponse(success, i);
     }
 
     @Override

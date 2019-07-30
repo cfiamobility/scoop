@@ -3,6 +3,8 @@ package ca.gc.inspection.scoop.postcomment;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -45,6 +47,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     protected boolean waitingForResponse = false;
 
     protected TextWatcher mTextEditorWatcher;
+    private CoordinatorLayout mCoordinatorLayout;
+    private Snackbar mSnackbar;
 
     public PostCommentViewHolder(View v, PostCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v);
@@ -64,6 +68,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     }
 
     protected void setupEditComment(View v) {
+        mCoordinatorLayout = v.findViewById(R.id.edit_post_coordinator);
         counter = v.findViewById(R.id.edit_post_text_counter);
         mTextEditorWatcher= getTextWatcher(counter);
         editText = v.findViewById(R.id.edit_post_text);
@@ -74,7 +79,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         hideEditText();
     }
 
-    private void hideEditText() {
+    @Override
+    public void hideEditText() {
         if (editText != null && editButton != null && counter != null) {
             postText.setVisibility(View.VISIBLE);
             editText.setVisibility(View.GONE);
@@ -262,23 +268,40 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     @Override
     public void onEditPostComment(int i) {
         if (!waitingForResponse) {
-            waitingForResponse = true;
             editButton.setOnClickListener(
-                    view -> {
-                        String newText = editText.getText().toString();
-                        EditPostData editPostData = mPresenter.getEditPostData(i);
-                        editPostData.setPostText(newText);
-                        mPresenter.sendCommentToDatabase(this, i, editPostData);
-                        postText.setText(newText);
-                        hideEditText();
-                    });
+                    view -> sendCommentToDatabase(i));
             editText.setText(postText.getText());
             showEditText();
         }
     }
 
+    private void sendCommentToDatabase(int i) {
+        if (!waitingForResponse) {
+            waitingForResponse = true;
+            mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_in_progress, Snackbar.LENGTH_INDEFINITE);
+            mSnackbar.show();
+            String newText = editText.getText().toString();
+            EditPostData editPostData = mPresenter.getEditPostData(i);
+            editPostData.setPostText(newText);
+            mPresenter.sendCommentToDatabase(this, i, editPostData);
+        }
+    }
+
     @Override
-    public void onDatabaseResponse(boolean success) {
+    public void onDatabaseResponse(boolean success, int i) {
         waitingForResponse = false;
+        if (success) {
+            mSnackbar.dismiss();
+        }
+        else {
+            mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_failed, Snackbar.LENGTH_INDEFINITE);
+            mSnackbar.setAction(R.string.retry_action, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendCommentToDatabase(i);
+                }
+            });
+            mSnackbar.show();
+        }
     }
 }

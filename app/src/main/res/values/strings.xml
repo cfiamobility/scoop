@@ -9,14 +9,26 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Create Post -->
     <string name="create_a_post">Create A Post</string>
     <string name="create_post_success">Post created!</string>
     <string name="create_post_failed">Failed to create post</string>
-    <string name="create_post_retry">Retry</string>
     <string name="create_post_in_progress">Creating post&#8230;</string>
     <string name="create_post_title_empty_error">Add a title to continue</string>
     <string name="create_post_text_empty_error">Add a message to continue</string>
+
+    <!-- Edit Post -->
+    <string name="edit_post_title">Edit Post</string>
+    <string name="edit_post_success">Post edited!</string>
+    <string name="edit_post_failed">Failed to edit post</string>
+    <string name="edit_post_in_progress">Editing post&#8230;</string>
+
     <string name="post">Post</string>
+    <string name="retry_action">Retry</string>
+
+    <!-- Edit Comment -->
+    <string name="edit_comment_in_progress">Editing comment&#8230;</string>
+    <string name="edit_comment_failed">Failed to edit comment</string>
 
     <!-- Navigation Drawer -->
     <string name="saved">Saved Posts</string>
