@@ -55,9 +55,4 @@ public class ProfileCommentViewHolder extends PostCommentViewHolder implements
         this.postTitle.setText(spannableStringBuilder);
         return this;
     }
-
-    @Override
-    public void onEditPostComment(int i) {
-        super.onEditPostComment(i);
-    }
 }

@@ -27,8 +27,9 @@
     <string name="retry_action">Retry</string>
 
     <!-- Edit Comment -->
-    <string name="edit_comment_in_progress">Editing comment&#8230;</string>
+    <string name="edit_comment_success">Comment edited!</string>
     <string name="edit_comment_failed">Failed to edit comment</string>
+    <string name="edit_comment_in_progress">Editing comment&#8230;</string>
 
     <!-- Navigation Drawer -->
     <string name="saved">Saved Posts</string>
