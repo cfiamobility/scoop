@@ -35,7 +35,7 @@ public class EditPostInteractor extends CreatePostInteractor {
         params.put("posttitle", title);
         params.put("posttext", text);
 
-        StringRequest postRequest = newPostRequest(mPresenter, urlText, params);
+        StringRequest postRequest = newPostRequest(mPresenter, null, urlText, params);
         network.addToRequestQueue(postRequest);
 
         if (imageBitmap != null) {
@@ -45,7 +45,7 @@ public class EditPostInteractor extends CreatePostInteractor {
             imageParams.put("userid", Config.currentUser);
             imageParams.put("postimage", imageBitmap);
 
-            StringRequest imagePostRequest = newPostRequest(mPresenter, urlImage, imageParams);
+            StringRequest imagePostRequest = newPostRequest(mPresenter, null, urlImage, imageParams);
             network.addToRequestQueue(imagePostRequest);
         }
     }

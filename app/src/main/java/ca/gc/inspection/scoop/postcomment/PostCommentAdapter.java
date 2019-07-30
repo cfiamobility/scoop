@@ -11,6 +11,8 @@ import ca.gc.inspection.scoop.R;
 public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHolder>
         implements PostCommentContract.View.Adapter {
 
+    public static final String ADAPTER_POSITION_KEY = "position";
+
     /**
      * Adapter used to create ViewHolders and bind new data to them for a RecyclerView.
      * Considered to be part of the View.

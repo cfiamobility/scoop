@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop.postcomment;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -10,16 +9,15 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.createpost.InteractorBundle;
 import ca.gc.inspection.scoop.createpost.PostRequestReceiver;
 import ca.gc.inspection.scoop.editpost.EditPostData;
-import ca.gc.inspection.scoop.feedpost.FeedPost;
-import ca.gc.inspection.scoop.profilelikes.ProfileLike;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;
 import static ca.gc.inspection.scoop.postcomment.LikeState.NEUTRAL;
 import static ca.gc.inspection.scoop.postcomment.LikeState.UPVOTE;
+import static ca.gc.inspection.scoop.postcomment.PostCommentAdapter.ADAPTER_POSITION_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
@@ -282,17 +280,29 @@ public class PostCommentPresenter implements
         return Objects.requireNonNull(getItemByIndex(i)).getPostText();
     }
 
-    @Override
-    public void setPostTextByIndex(int i, String text){
-        getItemByIndex(i).setPostText(text);
+    public void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, EditPostData editPostData) {
+        EditPostCommentBundle editPostCommentBundle = new EditPostCommentBundle();
+        editPostCommentBundle.setViewHolder(viewHolderInterface);
+        editPostCommentBundle.setPosition(i);
+        editPostCommentBundle.setEditPostData(editPostData);
+
+        mPostCommentInteractor.updatePostComment(editPostCommentBundle, editPostData.getActivityId(), editPostData.getPostText());
     }
 
-    public void sendCommentToDatabase(EditPostData editPostData) {
-        mPostCommentInteractor.updatePostComment(editPostData.getActivityId(), editPostData.getPostText());
-    }
-
     @Override
-    public void onDatabaseResponse(boolean success) {
+    public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
+        EditPostCommentBundle editPostCommentBundle = (EditPostCommentBundle) interactorBundle;
+        int i = editPostCommentBundle.getPosition();
+        PostCommentContract.View.ViewHolder viewHolderInterface = editPostCommentBundle.getViewHolder();
+
+        if (success) {
+            getItemByIndex(i).setPostText(editPostCommentBundle.getEditPostData().getPostText());
+            Log.d(TAG, "post text:" + getItemByIndex(i).getPostText());
+        }
+        else {
+            viewHolderInterface.setPostText(getPostTextByIndex(i));
+        }
+        viewHolderInterface.onDatabaseResponse(success);
     }
 
     @Override

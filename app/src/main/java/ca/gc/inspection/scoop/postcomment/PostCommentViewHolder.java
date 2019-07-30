@@ -42,6 +42,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     public ImageView profileImage, upvote, downvote, editButton, cancelButton;
     public ImageView optionsMenu;
     public Boolean savedStatus;
+    protected boolean waitingForResponse = false;
 
     protected TextWatcher mTextEditorWatcher;
 
@@ -260,16 +261,24 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
 
     @Override
     public void onEditPostComment(int i) {
-        editButton.setOnClickListener(
-                view -> {
-                    String newText = editText.getText().toString();
-                    EditPostData editPostData = mPresenter.getEditPostData(i);
-                    editPostData.setPostText(newText);
-                    mPresenter.sendCommentToDatabase(editPostData);
-                    postText.setText(newText);
-                    hideEditText();
-                });
-        editText.setText(postText.getText());
-        showEditText();
+        if (!waitingForResponse) {
+            waitingForResponse = true;
+            editButton.setOnClickListener(
+                    view -> {
+                        String newText = editText.getText().toString();
+                        EditPostData editPostData = mPresenter.getEditPostData(i);
+                        editPostData.setPostText(newText);
+                        mPresenter.sendCommentToDatabase(this, i, editPostData);
+                        postText.setText(newText);
+                        hideEditText();
+                    });
+            editText.setText(postText.getText());
+            showEditText();
+        }
+    }
+
+    @Override
+    public void onDatabaseResponse(boolean success) {
+        waitingForResponse = false;
     }
 }

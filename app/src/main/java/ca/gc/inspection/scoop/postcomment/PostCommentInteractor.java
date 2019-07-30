@@ -9,14 +9,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.createpost.InteractorBundle;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
@@ -25,6 +28,7 @@ import static ca.gc.inspection.scoop.createpost.CreatePostInteractor.newPostRequ
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_ACTIVITYID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_POSTERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
+import static ca.gc.inspection.scoop.postcomment.PostCommentAdapter.ADAPTER_POSITION_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class PostCommentInteractor {
@@ -169,7 +173,7 @@ public class PostCommentInteractor {
         mNetwork.addToRequestQueue(commentRequest);
     }
 
-    public void updatePostComment(final String activityId, final String text) {
+    public void updatePostComment(InteractorBundle interactorBundle, final String activityId, final String text) {
         String url = Config.baseIP + "post/edit-post/text/";
 
         Map<String, String>  params = new HashMap<>();
@@ -177,7 +181,7 @@ public class PostCommentInteractor {
         params.put("activitytype", Integer.toString(Config.commentType));
         params.put("posttext", text);
 
-        StringRequest postRequest = newPostRequest(mPresenter, url, params);
+        StringRequest postRequest = newPostRequest(mPresenter, interactorBundle, url, params);
         mNetwork.addToRequestQueue(postRequest);
     }
 

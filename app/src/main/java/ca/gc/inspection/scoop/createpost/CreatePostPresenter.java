@@ -2,7 +2,7 @@ package ca.gc.inspection.scoop.createpost;
 
 import android.support.annotation.NonNull;
 
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -41,7 +41,7 @@ public class CreatePostPresenter implements CreatePostContract.Presenter, PostRe
     }
 
     @Override
-    public void onDatabaseResponse(boolean success) {
+    public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
         mView.onDatabaseResponse(success);
     }
 }

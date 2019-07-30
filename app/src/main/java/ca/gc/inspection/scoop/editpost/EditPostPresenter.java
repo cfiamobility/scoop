@@ -2,7 +2,10 @@ package ca.gc.inspection.scoop.editpost;
 
 import android.support.annotation.NonNull;
 
+import org.json.JSONObject;
+
 import ca.gc.inspection.scoop.createpost.CreatePostPresenter;
+import ca.gc.inspection.scoop.createpost.InteractorBundle;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
@@ -45,7 +48,7 @@ public class EditPostPresenter extends CreatePostPresenter implements EditPostCo
     }
 
     @Override
-    public void onDatabaseResponse(boolean success) {
+    public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
         mView.onDatabaseResponse(success);
     }
 }

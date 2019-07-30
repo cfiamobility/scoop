@@ -2,6 +2,8 @@ package ca.gc.inspection.scoop.editpost;
 
 import android.support.annotation.NonNull;
 
+import org.json.JSONObject;
+
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.createpost.CreatePostContract;
@@ -14,14 +16,10 @@ public interface EditPostContract extends CreatePostContract {
 
     interface View extends CreatePostContract.View {
 
-        void onDatabaseResponse(boolean success);
-
         void onDatabaseImageResponse(String image);
     }
 
     interface Presenter extends CreatePostContract.Presenter {
-
-        void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap);
 
         void getPostImage(NetworkUtils network, String activityId);
     }

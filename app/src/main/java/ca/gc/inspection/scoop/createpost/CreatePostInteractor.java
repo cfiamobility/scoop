@@ -6,7 +6,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -50,27 +49,28 @@ public class CreatePostInteractor {
 
         Log.d("CreatePostInteractor", params.toString());
 
-        StringRequest postRequest = newPostRequest(mPresenter, url, params);
+        StringRequest postRequest = newPostRequest(mPresenter, null, url, params);
         network.addToRequestQueue(postRequest);
     }
 
-    public static StringRequest newPostRequest(PostRequestReceiver postRequestReceiver, String url, Map<String, String> params) {
+    public static StringRequest newPostRequest(PostRequestReceiver postRequestReceiver, InteractorBundle interactorBundle,
+                                               String url, Map<String, String> params) {
         return new StringRequest(Request.Method.POST, url,
                 response -> {
                     // response
                     Log.d("Response", response.getClass().toString() + ": " + response);
                     if (response.contains(DATABASE_RESPONSE_SUCCESS)){
                         Log.i("Info", "We good");
-                        postRequestReceiver.onDatabaseResponse(true);
+                        postRequestReceiver.onDatabaseResponse(true, interactorBundle);
                     }
                     else {
-                        postRequestReceiver.onDatabaseResponse(false);
+                        postRequestReceiver.onDatabaseResponse(false, interactorBundle);
                     }
                 },
                 error -> {
                     // error
                     Log.d("Error.Response", String.valueOf(error));
-                    postRequestReceiver.onDatabaseResponse(false);
+                    postRequestReceiver.onDatabaseResponse(false, interactorBundle);
                 }
         ) {
             @Override
