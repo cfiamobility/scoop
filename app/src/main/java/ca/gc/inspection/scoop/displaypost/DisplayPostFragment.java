@@ -121,6 +121,8 @@ public class DisplayPostFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
+        if (mAdapter != null)
+            mAdapter.refreshAdapter();
         if (!mSwipeRefreshLayout.isRefreshing()) {
             loadDataFromDatabase();
         }

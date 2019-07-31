@@ -79,7 +79,6 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         editText = v.findViewById(R.id.edit_post_text);
         editButton = v.findViewById(R.id.edit_post_text_btn);
         cancelButton = v.findViewById(R.id.edit_post_cancel_btn);
-        cancelButton.setOnClickListener(view -> hideEditText());
         hideEditText();
     }
 
@@ -91,7 +90,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //This sets a textview to the current length
                 counter.setText(String.valueOf(s.length()) + "/255");
-                mPresenter.cacheEditCommentData(new EditCommentData(activityId, s.toString()));
+                mPresenter.cacheEditCommentData(activityId, s.toString());
             }
 
             public void afterTextChanged(Editable s) {
@@ -109,13 +108,23 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         }
     }
 
-    private void showEditText() {
+    public void showEditText() {
         if (editText != null && editButton != null && counter != null) {
             postText.setVisibility(View.GONE);
             editText.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
             counter.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     *
+     * @param postText
+     */
+    @Override
+    public PostCommentContract.View.ViewHolder setEditPostText(String postText) {
+        this.editText.setText(postText);
+        return this;
     }
 
     /**
@@ -284,19 +293,23 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     }
 
     @Override
-    public void onEditComment(String activityId) {
+    public void onEditComment(int i, String activityId) {
         if (!waitingForResponse) {
             mTextEditorWatcher = getEditCommentTextWatcher(activityId);
             editText.addTextChangedListener(mTextEditorWatcher);
 
             editButton.setOnClickListener(
-                    view -> sendCommentToDatabase(activityId));
+                    view -> sendCommentToDatabase(i, activityId));
             editText.setText(postText.getText());
+            cancelButton.setOnClickListener(view -> {
+                hideEditText();
+                mPresenter.onCancelEditComment(activityId);
+            });
             showEditText();
         }
     }
 
-    private void sendCommentToDatabase(String activityId) {
+    private void sendCommentToDatabase(int i, String activityId) {
         if (!waitingForResponse) {
             waitingForResponse = true;
             ActivityUtils.hideKeyboardFrom(mView.getContext(), mView);
@@ -305,14 +318,15 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
             mSnackbar.show();
 
             String newText = editText.getText().toString();
-            mPresenter.sendCommentToDatabase(this, activityId, newText);
+            mPresenter.sendCommentToDatabase(this, i, activityId, newText);
         }
     }
 
     @Override
-    public void onDatabaseResponse(boolean success, String activityId) {
+    public void onDatabaseResponse(boolean success, int i, String activityId) {
         waitingForResponse = false;
         if (success) {
+            hideEditText();
             mSnackbar.setText(R.string.edit_comment_success);
             mSnackbar.setDuration(SNACKBAR_LENGTH_VERY_SHORT);
             mSnackbar.show();
@@ -322,7 +336,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
             mSnackbar.setAction(R.string.retry_action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendCommentToDatabase(activityId);
+                    sendCommentToDatabase(i, activityId);
                 }
             });
             mSnackbar.show();

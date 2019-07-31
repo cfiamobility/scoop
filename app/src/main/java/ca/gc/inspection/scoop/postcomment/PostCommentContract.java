@@ -5,6 +5,7 @@ import org.json.JSONException;
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.editpost.EditPostData;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.TextFormat;
 
 /**
@@ -53,7 +54,7 @@ public interface PostCommentContract {
             void refreshAdapter();
         }
 
-        interface ViewHolder {
+        interface ViewHolder extends PostOptionsDialogReceiver.EditCommentReceiver {
             ViewHolder setPostText(String postText);
             ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat);
             ViewHolder setUserName(String userName);
@@ -63,7 +64,9 @@ public interface PostCommentContract {
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
             ViewHolder setSavedStatus(Boolean savedStatus);
-            void onDatabaseResponse(boolean success, String activityId);
+            ViewHolder setEditPostText(String postText);
+            void onEditComment(int i, String activityId);
+            void onDatabaseResponse(boolean success, int i, String activityId);
             void hideEditText();
         }
     }
@@ -88,9 +91,10 @@ public interface PostCommentContract {
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException;
             EditCommentData getEditCommentData(String activityId);
-            void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, String activityId, String newText);
+            void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String activityId, String newText);
 
-            void cacheEditCommentData(EditCommentData editCommentData);
+            void cacheEditCommentData(String activityId, String postText);
+            void onCancelEditComment(String activityId);
         }
 
     }

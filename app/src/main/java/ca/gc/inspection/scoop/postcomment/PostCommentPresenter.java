@@ -11,7 +11,6 @@ import java.util.Objects;
 
 import ca.gc.inspection.scoop.createpost.InteractorBundle;
 import ca.gc.inspection.scoop.createpost.PostRequestReceiver;
-import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;
@@ -235,17 +234,36 @@ public class PostCommentPresenter implements
     public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         PostComment postComment = getItemByIndex(i);
         bindPostCommentDataToViewHolder(viewHolderInterface, postComment);
+        bindEditCommentDataToViewHolder(viewHolderInterface, postComment, mEditCommentCache);
     }
 
     public static void bindPostCommentDataToViewHolder(
             PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment) {
         if (postComment != null) {
+            Log.d(TAG, "activityId: " + postComment.getActivityId() + ", posttext: " + postComment.getPostText());
             viewHolderInterface.setDate(postComment.getDate())
                     .setLikeCount(postComment.getLikeCount())
                     .setPostText(postComment.getPostText())
                     .setUserImageFromString(postComment.getProfileImageString())
                     .setUserName(postComment.getValidFullName())
                     .setLikeState(postComment.getLikeState());
+        }
+    }
+
+    public static void bindEditCommentDataToViewHolder(
+            PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment, EditCommentCache editCommentCache) {
+        if (postComment != null && editCommentCache != null) {
+            EditCommentData editCommentData = editCommentCache.getEditCommentData(postComment.getActivityId());
+            if (editCommentData != null) {
+                String postText = editCommentData.getPostText();
+                Log.d(TAG, "editCommentCache: " + editCommentCache.toString());
+                Log.d(TAG, "activityIds: " + editCommentData.getActivityId() + ", " + postComment.getActivityId());
+                viewHolderInterface.onEditComment(editCommentData.getPosition(), postComment.getActivityId());
+                viewHolderInterface.setEditPostText(postText);
+            }
+            else {
+                viewHolderInterface.hideEditText();
+            }
         }
     }
 
@@ -281,9 +299,10 @@ public class PostCommentPresenter implements
     }
 
     @Override
-    public void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, String activityId, String newText) {
+    public void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String activityId, String newText) {
         EditCommentData editCommentData = getEditCommentData(activityId);
         editCommentData.setPostText(newText);
+        editCommentData.setPosition(i);
 
         EditCommentBundle editCommentBundle = new EditCommentBundle();
         editCommentBundle.setViewHolder(viewHolderInterface);
@@ -293,30 +312,39 @@ public class PostCommentPresenter implements
     }
 
     @Override
-    public void cacheEditCommentData(EditCommentData editCommentData) {
-        mEditCommentCache.addEditCommentData(editCommentData.getActivityId(), editCommentData);
+    public void cacheEditCommentData(String activityId, String postText) {
+        mEditCommentCache.insertOrUpdateExistingEditCommentDataWithPostText(activityId, postText);
+    }
+
+    @Override
+    public void onCancelEditComment(String activityId) {
+        mEditCommentCache.removeEditCommentData(activityId);
     }
 
     @Override
     public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
         EditCommentBundle editCommentBundle = (EditCommentBundle) interactorBundle;
         EditCommentData editCommentData = editCommentBundle.getEditCommentData();
+        int i = editCommentData.getPosition();
         String newText = editCommentData.getPostText();
+        String activityId = editCommentData.getActivityId();
         PostCommentContract.View.ViewHolder viewHolderInterface = editCommentBundle.getViewHolder();
 
         if (success) {
-            viewHolderInterface.setPostText(newText);
-            viewHolderInterface.hideEditText();
+            mDataCache.getPostCommentByIndex(i).setPostText(newText);
+            mEditCommentCache.removeEditCommentData(activityId);
+            if (mAdapter != null)
+                mAdapter.refreshAdapter();
         }
-        viewHolderInterface.onDatabaseResponse(success, editCommentData.getActivityId());
+        viewHolderInterface.onDatabaseResponse(success, i, activityId);
     }
 
     @Override
     public EditCommentData getEditCommentData(String activityId) {
-        EditCommentData editCommentData = mEditCommentCache.getEditCommentData(activityId);
-        return new EditPostData(activityId,
-                null,
-                editCommentData.getPostText(),
-                null);
+        return mEditCommentCache.getEditCommentData(activityId);
+    }
+
+    protected void onItemAdded() {
+        mEditCommentCache.incrementPositionForAll();
     }
 }

@@ -13,7 +13,6 @@ import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.feedpost.FeedPostPresenter;
 import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
-import ca.gc.inspection.scoop.postcomment.PostCommentPresenter;
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -138,6 +137,7 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         PostComment postComment = getItemByIndex(i);
         bindPostCommentDataToViewHolder(viewHolderInterface, postComment);
+        bindEditCommentDataToViewHolder(viewHolderInterface, postComment, mEditCommentCache);
     }
 
     @Override
@@ -146,8 +146,11 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     }
 
     public void onAddPostComment(boolean success, String activityId) {
-        if (success)
+        if (success) {
+            onItemAdded();
+            mAdapter.refreshAdapter();
             loadDataFromDatabase(activityId);
+        }
         mActivityView.onAddPostComment(success);
     }
 

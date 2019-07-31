@@ -6,7 +6,7 @@ public interface PostOptionsDialogReceiver {
     }
 
     interface EditCommentReceiver {
-        void onEditComment(String activityId);
+        void onEditComment(int i, String activityId);
     }
 
     interface EditPostReceiver {

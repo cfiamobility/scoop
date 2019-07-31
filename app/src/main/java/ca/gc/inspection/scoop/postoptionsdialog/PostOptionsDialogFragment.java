@@ -150,7 +150,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     mEditPostReceiver.onEditPost(position);
                 }
                 else {
-                    mEditCommentReceiver.onEditComment(activityId);
+                    mEditCommentReceiver.onEditComment(position, activityId);
                 }
                 if (getFragmentManager() != null) {
                     getFragmentManager().beginTransaction().remove(this).commit();
