@@ -20,7 +20,6 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
  */
 public class NotificationsInteractor {
 
-
     private RequestQueue requestQueue;
     private NotificationsPresenter presenter;
 
