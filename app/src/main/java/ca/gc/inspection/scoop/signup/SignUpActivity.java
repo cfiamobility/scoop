@@ -30,9 +30,9 @@ import static ca.gc.inspection.scoop.util.StringUtils.capitalizeFirstLetter;
 
 public class SignUpActivity extends AppCompatActivity implements SignUpContract.View{
     // Initializing the buttons, edit texts, and string variables
-    String firstNameText, lastNameText, emailText, passwordText;
+    String firstNameText, lastNameText, emailText, passwordText, reEnterPasswordText;
     Button registerBTN;
-    TextInputEditText firstNameET, lastNameET, emailET, passwordET;
+    TextInputEditText firstNameET, lastNameET, emailET, passwordET, reEnterPasswordET;
     // Needed to set the error messages if the user input is invalid
     TextInputLayout firstNameLayout, lastNameLayout, emailLayout, passwordLayout;
     // reference to the presenter
@@ -73,6 +73,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
         lastNameET = findViewById(R.id.activity_sign_up_et_last_name);
         emailET = findViewById(R.id.activity_sign_up_et_email);
         passwordET = findViewById(R.id.activity_sign_up_et_password);
+        reEnterPasswordET = findViewById(R.id.activity_sign_up_et_password_re_enter);
         registerBTN = findViewById(R.id.activity_sign_up_btn_sign_up);
 
         // Setting the onclick method for the register button
@@ -84,9 +85,10 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
                 lastNameText = capitalizeFirstLetter(lastNameET.getText().toString());
                 emailText = (emailET.getText().toString()).toLowerCase();
                 passwordText = passwordET.getText().toString();
+                reEnterPasswordText = reEnterPasswordET.getText().toString();
 
                 // Using the user-inputted information to register the user via this method
-                registerUser(firstNameText, lastNameText, emailText, passwordText);
+                registerUser(firstNameText, lastNameText, emailText, passwordText, reEnterPasswordText);
             }
         });
 
@@ -181,9 +183,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
      * @param email User inputted email
      * @param password User inputted password
      */
-    private void registerUser(final String firstName, final String lastName, final String email, final String password) {
+    private void registerUser(final String firstName, final String lastName, final String email, final String password, final String reEnterPassword) {
 
-        if (validRegister(firstName, lastName, email, password)){
+        if (validRegister(firstName, lastName, email, password, reEnterPassword)){
             mSignUpPresenter.registerUser(NetworkUtils.getInstance(this), email, password, firstName, lastName);
         }
 
@@ -197,22 +199,36 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
      * @param password User inputted password
      */
     //TODO: Middle tier to check if email is valid and pass error through response
-    private boolean validRegister(final String firstName, final String lastName, final String email, final String password){
+    private boolean validRegister(final String firstName, final String lastName, final String email, final String password, final String reEnterPassword){
         // Checks for string validity
+        boolean isValid = true;
         if (TextUtils.isEmpty(firstName)) { // first name field is empty
-            firstNameLayout.setError("Please enter a first name.");
-            return false;
-        } else if (TextUtils.isEmpty(lastName)) { // last name field is empty
-            lastNameLayout.setError("Please enter a last name");
-            return false;
-        } else if (TextUtils.isEmpty(email)) { // if the email field is empty
-            emailLayout.setError("Please enter valid email.");
-            return false;
-        } else if (TextUtils.isEmpty(password) || password.length() < 8 || !SignUpPresenter.isValidPassword(password)) { // is the password field is empty or is less than 8 characters or is not valid
-            passwordLayout.setError("Password is invalid. Ensure your password contains at least one of the following: Uppercase Letter, Lowercase Letter, Number, Symbol.");
+            firstNameLayout.setError(getString(R.string.enter_a_first_name));
+            isValid = false;
+        } if (TextUtils.isEmpty(lastName)) { // last name field is empty
+            lastNameLayout.setError(getString(R.string.enter_a_last_name));
+            isValid = false;
+        } if (TextUtils.isEmpty(email)) { // if the email field is empty
+            emailLayout.setError(getString(R.string.enter_a_valid_email));
+            isValid = false;
+        }
+
+        if (TextUtils.isEmpty(password) || password.length() < 8 || !SignUpPresenter.isValidPassword(password)) { // is the password field is empty or is less than 8 characters or is not valid
+            passwordLayout.setError(getString(R.string.enter_a_valid_password));
+            isValid = false;
+        }else if(!TextUtils.equals(password, reEnterPassword)){ // If password field and re-enter password field do not match
+            passwordLayout.setError(getString(R.string.passwords_do_not_match));
+            isValid = false;
+        }
+        else{
+            passwordLayout.setError("");
+        }
+
+        if (isValid){
+            return true;
+        }else{
             return false;
         }
-        return true;
     }
 
     /**

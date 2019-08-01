@@ -70,12 +70,19 @@
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="retype_password">Retype Password</string>
     <string name="forgot_password">Forgot your password?</string>
     <string name="login_verb">Log In</string>
     <string name="title_activity_community_feed_screen">community_feed_screen</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="enter_a_first_name">Please enter a first name.</string>
+    <string name="enter_a_last_name">Please enter a last name.</string>
+    <string name="enter_a_valid_email">Please enter valid email.</string>
+    <string name="enter_a_valid_password">Password is invalid. Ensure your password contains at least one of the following: Uppercase Letter, Lowercase Letter, Number, Symbol.</string>
+    <string name="passwords_do_not_match">Passwords do not match.</string>
+
 
     <!-- Action Bar Titles-->
     <string name="navigation_community">Community</string>
