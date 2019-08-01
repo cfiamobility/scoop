@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.feedpost.FeedPostViewHolder;
+import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
@@ -65,8 +66,10 @@ public class DisplayPostAdapter extends RecyclerView.Adapter<PostCommentViewHold
         PostCommentFragment.setUserInfoListener(viewHolder,
                 mDisplayPostPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setPostOptionsListener(viewHolder, i, mDisplayPostPresenter.getActivityIdByIndex(i),
-                mDisplayPostPresenter.getPosterIdByIndex(i), mDisplayPostPresenter.getSavedStatusByIndex(i),
+                mDisplayPostPresenter.getPosterIdByIndex(i), mDisplayPostPresenter.getSavedStateByIndex(i),
                 mDisplayPostPresenter.getPosterIdByIndex(0), mDisplayPostView);
+        PostCommentFragment.setSaveListener(viewHolder, i);
+        PostCommentFragment.setUnsaveListener(viewHolder, i);
     }
 
     @Override

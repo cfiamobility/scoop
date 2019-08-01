@@ -125,7 +125,9 @@ public class ProfilePostPresenter extends ProfileLikesPresenter implements
         if (profilePost != null) {
             viewHolderInterface
                     .setPostTitle(profilePost.getPostTitle())
-                    .setCommentCount(profilePost.getCommentCount());
+                    .setCommentCount(profilePost.getCommentCount())
+                    .setSavedState(profilePost.getSavedState());
+
         }
     }
 

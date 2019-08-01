@@ -1,7 +1,10 @@
 package ca.gc.inspection.scoop.profilelikes;
 
 
+import org.json.JSONException;
+
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 
 
@@ -47,6 +50,7 @@ public interface ProfileLikesContract extends ProfileCommentContract {
         interface ViewHolder extends ProfileCommentContract.View.ViewHolder {
             ViewHolder setPostTitle(String postTitle);
             ViewHolder setCommentCount(String commentCount);
+
         }
     }
 

@@ -136,19 +136,19 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/post_image"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_toStartOf="@+id/comment_count"
-            app:srcCompat="@drawable/ic_mode_comment_secondary_24dp" />
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/vote_count"
+            app:srcCompat="@drawable/ic_chat_bubble_outline_black_24dp" />
 
         <TextView
             android:id="@+id/comment_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/post_image"
-            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/item_post_img_comments"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:fontFamily="@font/roboto"
             android:text="2"
             android:textColor="@color/black"
@@ -161,6 +161,26 @@
             android:layout_below="@+id/down_vote"
             android:layout_marginTop="10dp"
             android:background="?android:attr/listDivider" />
+
+        <ImageView
+            android:id="@+id/item_post_img_unsaved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/post_image"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:srcCompat="@drawable/ic_bookmark_border_black_24dp" />
+
+        <ImageView
+            android:id="@+id/item_post_img_saved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/post_image"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:srcCompat="@drawable/ic_bookmark_black_24dp" />
 
     </RelativeLayout>
 </LinearLayout>

@@ -10,7 +10,10 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.feedpost.FeedPost;
+import ca.gc.inspection.scoop.profilelikes.ProfileLike;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;
@@ -81,7 +84,6 @@ public class PostCommentPresenter implements
     }
 
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
-
         if ((commentsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of commentsResponse != imagesResponse");
 
@@ -193,15 +195,6 @@ public class PostCommentPresenter implements
         }
     }
 
-    public void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException {
-        if (getItemByIndex(i) != null) {
-            getItemByIndex(i).setSavedStatus(savedStatus);
-            viewHolderInterface.setSavedStatus(savedStatus); //sets like count to new total
-            Log.i("saved status in post comment presenter", Boolean.toString(getSavedStatusByIndex(i)));
-        }
-    }
-
-
     /**
      * Description: updates the like count to new total
      *
@@ -243,7 +236,31 @@ public class PostCommentPresenter implements
                     .setPostText(postComment.getPostText())
                     .setUserImageFromString(postComment.getProfileImageString())
                     .setUserName(postComment.getValidFullName())
-                    .setLikeState(postComment.getLikeState());
+                    .setLikeState(postComment.getLikeState())
+                    .setSavedState(postComment.getSavedState());
+        }
+    }
+
+
+    /**
+     * Updates a viewHolder's saved state by setting it to the opposite Boolean value of its current state
+     * UI is updated and then the appropriate network request is made through a call to the Interactor
+     * @param viewHolderInterface interface used to communicate with the View/viewHolder
+     * @param i position of the view
+     * @throws JSONException
+     */
+    public void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException {
+        PostComment postComment = getItemByIndex(i);
+        String activityid = postComment.getActivityId();
+        if (getItemByIndex(i) != null) {
+            Boolean savedState = postComment.getSavedState();
+            getItemByIndex(i).setSavedState(!savedState);
+            viewHolderInterface.setSavedState(!savedState);
+            if (!savedState){
+                mPostCommentInteractor.savePost(activityid, Config.currentUser);
+            } else {
+                mPostCommentInteractor.unsavePost(activityid, Config.currentUser);
+            }
         }
     }
 
@@ -268,8 +285,7 @@ public class PostCommentPresenter implements
         return Objects.requireNonNull(getItemByIndex(i)).getActivityId();
     }
 
-    public Boolean getSavedStatusByIndex(int i){
-        return Objects.requireNonNull(getItemByIndex(i)).getSavedStatus();
+    public Boolean getSavedStateByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getSavedState();
     }
-
 }

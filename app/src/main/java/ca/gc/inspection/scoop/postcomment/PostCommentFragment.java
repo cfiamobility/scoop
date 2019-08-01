@@ -21,6 +21,7 @@ import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.profile.OtherUserActivity;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
 import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.NetworkUtils;
@@ -135,11 +136,42 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         viewHolder.getUserName().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                MainActivity.otherUserClicked(posterId);
                 Context context = v.getContext();
                 startFragmentOrActivity(context, posterId);
             }
         });
+    }
+
+    /**
+     * Sets the listener for unsaving a post if the post is already saved (saved != null)
+     * @param viewHolder view (post) that is holding the save listener
+     * @param i position of the view in the recycler view
+     */
+    public static void setSaveListener(PostCommentViewHolder viewHolder, int i){
+        if (viewHolder.saved != null){
+            viewHolder.saved.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewHolder.updateSavedState(i);
+                }
+            });
+        }
+    }
+
+    /**
+     * Sets the listener for saving a post if the post is not saved (unsaved != null)
+     * @param viewHolder view (post) that is holding the save listener
+     * @param i position of the view in the recycler view
+     */
+    public static void setUnsaveListener(PostCommentViewHolder viewHolder, int i){
+        if(viewHolder.unsaved != null){
+            viewHolder.unsaved.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewHolder.updateSavedState(i);
+                }
+            });
+        }
     }
 
     /**
@@ -232,7 +264,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 // bundle
                 Bundle bundle = new Bundle();
                 PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
-                Boolean updatedSave = viewHolder.getSavedStatus();
+//                Boolean updatedSave = viewHolder.getSavedStatus();
 
                 //gets the activity id, posterid, viewHolderType, and savedStatus and stores in bundle to be fetched in PostOptionsDialogFragment
                 Log.i("post I am clicking: ", activityId);
@@ -241,15 +273,15 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 bundle.putString("POSTER_ID", posterId);
                 Log.i("viewholder: ", viewHolder.getClass().toString());
                 bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
-                Log.i("saved status: ", savedStatus.toString());
+//                Log.i("saved status: ", savedStatus.toString());
                 bottomSheetDialog.setPostOptionsDialogReceiver(postOptionsDialogReceiver);
 
 
-                if (updatedSave == null){
-                    bundle.putBoolean("SAVED_STATUS", savedStatus); //saved status on response
-                } else {
-                    bundle.putBoolean("SAVED_STATUS", updatedSave); //saved status stored in the UI
-                }
+//                if (updatedSave == null){
+//                    bundle.putBoolean("SAVED_STATUS", savedStatus); //saved status on response
+//                } else {
+//                    bundle.putBoolean("SAVED_STATUS", updatedSave); //saved status stored in the UI
+//                }
 
                 Log.i("post position: ", Integer.toString(i));
                 bundle.putInt("POST_POSITION", i);
@@ -265,57 +297,6 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
             }
         });
     }
-
-    /**
-     * Just like the above function except doesn't include the interface needed to refresh the view
-     * @param viewHolder
-     * @param i
-     * @param activityId
-     * @param posterId
-     * @param savedStatus
-     * @param firstPosterId
-
-    public static void setPostOptionsListener(PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus, String firstPosterId){
-        // to get the options menu to appear
-        viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // bundle
-                Bundle bundle = new Bundle();
-                PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
-                Boolean updatedSave = viewHolder.getSavedStatus();
-
-                //gets the activity id, posterid, viewHolderType, and savedStatus and stores in bundle to be fetched in PostOptionsDialogFragment
-                Log.i("post I am clicking: ", activityId);
-                bundle.putString("ACTIVITY_ID", activityId);
-                Log.i("poster id I am clicking: ", posterId);
-                bundle.putString("POSTER_ID", posterId);
-                Log.i("viewholder: ", viewHolder.getClass().toString());
-                bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
-                Log.i("saved status: ", savedStatus.toString());
-
-
-                if (updatedSave == null){
-                    bundle.putBoolean("SAVED_STATUS", savedStatus); //saved status on response
-                } else {
-                    bundle.putBoolean("SAVED_STATUS", updatedSave); //saved status stored in the UI
-                }
-
-                Log.i("post position: ", Integer.toString(i));
-                bundle.putInt("POST_POSITION", i);
-                Log.i("first poster id: ", firstPosterId);
-                bundle.putString("FIRST_POSTER_ID", firstPosterId);
-
-                bottomSheetDialog.setArguments(bundle);
-                bottomSheetDialog.setViewHolder(viewHolder);
-
-                final Context context = v.getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                bottomSheetDialog.show(fragmentManager, "bottomSheet");
-            }
-        });
-    }
-    */
 
     /**
      * Method called by PostOptionsDialog class when a comment is deleted
