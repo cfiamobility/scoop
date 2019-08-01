@@ -25,6 +25,7 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
     private Timestamp currentTime;
     private NotificationsContract.View notificationsView;
     private NetworkUtils networkUtils;
+    private int recentEmpty, todayEmpty;
 
     public NotificationsPresenter(NotificationsContract.View notificationsView, NetworkUtils networkUtils){
         this.networkUtils = networkUtils;
@@ -84,13 +85,15 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
             public void onLayoutReady() throws InterruptedException { //sets all views to visible relevant to recent notifications and sets loading panel to gone
                 if(response.length() == 0){
                     notificationsView.hideRecentSection();
-                    notificationsView.showNoNotifications();
-                } else {
-                    notificationsView.hideNoNotifications();
-                    notificationsView.showRecentSection();
-                    notificationsView.hideLoadingPanel();
                     notificationsView.requestTodayFocus();
+                    recentEmpty = 1;
+                } else {
+                    notificationsView.showRecentSection();
+                    notificationsView.requestRecentFocus();
+                    notificationsView.hideLoadingPanel();
+                    recentEmpty = 0;
                 }
+                checkNothingNew();
             }
         };
         recentRecyclerView.getViewTreeObserver() //listens to see if recyclerview is finished laying out all properties
@@ -121,13 +124,14 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
                 if(response.length() == 0){ //if there is nothing in the today notifications, sets all relevant today sections' visibility to GONE
                     notificationsView.hideTodaySection();
                     notificationsView.requestRecentFocus();
+                    todayEmpty = 1;
                 }else { //otherwise sets them to be visible
-                    notificationsView.hideNoNotifications();
                     notificationsView.showTodaySection();
-                    notificationsView.requestTodayFocus();
+//                    notificationsView.requestTodayFocus();
+                    notificationsView.hideLoadingPanel();
+                    todayEmpty = 0;
                 }
-                notificationsView.hideLoadingPanel();
-
+                checkNothingNew();
             }
         };
         todayRecyclerView.getViewTreeObserver() //listens to see if recyclerview is finished laying out all properties
@@ -147,7 +151,13 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
     }
 
 
-
+    private void checkNothingNew(){
+        if (recentEmpty == 1 && todayEmpty == 1){
+            notificationsView.showNoNotifications();
+        } else {
+            notificationsView.hideNoNotifications();
+        }
+    }
 
     /**
      * Description: Interface for when the layout is ready after recycler view is done setting up
