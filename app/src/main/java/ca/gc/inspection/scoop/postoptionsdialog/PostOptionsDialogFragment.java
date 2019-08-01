@@ -35,8 +35,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class PostOptionsDialogFragment extends BottomSheetDialogFragment implements PostOptionsDialogContract.View {
 
     //UI Declarations
-    Button saveButton, shareButton, deleteButton, reportButton, unsaveButton;
-    TableRow saveTR, shareTR, deleteTR, reportTR, unsaveTR;
+    Button shareButton, deleteButton, reportButton;
+    TableRow shareTR, deleteTR, reportTR;
 
     //reference to the presenter
     private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
@@ -112,15 +112,6 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                 dismiss();
             }
         });
-
-        // Checks the type of the viewholder of the view - if is a comment view (e.g. postcomment or profilecomment) then hide the save/unsave options
-        // Can not save comments
-        if (mViewHolder.getClass().toString().contains("Comment")){
-            saveTR.setVisibility(View.GONE);
-            saveButton.setVisibility(View.GONE);
-            unsaveTR.setVisibility(View.GONE);
-            unsaveButton.setVisibility(View.GONE);
-        }
 
         if (getActivity().toString().contains("DisplayPostActivity") && firstPosterId.equals(Config.currentUser)){
             deleteButton.setVisibility(View.VISIBLE);
