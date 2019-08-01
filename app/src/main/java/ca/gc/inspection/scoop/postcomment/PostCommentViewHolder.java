@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -300,13 +301,22 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         if (!waitingForResponse) {
             mTextEditorWatcher = getEditCommentTextWatcher(activityId);
             editText.addTextChangedListener(mTextEditorWatcher);
+            editText.setText(postText.getText());
 
             editButton.setOnClickListener(
-                    view -> sendCommentToDatabase(i, activityId));
-            editText.setText(postText.getText());
+                    (View view) -> {
+                        if (editText.getText().toString().isEmpty()) {
+                            if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
+                                mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_empty_text_error, SNACKBAR_LENGTH_VERY_SHORT);
+                                mSnackbar.show();
+                            }
+                        }
+                        else sendCommentToDatabase(i, activityId);
+                    });
             cancelButton.setOnClickListener(view -> {
                 hideEditText();
                 setWaitingForResponse(false);
+                dismissSnackBar();
                 mPresenter.onCancelEditComment(activityId);
             });
             showEditText();
@@ -389,7 +399,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
                 @Override
                 public void onDismissed(Snackbar transientBottomBar, int event) {
                     super.onDismissed(transientBottomBar, event);
-                    mPresenter.onSnackBarDismissed(activityId);
+                    if (event != DISMISS_EVENT_MANUAL && event != DISMISS_EVENT_CONSECUTIVE)
+                        mPresenter.onSnackBarDismissed(activityId);
                 }
             });
         }

@@ -110,7 +110,7 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
                 String commentText = mAddCommentET.getText().toString();
                 if (canPostComment) {
                     if (commentText.isEmpty()) {
-                        Toast.makeText(DisplayPostActivity.this, "Please add comment message", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DisplayPostActivity.this, R.string.edit_comment_empty_text_error, Toast.LENGTH_SHORT).show();
                         Log.i("comment", commentText);
                     } else {
                         canPostComment = false;

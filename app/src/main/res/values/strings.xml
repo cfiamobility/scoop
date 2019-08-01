@@ -30,6 +30,7 @@
     <string name="edit_comment_success">Comment edited!</string>
     <string name="edit_comment_failed">Failed to edit comment</string>
     <string name="edit_comment_in_progress">Editing comment&#8230;</string>
+    <string name="edit_comment_empty_text_error">Please add comment message</string>
 
     <!-- Navigation Drawer -->
     <string name="saved">Saved Posts</string>
@@ -162,7 +163,6 @@
         who created the post or comment.\n\nOur team will review the post and if it violates our Community Guidelines or Terms of Use,
     we\'ll remove it.</string>
     <string name="thank_you_title">Thanks for reporting this</string>
-
 
 
 </resources>

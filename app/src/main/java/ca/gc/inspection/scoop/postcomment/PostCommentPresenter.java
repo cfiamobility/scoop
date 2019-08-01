@@ -19,6 +19,7 @@ import static ca.gc.inspection.scoop.postcomment.LikeState.NEUTRAL;
 import static ca.gc.inspection.scoop.postcomment.LikeState.UPVOTE;
 import static ca.gc.inspection.scoop.postcomment.ViewHolderState.SnackBarState.*;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+import static java.lang.Integer.max;
 
 /**
  * Presenter for replying to a post action. Tt is the most generic presenter
@@ -349,8 +350,6 @@ public class PostCommentPresenter implements
         editCommentBundle.setViewHolder(viewHolderInterface);
         Log.d(TAG, "sendCommentToDatabase " + mViewHolderStateCache.toString());
 
-        refreshAdapter();
-
         mPostCommentInteractor.updatePostComment(editCommentBundle, activityId, newText);
     }
 
@@ -363,8 +362,10 @@ public class PostCommentPresenter implements
     public void onCancelEditComment(String activityId) {
         mEditCommentCache.removeEditCommentData(activityId);
         ViewHolderState viewHolderState = mViewHolderStateCache.getViewHolderState(activityId);
-        if (viewHolderState != null)
+        if (viewHolderState != null) {
             viewHolderState.setWaitingForResponse(false);
+            viewHolderState.setSnackBarState(NONE);
+        }
     }
 
     @Override
@@ -380,11 +381,10 @@ public class PostCommentPresenter implements
         mViewHolderStateCache.createIfMissingViewHolderState(activityId, false, i, SnackBarState.EDIT_COMMENT_SUCCESS);
 
         if (success) {
-            if (getItemByIndex(i) != null)
-                getItemByIndex(i).setPostText(newText);
+            updateDataCachePostTextForActivityId(i, activityId, newText);
             mEditCommentCache.removeEditCommentData(activityId);
             mViewHolderStateCache.incrementPositionForAll();
-            getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_SUCCESS);
+            mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_SUCCESS);
             if (viewHolderInterface != null &&
                     viewHolderInterface.getCallBackIdentifier() != null &&
                     viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
@@ -394,23 +394,36 @@ public class PostCommentPresenter implements
             }
         }
         else {
-            getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_RETRY);
+            mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_RETRY);
             if (viewHolderInterface != null &&
                     viewHolderInterface.getCallBackIdentifier() != null &&
                     viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
                 viewHolderInterface.setSnackBarEditCommentRetry(i, activityId);
             }
         }
-        refreshAdapter();
     }
 
-    private void refreshAdapter() {
-        if (mAdapter != null)
-            mAdapter.refreshAdapter();
+    private boolean updateDataCachePostTextIfActivityIdMatchesIndex(int i, String activityId, String newText) {
+        if (i >=0 && i <= getItemCount()) {
+            if (getItemByIndex(i) != null && activityId.equals(getItemByIndex(i).getActivityId())) {
+                getItemByIndex(i).setPostText(newText);
+                Log.d(TAG, "Presenter update datacache" + activityId);
+                return true;
+            }
+        }
+        return false;
     }
 
-    private ViewHolderState getViewHolderState(String activityId) {
-        return mViewHolderStateCache.getViewHolderState(activityId);
+    private void updateDataCachePostTextForActivityId(int estimatedPosition, String activityId, String newText) {
+        int maxDistance = max(estimatedPosition, getItemCount()-estimatedPosition);
+        if (updateDataCachePostTextIfActivityIdMatchesIndex(estimatedPosition, activityId, newText))
+            return;
+
+        for (int i=1; i<=maxDistance; i++) {
+            if (updateDataCachePostTextIfActivityIdMatchesIndex(estimatedPosition + i, activityId, newText) ||
+                    updateDataCachePostTextIfActivityIdMatchesIndex(estimatedPosition - i, activityId, newText))
+                break;
+        }
     }
 
     protected void onItemAdded() {
