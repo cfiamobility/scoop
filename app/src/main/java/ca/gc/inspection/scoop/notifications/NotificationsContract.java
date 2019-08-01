@@ -30,6 +30,8 @@ public interface NotificationsContract {
 
         void showNoNotifications();
 
+        void hideNoNotifications();
+
         void showTodaySection();
 
         void hideTodaySection();

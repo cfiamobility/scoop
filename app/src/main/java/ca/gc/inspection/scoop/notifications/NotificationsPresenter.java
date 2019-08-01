@@ -86,6 +86,7 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
                     notificationsView.hideRecentSection();
                     notificationsView.showNoNotifications();
                 } else {
+                    notificationsView.hideNoNotifications();
                     notificationsView.showRecentSection();
                     notificationsView.hideLoadingPanel();
                     notificationsView.requestTodayFocus();
@@ -121,6 +122,7 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
                     notificationsView.hideTodaySection();
                     notificationsView.requestRecentFocus();
                 }else { //otherwise sets them to be visible
+                    notificationsView.hideNoNotifications();
                     notificationsView.showTodaySection();
                     notificationsView.requestTodayFocus();
                 }

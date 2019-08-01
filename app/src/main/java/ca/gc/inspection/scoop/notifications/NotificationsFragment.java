@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -38,6 +39,8 @@ public class NotificationsFragment extends Fragment implements
     private RecyclerView.Adapter todayAdapter, recentAdapter;
     private RecyclerView.LayoutManager todayLayoutManager, recentLayoutManager;
     private TextView today, recent;
+    private TextView noNotifications;
+    private ImageView noNotificationsImage;
     //private NotificationsPresenter notificationsScreenController;
     private NotificationsContract.Presenter mPresenter;
     private View view;
@@ -62,6 +65,9 @@ public class NotificationsFragment extends Fragment implements
 
         today = view.findViewById(R.id.fragment_notifications_txt_today); //instantiating the today textview
         recent = view.findViewById(R.id.fragment_notifications_txt_recent); //instantiating the recent textview
+
+        noNotifications = view.findViewById(R.id.fragment_notifications_no_new_text);
+        noNotificationsImage = view.findViewById(R.id.fragment_notifications_no_new_image);
 
         setSwipeRefreshLayout(view);
     }
@@ -148,9 +154,19 @@ public class NotificationsFragment extends Fragment implements
 
     }
 
+    /**
+     * Description: shows no new notification text and icon
+     */
     @Override
     public void showNoNotifications(){
-        
+        noNotifications.setVisibility(View.VISIBLE);
+        noNotificationsImage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNoNotifications(){
+        noNotifications.setVisibility(View.GONE);
+        noNotificationsImage.setVisibility(View.GONE);
     }
 
     /**
