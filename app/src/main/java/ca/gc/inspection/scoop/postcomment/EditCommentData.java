@@ -2,7 +2,6 @@ package ca.gc.inspection.scoop.postcomment;
 
 public class EditCommentData {
     protected String mActivityId, mPostText;
-    private int mPosition;
 
     public EditCommentData(String activityId, String postText) {
         mActivityId = activityId;
@@ -23,17 +22,5 @@ public class EditCommentData {
 
     public void setPostText(String postText) {
         this.mPostText = postText;
-    }
-
-    public int getPosition() {
-        return mPosition;
-    }
-
-    public void setPosition(int i) {
-        mPosition = i;
-    }
-
-    public void incrementPosition() {
-        mPosition += 1;
     }
 }

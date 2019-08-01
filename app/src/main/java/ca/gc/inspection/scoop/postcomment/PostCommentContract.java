@@ -66,8 +66,21 @@ public interface PostCommentContract {
             ViewHolder setSavedStatus(Boolean savedStatus);
             ViewHolder setEditPostText(String postText);
             void onEditComment(int i, String activityId);
-            void onDatabaseResponse(boolean success, int i, String activityId);
             void hideEditText();
+
+            String getCallBackIdentifier();
+
+            void setCallBackIdentifier(String activityId);
+
+            void clearCallBackIdentifier();
+
+            void setWaitingForResponse(boolean waitingForResponse);
+
+            void setSnackBarForCommentInProgress(String activityId);
+
+            void setSnackBarEditCommentSuccess(String activityId);
+
+            void setSnackBarEditCommentRetry(int i, String activityId);
         }
     }
 
@@ -90,11 +103,12 @@ public interface PostCommentContract {
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException;
-            EditCommentData getEditCommentData(String activityId);
             void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String activityId, String newText);
 
             void cacheEditCommentData(String activityId, String postText);
             void onCancelEditComment(String activityId);
+
+            void onSnackBarDismissed(String activityId);
         }
 
     }

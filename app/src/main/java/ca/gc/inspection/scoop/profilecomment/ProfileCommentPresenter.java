@@ -107,7 +107,8 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
         ProfileComment profileComment = getItemByIndex(i);
         bindProfileCommentDataToViewHolder(viewHolderInterface, profileComment);
-        bindEditCommentDataToViewHolder(viewHolderInterface, profileComment, mEditCommentCache);
+        bindEditCommentDataToViewHolder(viewHolderInterface, profileComment, i, mEditCommentCache);
+        bindViewHolderStateToViewHolder(viewHolderInterface, profileComment, i, mViewHolderStateCache);
     }
 
     public static void bindProfileCommentDataToViewHolder(

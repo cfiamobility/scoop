@@ -11,11 +11,13 @@ import java.util.Objects;
 
 import ca.gc.inspection.scoop.createpost.InteractorBundle;
 import ca.gc.inspection.scoop.createpost.PostRequestReceiver;
+import ca.gc.inspection.scoop.postcomment.ViewHolderState.SnackBarState;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;
 import static ca.gc.inspection.scoop.postcomment.LikeState.NEUTRAL;
 import static ca.gc.inspection.scoop.postcomment.LikeState.UPVOTE;
+import static ca.gc.inspection.scoop.postcomment.ViewHolderState.SnackBarState.*;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
@@ -38,9 +40,10 @@ public class PostCommentPresenter implements
     private PostCommentInteractor mPostCommentInteractor;
     protected PostDataCache mDataCache;
     protected EditCommentCache mEditCommentCache = new EditCommentCache();
+    protected ViewHolderStateCache mViewHolderStateCache = new ViewHolderStateCache();
 
     private PostComment getItemByIndex(int i) {
-        if (mDataCache == null)
+        if (mDataCache == null || getItemCount() < i+1)
             return null;
         return mDataCache.getPostCommentByIndex(i);
     }
@@ -234,13 +237,16 @@ public class PostCommentPresenter implements
     public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         PostComment postComment = getItemByIndex(i);
         bindPostCommentDataToViewHolder(viewHolderInterface, postComment);
-        bindEditCommentDataToViewHolder(viewHolderInterface, postComment, mEditCommentCache);
+        bindEditCommentDataToViewHolder(viewHolderInterface, postComment, i, mEditCommentCache);
+        bindViewHolderStateToViewHolder(viewHolderInterface, postComment, i, mViewHolderStateCache);
     }
 
     public static void bindPostCommentDataToViewHolder(
             PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment) {
+        Log.d(TAG, "bindPostCommentDataToViewHolder");
         if (postComment != null) {
             Log.d(TAG, "activityId: " + postComment.getActivityId() + ", posttext: " + postComment.getPostText());
+            viewHolderInterface.clearCallBackIdentifier();
             viewHolderInterface.setDate(postComment.getDate())
                     .setLikeCount(postComment.getLikeCount())
                     .setPostText(postComment.getPostText())
@@ -251,18 +257,50 @@ public class PostCommentPresenter implements
     }
 
     public static void bindEditCommentDataToViewHolder(
-            PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment, EditCommentCache editCommentCache) {
+            PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment, int i, EditCommentCache editCommentCache) {
+        Log.d(TAG, "bindEditCommentDataToViewHolder");
         if (postComment != null && editCommentCache != null) {
             EditCommentData editCommentData = editCommentCache.getEditCommentData(postComment.getActivityId());
             if (editCommentData != null) {
                 String postText = editCommentData.getPostText();
                 Log.d(TAG, "editCommentCache: " + editCommentCache.toString());
                 Log.d(TAG, "activityIds: " + editCommentData.getActivityId() + ", " + postComment.getActivityId());
-                viewHolderInterface.onEditComment(editCommentData.getPosition(), postComment.getActivityId());
+                viewHolderInterface.onEditComment(i, postComment.getActivityId());
                 viewHolderInterface.setEditPostText(postText);
             }
             else {
                 viewHolderInterface.hideEditText();
+            }
+        }
+    }
+
+    public static void bindViewHolderStateToViewHolder(
+            PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment,
+            int i, ViewHolderStateCache viewHolderStateCache) {
+        Log.d(TAG, "bindViewHolderStateToViewHolder");
+        if (postComment != null && viewHolderStateCache != null) {
+            String activityId = postComment.getActivityId();
+            ViewHolderState viewHolderState = viewHolderStateCache.getViewHolderState(activityId);
+            Log.d(TAG, "viewHolderStateCache: " + viewHolderStateCache.toString());
+            if (viewHolderState != null) {
+                Log.d(TAG, "viewHolderStateCache: " + viewHolderStateCache.toString());
+                SnackBarState snackBarState = viewHolderState.getSnackBarState();
+                switch (snackBarState) {
+                    case NONE:
+                        viewHolderInterface.dismissSnackBar();
+                        break;
+                    case EDIT_COMMENT_IN_PROGRESS:
+                        viewHolderInterface.setSnackBarForCommentInProgress(activityId);
+                        break;
+                    case EDIT_COMMENT_SUCCESS:
+                        viewHolderInterface.setSnackBarEditCommentSuccess(activityId);
+                        break;
+                    case EDIT_COMMENT_RETRY:
+                        viewHolderInterface.setSnackBarEditCommentRetry(i, activityId);
+                        break;
+                }
+
+                viewHolderInterface.setWaitingForResponse(viewHolderState.isWaitingForResponse());
             }
         }
     }
@@ -300,15 +338,20 @@ public class PostCommentPresenter implements
 
     @Override
     public void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String activityId, String newText) {
-        EditCommentData editCommentData = getEditCommentData(activityId);
-        editCommentData.setPostText(newText);
-        editCommentData.setPosition(i);
+        viewHolderInterface.setCallBackIdentifier(activityId);
+        cacheEditCommentData(activityId, newText);
+
+        mViewHolderStateCache.createIfMissingViewHolderState(activityId, true, i, EDIT_COMMENT_IN_PROGRESS);
+        viewHolderInterface.setSnackBarForCommentInProgress(activityId);
 
         EditCommentBundle editCommentBundle = new EditCommentBundle();
+        editCommentBundle.setActivityId(activityId);
         editCommentBundle.setViewHolder(viewHolderInterface);
-        editCommentBundle.setEditCommentData(editCommentData);
+        Log.d(TAG, "sendCommentToDatabase " + mViewHolderStateCache.toString());
 
-        mPostCommentInteractor.updatePostComment(editCommentBundle, editCommentData.getActivityId(), editCommentData.getPostText());
+        refreshAdapter();
+
+        mPostCommentInteractor.updatePostComment(editCommentBundle, activityId, newText);
     }
 
     @Override
@@ -319,32 +362,63 @@ public class PostCommentPresenter implements
     @Override
     public void onCancelEditComment(String activityId) {
         mEditCommentCache.removeEditCommentData(activityId);
+        ViewHolderState viewHolderState = mViewHolderStateCache.getViewHolderState(activityId);
+        if (viewHolderState != null)
+            viewHolderState.setWaitingForResponse(false);
     }
 
     @Override
     public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
         EditCommentBundle editCommentBundle = (EditCommentBundle) interactorBundle;
-        EditCommentData editCommentData = editCommentBundle.getEditCommentData();
-        int i = editCommentData.getPosition();
-        String newText = editCommentData.getPostText();
-        String activityId = editCommentData.getActivityId();
+        String activityId = editCommentBundle.getActivityId();
         PostCommentContract.View.ViewHolder viewHolderInterface = editCommentBundle.getViewHolder();
+        EditCommentData editCommentData = mEditCommentCache.getEditCommentData(activityId);
+        ViewHolderState viewHolderState = mViewHolderStateCache.getViewHolderState(activityId);
+        int i = viewHolderState.getPosition();
+        String newText = editCommentData.getPostText();
+
+        mViewHolderStateCache.createIfMissingViewHolderState(activityId, false, i, SnackBarState.EDIT_COMMENT_SUCCESS);
 
         if (success) {
-            mDataCache.getPostCommentByIndex(i).setPostText(newText);
+            if (getItemByIndex(i) != null)
+                getItemByIndex(i).setPostText(newText);
             mEditCommentCache.removeEditCommentData(activityId);
-            if (mAdapter != null)
-                mAdapter.refreshAdapter();
+            mViewHolderStateCache.incrementPositionForAll();
+            getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_SUCCESS);
+            if (viewHolderInterface != null &&
+                    viewHolderInterface.getCallBackIdentifier() != null &&
+                    viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
+                viewHolderInterface.setPostText(newText);
+                viewHolderInterface.hideEditText();
+                viewHolderInterface.setSnackBarEditCommentSuccess(activityId);
+            }
         }
-        viewHolderInterface.onDatabaseResponse(success, i, activityId);
+        else {
+            getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_RETRY);
+            if (viewHolderInterface != null &&
+                    viewHolderInterface.getCallBackIdentifier() != null &&
+                    viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
+                viewHolderInterface.setSnackBarEditCommentRetry(i, activityId);
+            }
+        }
+        refreshAdapter();
     }
 
-    @Override
-    public EditCommentData getEditCommentData(String activityId) {
-        return mEditCommentCache.getEditCommentData(activityId);
+    private void refreshAdapter() {
+        if (mAdapter != null)
+            mAdapter.refreshAdapter();
+    }
+
+    private ViewHolderState getViewHolderState(String activityId) {
+        return mViewHolderStateCache.getViewHolderState(activityId);
     }
 
     protected void onItemAdded() {
-        mEditCommentCache.incrementPositionForAll();
+        mViewHolderStateCache.incrementPositionForAll();
+    }
+
+    @Override
+    public void onSnackBarDismissed(String activityId) {
+        mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(NONE);
     }
 }

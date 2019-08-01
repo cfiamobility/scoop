@@ -3,6 +3,8 @@ package ca.gc.inspection.scoop.postcomment;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +27,6 @@ import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.TextFormat;
 
-import static ca.gc.inspection.scoop.createpost.CreatePostActivity.getTextWatcher;
 import static ca.gc.inspection.scoop.searchprofile.view.SearchProfileViewHolder.getSpannableStringBuilderWithFormat;
 
 /**
@@ -52,6 +53,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     protected CoordinatorLayout mCoordinatorLayout;
     private Snackbar mSnackbar;
     private View mView;
+    @Nullable
+    protected String mCallBackIdentifier;
 
     public PostCommentViewHolder(View v, PostCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v);
@@ -303,6 +306,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
             editText.setText(postText.getText());
             cancelButton.setOnClickListener(view -> {
                 hideEditText();
+                setWaitingForResponse(false);
                 mPresenter.onCancelEditComment(activityId);
             });
             showEditText();
@@ -311,35 +315,90 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
 
     private void sendCommentToDatabase(int i, String activityId) {
         if (!waitingForResponse) {
-            waitingForResponse = true;
             ActivityUtils.hideKeyboardFrom(mView.getContext(), mView);
-
-            mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_in_progress, Snackbar.LENGTH_INDEFINITE);
-            mSnackbar.show();
 
             String newText = editText.getText().toString();
             mPresenter.sendCommentToDatabase(this, i, activityId, newText);
         }
     }
 
+    @NonNull
     @Override
-    public void onDatabaseResponse(boolean success, int i, String activityId) {
-        waitingForResponse = false;
-        if (success) {
-            hideEditText();
-            mSnackbar.setText(R.string.edit_comment_success);
-            mSnackbar.setDuration(SNACKBAR_LENGTH_VERY_SHORT);
-            mSnackbar.show();
+    public String getCallBackIdentifier() {
+        if (mCallBackIdentifier == null)
+            return "";
+        else
+            return mCallBackIdentifier;
+    }
+
+    @Override
+    public void setCallBackIdentifier(String callBackIdentifier) {
+        mCallBackIdentifier = callBackIdentifier;
+    }
+
+    @Override
+    public void clearCallBackIdentifier() {
+        mCallBackIdentifier = null;
+    }
+
+    @Override
+    public void setWaitingForResponse(boolean waitingForResponse) {
+        Log.d("PostCommentViewHolder", "set waiting for response");
+        this.waitingForResponse = waitingForResponse;
+    }
+
+    @Override
+    public void setSnackBarForCommentInProgress(String activityId) {
+        Log.d("PostCommentViewHolder", "snackbar edit comment in progress");
+        mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_in_progress, Snackbar.LENGTH_INDEFINITE);
+        addSnackBarOnDismissCallback(activityId);
+        mSnackbar.show();
+    }
+
+    @Override
+    public void setSnackBarEditCommentSuccess(String activityId) {
+        Log.d("PostCommentViewHolder", "snackbar edit comment success");
+        if (mSnackbar == null) {
+            mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_success, SNACKBAR_LENGTH_VERY_SHORT);
         }
         else {
-            mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_failed, Snackbar.LENGTH_INDEFINITE);
-            mSnackbar.setAction(R.string.retry_action, new View.OnClickListener() {
+            mSnackbar.setText(R.string.edit_comment_success);
+            mSnackbar.setDuration(SNACKBAR_LENGTH_VERY_SHORT);
+        }
+        addSnackBarOnDismissCallback(activityId);
+        mSnackbar.show();
+    }
+
+    @Override
+    public void setSnackBarEditCommentRetry(int i, String activityId) {
+        Log.d("PostCommentViewHolder", "snackbar edit comment retry");
+        mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_failed, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.setAction(R.string.retry_action, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendCommentToDatabase(i, activityId);
+            }
+        });
+        addSnackBarOnDismissCallback(activityId);
+        mSnackbar.show();
+    }
+
+    private void addSnackBarOnDismissCallback(String activityId) {
+        if (mSnackbar != null) {
+            mSnackbar.addCallback(new Snackbar.Callback() {
                 @Override
-                public void onClick(View v) {
-                    sendCommentToDatabase(i, activityId);
+                public void onDismissed(Snackbar transientBottomBar, int event) {
+                    super.onDismissed(transientBottomBar, event);
+                    mPresenter.onSnackBarDismissed(activityId);
                 }
             });
-            mSnackbar.show();
         }
+    }
+
+    @Override
+    public void dismissSnackBar() {
+        Log.d("PostCommentViewHolder", "snackbar dismiss");
+        if (mSnackbar != null)
+            mSnackbar.dismiss();
     }
 }

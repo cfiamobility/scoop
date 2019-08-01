@@ -6,11 +6,20 @@ import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
 public class EditCommentBundle extends InteractorBundle {
+
+    private String mActivityId;
     private PostCommentContract.View.ViewHolder mViewHolderInterface;
-    private EditCommentData mEditCommentData;
 
     EditCommentBundle() {
         super();
+    }
+
+    public String getActivityId() {
+        return mActivityId;
+    }
+
+    public void setActivityId(String activityId) {
+        mActivityId = activityId;
     }
 
     public void setViewHolder(PostCommentContract.View.ViewHolder viewHolderInterface) {
@@ -19,13 +28,5 @@ public class EditCommentBundle extends InteractorBundle {
 
     public PostCommentContract.View.ViewHolder getViewHolder() {
         return mViewHolderInterface;
-    }
-
-    public void setEditCommentData(EditCommentData editPostData) {
-        mEditCommentData = editPostData;
-    }
-
-    public EditCommentData getEditCommentData() {
-        return mEditCommentData;
     }
 }

@@ -137,7 +137,8 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         PostComment postComment = getItemByIndex(i);
         bindPostCommentDataToViewHolder(viewHolderInterface, postComment);
-        bindEditCommentDataToViewHolder(viewHolderInterface, postComment, mEditCommentCache);
+        bindEditCommentDataToViewHolder(viewHolderInterface, postComment, i, mEditCommentCache);
+        bindViewHolderStateToViewHolder(viewHolderInterface, postComment, i, mViewHolderStateCache);
     }
 
     @Override

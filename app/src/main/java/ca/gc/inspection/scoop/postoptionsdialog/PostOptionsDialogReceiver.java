@@ -7,6 +7,8 @@ public interface PostOptionsDialogReceiver {
 
     interface EditCommentReceiver {
         void onEditComment(int i, String activityId);
+
+        void dismissSnackBar();
     }
 
     interface EditPostReceiver {

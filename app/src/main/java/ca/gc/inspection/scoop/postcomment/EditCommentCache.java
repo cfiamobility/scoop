@@ -5,7 +5,7 @@ import android.util.Log;
 import java.util.HashMap;
 
 public class EditCommentCache {
-    private HashMap<String, EditCommentData> mMap;
+    protected HashMap<String, EditCommentData> mMap;
 
     EditCommentCache() {
         mMap = new HashMap<>();
@@ -27,12 +27,6 @@ public class EditCommentCache {
 
     public void removeEditCommentData(String activityId) {
         mMap.remove(activityId);
-    }
-
-    public void incrementPositionForAll() {
-        for (EditCommentData editCommentData: mMap.values()) {
-            editCommentData.incrementPosition();
-        }
     }
 
     @Override
