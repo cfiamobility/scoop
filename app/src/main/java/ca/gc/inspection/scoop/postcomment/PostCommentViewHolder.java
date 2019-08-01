@@ -209,7 +209,10 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         }
     }
 
-
+    /**
+     * Invokes a method in the Presenter to update the given viewHolder's saved state
+     * @param i the position of the viewHolder, used to identify the view
+     */
     public void updateSavedState(int i){
         try {
             mPresenter.updateSavedState(this, i);
@@ -217,15 +220,6 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
             e.printStackTrace();
         }
     }
-
-//    public PostCommentContract.View.ViewHolder setSavedStatus(Boolean savedStatus) {
-//        this.savedStatus = savedStatus;
-//        return this;
-//    }
-//
-//    public Boolean getSavedStatus(){
-//        return savedStatus;
-//    }
 
     @Override
     public TextView getUserName() {

@@ -176,7 +176,6 @@ public class PostCommentInteractor {
      * @param userid ID of the user
      */
     public void savePost(final String activityid, final String userid) {
-        Log.i("MIDDLE-TIER CHECK", "sending data to save post table");
         String url = Config.baseIP + "post/save";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -221,8 +220,6 @@ public class PostCommentInteractor {
      * @param userid ID of the user
      */
     public void unsavePost(final String activityid, final String userid) {
-
-        Log.i("MIDDLE-TIER CHECK", "unsaving post");
         String url = Config.baseIP + "post/unsave";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {

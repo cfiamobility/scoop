@@ -142,6 +142,11 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         });
     }
 
+    /**
+     * Sets the listener for unsaving a post if the post is already saved (saved != null)
+     * @param viewHolder view (post) that is holding the save listener
+     * @param i position of the view in the recycler view
+     */
     public static void setSaveListener(PostCommentViewHolder viewHolder, int i){
         if (viewHolder.saved != null){
             viewHolder.saved.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +158,11 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
         }
     }
 
+    /**
+     * Sets the listener for saving a post if the post is not saved (unsaved != null)
+     * @param viewHolder view (post) that is holding the save listener
+     * @param i position of the view in the recycler view
+     */
     public static void setUnsaveListener(PostCommentViewHolder viewHolder, int i){
         if(viewHolder.unsaved != null){
             viewHolder.unsaved.setOnClickListener(new View.OnClickListener() {

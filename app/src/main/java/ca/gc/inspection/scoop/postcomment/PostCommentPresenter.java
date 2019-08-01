@@ -241,6 +241,14 @@ public class PostCommentPresenter implements
         }
     }
 
+
+    /**
+     * Updates a viewHolder's saved state by setting it to the opposite Boolean value of its current state
+     * UI is updated and then the appropriate network request is made through a call to the Interactor
+     * @param viewHolderInterface interface used to communicate with the View/viewHolder
+     * @param i position of the view
+     * @throws JSONException
+     */
     public void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException {
         PostComment postComment = getItemByIndex(i);
         String activityid = postComment.getActivityId();
