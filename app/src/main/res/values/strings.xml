@@ -156,6 +156,10 @@
     we\'ll remove it.</string>
     <string name="thank_you_title">Thanks for reporting this</string>
 
+    <!-- Notifications -->
+    <string name="notifications_today">Today</string>
+    <string name="notifications_recent">Recent</string>
+    <string name="notifications_no_new">No New Notifications\!</string>
 
 
 </resources>

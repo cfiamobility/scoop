@@ -28,11 +28,17 @@ public interface NotificationsContract {
 
         void setTodayRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notifications, JSONArray images);
 
+        void showNoNotifications();
+
+        void hideNoNotifications();
+
         void showTodaySection();
 
         void hideTodaySection();
 
         void showRecentSection();
+
+        void hideRecentSection();
 
         void hideLoadingPanel();
 
@@ -45,7 +51,7 @@ public interface NotificationsContract {
      * interface to be implemented by the NotificationsPresenter class
      */
     interface Presenter extends BasePresenter {
-        void listenRecentRecyclerView(RecyclerView recentRecyclerView);
+        void listenRecentRecyclerView(RecyclerView recentRecyclerView, JSONArray response);
 
         void listenTodayRecyclerView(RecyclerView todayRecyclerView, JSONArray response);
 
