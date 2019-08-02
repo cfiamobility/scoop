@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop.profilelikes;
 
-
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
@@ -45,20 +44,27 @@ public interface ProfileLikesContract extends ProfileCommentContract {
         }
 
         interface ViewHolder extends ProfileCommentContract.View.ViewHolder {
+
             ViewHolder setPostTitle(String postTitle);
             ViewHolder setCommentCount(String commentCount);
+
         }
     }
 
     interface Presenter extends ProfileCommentContract.Presenter {
+
         interface AdapterAPI extends ProfileCommentContract.Presenter.AdapterAPI {
+
             void setAdapter(ProfileLikesContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
                     ProfileLikesContract.View.ViewHolder postCommentViewHolder, int i);
+
         }
 
         interface ViewHolderAPI extends ProfileCommentContract.Presenter.ViewHolderAPI {
+
             EditPostData getEditPostData(int i);
+
         }
     }
 }

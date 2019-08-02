@@ -3,23 +3,17 @@ package ca.gc.inspection.scoop.notifications;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MyApplication;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -29,12 +23,13 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 public class NotificationsPresenter implements NotificationsContract.Presenter {
     private RequestQueue requestQueue;
     private Timestamp currentTime;
-    private NotificationsContract.View notificationsContract;
+    private NotificationsContract.View notificationsView;
     private NetworkUtils networkUtils;
+    private int recentEmpty, todayEmpty;
 
-    public NotificationsPresenter(NotificationsContract.View notificationsContract, NetworkUtils networkUtils){
+    public NotificationsPresenter(NotificationsContract.View notificationsView, NetworkUtils networkUtils){
         this.networkUtils = networkUtils;
-        this.notificationsContract = notificationsContract;
+        this.notificationsView = notificationsView;
         this.requestQueue = Volley.newRequestQueue(MyApplication.getContext()); //instantiating the request queue for volley
         Date date = new Date(); //getting the current date
         Log.i("date", date.toString());
@@ -56,8 +51,8 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
      * @param imageResponse
      */
     public void getTodayNotificationsCallBack(JSONArray notificationResponse, JSONArray imageResponse){
-        notificationsContract.setTodayRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse);
-        notificationsContract.onLoadedDataFromDatabase();
+        notificationsView.setTodayRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse);
+        notificationsView.onLoadedDataFromDatabase();
     }
 
 
@@ -75,8 +70,8 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
      * @param imageResponse
      */
     public void getRecentNotificationsCallBack(JSONArray notificationResponse, JSONArray imageResponse){
-        notificationsContract.setRecentRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse); //calls notificationInterface to set the recent recycler view
-        notificationsContract.onLoadedDataFromDatabase();
+        notificationsView.setRecentRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse); //calls notificationInterface to set the recent recycler view
+        notificationsView.onLoadedDataFromDatabase();
     }
 
 
@@ -84,13 +79,21 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
      * Description: listens to when the recent recycler view is all laid out
      * @param recentRecyclerView: the recycler view to listen to
      */
-    public void listenRecentRecyclerView(final RecyclerView recentRecyclerView){
+    public void listenRecentRecyclerView(final RecyclerView recentRecyclerView, final JSONArray response){
         final RecyclerViewReadyCallback recyclerViewReadyCallback = new RecyclerViewReadyCallback() {
             @Override
             public void onLayoutReady() throws InterruptedException { //sets all views to visible relevant to recent notifications and sets loading panel to gone
-                notificationsContract.showRecentSection();
-                notificationsContract.hideLoadingPanel();
-                notificationsContract.requestTodayFocus();
+                if(response.length() == 0){
+                    notificationsView.hideRecentSection();
+                    notificationsView.requestTodayFocus();
+                    recentEmpty = 1;
+                } else {
+                    notificationsView.showRecentSection();
+                    notificationsView.requestRecentFocus();
+                    notificationsView.hideLoadingPanel();
+                    recentEmpty = 0;
+                }
+                checkNothingNew();
             }
         };
         recentRecyclerView.getViewTreeObserver() //listens to see if recyclerview is finished laying out all properties
@@ -119,14 +122,16 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
             @Override
             public void onLayoutReady() throws InterruptedException {
                 if(response.length() == 0){ //if there is nothing in the today notifications, sets all relevant today sections' visibility to GONE
-                    notificationsContract.hideTodaySection();
-                    notificationsContract.requestRecentFocus();
+                    notificationsView.hideTodaySection();
+                    notificationsView.requestRecentFocus();
+                    todayEmpty = 1;
                 }else { //otherwise sets them to be visible
-                    notificationsContract.showTodaySection();
-                    notificationsContract.requestTodayFocus();
+                    notificationsView.showTodaySection();
+//                    notificationsView.requestTodayFocus();
+                    notificationsView.hideLoadingPanel();
+                    todayEmpty = 0;
                 }
-                notificationsContract.hideLoadingPanel();
-
+                checkNothingNew();
             }
         };
         todayRecyclerView.getViewTreeObserver() //listens to see if recyclerview is finished laying out all properties
@@ -146,7 +151,13 @@ public class NotificationsPresenter implements NotificationsContract.Presenter {
     }
 
 
-
+    private void checkNothingNew(){
+        if (recentEmpty == 1 && todayEmpty == 1){
+            notificationsView.showNoNotifications();
+        } else {
+            notificationsView.hideNoNotifications();
+        }
+    }
 
     /**
      * Description: Interface for when the layout is ready after recycler view is done setting up

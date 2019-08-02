@@ -116,18 +116,20 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
 
     @Override
     public void onBindViewHolderAtPosition(ProfileLikesContract.View.ViewHolder viewHolderInterface, int i) {
-        ProfileLike profilePost = getItemByIndex(i);
-        bindProfileLikesDataToViewHolder(viewHolderInterface, profilePost);
+        ProfileLike profileLike = getItemByIndex(i);
+        bindProfileLikesDataToViewHolder(viewHolderInterface, profileLike);
     }
 
     public static void bindProfileLikesDataToViewHolder(
-            ProfileLikesContract.View.ViewHolder viewHolderInterface, ProfileLike profilePost) {
+            ProfileLikesContract.View.ViewHolder viewHolderInterface, ProfileLike profileLike) {
         // call bindPostCommentDataToViewHolder instead of bindProfileCommentDataToViewHolder as we are setting a different title
-        bindPostCommentDataToViewHolder(viewHolderInterface, profilePost);
-        if (profilePost != null) {
+        bindPostCommentDataToViewHolder(viewHolderInterface, profileLike);
+        if (profileLike != null) {
             viewHolderInterface
-                    .setPostTitle(profilePost.getPostTitle())
-                    .setCommentCount(profilePost.getCommentCount());
+                    .setPostTitle(profileLike.getPostTitle())
+                    .setCommentCount(profileLike.getCommentCount())
+                    .setSavedState(profileLike.getSavedState());
+
         }
     }
 

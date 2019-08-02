@@ -1,5 +1,7 @@
 package ca.gc.inspection.scoop.profilelikes;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.profilecomment.ProfileComment;
@@ -46,7 +48,5 @@ public class ProfileLike extends ProfileComment {
             return "";
         }
     }
-
-
 
 }

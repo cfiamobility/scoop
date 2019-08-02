@@ -57,9 +57,11 @@ public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHo
                 mProfileLikesPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setPostOptionsListener(profilePostViewHolder, i,
                 mProfileLikesPresenter.getActivityIdByIndex(i), mProfileLikesPresenter.getPosterIdByIndex(i),
-                mProfileLikesPresenter.getSavedStatusByIndex(i), mProfileLikesPresenter.getPosterIdByIndex(0),
+                mProfileLikesPresenter.getSavedStateByIndex(i), mProfileLikesPresenter.getPosterIdByIndex(0),
                 mProfileLikesPresenter.getPostTitleByIndex(i), mProfileLikesPresenter.getPostTextByIndex(i),
                 null, mProfileLikesView);
+        PostCommentFragment.setSaveListener(profilePostViewHolder, i);
+        PostCommentFragment.setUnsaveListener(profilePostViewHolder, i);
     }
 
     @Override

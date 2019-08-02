@@ -41,8 +41,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     //reference to the presenter
     private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
     // required as context may be null outside of fragment onCreateView
-    private Context currContext;
     private PostCommentViewHolder mViewHolder;
+    private Context currContext;
 
     private PostOptionsDialogReceiver.DeleteCommentReceiver mDeleteCommentReceiver; // Interface implemented by DisplayPostFragment (used to refresh view after comment is deleted)
     private PostOptionsDialogReceiver.EditCommentReceiver mEditCommentReceiver;
@@ -99,7 +99,6 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         //contains activity id and posterid of the specific post in the Recycler View in which its options menu was clicked
         String activityId = getArguments().getString("ACTIVITY_ID");
         String posterId = getArguments().getString("POSTER_ID");
-        Boolean savedStatus = getArguments().getBoolean("SAVED_STATUS");
         position = getArguments().getInt("POST_POSITION");
         String firstPosterId = getArguments().getString("FIRST_POSTER_ID");
         String postTitle = getArguments().getString(PROFILE_POST_TITLE_KEY);
@@ -134,19 +133,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             }
         });
 
-        // Checks the type of the viewholder of the view - if is a comment view (e.g. postcomment or profilecomment) then hide the save/unsave options
-        // Can not save comments
-        if (mViewHolder.getClass().toString().contains("Comment")){
-            saveTR.setVisibility(View.GONE);
-            saveButton.setVisibility(View.GONE);
-            unsaveTR.setVisibility(View.GONE);
-            unsaveButton.setVisibility(View.GONE);
-        }
-
         setupEditOption(posterId, activityType, activityId);
 
-//        Log.i("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));
-//        Log.i("does activity match display post", Boolean.toString(getActivity().toString().contains("DisplayPostActivity")));
         if (getActivity().toString().contains("DisplayPostActivity") && firstPosterId!= null && firstPosterId.equals(Config.currentUser)){
             deleteButton.setVisibility(View.VISIBLE);
             deleteTR.setVisibility(View.VISIBLE);
@@ -164,13 +152,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             });
 
             setReportOnClickListener(activityId, posterId);
-//            reportButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.i("BUTTON PRESSED", "Report");
-//                    dismiss();
-//                }
-//            });
+
 
             if (posterId.equals(Config.currentUser)){
                 reportTR.setVisibility(View.GONE);
@@ -200,51 +182,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         } else {
             deleteTR.setVisibility(View.GONE);
             deleteButton.setVisibility(View.GONE);
-
             setReportOnClickListener(activityId, posterId);
-
-//            reportButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.i("BUTTON PRESSED", "Report");
-//                    dismiss();
-//                }
-//            });
-        }
-
-
-        // Checks if the post is already saved - if saved hide the save option and set the unsaveButton listener
-        // Otherwise hide the unsave option and set the saveButton listener
-        if (savedStatus){
-            saveTR.setVisibility(View.GONE);
-            saveButton.setVisibility(View.GONE);
-
-            unsaveButton.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    Log.i("BUTTON PRESSED", "Unsave");
-                    Log.i("activity id:", activityId);
-                    // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
-                    currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, false, position);
-                    dismiss();
-                }
-            });
-        } else {
-            unsaveTR.setVisibility(View.GONE);
-            unsaveButton.setVisibility(View.GONE);
-
-            saveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("BUTTON PRESSED", "Save");
-                    Log.i("activity id:", activityId);
-                    // store context as a local variable and used as a param in setSaveResponseMessage(String message) method
-                    currContext = getContext();
-                    mPostOptionsDialogPresenter.savePost(NetworkUtils.getInstance(getContext()), activityId, Config.currentUser, mViewHolder, true, position);
-                    dismiss();
-                }
-            });
         }
 
         return view;

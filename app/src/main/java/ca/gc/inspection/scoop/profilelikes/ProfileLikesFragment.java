@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.editpost.EditPostActivity;
 import ca.gc.inspection.scoop.editpost.EditPostData;
+import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;

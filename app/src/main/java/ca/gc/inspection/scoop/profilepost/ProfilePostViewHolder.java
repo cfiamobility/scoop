@@ -1,10 +1,8 @@
 package ca.gc.inspection.scoop.profilepost;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
 
@@ -51,4 +49,5 @@ public class ProfilePostViewHolder extends ProfileLikesViewHolder
         super.setPostTitle(postTitle);
         return this;
     }
+
 }

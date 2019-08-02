@@ -45,7 +45,7 @@ public class PostComment {
     public static final String PROFILE_COMMENT_LIKE_TYPE_KEY = "liketype";
     public static final String PROFILE_COMMENT_LIKE_COUNT_KEY = "likecount";
     public static final String PROFILE_COMMENT_POST_TEXT_KEY = "posttext";
-    public static final String PROFILE_COMMENT_SAVED_STATUS_KEY = "savedstatus";
+    public static final String PROFILE_COMMENT_SAVED_STATE_KEY = "savedstatus";
 
     /**
      * Constructor for the data object.
@@ -233,18 +233,22 @@ public class PostComment {
      * Gets the saved status from the JSONObject and parses to a Boolean value
      * @return the saved status of a post
      */
-    public Boolean getSavedStatus(){
+    public Boolean getSavedState(){
         try{
-            return Boolean.parseBoolean(mComment.getString(PROFILE_COMMENT_SAVED_STATUS_KEY));
+            if (mComment.getString(PROFILE_COMMENT_SAVED_STATE_KEY).equals("null")){
+                return false;
+            } else {
+                return Boolean.parseBoolean(mComment.getString(PROFILE_COMMENT_SAVED_STATE_KEY));
+            }
         } catch (Exception e){
             e.printStackTrace();
             return false;
         }
     }
 
-    public void setSavedStatus(Boolean savedStatus){
+    public void setSavedState(Boolean savedState){
         try {
-            mComment.put(PROFILE_COMMENT_SAVED_STATUS_KEY, savedStatus);
+            mComment.put(PROFILE_COMMENT_SAVED_STATE_KEY, savedState);
         }
         catch (Exception e) {
             e.printStackTrace();

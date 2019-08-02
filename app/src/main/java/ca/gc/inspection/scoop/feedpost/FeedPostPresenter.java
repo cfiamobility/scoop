@@ -96,7 +96,6 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
 
     @Override
     public void setData(JSONArray feedPostsResponse, JSONArray imagesResponse) {
-
         if ((feedPostsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of feedPostsResponse != imagesResponse; some users may not have profile images");
 

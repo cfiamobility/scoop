@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -38,6 +39,8 @@ public class NotificationsFragment extends Fragment implements
     private RecyclerView.Adapter todayAdapter, recentAdapter;
     private RecyclerView.LayoutManager todayLayoutManager, recentLayoutManager;
     private TextView today, recent;
+    private TextView noNotifications;
+    private ImageView noNotificationsImage;
     //private NotificationsPresenter notificationsScreenController;
     private NotificationsContract.Presenter mPresenter;
     private View view;
@@ -60,8 +63,11 @@ public class NotificationsFragment extends Fragment implements
         //notificationsScreenController = new NotificationsPresenter(this,  NetworkUtils.getInstance(getContext())); //instantiates controller for notifications screen
         setPresenter(new NotificationsPresenter(this, NetworkUtils.getInstance(getContext())));
 
-        today = (TextView) view.findViewById(R.id.fragment_notifications_txt_today); //instantiating the today textview
-        recent = (TextView) view.findViewById(R.id.fragment_notifications_txt_recent); //instantiating the recent textview
+        today = view.findViewById(R.id.fragment_notifications_txt_today); //instantiating the today textview
+        recent = view.findViewById(R.id.fragment_notifications_txt_recent); //instantiating the recent textview
+
+        noNotifications = view.findViewById(R.id.fragment_notifications_no_new_text);
+        noNotificationsImage = view.findViewById(R.id.fragment_notifications_no_new_image);
 
         setSwipeRefreshLayout(view);
     }
@@ -117,14 +123,14 @@ public class NotificationsFragment extends Fragment implements
      */
     @Override
     public void setRecentRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notificationResponse, JSONArray imageResponse) {
-        recentRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_notifications_rv_recent); //instantiating the recyclerview
+        recentRecyclerView = view.findViewById(R.id.fragment_notifications_rv_recent); //instantiating the recyclerview
         recentRecyclerView.setHasFixedSize(true);
         recentLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
         recentRecyclerView.setLayoutManager(recentLayoutManager); //sets the layout manager to one chosen
         recentAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "recent", currentTime, getContext()); //instantiates the adapter
         recentRecyclerView.setAdapter(recentAdapter); //sets the adapter
         //notificationsScreenController.listenRecentRecyclerView(recentRecyclerView);
-        mPresenter.listenRecentRecyclerView(recentRecyclerView);
+        mPresenter.listenRecentRecyclerView(recentRecyclerView, notificationResponse);
 
     }
 
@@ -137,7 +143,7 @@ public class NotificationsFragment extends Fragment implements
      */
     @Override
     public void setTodayRecyclerView(Timestamp currentTime, RequestQueue requestQueue, JSONArray notificationResponse, JSONArray imageResponse) {
-        todayRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_notifications_rv_today); //instantiating the recyclerview
+        todayRecyclerView = view.findViewById(R.id.fragment_notifications_rv_today); //instantiating the recyclerview
         todayRecyclerView.setHasFixedSize(true); //
         todayLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
         todayRecyclerView.setLayoutManager(todayLayoutManager); //sets the layout manager to one chosen
@@ -149,14 +155,27 @@ public class NotificationsFragment extends Fragment implements
     }
 
     /**
+     * Description: shows no new notification text and icon
+     */
+    @Override
+    public void showNoNotifications(){
+        noNotifications.setVisibility(View.VISIBLE);
+        noNotificationsImage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNoNotifications(){
+        noNotifications.setVisibility(View.GONE);
+        noNotificationsImage.setVisibility(View.GONE);
+    }
+
+    /**
      * Description: shows the today portion of the fragment
      */
     @Override
     public void showTodaySection() {
         today.setVisibility(View.VISIBLE);
         todayRecyclerView.setVisibility(View.VISIBLE);
-//        view.findViewById(R.id.view1).setVisibility(View.VISIBLE);
-//        view.findViewById(R.id.view2).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -164,10 +183,8 @@ public class NotificationsFragment extends Fragment implements
      */
     @Override
     public void hideTodaySection() {
-        todayRecyclerView.setVisibility(View.GONE);
         today.setVisibility(View.GONE);
-//        view.findViewById(R.id.view1).setVisibility(View.GONE);
-//        view.findViewById(R.id.view2).setVisibility(View.GONE);
+        todayRecyclerView.setVisibility(View.GONE);
     }
 
     /**
@@ -175,10 +192,17 @@ public class NotificationsFragment extends Fragment implements
      */
     @Override
     public void showRecentSection() {
-//        view.findViewById(R.id.view3).setVisibility(View.VISIBLE);
-//        view.findViewById(R.id.view4).setVisibility(View.VISIBLE);
         recent.setVisibility(View.VISIBLE);
         recentRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Description: hides the recent portion of the fragment
+     */
+    @Override
+    public void hideRecentSection() {
+        recent.setVisibility(View.GONE);
+        recentRecyclerView.setVisibility(View.GONE);
     }
 
     /**

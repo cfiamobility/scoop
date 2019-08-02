@@ -7,6 +7,7 @@ import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.editcomment.EditCommentContract;
 import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.util.TextFormat;
 
 /**
@@ -69,7 +70,7 @@ public interface PostCommentContract {
             ViewHolder setLikeState(LikeState likeState);
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
-            ViewHolder setSavedStatus(Boolean savedStatus);
+            ViewHolder setSavedState(Boolean savedState);
         }
     }
 
