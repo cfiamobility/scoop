@@ -354,11 +354,6 @@ public class PostCommentPresenter implements
     }
 
     @Override
-    public String getPostTextByIndex(int i){
-        return Objects.requireNonNull(getItemByIndex(i)).getPostText();
-    }
-
-    @Override
     public void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String activityId, String newText) {
         viewHolderInterface.setCallBackIdentifier(activityId);
         cacheEditCommentData(activityId, newText);
@@ -391,6 +386,7 @@ public class PostCommentPresenter implements
 
     @Override
     public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
+
         EditCommentBundle editCommentBundle = (EditCommentBundle) interactorBundle;
         String activityId = editCommentBundle.getActivityId();
         PostCommentContract.View.ViewHolder viewHolderInterface = editCommentBundle.getViewHolder();
@@ -399,28 +395,39 @@ public class PostCommentPresenter implements
         int i = viewHolderState.getPosition();
         String newText = editCommentData.getPostText();
 
-        mViewHolderStateCache.createIfMissingViewHolderState(activityId, false, i, SnackBarState.EDIT_COMMENT_SUCCESS);
+        mViewHolderStateCache.createIfMissingViewHolderState(
+                activityId, false, i, SnackBarState.EDIT_COMMENT_SUCCESS);
 
-        if (success) {
-            updateDataCachePostTextForActivityId(i, activityId, newText);
-            mEditCommentCache.removeEditCommentData(activityId);
-            mViewHolderStateCache.incrementPositionForAll();
-            mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_SUCCESS);
-            if (viewHolderInterface != null &&
-                    viewHolderInterface.getCallBackIdentifier() != null &&
-                    viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
-                viewHolderInterface.setPostText(newText);
-                viewHolderInterface.hideEditText();
-                viewHolderInterface.setSnackBarEditCommentSuccess(activityId);
-            }
+        if (success)
+            onDatabaseResponseSuccess(viewHolderInterface, i, activityId, newText);
+        else
+            onDatabaseResponseError(viewHolderInterface, i, activityId);
+    }
+
+    private void onDatabaseResponseError(PostCommentContract.View.ViewHolder viewHolderInterface,
+                                         int i, String activityId) {
+        mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_RETRY);
+        if (viewHolderInterface != null &&
+                viewHolderInterface.getCallBackIdentifier() != null &&
+                viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
+            viewHolderInterface.setSnackBarEditCommentRetry(i, activityId);
         }
-        else {
-            mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_RETRY);
-            if (viewHolderInterface != null &&
-                    viewHolderInterface.getCallBackIdentifier() != null &&
-                    viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
-                viewHolderInterface.setSnackBarEditCommentRetry(i, activityId);
-            }
+    }
+
+    private void onDatabaseResponseSuccess(PostCommentContract.View.ViewHolder viewHolderInterface,
+                                           int i, String activityId, String newText) {
+
+        updateDataCachePostTextForActivityId(i, activityId, newText);
+        mEditCommentCache.removeEditCommentData(activityId);
+        mViewHolderStateCache.incrementPositionForAll();
+        mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_SUCCESS);
+
+        if (viewHolderInterface != null &&
+                viewHolderInterface.getCallBackIdentifier() != null &&
+                viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
+            viewHolderInterface.setPostText(newText);
+            viewHolderInterface.hideEditText();
+            viewHolderInterface.setSnackBarEditCommentSuccess(activityId);
         }
     }
 

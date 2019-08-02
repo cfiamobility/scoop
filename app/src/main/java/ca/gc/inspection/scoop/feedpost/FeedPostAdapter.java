@@ -58,8 +58,7 @@ public class FeedPostAdapter extends RecyclerView.Adapter<FeedPostViewHolder>
         PostCommentFragment.setPostOptionsListener(feedPostViewHolder, i,
                 mFeedPostPresenter.getActivityIdByIndex(i),mFeedPostPresenter.getPosterIdByIndex(i),
                 mFeedPostPresenter.getSavedStateByIndex(i), mFeedPostPresenter.getPosterIdByIndex(0),
-                mFeedPostPresenter.getPostTitleByIndex(i), mFeedPostPresenter.getPostTextByIndex(i),
-                mFeedPostPresenter.getFeedPostImagePathByIndex(i), mFeedPostView);
+                mFeedPostView);
         PostCommentFragment.setSaveListener(feedPostViewHolder, i);
         PostCommentFragment.setUnsaveListener(feedPostViewHolder, i);
 

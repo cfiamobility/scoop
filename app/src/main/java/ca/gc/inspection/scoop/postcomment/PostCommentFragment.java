@@ -22,17 +22,12 @@ import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.profile.OtherUserActivity;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
-import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_TYPE_KEY;
 import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
-import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
-import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
-import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -249,8 +244,7 @@ public abstract class PostCommentFragment extends Fragment implements
                 bundle.putInt("POST_POSITION", i);
                 bottomSheetDialog.setArguments(bundle);
                 bottomSheetDialog.setViewHolder(viewHolder);
-                bundle.putInt(INTENT_ACTIVITY_TYPE_KEY, Config.commentType);
-                bottomSheetDialog.setPostOptionsDialogReceiver(deleteCommentReceiver);
+                bottomSheetDialog.setDeleteCommentReceiver(deleteCommentReceiver);
                 bottomSheetDialog.setEditCommentReceiver(viewHolder);
 
                 final Context context = v.getContext();
@@ -271,7 +265,7 @@ public abstract class PostCommentFragment extends Fragment implements
      */
     public static void setPostOptionsListener(
             PostCommentViewHolder viewHolder, int i, String activityId, String posterId, Boolean savedStatus,
-            String firstPosterId, String postTitle, String postText, String postImagePath,
+            String firstPosterId,
             PostOptionsDialogReceiver.DeleteCommentReceiver deleteCommentReceiver){
         // to get the options menu to appear
         viewHolder.optionsMenu.setOnClickListener(new View.OnClickListener() {
@@ -290,11 +284,8 @@ public abstract class PostCommentFragment extends Fragment implements
                 Log.i("viewholder: ", viewHolder.getClass().toString());
                 bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
 //                Log.i("saved status: ", savedStatus.toString());
-                bundle.putString(PROFILE_POST_TITLE_KEY, postTitle);
-                bundle.putString(PROFILE_COMMENT_POST_TEXT_KEY, postText);
-                bundle.putString(FEED_POST_IMAGE_PATH_KEY, postImagePath);
                 bundle.putInt(INTENT_ACTIVITY_TYPE_KEY, Config.postType);
-                bottomSheetDialog.setPostOptionsDialogReceiver(deleteCommentReceiver);
+                bottomSheetDialog.setDeleteCommentReceiver(deleteCommentReceiver);
                 bottomSheetDialog.setEditPostReceiver((PostOptionsDialogReceiver.EditPostReceiver) viewHolder);
 
 

@@ -321,27 +321,35 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
                 editText.addTextChangedListener(mTextEditorWatcher);
                 editText.setText(postText.getText());
 
-                editButton.setOnClickListener(
-                        (View view) -> {
-                            if (editText.getText().toString().isEmpty()) {
-                                if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
-                                    mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_empty_text_error, SNACKBAR_LENGTH_VERY_SHORT);
-                                    mSnackbar.show();
-                                }
-                            } else sendCommentToDatabase(i, activityId);
-                        });
-                cancelButton.setOnClickListener(view -> {
-                    hideEditText();
-                    setWaitingForResponse(false);
-                    dismissSnackBar();
-                    mPresenter.onCancelEditComment(activityId);
-                });
+                setEditButtonOnClickListener(i, activityId);
+                setCancelButtonOnClickListener(activityId);
                 showEditText();
             }
             else {
                 Snackbar.make(mCoordinatorLayout, "Already editing comment", SNACKBAR_LENGTH_VERY_SHORT).show();
             }
         }
+    }
+
+    private void setEditButtonOnClickListener(int i, String activityId) {
+        editButton.setOnClickListener(
+                (View view) -> {
+                    if (editText.getText().toString().isEmpty()) {
+                        if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
+                            mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_empty_text_error, SNACKBAR_LENGTH_VERY_SHORT);
+                            mSnackbar.show();
+                        }
+                    } else sendCommentToDatabase(i, activityId);
+                });
+    }
+
+    private void setCancelButtonOnClickListener(String activityId) {
+        cancelButton.setOnClickListener(view -> {
+            hideEditText();
+            setWaitingForResponse(false);
+            dismissSnackBar();
+            mPresenter.onCancelEditComment(activityId);
+        });
     }
 
     private void sendCommentToDatabase(int i, String activityId) {

@@ -35,8 +35,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class PostOptionsDialogFragment extends BottomSheetDialogFragment implements PostOptionsDialogContract.View {
 
     //UI Declarations
-    Button saveButton, editButton, shareButton, deleteButton, reportButton, unsaveButton;
-    TableRow saveTR, editTR, shareTR, deleteTR, reportTR, unsaveTR;
+    Button editButton, shareButton, deleteButton, reportButton;
+    TableRow editTR, shareTR, deleteTR, reportTR;
 
     //reference to the presenter
     private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
@@ -68,7 +68,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
      * Invoked by DisplayPostPresenter to pass a reference of itself to this class
      * @param deleteCommentReceiver
      */
-    public void setPostOptionsDialogReceiver(PostOptionsDialogReceiver.DeleteCommentReceiver deleteCommentReceiver) {
+    public void setDeleteCommentReceiver(PostOptionsDialogReceiver.DeleteCommentReceiver deleteCommentReceiver) {
         mDeleteCommentReceiver = deleteCommentReceiver;
     }
 
@@ -101,9 +101,6 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         String posterId = getArguments().getString("POSTER_ID");
         position = getArguments().getInt("POST_POSITION");
         String firstPosterId = getArguments().getString("FIRST_POSTER_ID");
-        String postTitle = getArguments().getString(PROFILE_POST_TITLE_KEY);
-        String postText = getArguments().getString(PROFILE_COMMENT_POST_TEXT_KEY);
-        String feedPostImagePath = getArguments().getString(FEED_POST_IMAGE_PATH_KEY, "");
         int activityType = getArguments().getInt(INTENT_ACTIVITY_TYPE_KEY);
 
         setPresenter(new PostOptionsDialogPresenter(this));
@@ -111,16 +108,12 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         // initializing all of the buttons
         shareButton = view.findViewById(R.id.dialog_post_options_btn_share);
         editButton = view.findViewById(R.id.dialog_post_options_btn_edit);
-        saveButton = view.findViewById(R.id.dialog_post_options_btn_save);
-        unsaveButton = view.findViewById(R.id.dialog_post_options_btn_unsave);
         deleteButton = view.findViewById(R.id.dialog_post_options_btn_delete);
         reportButton = view.findViewById(R.id.dialog_post_options_btn_report);
 
         // initializing all of the rows
         shareTR = view.findViewById(R.id.dialog_post_options_tr_share);
         editTR = view.findViewById(R.id.dialog_post_options_tr_edit);
-        saveTR = view.findViewById(R.id.dialog_post_options_tr_save);
-        unsaveTR = view.findViewById(R.id.dialog_post_options_tr_unsave);
         deleteTR = view.findViewById(R.id.dialog_post_options_tr_delete);
         reportTR = view.findViewById(R.id.dialog_post_options_tr_report);
 
@@ -189,7 +182,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
     private void setupEditOption(String posterId, int activityType, String activityId) {
-        if (posterId != null && posterId.equals(Config.currentUser) && !inProfileLikes()) {
+        if (posterId != null && posterId.equals(Config.currentUser) && !inProfileLikes(activityType)) {
             showEditOption();
             editButton.setOnClickListener((View v) -> {
                 if (activityType == Config.postType) {
@@ -208,8 +201,8 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         }
     }
 
-    private boolean inProfileLikes() {
-        return getActivity().getClass().equals(MainActivity.class);
+    private boolean inProfileLikes(int activityType) {
+        return (activityType == Config.commentType && getActivity().getClass().equals(MainActivity.class));
     }
 
     private void showEditOption() {
@@ -220,14 +213,6 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     private void hideEditOption() {
         editTR.setVisibility(View.GONE);
         editButton.setVisibility(View.GONE);
-    }
-
-    /**
-     * Displays toast message based on the response received from the database
-     * @param message Message that is set in the Presenter
-     */
-    public void setSaveResponseMessage(String message){
-        Toast.makeText(currContext,message,Toast.LENGTH_SHORT).show();
     }
 
 

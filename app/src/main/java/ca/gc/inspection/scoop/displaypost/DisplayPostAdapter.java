@@ -8,15 +8,9 @@ import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.feedpost.FeedPostViewHolder;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
-import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 
 import static java.lang.Integer.min;
 
@@ -57,8 +51,7 @@ public class DisplayPostAdapter extends RecyclerView.Adapter<PostCommentViewHold
             mDisplayPostPresenter.onBindViewHolder((FeedPostContract.View.ViewHolder) viewHolder);
             PostCommentFragment.setPostOptionsListener(viewHolder, i, mDisplayPostPresenter.getActivityIdByIndex(i),
                     mDisplayPostPresenter.getPosterIdByIndex(i), mDisplayPostPresenter.getSavedStateByIndex(i),
-                    mDisplayPostPresenter.getPosterIdByIndex(0), mDisplayPostPresenter.getPostTitleByIndex(i),
-                    mDisplayPostPresenter.getPostTextByIndex(i), mDisplayPostPresenter.getFeedPostImagePathByIndex(i),
+                    mDisplayPostPresenter.getPosterIdByIndex(0),
                     mDisplayPostView);
         }
         else {

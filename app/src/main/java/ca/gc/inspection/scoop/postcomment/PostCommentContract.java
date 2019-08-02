@@ -86,8 +86,7 @@ public interface PostCommentContract {
             int getItemCount();
             String getPosterIdByIndex(int i);
             String getActivityIdByIndex(int i);
-            Boolean getSavedStatusByIndex(int i);
-            String getPostTextByIndex(int i);
+            Boolean getSavedStateByIndex(int i);
 
         }
 
@@ -95,7 +94,7 @@ public interface PostCommentContract {
 
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
-            void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException;
+            void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException;
 
         }
 
