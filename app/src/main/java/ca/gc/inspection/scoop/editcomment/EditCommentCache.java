@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.postcomment;
+package ca.gc.inspection.scoop.editcomment;
 
 import android.util.Log;
 
@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class EditCommentCache {
     protected HashMap<String, EditCommentData> mMap;
 
-    EditCommentCache() {
+    public EditCommentCache() {
         mMap = new HashMap<>();
     }
 
@@ -27,6 +27,10 @@ public class EditCommentCache {
 
     public void removeEditCommentData(String activityId) {
         mMap.remove(activityId);
+    }
+
+    public int size() {
+        return mMap.size();
     }
 
     @Override

@@ -15,6 +15,7 @@ import android.widget.TableRow;
 import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.report.ReportDialogFragment;
@@ -142,25 +143,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             unsaveButton.setVisibility(View.GONE);
         }
 
-        if (posterId != null && posterId.equals(Config.currentUser)) {
-            editTR.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.VISIBLE);
-            editButton.setOnClickListener((View v) -> {
-                if (activityType == Config.postType) {
-                    mEditPostReceiver.onEditPost(position);
-                }
-                else {
-                    mEditCommentReceiver.onEditComment(position, activityId);
-                }
-                if (getFragmentManager() != null) {
-                    getFragmentManager().beginTransaction().remove(this).commit();
-                }
-            });
-        }
-        else {
-            editTR.setVisibility(View.GONE);
-            editButton.setVisibility(View.GONE);
-        }
+        setupEditOption(posterId, activityType, activityId);
 
 //        Log.i("does first poster match config", Boolean.toString(firstPosterId.equals(Config.currentUser)));
 //        Log.i("does activity match display post", Boolean.toString(getActivity().toString().contains("DisplayPostActivity")));
@@ -267,8 +250,39 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         return view;
     }
 
+    private void setupEditOption(String posterId, int activityType, String activityId) {
+        if (posterId != null && posterId.equals(Config.currentUser) && !inProfileLikes()) {
+            showEditOption();
+            editButton.setOnClickListener((View v) -> {
+                if (activityType == Config.postType) {
+                    mEditPostReceiver.onEditPost(position);
+                }
+                else {
+                    mEditCommentReceiver.onEditComment(position, activityId);
+                }
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction().remove(this).commit();
+                }
+            });
+        }
+        else {
+            hideEditOption();
+        }
+    }
 
+    private boolean inProfileLikes() {
+        return getActivity().getClass().equals(MainActivity.class);
+    }
 
+    private void showEditOption() {
+        editTR.setVisibility(View.VISIBLE);
+        editButton.setVisibility(View.VISIBLE);
+    }
+
+    private void hideEditOption() {
+        editTR.setVisibility(View.GONE);
+        editButton.setVisibility(View.GONE);
+    }
 
     /**
      * Displays toast message based on the response received from the database

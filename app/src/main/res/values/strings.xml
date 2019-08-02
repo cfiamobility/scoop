@@ -164,5 +164,9 @@
     we\'ll remove it.</string>
     <string name="thank_you_title">Thanks for reporting this</string>
 
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit_comment_lose_data">Are you sure you want to proceed? \nYou will lose your current unsaved edits.</string>
+
 
 </resources>

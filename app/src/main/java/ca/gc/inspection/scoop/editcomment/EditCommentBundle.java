@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.postcomment;
+package ca.gc.inspection.scoop.editcomment;
 
 
 import ca.gc.inspection.scoop.createpost.InteractorBundle;
@@ -10,7 +10,7 @@ public class EditCommentBundle extends InteractorBundle {
     private String mActivityId;
     private PostCommentContract.View.ViewHolder mViewHolderInterface;
 
-    EditCommentBundle() {
+    public EditCommentBundle() {
         super();
     }
 

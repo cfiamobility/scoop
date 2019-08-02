@@ -11,6 +11,9 @@ import java.util.Objects;
 
 import ca.gc.inspection.scoop.createpost.InteractorBundle;
 import ca.gc.inspection.scoop.createpost.PostRequestReceiver;
+import ca.gc.inspection.scoop.editcomment.EditCommentBundle;
+import ca.gc.inspection.scoop.editcomment.EditCommentCache;
+import ca.gc.inspection.scoop.editcomment.EditCommentData;
 import ca.gc.inspection.scoop.postcomment.ViewHolderState.SnackBarState;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -433,5 +436,20 @@ public class PostCommentPresenter implements
     @Override
     public void onSnackBarDismissed(String activityId) {
         mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(NONE);
+    }
+
+    @Override
+    public boolean unsavedEditsExist() {
+        return (mEditCommentCache != null && mEditCommentCache.size() != 0);
+    }
+
+    @Override
+    public void clearEditCommentCache() {
+        mEditCommentCache = null;
+    }
+
+    @Override
+    public void clearViewHolderStateCache() {
+        mViewHolderStateCache = null;
     }
 }

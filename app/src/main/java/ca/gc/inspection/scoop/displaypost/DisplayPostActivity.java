@@ -19,11 +19,15 @@ import ca.gc.inspection.scoop.Config;
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveDialog;
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.util.ActivityUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 
-public class DisplayPostActivity extends AppCompatActivity implements DisplayPostContract.View {
+public class DisplayPostActivity extends AppCompatActivity implements
+        DisplayPostContract.View,
+        EditLeaveEventListener {
 
     private DisplayPostContract.Presenter mDisplayPostPresenter;
     private DisplayPostFragment mDisplayPostFragment;
@@ -33,9 +37,21 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
     private EditText mAddCommentET;
     private Button mAddCommentButton;
     private boolean canPostComment;
+    private Button mBackButton;
 
     public void goBack (View view) {
         finish();
+    }
+
+    public void confirmLoseEdits() {
+        if (mDisplayPostPresenter.unsavedEditsExist()) {
+            EditLeaveDialog editLeaveDialog = new EditLeaveDialog();
+            editLeaveDialog.setEditLeaveEventListener(this);
+            editLeaveDialog.show(getSupportFragmentManager(), EditLeaveDialog.TAG);
+        }
+        else {
+            confirmLeaveEvent();
+        }
     }
 
     @Override
@@ -128,6 +144,14 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
             }
         });
         canPostComment = true;
+
+        mBackButton = findViewById(R.id.activity_display_post_btn_back);
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmLoseEdits();
+            }
+        });
     }
 
     @Override
@@ -139,5 +163,17 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
         else
             toastMessage = "Failed to post comment";
         Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void confirmLeaveEvent() {
+        mDisplayPostPresenter.clearEditCommentCache();
+        mDisplayPostPresenter.clearEditCommentCache();
+        finish();
+    }
+
+    @Override
+    public void cancelLeaveEvent() {
+
     }
 }

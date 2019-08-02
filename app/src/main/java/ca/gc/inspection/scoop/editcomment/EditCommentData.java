@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.postcomment;
+package ca.gc.inspection.scoop.editcomment;
 
 public class EditCommentData {
     protected String mActivityId, mPostText;

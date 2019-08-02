@@ -1,6 +1,6 @@
 package ca.gc.inspection.scoop.editpost;
 
-import ca.gc.inspection.scoop.postcomment.EditCommentData;
+import ca.gc.inspection.scoop.editcomment.EditCommentData;
 
 public class EditPostData extends EditCommentData {
     private String mPostTitle, mPostImagePath;

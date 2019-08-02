@@ -56,6 +56,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     private View mView;
     @Nullable
     protected String mCallBackIdentifier;
+    private boolean isEditing;
 
     public PostCommentViewHolder(View v, PostCommentContract.Presenter.ViewHolderAPI presenter) {
         super(v);
@@ -105,6 +106,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     @Override
     public void hideEditText() {
         if (editText != null && editButton != null && counter != null) {
+            isEditing = false;
             postText.setVisibility(View.VISIBLE);
             editText.setVisibility(View.GONE);
             editButton.setVisibility(View.GONE);
@@ -114,6 +116,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
 
     public void showEditText() {
         if (editText != null && editButton != null && counter != null) {
+            isEditing = true;
             postText.setVisibility(View.GONE);
             editText.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
@@ -299,27 +302,31 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     @Override
     public void onEditComment(int i, String activityId) {
         if (!waitingForResponse) {
-            mTextEditorWatcher = getEditCommentTextWatcher(activityId);
-            editText.addTextChangedListener(mTextEditorWatcher);
-            editText.setText(postText.getText());
+            if (!isEditing) {
+                mTextEditorWatcher = getEditCommentTextWatcher(activityId);
+                editText.addTextChangedListener(mTextEditorWatcher);
+                editText.setText(postText.getText());
 
-            editButton.setOnClickListener(
-                    (View view) -> {
-                        if (editText.getText().toString().isEmpty()) {
-                            if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
-                                mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_empty_text_error, SNACKBAR_LENGTH_VERY_SHORT);
-                                mSnackbar.show();
-                            }
-                        }
-                        else sendCommentToDatabase(i, activityId);
-                    });
-            cancelButton.setOnClickListener(view -> {
-                hideEditText();
-                setWaitingForResponse(false);
-                dismissSnackBar();
-                mPresenter.onCancelEditComment(activityId);
-            });
-            showEditText();
+                editButton.setOnClickListener(
+                        (View view) -> {
+                            if (editText.getText().toString().isEmpty()) {
+                                if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
+                                    mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_empty_text_error, SNACKBAR_LENGTH_VERY_SHORT);
+                                    mSnackbar.show();
+                                }
+                            } else sendCommentToDatabase(i, activityId);
+                        });
+                cancelButton.setOnClickListener(view -> {
+                    hideEditText();
+                    setWaitingForResponse(false);
+                    dismissSnackBar();
+                    mPresenter.onCancelEditComment(activityId);
+                });
+                showEditText();
+            }
+            else {
+                Snackbar.make(mCoordinatorLayout, "Already editing comment", SNACKBAR_LENGTH_VERY_SHORT).show();
+            }
         }
     }
 
@@ -399,8 +406,9 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
                 @Override
                 public void onDismissed(Snackbar transientBottomBar, int event) {
                     super.onDismissed(transientBottomBar, event);
-                    if (event != DISMISS_EVENT_MANUAL && event != DISMISS_EVENT_CONSECUTIVE)
+                    if (event != DISMISS_EVENT_MANUAL && event != DISMISS_EVENT_CONSECUTIVE) {
                         mPresenter.onSnackBarDismissed(activityId);
+                    }
                 }
             });
         }
@@ -409,7 +417,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     @Override
     public void dismissSnackBar() {
         Log.d("PostCommentViewHolder", "snackbar dismiss");
-        if (mSnackbar != null)
+        if (mSnackbar != null) {
             mSnackbar.dismiss();
+        }
     }
 }

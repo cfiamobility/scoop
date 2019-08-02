@@ -4,6 +4,7 @@ import org.json.JSONException;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.editcomment.EditCommentContract;
 import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.TextFormat;
@@ -51,10 +52,15 @@ public interface PostCommentContract {
         void onLoadedDataFromDatabase();
 
         interface Adapter {
+
             void refreshAdapter();
+
         }
 
-        interface ViewHolder extends PostOptionsDialogReceiver.EditCommentReceiver {
+        interface ViewHolder extends
+                PostOptionsDialogReceiver.EditCommentReceiver,
+                EditCommentContract.View.ViewHolder {
+
             ViewHolder setPostText(String postText);
             ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat);
             ViewHolder setUserName(String userName);
@@ -64,31 +70,15 @@ public interface PostCommentContract {
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
             ViewHolder setSavedStatus(Boolean savedStatus);
-            ViewHolder setEditPostText(String postText);
-            void onEditComment(int i, String activityId);
-            void hideEditText();
-
-            String getCallBackIdentifier();
-
-            void setCallBackIdentifier(String activityId);
-
-            void clearCallBackIdentifier();
-
-            void setWaitingForResponse(boolean waitingForResponse);
-
-            void setSnackBarForCommentInProgress(String activityId);
-
-            void setSnackBarEditCommentSuccess(String activityId);
-
-            void setSnackBarEditCommentRetry(int i, String activityId);
         }
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter extends EditCommentContract.Presenter {
 
         void loadDataFromDatabase(String activityId);
 
         interface AdapterAPI {
+
             void setAdapter(PostCommentContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
                     PostCommentContract.View.ViewHolder postCommentViewHolder, int i);
@@ -97,18 +87,15 @@ public interface PostCommentContract {
             String getActivityIdByIndex(int i);
             Boolean getSavedStatusByIndex(int i);
             String getPostTextByIndex(int i);
+
         }
 
-        interface ViewHolderAPI {
+        interface ViewHolderAPI extends EditCommentContract.Presenter.ViewHolderAPI {
+
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException;
-            void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String activityId, String newText);
 
-            void cacheEditCommentData(String activityId, String postText);
-            void onCancelEditComment(String activityId);
-
-            void onSnackBarDismissed(String activityId);
         }
 
     }

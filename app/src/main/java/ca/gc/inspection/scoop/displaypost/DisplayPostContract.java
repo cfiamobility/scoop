@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.displaypost;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.editcomment.EditCommentContract;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
@@ -52,7 +53,7 @@ public interface DisplayPostContract extends FeedPostContract {
         }
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter extends EditCommentContract.Presenter {
 
         void addPostComment(String currentUserId, String commentText, String activityId);
 
