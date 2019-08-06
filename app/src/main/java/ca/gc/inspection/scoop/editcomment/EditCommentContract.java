@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.editcomment;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
 public class EditCommentContract {
@@ -30,13 +31,11 @@ public class EditCommentContract {
         }
     }
 
-    public interface Presenter extends BasePresenter {
+    public interface Presenter extends BasePresenter, EditLeaveEventListener.Presenter {
 
         void clearEditCommentCache();
 
         void clearViewHolderStateCache();
-
-        boolean unsavedEditsExist();
 
         interface ViewHolderAPI {
 

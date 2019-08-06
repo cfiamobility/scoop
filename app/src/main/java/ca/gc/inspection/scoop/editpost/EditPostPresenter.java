@@ -2,15 +2,16 @@ package ca.gc.inspection.scoop.editpost;
 
 import android.support.annotation.NonNull;
 
-import org.json.JSONObject;
-
 import ca.gc.inspection.scoop.createpost.CreatePostPresenter;
 import ca.gc.inspection.scoop.createpost.InteractorBundle;
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class EditPostPresenter extends CreatePostPresenter implements EditPostContract.Presenter {
+public class EditPostPresenter extends CreatePostPresenter implements
+        EditPostContract.Presenter,
+        EditLeaveEventListener.Presenter {
     /**
      * Implements the Presenter in the EditPostContract interface to follow MVP architecture.
      *
@@ -50,5 +51,16 @@ public class EditPostPresenter extends CreatePostPresenter implements EditPostCo
     @Override
     public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
         mView.onDatabaseResponse(success);
+    }
+
+
+    /**
+     * Calls EditLeaveEventListener.View
+     * The cost of this extra method invocation is reasonable to follow MVP architecture
+     * @return if there are unsaved edits
+     */
+    @Override
+    public boolean unsavedEditsExist() {
+        return mView.unsavedEditsExist();
     }
 }

@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class EditLeaveDialog extends DialogFragment {
     public static final String TAG = "EditLeaveDialog";
-    EditLeaveEventListener mEditLeaveEventListener;
+    EditLeaveEventListener.View mEditLeaveEventListener;
     Button confirmBtn, cancelBtn;
 
     public EditLeaveDialog() {
@@ -52,7 +52,7 @@ public class EditLeaveDialog extends DialogFragment {
         return view;
     }
 
-    public void setEditLeaveEventListener(EditLeaveEventListener editLeaveEventListener) {
+    public void setEditLeaveEventListener(EditLeaveEventListener.View editLeaveEventListener) {
         mEditLeaveEventListener = editLeaveEventListener;
     }
 }

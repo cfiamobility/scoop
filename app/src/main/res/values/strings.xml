@@ -22,6 +22,7 @@
     <string name="edit_post_success">Post edited!</string>
     <string name="edit_post_failed">Failed to edit post</string>
     <string name="edit_post_in_progress">Editing post&#8230;</string>
+    <string name="edit_post_no_changes">No unsaved changes</string>
 
     <string name="post">Post</string>
     <string name="retry_action">Retry</string>

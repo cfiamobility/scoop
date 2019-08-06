@@ -1,7 +1,10 @@
 package ca.gc.inspection.scoop.displaypost;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,15 +22,17 @@ import ca.gc.inspection.scoop.Config;
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.editcomment.EditCommentContract;
 import ca.gc.inspection.scoop.editleavedialog.EditLeaveDialog;
 import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
+import ca.gc.inspection.scoop.editpost.EditPostContract;
 import ca.gc.inspection.scoop.util.ActivityUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 
 public class DisplayPostActivity extends AppCompatActivity implements
         DisplayPostContract.View,
-        EditLeaveEventListener {
+        EditLeaveEventListener.View {
 
     private DisplayPostContract.Presenter mDisplayPostPresenter;
     private DisplayPostFragment mDisplayPostFragment;
@@ -43,14 +48,16 @@ public class DisplayPostActivity extends AppCompatActivity implements
         finish();
     }
 
-    public void confirmLoseEdits() {
-        if (mDisplayPostPresenter.unsavedEditsExist()) {
+    public static void confirmLoseEdits(FragmentManager fragmentManager,
+                                 EditLeaveEventListener.Presenter presenter,
+                                 EditLeaveEventListener.View editLeaveEventListener) {
+
+        if (presenter.unsavedEditsExist()) {
             EditLeaveDialog editLeaveDialog = new EditLeaveDialog();
-            editLeaveDialog.setEditLeaveEventListener(this);
-            editLeaveDialog.show(getSupportFragmentManager(), EditLeaveDialog.TAG);
-        }
-        else {
-            confirmLeaveEvent();
+            editLeaveDialog.setEditLeaveEventListener(editLeaveEventListener);
+            editLeaveDialog.show(fragmentManager, EditLeaveDialog.TAG);
+        } else {
+            editLeaveEventListener.confirmLeaveEvent();
         }
     }
 
@@ -149,7 +156,7 @@ public class DisplayPostActivity extends AppCompatActivity implements
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmLoseEdits();
+                confirmLoseEdits(getSupportFragmentManager(), mDisplayPostPresenter, DisplayPostActivity.this);
             }
         });
     }
@@ -168,7 +175,7 @@ public class DisplayPostActivity extends AppCompatActivity implements
     @Override
     public void confirmLeaveEvent() {
         mDisplayPostPresenter.clearEditCommentCache();
-        mDisplayPostPresenter.clearEditCommentCache();
+        mDisplayPostPresenter.clearViewHolderStateCache();
         finish();
     }
 

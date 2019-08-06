@@ -52,6 +52,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     protected EditText postText;
     protected ImageView postImage;
     protected CoordinatorLayout mCoordinatorLayout;
+    protected Button removeImage;
 
     protected TextView counter;
     protected TextWatcher mTextEditorWatcher;
@@ -113,13 +114,12 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         postText.addTextChangedListener(mTextEditorWatcher);
 
         postImage = findViewById(R.id.activity_create_post_img_post);
-
+        removeImage = findViewById(R.id.activity_create_post_btn_remove_image);
         mCoordinatorLayout = findViewById(R.id.activity_create_post_coordinator);
 
         Button camera = findViewById(R.id.activity_create_post_btn_camera);
         Button cameraRoll = findViewById(R.id.activity_create_post_btn_image);
         Button send = findViewById(R.id.activity_create_post_btn_post);
-        Button removeImage = findViewById(R.id.activity_create_post_btn_remove_image);
 
         /** OnClickListener for the camera button that launches the native camera app.
          *  Deals with permission checks for Camera
@@ -163,9 +163,13 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         removeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postImage.setImageDrawable(null);
+                removeImageOnClick();
             }
         });
+    }
+
+    protected void removeImageOnClick() {
+        postImage.setImageDrawable(null);
     }
 
     public void takePicture() {

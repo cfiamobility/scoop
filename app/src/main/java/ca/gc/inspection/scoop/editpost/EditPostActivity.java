@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.editpost;
 
+import ca.gc.inspection.scoop.R;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,22 +13,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.util.Objects;
-
-import ca.gc.inspection.scoop.R;
-
 import ca.gc.inspection.scoop.createpost.CreatePostActivity;
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
+import static ca.gc.inspection.scoop.displaypost.DisplayPostActivity.confirmLoseEdits;
 import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
 import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class EditPostActivity extends CreatePostActivity implements EditPostContract.View {
+public class EditPostActivity extends CreatePostActivity implements
+        EditPostContract.View,
+        EditLeaveEventListener.View {
     private static final String TAG = "EditPostActivity";
     /**
      * Implements the View in the EditPostContract interface to follow MVP architecture.
@@ -38,6 +39,11 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
     private EditPostContract.Presenter mPresenter;
     private Bitmap mInitialBitmap;
     private String mActivityId;
+    private Button mBackButton;
+
+    private String mInitialPostTitle, mInitialPostText;
+    private boolean mImageModified = false;
+    private Snackbar mSnackbar;
 
     /**
      * Used by post related action cases to start the edit post activity.
@@ -85,21 +91,42 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
         heading.setText(getString(R.string.edit_post_title));
         Button send = findViewById(R.id.activity_create_post_btn_post);
         send.setText(getString(R.string.save));
+        mBackButton = findViewById(R.id.activity_create_post_btn_back);
 
         mActivityId = Objects.requireNonNull(bundle).getString(INTENT_ACTIVITY_ID_KEY);
-        postTitle.setText(bundle.getString(PROFILE_POST_TITLE_KEY));
-        postText.setText(bundle.getString(PROFILE_COMMENT_POST_TEXT_KEY));
+        mInitialPostTitle = bundle.getString(PROFILE_POST_TITLE_KEY);
+        postTitle.setText(mInitialPostTitle);
+        mInitialPostText = bundle.getString(PROFILE_COMMENT_POST_TEXT_KEY);
+        postText.setText(mInitialPostText);
         String feedPostImage = bundle.getString(FEED_POST_IMAGE_PATH_KEY, "");
 
         if (feedPostImage != null && !feedPostImage.isEmpty()) {
-            mInitialBitmap = CameraUtils.stringToBitmap(feedPostImage);
-            setPostImageFromBitmap(mInitialBitmap);
-            Log.d(TAG, "bitmap:"+mInitialBitmap);
+            Bitmap bitmap = CameraUtils.stringToBitmap(feedPostImage);
+            super.setPostImageFromBitmap(bitmap);
         }
         else {
             waitingForResponse = true;
             mPresenter.getPostImage(NetworkUtils.getInstance(this), mActivityId);
         }
+
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmLoseEdits(getSupportFragmentManager(), mPresenter, EditPostActivity.this);
+            }
+        });
+    }
+
+    @Override
+    protected void removeImageOnClick() {
+        super.removeImageOnClick();
+        mImageModified = true;
+    }
+
+    @Override
+    public void setPostImageFromBitmap(Bitmap newBitmap) {
+        super.setPostImageFromBitmap(newBitmap);
+        mImageModified = true;
     }
 
     @Override
@@ -109,24 +136,37 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
         setPostImageFromBitmap(mInitialBitmap);
     }
 
+    @Override
+    public boolean unsavedEditsExist() {
+        return (mImageModified ||
+                !mInitialPostTitle.equals(postTitle.getText().toString()) ||
+                !mInitialPostText.equals(postText.getText().toString()));
+    }
+
     public void sendPostToDatabase(String postTitle, String postText, Drawable postImage) {
         if (postTitle.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_title_empty_error, Snackbar.LENGTH_SHORT).show();
         } else if (postText.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_text_empty_error, Snackbar.LENGTH_SHORT).show();
         } else if (!waitingForResponse) {
-            Snackbar.make(mCoordinatorLayout, R.string.edit_post_in_progress, Snackbar.LENGTH_INDEFINITE).show();
-            waitingForResponse = true;
-            String imageBitmap = "";
-            if (postImage != null) {
-                imageBitmap = CameraUtils.bitmapToString(((BitmapDrawable) postImage).getBitmap());
-                Log.i(TAG, "bitmap: "+imageBitmap);
+            if (unsavedEditsExist()) {
+                Snackbar.make(mCoordinatorLayout, R.string.edit_post_in_progress, Snackbar.LENGTH_INDEFINITE).show();
+                waitingForResponse = true;
+                String imageBitmap = "";
+                if (postImage != null) {
+                    imageBitmap = CameraUtils.bitmapToString(((BitmapDrawable) postImage).getBitmap());
+                    Log.i(TAG, "bitmap: " + imageBitmap);
+                }
+                if (!mImageModified) {
+                    Log.i(TAG, "bitmap equals the initial bitmap");
+                    imageBitmap = null;
+                }
+                mPresenter.sendPostToDatabase(NetworkUtils.getInstance(this), mActivityId, postTitle, postText, imageBitmap);
             }
-            if (mInitialBitmap != null && imageBitmap.equals(CameraUtils.bitmapToString(mInitialBitmap))) {
-                Log.i(TAG, "bitmap equals the initial bitmap");
-                imageBitmap = null;
+            else if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
+                mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_post_no_changes, Snackbar.LENGTH_SHORT);
+                mSnackbar.show();
             }
-            mPresenter.sendPostToDatabase(NetworkUtils.getInstance(this), mActivityId, postTitle, postText, imageBitmap);
         }
     }
 
@@ -148,5 +188,15 @@ public class EditPostActivity extends CreatePostActivity implements EditPostCont
             });
             mSnackbar.show();
         }
+    }
+
+    @Override
+    public void confirmLeaveEvent() {
+        finish();
+    }
+
+    @Override
+    public void cancelLeaveEvent() {
+
     }
 }
