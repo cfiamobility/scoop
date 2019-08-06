@@ -253,7 +253,7 @@ public class PostCommentPresenter implements
             viewHolderInterface.clearCallBackIdentifier();
             viewHolderInterface.setDate(postComment.getCreatedDate())
                     .setLikeCount(postComment.getLikeCount())
-                    .setPostText(postComment.getPostText())
+                    .setPostTextWithFormat(postComment.getPostText(), postComment.getTextFormat())
                     .setUserImageFromString(postComment.getProfileImageString())
                     .setUserName(postComment.getValidFullName())
                     .setLikeState(postComment.getLikeState())

@@ -17,7 +17,7 @@ public class SearchProfile {
 
     JSONObject mProfile;
     private static final String TAG = "SearchPost";
-    private static final String RELEVANCE_LABEL = "relevance: ";
+    private static final String RELEVANCE_LABEL = "Relevance: ";
     private static final double SEARCH_POST_NAME_WEIGHT_MULTIPLIER = 2;
 
     public static final String SEARCH_PROFILE_POSITION_KEY = "positionname";

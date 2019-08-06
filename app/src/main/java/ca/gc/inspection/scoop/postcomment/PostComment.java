@@ -4,6 +4,8 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.util.TextFormat;
+
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.LikeState.NULL;
 
@@ -22,6 +24,8 @@ public class PostComment {
      * TODO: use mComment.isNull(key) for null checking
      */
     protected JSONObject mComment, mImage;
+    protected TextFormat mTextFormat = null;
+    private static final String MODIFIED_DATE_LABEL = "Edited: ";
 
     public static final String PROFILE_COMMENT_ACTIVITYID_KEY = "activityid";
     /*  Disambiguation: PosterId vs UserId
@@ -58,6 +62,10 @@ public class PostComment {
     public PostComment(JSONObject jsonComment, JSONObject jsonImage) {
         mComment = jsonComment;
         mImage = jsonImage;
+        String modifiedDatefooter = null;
+        if (getModifiedDate() != null && !getModifiedDate().isEmpty() && !getModifiedDate().equals(getCreatedDate()))
+            modifiedDatefooter = MODIFIED_DATE_LABEL + getModifiedDate();
+        mTextFormat = new TextFormat(null, getPostText(), modifiedDatefooter);
     }
 
     /**
@@ -269,4 +277,7 @@ public class PostComment {
         }
     }
 
+    public TextFormat getTextFormat() {
+        return mTextFormat;
+    }
 }
