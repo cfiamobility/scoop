@@ -54,7 +54,7 @@ public interface DisplayPostContract extends FeedPostContract {
 
     interface Presenter extends BasePresenter {
 
-        void addPostComment(String currentUserId, String commentText, String activityId);
+        void addPostComment(String currentUserId, String commentText, String activityId, String posterId);
 
         interface FragmentAPI extends FeedPostContract.Presenter {
             void setFragmentView(DisplayPostContract.View.Fragment fragmentView);
