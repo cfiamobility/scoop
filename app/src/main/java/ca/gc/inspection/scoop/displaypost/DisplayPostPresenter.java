@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.feedpost.FeedPost;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
@@ -21,7 +22,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 class DisplayPostPresenter extends FeedPostPresenter implements
         DisplayPostContract.Presenter,
         DisplayPostContract.Presenter.FragmentAPI,
-        DisplayPostContract.Presenter.FragmentAPI.AdapterAPI {
+        DisplayPostContract.Presenter.FragmentAPI.AdapterAPI,
+        EditLeaveEventListener.Presenter {
 
     private static final String TAG = "DisplayPostPresenter";
 
@@ -171,5 +173,9 @@ class DisplayPostPresenter extends FeedPostPresenter implements
                     postComment.getPostText(),
                     null);
         }
+    }
+
+    public boolean unsavedEditsExist() {
+        return (mEditCommentCache != null && mEditCommentCache.size() != 0);
     }
 }

@@ -31,7 +31,7 @@ public class EditCommentContract {
         }
     }
 
-    public interface Presenter extends BasePresenter, EditLeaveEventListener.Presenter {
+    public interface Presenter extends BasePresenter {
 
         void clearEditCommentCache();
 

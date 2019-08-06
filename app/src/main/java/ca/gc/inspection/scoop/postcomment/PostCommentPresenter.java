@@ -16,9 +16,6 @@ import ca.gc.inspection.scoop.editcomment.EditCommentCache;
 import ca.gc.inspection.scoop.editcomment.EditCommentData;
 import ca.gc.inspection.scoop.postcomment.ViewHolderState.SnackBarState;
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.feedpost.FeedPost;
-import ca.gc.inspection.scoop.profilelikes.ProfileLike;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;
@@ -54,6 +51,15 @@ public class PostCommentPresenter implements
         if (mDataCache == null || getItemCount() < i+1)
             return null;
         return mDataCache.getPostCommentByIndex(i);
+    }
+
+    private PostComment getItemByActivityId(int i, String activityId) {
+        if (i >=0 && i <= getItemCount()) {
+            if (getItemByIndex(i) != null && activityId.equals(getItemByIndex(i).getActivityId())) {
+                return getItemByIndex(i);
+            }
+        }
+        return null;
     }
 
     /**
@@ -245,7 +251,7 @@ public class PostCommentPresenter implements
         if (postComment != null) {
             Log.d(TAG, "activityId: " + postComment.getActivityId() + ", posttext: " + postComment.getPostText());
             viewHolderInterface.clearCallBackIdentifier();
-            viewHolderInterface.setDate(postComment.getDate())
+            viewHolderInterface.setDate(postComment.getCreatedDate())
                     .setLikeCount(postComment.getLikeCount())
                     .setPostText(postComment.getPostText())
                     .setUserImageFromString(postComment.getProfileImageString())
@@ -432,12 +438,10 @@ public class PostCommentPresenter implements
     }
 
     private boolean updateDataCachePostTextIfActivityIdMatchesIndex(int i, String activityId, String newText) {
-        if (i >=0 && i <= getItemCount()) {
-            if (getItemByIndex(i) != null && activityId.equals(getItemByIndex(i).getActivityId())) {
-                getItemByIndex(i).setPostText(newText);
-                Log.d(TAG, "Presenter update datacache" + activityId);
-                return true;
-            }
+        PostComment postComment = getItemByActivityId(i, activityId);
+        if (postComment != null) {
+            Log.d(TAG, "Presenter update datacache" + activityId);
+            postComment.setPostText(newText);
         }
         return false;
     }
@@ -464,8 +468,14 @@ public class PostCommentPresenter implements
     }
 
     @Override
-    public boolean unsavedEditsExist() {
-        return (mEditCommentCache != null && mEditCommentCache.size() != 0);
+    public boolean unsavedEditsExist(int i, String activityId) {
+        if (mEditCommentCache == null)
+            return false;
+        EditCommentData editCommentData = mEditCommentCache.getEditCommentData(activityId);
+        if (editCommentData == null)
+            return false;
+        PostComment postComment = getItemByActivityId(i, activityId);
+        return postComment != null && !postComment.getPostText().equals(editCommentData.getPostText());
     }
 
     @Override

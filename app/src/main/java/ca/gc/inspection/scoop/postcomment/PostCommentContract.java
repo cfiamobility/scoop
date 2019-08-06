@@ -5,6 +5,7 @@ import org.json.JSONException;
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.editcomment.EditCommentContract;
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
@@ -95,7 +96,7 @@ public interface PostCommentContract {
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException;
-
+            boolean unsavedEditsExist(int i, String activityId);
         }
 
     }

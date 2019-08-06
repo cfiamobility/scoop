@@ -339,6 +339,11 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
                             mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_empty_text_error, SNACKBAR_LENGTH_VERY_SHORT);
                             mSnackbar.show();
                         }
+                    } else if (!mPresenter.unsavedEditsExist(i, activityId)) {
+                        if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
+                            mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_post_no_changes, SNACKBAR_LENGTH_VERY_SHORT);
+                            mSnackbar.show();
+                        }
                     } else sendCommentToDatabase(i, activityId);
                 });
     }

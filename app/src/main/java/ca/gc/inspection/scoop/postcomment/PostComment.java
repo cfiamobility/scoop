@@ -37,6 +37,7 @@ public class PostComment {
      */
     public static final String PROFILE_COMMENT_LIKE_POSTERID_KEY = "posterid";
     public static final String PROFILE_COMMENT_DATE_KEY = "createddate";
+    public static final String PROFILE_COMMENT_MODIFIED_DATE_KEY = "modifieddate";
     public static final String PROFILE_COMMENT_PROFILE_IMAGE_KEY = "profileimage";
     public static final String PROFILE_COMMENT_POST_FIRST_NAME_KEY = "postfirstname";
     public static final String PROFILE_COMMENT_POST_LAST_NAME_KEY = "postlastname";
@@ -91,9 +92,22 @@ public class PostComment {
     /**
      * @return date string
      */
-    public String getDate() {
+    public String getCreatedDate() {
         try {
             return mComment.getString(PROFILE_COMMENT_DATE_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * @return date string
+     */
+    public String getModifiedDate() {
+        try {
+            return mComment.getString(PROFILE_COMMENT_MODIFIED_DATE_KEY);
         }
         catch (Exception e) {
             e.printStackTrace();
