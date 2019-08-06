@@ -7,10 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.searchpost.SearchPostContract;
 
 public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder>
@@ -55,7 +52,7 @@ public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder
     public void onBindViewHolder(@NonNull SearchPostViewHolder searchPostViewHolder, int i) {
         mSearchPostPresenter.onBindViewHolderAtPosition(searchPostViewHolder, i);
         PostCommentFragment.setDisplayPostListener(searchPostViewHolder,
-                mSearchPostPresenter.getActivityIdByIndex(i));
+                mSearchPostPresenter.getActivityIdByIndex(i), mSearchPostPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setLikesListener(searchPostViewHolder, i);
         PostCommentFragment.setUserInfoListener(searchPostViewHolder,
                 mSearchPostPresenter.getPosterIdByIndex(i));

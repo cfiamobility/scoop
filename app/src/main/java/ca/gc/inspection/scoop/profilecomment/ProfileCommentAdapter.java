@@ -61,7 +61,7 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
         PostCommentFragment.setDisplayPostListener(profileCommentViewHolder,
                 //NOTE: The DisplayListener get's the reference ID instead of the activity ID
                 // to display the original post that was commented on.
-                mProfileCommentPresenter.getReferenceIdByIndex(i));
+                mProfileCommentPresenter.getReferenceIdByIndex(i), mProfileCommentPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setLikesListener(profileCommentViewHolder, i);
         PostCommentFragment.setUserInfoListener(profileCommentViewHolder,
                 mProfileCommentPresenter.getPosterIdByIndex(i));

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 
 public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHolder>
@@ -52,7 +51,7 @@ public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHo
     public void onBindViewHolder(@NonNull ProfileLikesViewHolder profilePostViewHolder, int i) {
         mProfileLikesPresenter.onBindViewHolderAtPosition(profilePostViewHolder, i);
         PostCommentFragment.setDisplayPostListener(profilePostViewHolder,
-                mProfileLikesPresenter.getActivityIdByIndex(i));
+                mProfileLikesPresenter.getActivityIdByIndex(i), mProfileLikesPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setLikesListener(profilePostViewHolder, i);
         PostCommentFragment.setUserInfoListener(profilePostViewHolder,
                 mProfileLikesPresenter.getPosterIdByIndex(i));

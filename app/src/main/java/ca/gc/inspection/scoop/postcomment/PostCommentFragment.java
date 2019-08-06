@@ -21,8 +21,6 @@ import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogFragment;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.profile.OtherUserActivity;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesViewHolder;
-import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -197,7 +195,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
      * @param viewHolder viewholder that displays the current post
      * @param activityId activityid of the post that the viewholder contains
      */
-    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
+    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId, String posterId){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +206,7 @@ public abstract class PostCommentFragment extends Fragment implements PostCommen
                 else {
                     Intent intent = new Intent(context, DisplayPostActivity.class);
                     intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
+                    intent.putExtra(INTENT_POSTER_ID_KEY, posterId);
                     context.startActivity(intent);
                 }
             }
