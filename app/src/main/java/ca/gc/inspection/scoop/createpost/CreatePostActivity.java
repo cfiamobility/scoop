@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.ImageFilePath;
@@ -57,14 +58,20 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     protected TextView counter;
     protected TextWatcher mTextEditorWatcher;
 
+    /**
+     * Creates a TextWatcher to show the current word count out of the maximum allowed for a post/comment
+     * @param textView of a word counter TextView
+     * @return TextWatcher
+     */
     public static TextWatcher getTextWatcher(TextView textView) {
         return new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //This sets a textview to the current length
-                textView.setText(String.valueOf(s.length()) + "/255");
+                //This sets a TextView to the current length
+                textView.setText(String.format(Locale.CANADA, "%s/%d",
+                        String.valueOf(s.length()), TEXT_CHAR_LIMIT));
             }
 
             public void afterTextChanged(Editable s) {
@@ -298,6 +305,10 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
     }
 
+    /**
+     * Helper method to encapsulate setting a post image to a bitmap including the layout parameters
+     * @param newBitmap to set post image to
+     */
     public void setPostImageFromBitmap(Bitmap newBitmap) {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
@@ -306,6 +317,13 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         postImage.setImageBitmap(newBitmap);
     }
 
+    /**
+     * Callback method to update the UI based on the database response. If a post was created successfully,
+     * the activity finishes, otherwise, display a SnackBar to retry sending the post.
+     * Presenter's onDatabaseResponse calls this since the Presenter it can only work with Java objects,
+     * not Android objects
+     * @param success True if a post was created
+     */
     public void onDatabaseResponse(boolean success) {
         waitingForResponse = false;
         if (success) {

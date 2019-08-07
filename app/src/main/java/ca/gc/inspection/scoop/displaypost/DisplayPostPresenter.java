@@ -148,6 +148,13 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         mDisplayPostInteractor.addPostComment(currentUserId, commentText, activityId);
     }
 
+    /**
+     * Callback for database response for adding a post comment.
+     * Deals with reloading data from the database.
+     *
+     * @param success       True if a comment was successfully added to the post
+     * @param activityId    activityId of the post to reload
+     */
     public void onAddPostComment(boolean success, String activityId) {
         if (success) {
             onItemAdded();
@@ -157,6 +164,15 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         mActivityView.onAddPostComment(success);
     }
 
+    /**
+     * EditPostData used to store current state of post to start EditPostActivity.
+     * The relevant is retrieved from the DataCache using the adapter position i.
+     * Display post only contains a single post and the rest are comments - this method is only
+     * needed for the post item.
+     *
+     * @param i     adapter position
+     * @return EditPostData is a data class which stores the current edits for a post
+     */
     @Override
     public EditPostData getEditPostData(int i) {
         if (i == 0) {
@@ -175,6 +191,13 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         }
     }
 
+    /**
+     * Helper method to let EditLeaveEventListener.View know if it needs to create an EditLeaveDialog
+     * to ask the user to confirm leaving their unsaved edits.
+     *
+     * @return True if there are unsaved edits for a post comment
+     */
+    @Override
     public boolean unsavedEditsExist() {
         return (mEditCommentCache != null && mEditCommentCache.size() != 0);
     }

@@ -173,6 +173,14 @@ public class PostComment {
         }
     }
 
+    /**
+     * Used to update the text of a post comment in the DataCache.
+     * Needed for editing a post - if the user does not pull down to refresh, the DataCache becomes stale.
+     * This means that scrolling up and down the RecyclerView will cause stale data to be binded to the
+     * view holders instead of the edited comment text.
+     *
+     * @param text  post comment text
+     */
     public void setPostText(String text) {
         try {
             mComment.put(PROFILE_COMMENT_POST_TEXT_KEY, text);

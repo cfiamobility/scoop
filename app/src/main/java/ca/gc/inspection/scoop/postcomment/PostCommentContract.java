@@ -37,9 +37,11 @@ import ca.gc.inspection.scoop.util.TextFormat;
  *      ^
  *      ProfileComment - extends above but with post title
  *      ^
- *      ProfilePost - extends above but overrides post title and contains comment count
+ *      ProfileLike - extends above but overrides post title and contains comment count
  *      ^
- *      FeedPost - extends above but contains
+ *      ProfilePost - similar to above but used for profile posts
+ *      ^
+ *      FeedPost - extends above but contains a post image (in addition to the profile image)
  */
 
 public interface PostCommentContract {

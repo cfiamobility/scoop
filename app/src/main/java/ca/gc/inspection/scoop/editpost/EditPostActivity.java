@@ -28,7 +28,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class EditPostActivity extends CreatePostActivity implements
         EditPostContract.View,
-        EditLeaveEventListener.View {
+        EditLeaveEventListener.View.EditLeaveDialogAPI {
     private static final String TAG = "EditPostActivity";
     /**
      * Implements the View in the EditPostContract interface to follow MVP architecture.
@@ -170,6 +170,10 @@ public class EditPostActivity extends CreatePostActivity implements
         }
     }
 
+    /**
+     * Data
+     * @param success True if a post was created
+     */
     public void onDatabaseResponse(boolean success) {
         waitingForResponse = false;
         if (success) {
@@ -190,11 +194,19 @@ public class EditPostActivity extends CreatePostActivity implements
         }
     }
 
+    /**
+     * User has confirmed they want to leave the activity and lose their unsaved edits.
+     * Edit post does not have any caches to clear.
+     */
     @Override
     public void confirmLeaveEvent() {
         finish();
     }
 
+    /**
+     * Callback for EditLeaveDialog's option to cancel leave event.
+     * Not necessary but included to be consistent with attaching a callback to a Dialog button.
+     */
     @Override
     public void cancelLeaveEvent() {
 

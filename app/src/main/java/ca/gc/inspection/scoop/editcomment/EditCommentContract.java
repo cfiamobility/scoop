@@ -5,6 +5,9 @@ import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
+/**
+ * Defines the relationship between the View and Presenter
+ */
 public class EditCommentContract {
 
     public interface View extends BaseView<Presenter> {
@@ -32,10 +35,6 @@ public class EditCommentContract {
     }
 
     public interface Presenter extends BasePresenter {
-
-        void clearEditCommentCache();
-
-        void clearViewHolderStateCache();
 
         interface ViewHolderAPI {
 

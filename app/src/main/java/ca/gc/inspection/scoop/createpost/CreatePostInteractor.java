@@ -21,6 +21,9 @@ public class CreatePostInteractor {
 
     private CreatePostPresenter mPresenter;
 
+    /**
+     * Empty constructor to allow inheritance
+     */
     public CreatePostInteractor() {
     }
 
@@ -53,6 +56,15 @@ public class CreatePostInteractor {
         network.addToRequestQueue(postRequest);
     }
 
+    /**
+     * Static helper method to create a StringRequest of type Post.
+     * Unlike GET, POST passes parameters in the message body instead of url
+     * @param postRequestReceiver   Instance which implements the PostRequestReceiver to receive callbacks
+     * @param interactorBundle      Any implementation of interactor Bundle
+     * @param url
+     * @param params
+     * @return
+     */
     public static StringRequest newPostRequest(PostRequestReceiver postRequestReceiver, InteractorBundle interactorBundle,
                                                String url, Map<String, String> params) {
         return new StringRequest(Request.Method.POST, url,

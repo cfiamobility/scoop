@@ -136,11 +136,25 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         }
     }
 
+    /**
+     * Feed post image path is stored in the DataCache which is indexed using the RecyclerView adapter
+     * position (0 ... n-1).
+     *
+     * @param i adapter position
+     * @return String of the feed post image path is used to construct the post image
+     */
     @Override
     public String getFeedPostImagePathByIndex(int i) {
         return Objects.requireNonNull(getItemByIndex(i)).getFeedPostImagePath();
     }
 
+    /**
+     * EditPostData used to store current state of post to start EditPostActivity.
+     * The relevant is retrieved from the DataCache using the adapter position i.
+     *
+     * @param i     adapter position
+     * @return EditPostData is a data class which stores the current edits for a post
+     */
     @Override
     public EditPostData getEditPostData(int i) {
         FeedPost feedPost = getItemByIndex(i);

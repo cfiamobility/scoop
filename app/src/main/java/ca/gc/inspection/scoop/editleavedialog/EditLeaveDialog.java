@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class EditLeaveDialog extends DialogFragment {
     public static final String TAG = "EditLeaveDialog";
-    EditLeaveEventListener.View mEditLeaveEventListener;
+    EditLeaveEventListener.View.EditLeaveDialogAPI mEditLeaveEventListener;
     Button confirmBtn, cancelBtn;
 
     public EditLeaveDialog() {
@@ -27,7 +27,9 @@ public class EditLeaveDialog extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.dialog_lose_edits, container);
@@ -52,7 +54,8 @@ public class EditLeaveDialog extends DialogFragment {
         return view;
     }
 
-    public void setEditLeaveEventListener(EditLeaveEventListener.View editLeaveEventListener) {
+    public void setEditLeaveEventListener(
+            EditLeaveEventListener.View.EditLeaveDialogAPI editLeaveEventListener) {
         mEditLeaveEventListener = editLeaveEventListener;
     }
 }

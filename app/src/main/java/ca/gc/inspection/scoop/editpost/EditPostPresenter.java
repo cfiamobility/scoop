@@ -48,11 +48,17 @@ public class EditPostPresenter extends CreatePostPresenter implements
         mView.onDatabaseImageResponse(image);
     }
 
+    /**
+     * Callback for the database response when editing a post.
+     * Routes to the view to handle Android UI changes.
+     *
+     * @param success           True if the post was edited
+     * @param interactorBundle  Data class not used but must be present to implement PostRequestReceiver
+     */
     @Override
     public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
         mView.onDatabaseResponse(success);
     }
-
 
     /**
      * Calls EditLeaveEventListener.View

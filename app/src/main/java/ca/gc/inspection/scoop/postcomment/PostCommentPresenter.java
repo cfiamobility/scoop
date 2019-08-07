@@ -35,7 +35,8 @@ import static java.lang.Integer.max;
 public class PostCommentPresenter implements
         PostCommentContract.Presenter,
         PostCommentContract.Presenter.AdapterAPI,
-        PostCommentContract.Presenter.ViewHolderAPI, PostRequestReceiver {
+        PostCommentContract.Presenter.ViewHolderAPI,
+        PostRequestReceiver {
 
     private static final String TAG = "PostCommentPresenter";
 
@@ -284,6 +285,18 @@ public class PostCommentPresenter implements
         }
     }
 
+    /**
+     * Helper method to bind the unsaved edit comment text to a post comment. Called when RecyclerView
+     * scrolls and new data has to be attached to the existing view holders.
+     *
+     * @param viewHolderInterface   Call interface method to setup the edit comment UI (if unsaved edit exists).
+     * @param postComment           DataCache item which contains the activityId of the comment.
+     *                              Serves as the unique id of a comment since the adapter position
+     *                              can change if the DataCache is reordered or if comments are added/deleted.
+     * @param i                     Adapter position - the index to retrieve an element from the DataCache.
+     * @param editCommentCache      Cache of EditCommentData objects to retrieve the correct unsaved edit
+     *                              text data by activityId.
+     */
     public static void bindEditCommentDataToViewHolder(
             PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment, int i, EditCommentCache editCommentCache) {
         Log.d(TAG, "bindEditCommentDataToViewHolder");
@@ -302,6 +315,20 @@ public class PostCommentPresenter implements
         }
     }
 
+    /**
+     * Helper method to bind the state of Snackbars and whether it can send data to the database through
+     * the Presenter or if it is waiting for a response.
+     * Called when RecyclerView scrolls or the page is refreshed and allows the state of SnackBar messages,
+     * such as the retry send action, to be preserved.
+     *
+     * @param viewHolderInterface   Call interface method to set the SnackBar and waitingForResponse state.
+     * @param postComment           DataCache item which contains the activityId of the comment.
+     *                              Serves as the unique id of a comment since the adapter position
+     *                              can change if the DataCache is reordered or if comments are added/deleted.
+     * @param i                     Adapter position - the index to retrieve an element from the DataCache.
+     * @param viewHolderStateCache  Cache of ViewHolderState objects to retrieve the correct SnackBar and
+     *                              waitingForResponse state by activityId.
+     */
     public static void bindViewHolderStateToViewHolder(
             PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment,
             int i, ViewHolderStateCache viewHolderStateCache) {
@@ -359,6 +386,28 @@ public class PostCommentPresenter implements
         return Objects.requireNonNull(getItemByIndex(i)).getSavedState();
     }
 
+    /**
+     * Called by PostCommentViewHolder to save the edit for a post comment to the database.
+     *
+     * @param viewHolderInterface   Interface to update when the database response is received. Note that a
+     *                              callback identifier must be set (in this case, the activityId) so that
+     *                              when the Presenter receives the database response, it knows if the ViewHolder
+     *                              is still the correct one. If the ViewHolder was scrolled and recycled, we don't
+     *                              want it to update UI as it may be showing a completely different post comment.
+     *                              Instead the correct view holder will eventually have its UI updated using the
+     *                              onBind methods and Presenter-scoped Cache objects.
+     *
+     * @param i                     Estimated adapter position. This may shift if comments are added/deleted
+     *                              or if the user initiates a pull down to refresh while the viewholder is waiting
+     *                              for a database response for editing a comment. Nonetheless, this value
+     *                              provides a starting point to search by activityId - it reduces the need
+     *                              for an O(n) scan of the DataCache to locate the correct item to update by
+     *                              activityId.
+     *
+     * @param activityId            Unique identifier for the post comment.
+     *
+     * @param newText               The new text to update the post comment to.
+     */
     @Override
     public void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String activityId, String newText) {
         viewHolderInterface.setCallBackIdentifier(activityId);
@@ -367,6 +416,7 @@ public class PostCommentPresenter implements
         mViewHolderStateCache.createIfMissingViewHolderState(activityId, true, i, EDIT_COMMENT_IN_PROGRESS);
         viewHolderInterface.setSnackBarForCommentInProgress(activityId);
 
+        // Put all the data in the EditCommentBundle that we'll need again in the Presenter's callback method
         EditCommentBundle editCommentBundle = new EditCommentBundle();
         editCommentBundle.setActivityId(activityId);
         editCommentBundle.setViewHolder(viewHolderInterface);
@@ -375,11 +425,29 @@ public class PostCommentPresenter implements
         mPostCommentInteractor.updatePostComment(editCommentBundle, activityId, newText);
     }
 
+    /**
+     * Need to store the unsaved changes in the EditCommentCache so that when the user scrolls through
+     * the RecyclerView when editing a comment, the correct data can be re-attached to the view holder.
+     *
+     * @param activityId    Unique identifier of a post comment. Adapter position may shift and cannot be
+     *                      used here.
+     * @param postText      The current unsaved text.
+     */
     @Override
     public void cacheEditCommentData(String activityId, String postText) {
         mEditCommentCache.insertOrUpdateExistingEditCommentDataWithPostText(activityId, postText);
     }
 
+    /**
+     * When the user cancels their edit for a specific post comment, we must drop the data from the
+     * EditCommentCache and ViewHolderStateCache, otherwise when the user scrolls through the RecyclerView,
+     * the dropped changes and irrelevant SnackBar states may show up. It is not enough to set the
+     * ViewHolder's waitingForResponse to False, we must update the ViewHolderStateCache to prevent
+     * onBind methods from resetting the ViewHolderState to a stale value.
+     *
+     * @param activityId    Unique identifier of a post comment. Adapter position may shift and cannot be
+     *                      used here.
+     */
     @Override
     public void onCancelEditComment(String activityId) {
         mEditCommentCache.removeEditCommentData(activityId);
@@ -476,15 +544,5 @@ public class PostCommentPresenter implements
             return false;
         PostComment postComment = getItemByActivityId(i, activityId);
         return postComment != null && !postComment.getPostText().equals(editCommentData.getPostText());
-    }
-
-    @Override
-    public void clearEditCommentCache() {
-        mEditCommentCache = null;
-    }
-
-    @Override
-    public void clearViewHolderStateCache() {
-        mViewHolderStateCache = null;
     }
 }

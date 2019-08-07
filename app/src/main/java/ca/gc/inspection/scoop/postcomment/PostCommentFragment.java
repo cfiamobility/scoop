@@ -242,10 +242,13 @@ public abstract class PostCommentFragment extends Fragment implements
                 bundle.putString("POSTER_ID", posterId);
                 bundle.putInt(INTENT_ACTIVITY_TYPE_KEY, Config.commentType);
                 bundle.putInt("POST_POSITION", i);
+
                 bottomSheetDialog.setArguments(bundle);
-                bottomSheetDialog.setViewHolder(viewHolder);
+
+                // sets the receiver objects to handle callbacks when the user presses a PostOptionsDialog option
                 bottomSheetDialog.setDeleteCommentReceiver(deleteCommentReceiver);
                 bottomSheetDialog.setEditCommentReceiver(viewHolder);
+                bottomSheetDialog.setViewHolder(viewHolder);
 
                 final Context context = v.getContext();
                 FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
@@ -274,7 +277,6 @@ public abstract class PostCommentFragment extends Fragment implements
                 // bundle
                 Bundle bundle = new Bundle();
                 PostOptionsDialogFragment bottomSheetDialog = new PostOptionsDialogFragment();
-//                Boolean updatedSave = viewHolder.getSavedStatus();
 
                 //gets the activity id, posterid, viewHolderType, and savedStatus and stores in bundle to be fetched in PostOptionsDialogFragment
                 Log.i("post I am clicking: ", activityId);
@@ -283,24 +285,17 @@ public abstract class PostCommentFragment extends Fragment implements
                 bundle.putString("POSTER_ID", posterId);
                 Log.i("viewholder: ", viewHolder.getClass().toString());
                 bundle.putString("VIEWHOLDER_TYPE", viewHolder.getClass().toString());
-//                Log.i("saved status: ", savedStatus.toString());
                 bundle.putInt(INTENT_ACTIVITY_TYPE_KEY, Config.postType);
-                bottomSheetDialog.setDeleteCommentReceiver(deleteCommentReceiver);
-                bottomSheetDialog.setEditPostReceiver((PostOptionsDialogReceiver.EditPostReceiver) viewHolder);
-
-
-//                if (updatedSave == null){
-//                    bundle.putBoolean("SAVED_STATUS", savedStatus); //saved status on response
-//                } else {
-//                    bundle.putBoolean("SAVED_STATUS", updatedSave); //saved status stored in the UI
-//                }
-
                 Log.i("post position: ", Integer.toString(i));
                 bundle.putInt("POST_POSITION", i);
                 Log.i("first poster id: ", firstPosterId);
                 bundle.putString("FIRST_POSTER_ID", firstPosterId);
 
                 bottomSheetDialog.setArguments(bundle);
+
+                // sets the receiver objects to handle callbacks when the user presses a PostOptionsDialog option
+                bottomSheetDialog.setDeleteCommentReceiver(deleteCommentReceiver);
+                bottomSheetDialog.setEditPostReceiver((PostOptionsDialogReceiver.EditPostReceiver) viewHolder);
                 bottomSheetDialog.setViewHolder(viewHolder);
 
                 final Context context = v.getContext();

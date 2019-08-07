@@ -28,7 +28,6 @@ import static ca.gc.inspection.scoop.createpost.CreatePostInteractor.newPostRequ
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_ACTIVITYID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_POSTERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
-import static ca.gc.inspection.scoop.postcomment.PostCommentAdapter.ADAPTER_POSITION_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class PostCommentInteractor {

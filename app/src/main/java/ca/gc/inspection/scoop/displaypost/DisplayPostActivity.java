@@ -32,7 +32,7 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 public class DisplayPostActivity extends AppCompatActivity implements
         DisplayPostContract.View,
-        EditLeaveEventListener.View {
+        EditLeaveEventListener.View.EditLeaveDialogAPI {
 
     private DisplayPostContract.Presenter mDisplayPostPresenter;
     private DisplayPostFragment mDisplayPostFragment;
@@ -50,7 +50,7 @@ public class DisplayPostActivity extends AppCompatActivity implements
 
     public static void confirmLoseEdits(FragmentManager fragmentManager,
                                  EditLeaveEventListener.Presenter presenter,
-                                 EditLeaveEventListener.View editLeaveEventListener) {
+                                 EditLeaveEventListener.View.EditLeaveDialogAPI editLeaveEventListener) {
 
         if (presenter.unsavedEditsExist()) {
             EditLeaveDialog editLeaveDialog = new EditLeaveDialog();
@@ -161,6 +161,10 @@ public class DisplayPostActivity extends AppCompatActivity implements
         });
     }
 
+    /**
+     * Callback to show a success toast message or error toast message when adding a post comment
+     * @param success True if a comment was added
+     */
     @Override
     public void onAddPostComment(boolean success) {
         canPostComment = true;
@@ -172,13 +176,18 @@ public class DisplayPostActivity extends AppCompatActivity implements
         Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * User has confirmed they want to leave the activity and lose their unsaved edits.
+     */
     @Override
     public void confirmLeaveEvent() {
-        mDisplayPostPresenter.clearEditCommentCache();
-        mDisplayPostPresenter.clearViewHolderStateCache();
         finish();
     }
 
+    /**
+     * Callback for EditLeaveDialog's option to cancel leave event.
+     * Not necessary but included to be consistent with attaching a callback to a Dialog button.
+     */
     @Override
     public void cancelLeaveEvent() {
 
