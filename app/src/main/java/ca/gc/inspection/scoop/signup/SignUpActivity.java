@@ -224,11 +224,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
             passwordLayout.setError("");
         }
 
-        if (isValid){
-            return true;
-        }else{
-            return false;
-        }
+        return isValid;
     }
 
     /**
