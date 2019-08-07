@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 
@@ -58,6 +59,7 @@ public class ProfileCommentAdapter extends RecyclerView.Adapter<ProfileCommentVi
     @Override
     public void onBindViewHolder(@NonNull ProfileCommentViewHolder profileCommentViewHolder, int i) {
         mProfileCommentPresenter.onBindViewHolderAtPosition(profileCommentViewHolder, i);
+
         PostCommentFragment.setDisplayPostListener(profileCommentViewHolder,
                 //NOTE: The DisplayListener get's the reference ID instead of the activity ID
                 // to display the original post that was commented on.

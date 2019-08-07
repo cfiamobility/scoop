@@ -7,10 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment;
-import ca.gc.inspection.scoop.profilepost.ProfilePostFragment;
 import ca.gc.inspection.scoop.searchpost.SearchPostContract;
 
 public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder>
@@ -41,7 +38,7 @@ public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder
     @NonNull
     @Override
     public SearchPostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_profile_layout, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_profile_post, viewGroup, false);
         return new SearchPostViewHolder(v, (SearchPostContract.Presenter.ViewHolderAPI) mSearchPostPresenter);
     }
 

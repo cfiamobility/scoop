@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
-import ca.gc.inspection.scoop.profilelikes.ProfileLike;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesFragment;
 
 public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHolder>
     implements ProfilePostContract.View.Adapter {
@@ -39,7 +37,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostViewHold
     @NonNull
     @Override
     public ProfilePostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_profile_layout, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_profile_post, viewGroup, false);
         return new ProfilePostViewHolder(v, (ProfilePostContract.Presenter.ViewHolderAPI) mProfilePostPresenter);
     }
 

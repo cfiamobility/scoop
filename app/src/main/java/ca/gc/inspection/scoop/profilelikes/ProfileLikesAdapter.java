@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 
 public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHolder>
@@ -38,7 +37,7 @@ public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHo
     @NonNull
     @Override
     public ProfileLikesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_profile_layout, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_profile_post, viewGroup, false);
         return new ProfileLikesViewHolder(v, (ProfileLikesContract.Presenter.ViewHolderAPI) mProfileLikesPresenter);
     }
 
