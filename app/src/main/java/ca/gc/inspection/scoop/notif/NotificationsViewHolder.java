@@ -4,23 +4,22 @@ import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.CameraUtils;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NotificationsViewHolder extends RecyclerView.ViewHolder
         implements NotificationsContract.View.ViewHolder{
 
     NotificationsContract.Presenter.ViewHolderAPI mPresenter;
 
-    ImageView profileImage;
+    CircleImageView profileImage;
     TextView fullName, actionType, activityType, time;
 
     NotificationsViewHolder(View v, NotificationsContract.Presenter.ViewHolderAPI presenter) {
         super(v);
-        Log.i("NOTIFICATIONS_VIEWHOLDER", "is this working");
         profileImage = v.findViewById(R.id.profile_image); //instantiating the profile image imageview
         actionType = v.findViewById(R.id.actiontype); //instantiating the action type textview
         activityType = v.findViewById(R.id.activitytype); //instantiating the activity type textview

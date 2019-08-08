@@ -5,16 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="90dp">
 
-    <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="50dp"
-        android:layout_height="43dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+    android:id="@+id/profile_image"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="26dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp" />
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp" />
+
+    <!--<ImageView-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginBottom="25dp"-->
+        <!--android:layout_marginEnd="18dp"-->
+        <!--android:layout_marginTop="18dp"/>-->
 
     <TextView
         android:id="@+id/fullname"
@@ -24,7 +34,7 @@
         android:layout_alignParentTop="true"
 
         android:layout_marginEnd="2.5dp"
-        android:layout_marginStart="27dp"
+        android:layout_marginStart="18dp"
         android:layout_marginTop="24dp"
         android:layout_toEndOf="@+id/profile_image"
         android:onClick="goToProfile"
@@ -55,17 +65,17 @@
         android:textStyle="bold" />
 
     <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/fullname"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="27dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="30dp"
-            android:layout_toEndOf="@+id/profile_image"
-            android:text="1 hour ago"
-            android:textSize="12sp" />
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fullname"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="30dp"
+        android:layout_toEndOf="@+id/profile_image"
+        android:text="1 hour ago"
+        android:textSize="12sp" />
 
     <View
         android:id="@+id/divider2"
