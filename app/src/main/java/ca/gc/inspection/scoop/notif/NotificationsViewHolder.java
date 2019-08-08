@@ -21,10 +21,10 @@ public class NotificationsViewHolder extends RecyclerView.ViewHolder
     NotificationsViewHolder(View v, NotificationsContract.Presenter.ViewHolderAPI presenter) {
         super(v);
         profileImage = v.findViewById(R.id.profile_image); //instantiating the profile image imageview
+        fullName = v.findViewById(R.id.fullname); //instantiating the full name linearlayout
         actionType = v.findViewById(R.id.actiontype); //instantiating the action type textview
         activityType = v.findViewById(R.id.activitytype); //instantiating the activity type textview
         time = v.findViewById(R.id.time); //instantiating the time textview
-        fullName = v.findViewById(R.id.fullname); //instantiating the full name linearlayout
 
         mPresenter = presenter;
     }
@@ -73,5 +73,11 @@ public class NotificationsViewHolder extends RecyclerView.ViewHolder
         }
         return this;
     }
+
+//    private void goToPost() {
+//        Intent intent = new Intent(MyApplication.getContext(), DisplayPostActivity.class);
+//        intent.putExtra("activityid", ); //puts the activity id into the intent
+//        MyApplication.getContext().startActivity(intent); //changes to the Post activity
+//    }
 
 }

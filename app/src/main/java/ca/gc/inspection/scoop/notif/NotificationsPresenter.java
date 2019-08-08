@@ -160,7 +160,7 @@ public class NotificationsPresenter implements
                     .setActivityType(notification.getActivityType())
                     .setTime(notification.getModifiedDate())
                     .setFullName(notification.getValidFullName())
-                    .setUserImageFromString(notification.getOtherProfileImage());
+                    .setUserImageFromString(notification.getNotifierProfileImage());
         }
     }
 

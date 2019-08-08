@@ -65,20 +65,14 @@ public class NotificationsFragment extends Fragment implements
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         setRecentRecyclerView();
-//        setTodayRecyclerView();
+        setTodayRecyclerView();
 //        today = view.findViewById(R.id.fragment_notifications_txt_today); //instantiating the today textview
         recent = view.findViewById(R.id.fragment_notifications_txt_recent); //instantiating the recent textview
 //
         noNotifications = view.findViewById(R.id.fragment_notifications_no_new_text);
         noNotificationsImage = view.findViewById(R.id.fragment_notifications_no_new_image);
     }
-    //    /**
-//     * Description: sets the recycler view for recent notifications
-//     * @param currentTime: the current time of when notifications were loaded
-//     * @param requestQueue: request queue to add requests to
-//     * @param notificationResponse: all the notifications received
-//     * @param imageResponse: all the images received
-//     */
+
     public void setRecentRecyclerView() {
         // Initializing the recycler view
         recentRecyclerView = view.findViewById(R.id.fragment_notifications_rv_recent); //instantiating the recyclerview
@@ -92,10 +86,27 @@ public class NotificationsFragment extends Fragment implements
         recentAdapter = new NotificationsAdapter(this,
                 (NotificationsContract.Presenter.AdapterAPI) mPresenter); //instantiates the adapter
         recentRecyclerView.setAdapter(recentAdapter); //sets the adapter
-        Log.i("NOTIFICATIONS_FRAGMENT", recentAdapter.toString());
         //notificationsScreenController.listenRecentRecyclerView(recentRecyclerView);
 //        mPresenter.listenRecentRecyclerView(recentRecyclerView, notificationResponse);
     }
+
+    public void setTodayRecyclerView() {
+        // Initializing the recycler view
+        todayRecyclerView = view.findViewById(R.id.fragment_notifications_rv_today); //instantiating the recyclerview
+        todayRecyclerView.setHasFixedSize(true); //
+
+        // Setting the layout manager for the recycler view
+        todayLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
+        todayRecyclerView.setLayoutManager(todayLayoutManager); //sets the layout manager to one chosen
+
+        // Setting the custom adapter for the recycler view
+        todayAdapter = new NotificationsAdapter(this,
+                (NotificationsContract.Presenter.AdapterAPI) mPresenter); //instantiates the adapter
+        todayRecyclerView.setAdapter(todayAdapter); //sets the adapter
+        //notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
+//        mPresenter.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
+    }
+
 
     private void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_notifications_swipe);
@@ -136,31 +147,6 @@ public class NotificationsFragment extends Fragment implements
         if (!mSwipeRefreshLayout.isRefreshing())
             loadDataFromDatabase();
     }
-
-
-
-//    /**
-//     * Description: sets the recycler view for today notifications
-//     * @param currentTime: the current time of when the notifications were loaded
-//     * @param requestQueue: request queue to add requests to
-//     * @param notificationResponse: all the notifications received
-//     * @param imageResponse: all the images received
-//     */
-//    public void setTodayRecyclerView() {
-//        // Initializing the recycler view
-//        todayRecyclerView = view.findViewById(R.id.fragment_notifications_rv_today); //instantiating the recyclerview
-//        todayRecyclerView.setHasFixedSize(false); //
-//
-//        // Setting the layout manager for the recycler view
-//        todayLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
-//        todayRecyclerView.setLayoutManager(todayLayoutManager); //sets the layout manager to one chosen
-//
-//        // Setting the custom adapter for the recycler view
-//        todayAdapter = new NotificationsAdapter(this, (NotificationsContract.Presenter.AdapterAPI) mPresenter); //instantiates the adapter
-//        todayRecyclerView.setAdapter(todayAdapter); //sets the adapter
-//        //notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, notificationResponse);\
-////        mPresenter.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
-//    }
 
 
     /**
@@ -230,6 +216,8 @@ public class NotificationsFragment extends Fragment implements
         view.findViewById(R.id.fragment_notifications_rv_recent).setFocusable(false);
 //        view.findViewById(R.id.view3).requestFocus();
     }
+
+
 
 
 }

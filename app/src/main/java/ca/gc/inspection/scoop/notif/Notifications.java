@@ -154,7 +154,7 @@ public class Notifications {
     }
 
 
-    public String getOtherProfileImage() {
+    public String getNotifierProfileImage() {
         try {
             return mImage.getString(NOTIFICATIONS_NOTIFIER_PROFILE_IMAGE);
         }
