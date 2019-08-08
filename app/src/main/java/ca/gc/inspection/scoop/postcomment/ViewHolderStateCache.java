@@ -18,10 +18,11 @@ public class ViewHolderStateCache {
             mMap.put(activityId, viewHolderState);
         }
 
-        mMap.get(activityId).setWaitingForResponse(waitingForState);
-        mMap.get(activityId).setPosition(position);
-        mMap.get(activityId).setSnackBarState(snackBarState);
-        Log.d("ViewHolderState", "snackBarState:" + mMap.get(activityId).getSnackBarState().toString());
+        getViewHolderState(activityId).setPosition(position);
+        getViewHolderState(activityId).setSnackBarState(snackBarState);
+        Log.d("ViewHolderState",
+                "waitingForResponse" + getViewHolderState(activityId).isWaitingForResponse() +
+                ",\tsnackBarState:" + getViewHolderState(activityId).getSnackBarState().toString());
     }
 
     public ViewHolderState getViewHolderState(String activityId) {

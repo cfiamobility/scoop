@@ -15,14 +15,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.searchprofile.UserProfileListener;
 import ca.gc.inspection.scoop.util.ActivityUtils;
 import ca.gc.inspection.scoop.util.CameraUtils;
@@ -31,7 +29,6 @@ import ca.gc.inspection.scoop.util.TextFormat;
 
 import static android.view.View.GONE;
 import static ca.gc.inspection.scoop.searchprofile.view.SearchProfileViewHolder.getSpannableStringBuilderWithFormat;
-import static java.lang.Boolean.TRUE;
 
 /**
  * ViewHolder for replying to a post action; it is the most generic View Holder
@@ -83,6 +80,12 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         setupEditComment(v);
     }
 
+    /**
+     * Helper method to setup the edit comment layout objects.
+     * Overridden by ProfileLikesViewHolder since Posts do not contain these view objects.
+     *
+     * @param v     Used to call findViewById
+     */
     protected void setupEditComment(View v) {
         mCoordinatorLayout = v.findViewById(R.id.edit_comment_coordinator);
         counter = v.findViewById(R.id.edit_post_text_counter);
@@ -93,6 +96,13 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         hideEditText();
     }
 
+    /**
+     * Updates current word count when editing comment. Caches data so that the edits persist through
+     * scrolling and refreshes.
+     *
+     * @param activityId    Unique identifier of post comment
+     * @return              TextWatcher
+     */
     private TextWatcher getEditCommentTextWatcher(String activityId) {
         return new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -109,6 +119,9 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         };
     }
 
+    /**
+     * Hides the UI for editing the comment text.
+     */
     @Override
     public void hideEditText() {
         if (editText != null && editButton != null && counter != null) {
@@ -120,6 +133,9 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         }
     }
 
+    /**
+     * Shows the UI for editing the comment text.
+     */
     public void showEditText() {
         if (editText != null && editButton != null && counter != null) {
             isEditing = true;
@@ -131,6 +147,8 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     }
 
     /**
+     * Called during onBind if there are unsaved edits in the EditCommentCache which is relevant to
+     * this ViewHolder.
      *
      * @param postText
      */
@@ -151,6 +169,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     }
 
     /**
+     * Shows formatted text which can include bold words and an italicized footer message.
      *
      * @param postText
      */
@@ -313,13 +332,21 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         return profileImage;
     }
 
+    /**
+     * Check if the comment can be edited. If so, setup the UI for editing.
+     * Otherwise, show a SnackBar message.
+     *
+     * @param i             Current adapter position - can change when comments are added/removed or
+     *                      when the page is refreshed
+     * @param activityId    Unique identifier for post comment
+     */
     @Override
     public void onEditComment(int i, String activityId) {
         if (!waitingForResponse) {
             if (!isEditing) {
                 mTextEditorWatcher = getEditCommentTextWatcher(activityId);
                 editText.addTextChangedListener(mTextEditorWatcher);
-                editText.setText(postText.getText());
+                editText.setText(mPresenter.getPostTextById(i));
 
                 setEditButtonOnClickListener(i, activityId);
                 setCancelButtonOnClickListener(activityId);
@@ -329,25 +356,59 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
                 Snackbar.make(mCoordinatorLayout, "Already editing comment", SNACKBAR_LENGTH_VERY_SHORT).show();
             }
         }
+        else Log.d("PostCommentViewHolder", "waitingForResponse for onEditComment");
     }
 
+    /**
+     * Helper method for onEditComment to setup the editButton listener. Checks if the new text is
+     * not empty and different from the current text before saving the changes to the database.
+     * Otherwise, show the relevant SnackBar message. Since these messages are very short,
+     * we do not need to cache them in the ViewHolderStateCache.
+     *
+     * @param i             Current adapter position - can change when comments are added/removed or
+     *                      when the page is refreshed
+     * @param activityId    Unique identifier for post comment
+     */
     private void setEditButtonOnClickListener(int i, String activityId) {
         editButton.setOnClickListener(
                 (View view) -> {
-                    if (editText.getText().toString().isEmpty()) {
-                        if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
-                            mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_empty_text_error, SNACKBAR_LENGTH_VERY_SHORT);
-                            mSnackbar.show();
-                        }
-                    } else if (!mPresenter.unsavedEditsExist(i, activityId)) {
-                        if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
-                            mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_post_no_changes, SNACKBAR_LENGTH_VERY_SHORT);
-                            mSnackbar.show();
-                        }
-                    } else sendCommentToDatabase(i, activityId);
+                    if (validEditsExist(i, activityId)) {
+                        sendCommentToDatabase(i, activityId);
+                    }
                 });
     }
 
+    /**
+     * Helper method to validate that the edited text is not empty and that it differs from the original.
+     *
+     * @param i             Adapter position.
+     * @param activityId    Unique identifier for post comment.
+     * @return              True if the edit can be saved to the database.
+     */
+    private boolean validEditsExist(int i, String activityId) {
+        if (editText.getText().toString().isEmpty()) {
+            if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
+                mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_comment_empty_text_error, SNACKBAR_LENGTH_VERY_SHORT);
+                mSnackbar.show();
+            }
+            return false;
+        } else if (!mPresenter.unsavedEditsExistForViewHolder(i, activityId)) {
+            if (mSnackbar == null || !mSnackbar.isShownOrQueued()) {
+                mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.edit_post_no_changes, SNACKBAR_LENGTH_VERY_SHORT);
+                mSnackbar.show();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Helper method for onEditComment to setup the cancelButton listener. Need to drop our unsaved
+     * changes from the Presenter's Cache otherwise onBind will re-attach the stale data to the
+     * ViewHolder.
+     *
+     * @param activityId    Unique identifier for post comment
+     */
     private void setCancelButtonOnClickListener(String activityId) {
         cancelButton.setOnClickListener(view -> {
             hideEditText();
@@ -357,15 +418,36 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         });
     }
 
+    /**
+     * Saves the edits made to the post comment to the database.
+     *
+     * @param i             Current adapter position - can change when comments are added/removed or
+     *                      when the page is refreshed
+     * @param activityId    Unique identifier for post comment
+     */
     private void sendCommentToDatabase(int i, String activityId) {
         if (!waitingForResponse) {
             ActivityUtils.hideKeyboardFrom(mView.getContext(), mView);
+            waitingForResponse = true;
 
             String newText = editText.getText().toString();
             mPresenter.sendCommentToDatabase(this, i, activityId, newText);
         }
     }
 
+    /**
+     * Getter for call back identifier.
+     *
+     * When editing a post comment there is a brief period between sending the comment to the database
+     * and receiving the database response. Upon the database response, the presenter needs to know
+     * if the ViewHolder is still relevant or if it is displaying a different post comment.
+     *
+     * If the ViewHolder was scrolled and recycled, we don't want it to update UI as it may be
+     * showing a completely different post comment. Instead the correct view holder will eventually
+     * have its UI updated using the onBind methods and Presenter-scoped Cache objects.
+     *
+     * @return String of unique identifier for post comment (ie. activityId)
+     */
     @NonNull
     @Override
     public String getCallBackIdentifier() {
@@ -375,22 +457,47 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
             return mCallBackIdentifier;
     }
 
+    /**
+     * Setter for call back identifier. This is set by the Presenter prior to editing the comment.
+     *
+     * See documentation for getCallBackIdentifier.
+     *
+     * @param callBackIdentifier    String of unique identifier for post comment (ie. activityId)
+     */
     @Override
     public void setCallBackIdentifier(String callBackIdentifier) {
         mCallBackIdentifier = callBackIdentifier;
     }
 
+    /**
+     * Clears the call back identifier every time we bind new data to the ViewHolder. This occurs
+     * when scrolling or refreshing.
+     *
+     * See documentation for getCallBackIdentifier.
+     */
     @Override
     public void clearCallBackIdentifier() {
         mCallBackIdentifier = null;
     }
 
+    /**
+     * Used by the Presenter's onBind methods to persist whether the post comment is waiting
+     * for a database response.
+     *
+     * @param waitingForResponse    This specific post comment cannot send another database request
+     *                              until a response is received.
+     */
     @Override
     public void setWaitingForResponse(boolean waitingForResponse) {
         Log.d("PostCommentViewHolder", "set waiting for response");
         this.waitingForResponse = waitingForResponse;
     }
 
+    /**
+     * Used by the Presenter's onBind methods to persist Snackbar for comment in progress.
+     *
+     * @param activityId        Unique indentifier of post comment.
+     */
     @Override
     public void setSnackBarForCommentInProgress(String activityId) {
         Log.d("PostCommentViewHolder", "snackbar edit comment in progress");
@@ -399,6 +506,11 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         mSnackbar.show();
     }
 
+    /**
+     * Used by the Presenter's onBind methods to persist Snackbar for comment success.
+     *
+     * @param activityId        Unique indentifier of post comment.
+     */
     @Override
     public void setSnackBarEditCommentSuccess(String activityId) {
         Log.d("PostCommentViewHolder", "snackbar edit comment success");
@@ -413,6 +525,12 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         mSnackbar.show();
     }
 
+    /**
+     * Used by the Presenter's onBind methods to persist Snackbar for comment retry.
+     *
+     * @param i                 adapter position
+     * @param activityId        Unique indentifier of post comment.
+     */
     @Override
     public void setSnackBarEditCommentRetry(int i, String activityId) {
         Log.d("PostCommentViewHolder", "snackbar edit comment retry");
@@ -420,13 +538,22 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         mSnackbar.setAction(R.string.retry_action, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendCommentToDatabase(i, activityId);
+                if (validEditsExist(i, activityId)) {
+                    sendCommentToDatabase(i, activityId);
+                }
             }
         });
         addSnackBarOnDismissCallback(activityId);
         mSnackbar.show();
     }
 
+    /**
+     * When the SnackBar is dismissed, we need to update the Presenter's ViewHolderStateCache otherwise
+     * onBind will set the ViewHolder's SnackBar to a stale state. (ie. every time you scroll back
+     * to the ViewHolder it may reshow the last SnackBar which was already dismissed)
+     *
+     * @param activityId
+     */
     private void addSnackBarOnDismissCallback(String activityId) {
         if (mSnackbar != null) {
             mSnackbar.addCallback(new Snackbar.Callback() {
@@ -441,6 +568,10 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         }
     }
 
+    /**
+     * Called by Presenter to dismiss the current SnackBar during onBind when new data is attached
+     * to the recycled ViewHolders.
+     */
     @Override
     public void dismissSnackBar() {
         Log.d("PostCommentViewHolder", "snackbar dismiss");

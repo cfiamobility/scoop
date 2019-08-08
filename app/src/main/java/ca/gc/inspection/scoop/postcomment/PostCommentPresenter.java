@@ -17,6 +17,7 @@ import ca.gc.inspection.scoop.editcomment.EditCommentData;
 import ca.gc.inspection.scoop.postcomment.ViewHolderState.SnackBarState;
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
+import ca.gc.inspection.scoop.util.TextFormat;
 
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;
 import static ca.gc.inspection.scoop.postcomment.LikeState.NEUTRAL;
@@ -251,7 +252,6 @@ public class PostCommentPresenter implements
         Log.d(TAG, "bindPostCommentDataToViewHolder");
         if (postComment != null) {
             Log.d(TAG, "activityId: " + postComment.getActivityId() + ", posttext: " + postComment.getPostText());
-            viewHolderInterface.clearCallBackIdentifier();
             viewHolderInterface.setDate(postComment.getCreatedDate())
                     .setLikeCount(postComment.getLikeCount())
                     .setPostTextWithFormat(postComment.getPostText(), postComment.getTextFormat())
@@ -333,6 +333,7 @@ public class PostCommentPresenter implements
             PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment,
             int i, ViewHolderStateCache viewHolderStateCache) {
         Log.d(TAG, "bindViewHolderStateToViewHolder");
+        viewHolderInterface.clearCallBackIdentifier();
         if (postComment != null && viewHolderStateCache != null) {
             String activityId = postComment.getActivityId();
             ViewHolderState viewHolderState = viewHolderStateCache.getViewHolderState(activityId);
@@ -356,6 +357,10 @@ public class PostCommentPresenter implements
                 }
 
                 viewHolderInterface.setWaitingForResponse(viewHolderState.isWaitingForResponse());
+                /* CallBackIdentifier reset when ViewHolders are recycled so that Presenter knows if the correct
+                ViewHolder is still on screen.*/
+                if (viewHolderState.isWaitingForResponse())
+                    viewHolderInterface.setCallBackIdentifier(activityId);
             }
         }
     }
@@ -458,85 +463,207 @@ public class PostCommentPresenter implements
         }
     }
 
+    /**
+     * Callback for editing post comment. Updates the ViewHolderStateCache so that if the user receives
+     * the database response during a pull down to refresh or when the user has scrolled away, the
+     * relevant SnackBar (success or retry) will show when the ViewHolder comes "back into view"
+     * (by showing the relevant post comment data).
+     *
+     * @param success       True if a comment was successfully edited
+     * @param interactorBundle  Casted back to an EditCommentBundle. Passed as an InteractorBundle
+     *                          so that newPostRequest can call PostRequestReceiver's interface method.
+     */
     @Override
     public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
 
+        // Retrieve necessary data from EditCommentBundle
         EditCommentBundle editCommentBundle = (EditCommentBundle) interactorBundle;
         String activityId = editCommentBundle.getActivityId();
         PostCommentContract.View.ViewHolder viewHolderInterface = editCommentBundle.getViewHolder();
+
+        // Use the retrieved activityId to access the correct objects in the caches
         EditCommentData editCommentData = mEditCommentCache.getEditCommentData(activityId);
         ViewHolderState viewHolderState = mViewHolderStateCache.getViewHolderState(activityId);
-        int i = viewHolderState.getPosition();
-        String newText = editCommentData.getPostText();
 
-        mViewHolderStateCache.createIfMissingViewHolderState(
-                activityId, false, i, SnackBarState.EDIT_COMMENT_SUCCESS);
+        if (editCommentData != null && viewHolderState != null) {
+            int i = viewHolderState.getPosition();
+            String newText = editCommentData.getPostText();
 
-        if (success)
-            onDatabaseResponseSuccess(viewHolderInterface, i, activityId, newText);
-        else
-            onDatabaseResponseError(viewHolderInterface, i, activityId);
+            mViewHolderStateCache.createIfMissingViewHolderState(
+                    activityId, false, i, SnackBarState.EDIT_COMMENT_SUCCESS);
+
+            if (viewHolderHasCallBackIdentifier(viewHolderInterface, activityId)) {
+                viewHolderInterface.setWaitingForResponse(false);
+            }
+
+            if (success)
+                onDatabaseResponseSuccess(viewHolderInterface, i, activityId, newText);
+            else
+                onDatabaseResponseError(viewHolderInterface, i, activityId);
+        }
+        else Log.d(TAG, "editCommentData and/or viewHolderState is null onDatabaseResponse");
     }
 
+    /**
+     * Private helper method for onDatabaseResponse to handle when the comment's changes failed to save.
+     * Updates the relevant caches for edit comment text and ViewHolder state so that onBind attaches
+     * the correct data.
+     *
+     * @param viewHolderInterface   Interface to update when the database response is received. Note that the
+     *                              callback identifier must be checked(in this case, the activityId) so that
+     *                              when the Presenter receives the database response, it knows if the ViewHolder
+     *                              is still the correct one. If the ViewHolder was scrolled and recycled, we don't
+     *                              want it to update UI as it may be showing a completely different post comment.
+     *                              Instead the correct view holder will eventually have its UI updated using the
+     *                              onBind methods and Presenter-scoped Cache objects.
+     *
+     * @param i                     This may shift if comments are added/deleted
+     *                              or if the user initiates a pull down to refresh while the viewholder is waiting
+     *                              for a database response for editing a comment. Nonetheless, this value
+     *                              provides a starting point to search by activityId - it reduces the need
+     *                              for an O(n) scan of the DataCache to locate the correct item to update by
+     *                              activityId.
+     *
+     * @param activityId            Unique identifier for the post comment.
+     */
     private void onDatabaseResponseError(PostCommentContract.View.ViewHolder viewHolderInterface,
                                          int i, String activityId) {
         mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_RETRY);
-        if (viewHolderInterface != null &&
-                viewHolderInterface.getCallBackIdentifier() != null &&
-                viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
+        if (viewHolderHasCallBackIdentifier(viewHolderInterface, activityId)) {
             viewHolderInterface.setSnackBarEditCommentRetry(i, activityId);
         }
     }
 
+    /**
+     * Private helper method for onDatabaseResponse to handle when the comment was successfully edited.
+     *
+     * @param viewHolderInterface   Interface to update when the database response is received. Note that the
+     *                              callback identifier must be checked(in this case, the activityId) so that
+     *                              when the Presenter receives the database response, it knows if the ViewHolder
+     *                              is still the correct one. If the ViewHolder was scrolled and recycled, we don't
+     *                              want it to update UI as it may be showing a completely different post comment.
+     *                              Instead the correct view holder will eventually have its UI updated using the
+     *                              onBind methods and Presenter-scoped Cache objects.
+     *
+     * @param i                     Estimated adapter position. This may shift if comments are added/deleted
+     *                              or if the user initiates a pull down to refresh while the viewholder is waiting
+     *                              for a database response for editing a comment. Nonetheless, this value
+     *                              provides a starting point to search by activityId - it reduces the need
+     *                              for an O(n) scan of the DataCache to locate the correct item to update by
+     *                              activityId.
+     *
+     * @param activityId            Unique identifier for the post comment.
+     *
+     * @param newText               updated post comment text
+     */
     private void onDatabaseResponseSuccess(PostCommentContract.View.ViewHolder viewHolderInterface,
                                            int i, String activityId, String newText) {
 
+        // must be updated so that scrolling binds the updated text to the ViewHolders (if the activity was not refreshed)
         updateDataCachePostTextForActivityId(i, activityId, newText);
         mEditCommentCache.removeEditCommentData(activityId);
-        mViewHolderStateCache.incrementPositionForAll();
         mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_SUCCESS);
 
-        if (viewHolderInterface != null &&
-                viewHolderInterface.getCallBackIdentifier() != null &&
-                viewHolderInterface.getCallBackIdentifier().equals(activityId)) {
-            viewHolderInterface.setPostText(newText);
+        /* Update ViewHolder UI if the user has not scrolled away, otherwise rely on the onBind methods
+        attaching the correct data using the EditCommentCache and ViewHolderStateCache */
+        if (viewHolderHasCallBackIdentifier(viewHolderInterface, activityId)) {
+            TextFormat textFormat = getItemByIndex(i).getTextFormat();
+            viewHolderInterface.setPostTextWithFormat(newText, textFormat);
             viewHolderInterface.hideEditText();
             viewHolderInterface.setSnackBarEditCommentSuccess(activityId);
         }
     }
 
+    /**
+     * Helper method for database callback methods. Checks if the viewHolder is still showing the
+     * same post comment which was edited so that the UI can be updated.
+     *
+     * @param viewHolderInterface       check the callBackIdentifier
+     * @param activityId                Unique identifier for post comment.
+     * @return
+     */
+    private boolean viewHolderHasCallBackIdentifier(
+            PostCommentContract.View.ViewHolder viewHolderInterface, String activityId) {
+        return (viewHolderInterface != null &&
+                viewHolderInterface.getCallBackIdentifier() != null &&
+                viewHolderInterface.getCallBackIdentifier().equals(activityId));
+    }
+
+    /**
+     * Helper method for updateDataCachePostTextForActivityId
+     *
+     * @param i             Position in DataCache to check
+     * @param activityId    Unique identifier for post comment.
+     * @param newText   update post text to this
+     * @return  if a post comment in the DataCache was updated
+     */
     private boolean updateDataCachePostTextIfActivityIdMatchesIndex(int i, String activityId, String newText) {
         PostComment postComment = getItemByActivityId(i, activityId);
         if (postComment != null) {
             Log.d(TAG, "Presenter update datacache" + activityId);
             postComment.setPostText(newText);
+            return true;
         }
         return false;
     }
 
+    /**
+     * Helper method for onDatabaseResponseSuccess. Searches outward from the estimated position for
+     * a post comment with a matching activityId. Upon finding the PostComment object, update the
+     * post text to newText. The search is necessary if the user adds/removes or refreshes the comments
+     * causing the order of the DataCache objects to differ from the original position.
+     *
+     * @param estimatedPosition     adapter position to start search from
+     * @param activityId            unique identifier of post comment to edit
+     * @param newText               update post text in DataCache
+     */
     private void updateDataCachePostTextForActivityId(int estimatedPosition, String activityId, String newText) {
         int maxDistance = max(estimatedPosition, getItemCount()-estimatedPosition);
         if (updateDataCachePostTextIfActivityIdMatchesIndex(estimatedPosition, activityId, newText))
             return;
 
         for (int i=1; i<=maxDistance; i++) {
+            // terminate loop early if a post comment in the DataCache was updated
             if (updateDataCachePostTextIfActivityIdMatchesIndex(estimatedPosition + i, activityId, newText) ||
                     updateDataCachePostTextIfActivityIdMatchesIndex(estimatedPosition - i, activityId, newText))
                 break;
         }
     }
 
+    /**
+     * Called when a post comment is added. Attempts to keep estimated adapter positions in ViewHolderStateCache
+     * up to date to reduce the amount of scanning required when updating the DataCache by activityId.
+     */
     protected void onItemAdded() {
         mViewHolderStateCache.incrementPositionForAll();
     }
 
+    /**
+     * Need to update the ViewHolderStateCache otherwise the SnackBar will be reshown every time
+     * onBind is called on the ViewHolder.
+     *
+     * @param activityId    Unique identifier for post comment
+     */
     @Override
     public void onSnackBarDismissed(String activityId) {
         mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(NONE);
     }
 
+    /**
+     * Check if unsaved edits exist for a specific post comment. Used to check whether the
+     * PostCommentViewHolder should save the changes to the database through the Presenter or
+     * show a SnackBar message stating that no changes were made.
+     *
+     * Disambiguation:
+     * This is different from unsavedEditsExist (no parameters) which is used in an Activity/Fragment
+     * to check if the user should be prompted to leave their unsaved edits.
+     *
+     * @param i             Estimated adapter position
+     * @param activityId    Unique identifier for post comment
+     * @return  True if there are unsaved edits in the EditCommentCache
+     */
     @Override
-    public boolean unsavedEditsExist(int i, String activityId) {
+    public boolean unsavedEditsExistForViewHolder(int i, String activityId) {
         if (mEditCommentCache == null)
             return false;
         EditCommentData editCommentData = mEditCommentCache.getEditCommentData(activityId);
@@ -544,5 +671,15 @@ public class PostCommentPresenter implements
             return false;
         PostComment postComment = getItemByActivityId(i, activityId);
         return postComment != null && !postComment.getPostText().equals(editCommentData.getPostText());
+    }
+
+    /**
+     * We need the post text excluding the edited date when editing a post comment.
+     * @param i adapter position
+     * @return  post text without the footer
+     */
+    @Override
+    public String getPostTextById(int i) {
+        return getItemByIndex(i).getPostText();
     }
 }

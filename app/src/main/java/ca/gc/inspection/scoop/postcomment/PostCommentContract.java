@@ -98,7 +98,8 @@ public interface PostCommentContract {
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException;
-            boolean unsavedEditsExist(int i, String activityId);
+            boolean unsavedEditsExistForViewHolder(int i, String activityId);
+            String getPostTextById(int i);
         }
 
     }
