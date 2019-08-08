@@ -100,11 +100,19 @@ public class EditPostActivity extends CreatePostActivity implements
         postText.setText(mInitialPostText);
         String feedPostImage = bundle.getString(FEED_POST_IMAGE_PATH_KEY, "");
 
+        /*
+        When starting the edit post activity, we need to retrieve and display the current post image
+        if it exists. Note that some post types (ie. ProfilePost, ProfileLikes, SearchPost) don't show
+        the post image, even if the actual post contains one. This means that we will have to fetch the
+        image for a single post from the database since the DataCache doesn't contain the post image.
+         */
         if (feedPostImage != null && !feedPostImage.isEmpty()) {
+            // Set post image from the bundle
             Bitmap bitmap = CameraUtils.stringToBitmap(feedPostImage);
             super.setPostImageFromBitmap(bitmap);
         }
         else {
+            // Bundle doesn't contain post image, fetch post image from database
             waitingForResponse = true;
             mPresenter.getPostImage(NetworkUtils.getInstance(this), mActivityId);
         }
@@ -117,18 +125,36 @@ public class EditPostActivity extends CreatePostActivity implements
         });
     }
 
+    /**
+     * Overridden to set the flag that the post image was modified so that the user will be prompted
+     * when leaving their unsaved changes.
+     *
+     */
     @Override
     protected void removeImageOnClick() {
         super.removeImageOnClick();
         mImageModified = true;
     }
 
+    /**
+     * Overridden to set the flag that the post image was modified so that the user will be prompted
+     * when leaving their unsaved changes.
+     *
+     * @param newBitmap to set post image to
+     */
     @Override
     public void setPostImageFromBitmap(Bitmap newBitmap) {
         super.setPostImageFromBitmap(newBitmap);
         mImageModified = true;
     }
 
+    /**
+     * Callback to set post image from database response.
+     * The bundle did not contain a post image, so we fetch it from the database and handle
+     * the response here.
+     *
+     * @param image post image from the database
+     */
     @Override
     public void onDatabaseImageResponse(String image) {
         waitingForResponse = false;
@@ -136,6 +162,11 @@ public class EditPostActivity extends CreatePostActivity implements
         setPostImageFromBitmap(mInitialBitmap);
     }
 
+    /**
+     * Called by the Presenter to know if their are unsaved edits.
+     *
+     * @return whether the image, post title, and/or post text was modified.
+     */
     @Override
     public boolean unsavedEditsExist() {
         return (mImageModified ||
@@ -171,8 +202,11 @@ public class EditPostActivity extends CreatePostActivity implements
     }
 
     /**
-     * Data
-     * @param success True if a post was created
+     * Callback method to update the UI based on the database response.
+     * If the post was edited successfully, we can finish the activity. Otherwise, show a SnackBar
+     * for the user to retry saving their changes to the database.
+     *
+     * @param success True if a post was edited
      */
     public void onDatabaseResponse(boolean success) {
         waitingForResponse = false;

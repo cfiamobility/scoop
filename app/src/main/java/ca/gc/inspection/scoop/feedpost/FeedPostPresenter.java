@@ -150,7 +150,7 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
 
     /**
      * EditPostData used to store current state of post to start EditPostActivity.
-     * The relevant is retrieved from the DataCache using the adapter position i.
+     * The relevant data is retrieved from the DataCache using the adapter position i.
      *
      * @param i     adapter position
      * @return EditPostData is a data class which stores the current edits for a post

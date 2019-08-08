@@ -1,5 +1,10 @@
 package ca.gc.inspection.scoop.editcomment;
 
+
+/**
+ * Encapsulates the current edits for a post comment. The comment is identified from its unique activityId.
+ * This object may be stored in the Presenter's EditCommentCache.
+ */
 public class EditCommentData {
     protected String mActivityId, mPostText;
 

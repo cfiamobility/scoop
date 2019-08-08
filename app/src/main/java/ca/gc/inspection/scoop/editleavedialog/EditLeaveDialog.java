@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+/**
+ * Prompts the user if they want to leave their unsaved edits for a post or comment, thereby losing
+ * their changes.
+ */
 public class EditLeaveDialog extends DialogFragment {
     public static final String TAG = "EditLeaveDialog";
     EditLeaveEventListener.View.EditLeaveDialogAPI mEditLeaveEventListener;
@@ -54,6 +58,13 @@ public class EditLeaveDialog extends DialogFragment {
         return view;
     }
 
+    /**
+     * Allows the View layer to provide a reference itself into this class. The reference is
+     * required so that the Dialog's options have a callback method.
+     *
+     * @param editLeaveEventListener    View layer object such as an activity where you can leave
+     *                                  unsaved edits from.
+     */
     public void setEditLeaveEventListener(
             EditLeaveEventListener.View.EditLeaveDialogAPI editLeaveEventListener) {
         mEditLeaveEventListener = editLeaveEventListener;

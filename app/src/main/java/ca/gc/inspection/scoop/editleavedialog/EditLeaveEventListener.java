@@ -4,7 +4,6 @@ package ca.gc.inspection.scoop.editleavedialog;
 /**
  * Defined relationship between the View and Presenter when prompting a user to leave an activity
  * which contains unsaved edits for a Post or Comment.
- * This contract is
  */
 public interface EditLeaveEventListener {
 

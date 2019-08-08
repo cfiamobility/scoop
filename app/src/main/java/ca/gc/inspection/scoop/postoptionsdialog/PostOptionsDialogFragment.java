@@ -72,10 +72,22 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         mDeleteCommentReceiver = deleteCommentReceiver;
     }
 
+    /**
+     * Allows the View layer to pass an instance of itself to this class. The receiver provides access to
+     * callback methods for clicking different options.
+     *
+     * @param editCommentReceiver   ie. PostCommentViewHolder
+     */
     public void setEditCommentReceiver(PostOptionsDialogReceiver.EditCommentReceiver editCommentReceiver) {
         mEditCommentReceiver = editCommentReceiver;
     }
 
+    /**
+     * Allows the View layer to pass an instance of itself to this class. The receiver provides access to
+     * callback methods for clicking different options.
+     *
+     * @param editPostReceiver      ie. FeedPostViewHolder
+     */
     public void setEditPostReceiver(PostOptionsDialogReceiver.EditPostReceiver editPostReceiver) {
         mEditPostReceiver = editPostReceiver;
     }

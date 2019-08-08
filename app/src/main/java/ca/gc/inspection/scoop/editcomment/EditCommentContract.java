@@ -6,12 +6,18 @@ import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
 /**
- * Defines the relationship between the View and Presenter
+ * Defines the relationship between the View and Presenter for action cases which implement the
+ * edit post comment feature. Currently, only display post allows editing comments.
  */
 public class EditCommentContract {
 
     public interface View extends BaseView<Presenter> {
 
+        /**
+         * Interaction between View and Presenter only occurs between the ViewHolder and the Presenter's
+         * ViewHolderAPI methods. Nonetheless, the View and Presenter interfaces are provided to remain
+         * consistent with MVP architecture.
+         */
         interface ViewHolder {
 
             ViewHolder setEditPostText(String postText);

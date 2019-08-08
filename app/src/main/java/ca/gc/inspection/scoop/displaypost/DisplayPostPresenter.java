@@ -166,7 +166,7 @@ class DisplayPostPresenter extends FeedPostPresenter implements
 
     /**
      * EditPostData used to store current state of post to start EditPostActivity.
-     * The relevant is retrieved from the DataCache using the adapter position i.
+     * The relevant data is retrieved from the DataCache using the adapter position i.
      * Display post only contains a single post and the rest are comments - this method is only
      * needed for the post item.
      *

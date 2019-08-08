@@ -322,6 +322,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
      * the activity finishes, otherwise, display a SnackBar to retry sending the post.
      * Presenter's onDatabaseResponse calls this since the Presenter it can only work with Java objects,
      * not Android objects
+     *
      * @param success True if a post was created
      */
     public void onDatabaseResponse(boolean success) {

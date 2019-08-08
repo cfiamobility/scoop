@@ -60,6 +60,11 @@ public class ProfileLikesViewHolder extends ProfileCommentViewHolder implements
     protected void setupEditComment(View v) {
     }
 
+    /**
+     * When the PostOptionsDialog option for Edit is clicked, start the EditPostActivity.
+     *
+     * @param i adapter position of current post
+     */
     @Override
     public void onEditPost(int i) {
         EditPostData editPostData = mPresenter.getEditPostData(i);

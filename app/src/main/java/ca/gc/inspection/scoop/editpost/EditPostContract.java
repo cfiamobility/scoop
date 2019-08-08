@@ -11,10 +11,10 @@ import ca.gc.inspection.scoop.editcomment.EditCommentContract;
 import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+/**
+ * Defines the interaction between the View and Presenter for the Edit Post action case.
+ */
 public interface EditPostContract extends CreatePostContract {
-    /**
-     * Defines the interaction between the View and Presenter of EditPostContract
-     */
 
     interface View extends CreatePostContract.View {
 

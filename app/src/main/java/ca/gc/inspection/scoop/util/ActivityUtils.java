@@ -26,6 +26,13 @@ public class ActivityUtils {
         transaction.commit();
     }
 
+    /**
+     * Helper method to hide android keyboard which can be called from a ViewHolder object
+     * (or any other object with Context)
+     *
+     * @param context   of the activity
+     * @param view      which the method is being called from
+     */
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
