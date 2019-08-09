@@ -25,16 +25,16 @@ public class NotificationsTodayFragment extends Fragment implements
         SwipeRefreshLayout.OnRefreshListener{
 
     //recycler view widgets
-    private RecyclerView todayRecyclerView;
-    private NotificationsTodayAdapter todayAdapter;
-    private RecyclerView.LayoutManager todayLayoutManager;
+    private RecyclerView mRecyclerView;
+    private NotificationsTodayAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     //private NotificationsTodayPresenter notificationsScreenController;
     private NotificationsTodayContract.Presenter mPresenter;
     private View view;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private TextView noNotifications;
+    private TextView noNotificationsTitle, noNotificationsText;
     private ImageView noNotificationsImage;
 
     @Override
@@ -57,28 +57,29 @@ public class NotificationsTodayFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
         setRecyclerView();
 
-        noNotifications = view.findViewById(R.id.fragment_notifications_no_new_text);
+        noNotificationsTitle = view.findViewById(R.id.fragment_notifications_no_new_title);
+        noNotificationsText = view.findViewById(R.id.fragment_notifications_no_new_text);
         noNotificationsImage = view.findViewById(R.id.fragment_notifications_no_new_image);
     }
 
     public void setRecyclerView() {
         // Initializing the recycler view
-        todayRecyclerView = view.findViewById(R.id.fragment_notifications_today_rv); //instantiating the recyclerview
-        todayRecyclerView.setHasFixedSize(true); //
+        mRecyclerView = view.findViewById(R.id.fragment_notifications_today_rv); //instantiating the recyclerview
+        mRecyclerView.setHasFixedSize(true); //
 
         // Setting the layout manager for the recycler view
-        todayLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
-        todayRecyclerView.setLayoutManager(todayLayoutManager); //sets the layout manager to one chosen
+        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
+        mRecyclerView.setLayoutManager(mLayoutManager); //sets the layout manager to one chosen
 
         // Setting the custom adapter for the recycler view
-        todayAdapter = new NotificationsTodayAdapter(this,
+        mAdapter = new NotificationsTodayAdapter(this,
                 (NotificationsTodayContract.Presenter.AdapterAPI) mPresenter); //instantiates the adapter
-        todayRecyclerView.setAdapter(todayAdapter); //sets the adapter
-        //notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
-//        mPresenter.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
+        mRecyclerView.setAdapter(mAdapter); //sets the adapter
+        //notificationsScreenController.listenTodayRecyclerView(mRecyclerView, notificationResponse);
+//        mPresenter.listenTodayRecyclerView(mRecyclerView, notificationResponse);
     }
 
-    private void setSwipeRefreshLayout(View view) {
+    protected void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_notifications_today_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
@@ -116,12 +117,14 @@ public class NotificationsTodayFragment extends Fragment implements
      * Description: shows no new notification text and icon
      */
     public void showNoNotifications(){
-        noNotifications.setVisibility(View.VISIBLE);
+        noNotificationsTitle.setVisibility(View.VISIBLE);
+        noNotificationsText.setVisibility(View.VISIBLE);
         noNotificationsImage.setVisibility(View.VISIBLE);
     }
 
     public void hideNoNotifications(){
-        noNotifications.setVisibility(View.GONE);
+        noNotificationsTitle.setVisibility(View.GONE);
+        noNotificationsText.setVisibility(View.GONE);
         noNotificationsImage.setVisibility(View.GONE);
     }
 

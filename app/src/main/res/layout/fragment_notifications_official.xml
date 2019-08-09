@@ -24,23 +24,36 @@
 
         <ImageView
             android:id="@+id/fragment_notifications_no_new_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_above="@id/fragment_notifications_no_new_text"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_above="@id/fragment_notifications_no_new_title"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/ic_notifications_active_black_24dp"
+            app:srcCompat="@drawable/ic_notifications_none_black_24dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/fragment_notifications_no_new_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/roboto"
+            android:text="@string/notifications_today_no_new_title"
+            android:textColor="@color/colorPrimary"
+            android:textSize="26sp"
             android:visibility="gone"/>
 
         <TextView
             android:id="@+id/fragment_notifications_no_new_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/fragment_notifications_no_new_title"
             android:fontFamily="@font/roboto"
-            android:text="@string/notifications_no_new"
-            android:textColor="@color/primary_dark"
-            android:textSize="26sp"
-            android:visibility="gone"/>
+            android:text="@string/notifications_today_no_new_text"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:visibility="gone" />
     </RelativeLayout>
 </FrameLayout>

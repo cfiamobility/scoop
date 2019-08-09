@@ -34,8 +34,9 @@ public class NotificationsRecentFragment extends Fragment implements
     private View view;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private TextView noNotifications;
+    private TextView noNotificationsTitle, noNotificationsText;
     private ImageView noNotificationsImage;
+
 
     @Override
     public void setPresenter(NotificationsRecentContract.Presenter presenter) {
@@ -57,7 +58,8 @@ public class NotificationsRecentFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
         setRecyclerView();
 
-        noNotifications = view.findViewById(R.id.fragment_notifications_no_new_text);
+        noNotificationsTitle = view.findViewById(R.id.fragment_notifications_no_new_title);
+        noNotificationsText = view.findViewById(R.id.fragment_notifications_no_new_text);
         noNotificationsImage = view.findViewById(R.id.fragment_notifications_no_new_image);
     }
 
@@ -117,14 +119,9 @@ public class NotificationsRecentFragment extends Fragment implements
      * Description: shows no new notification text and icon
      */
     public void showNoNotifications(){
-        noNotifications.setVisibility(View.VISIBLE);
+        noNotificationsTitle.setVisibility(View.VISIBLE);
+        noNotificationsText.setVisibility(View.VISIBLE);
         noNotificationsImage.setVisibility(View.VISIBLE);
     }
-
-    public void hideNoNotifications(){
-        noNotifications.setVisibility(View.GONE);
-        noNotificationsImage.setVisibility(View.GONE);
-    }
-
 
 }

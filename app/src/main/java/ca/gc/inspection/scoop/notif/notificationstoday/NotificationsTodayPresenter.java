@@ -52,22 +52,22 @@ public class NotificationsTodayPresenter implements
     }
 
     public void setData(JSONArray notificationResponse, JSONArray imageResponse) {
-        if ((notificationResponse.length() != imageResponse.length()))
-            Log.i(TAG, "length of notificationResponse != imageResponse");
-
-        for (int i = 0; i < notificationResponse.length(); i++){
-            JSONObject jsonNotification = null;
-            JSONObject jsonImage = null;
-            try {
-                jsonNotification = notificationResponse.getJSONObject(i);
-                jsonImage = imageResponse.getJSONObject(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (notificationResponse.length() == 0){
+            mView.showNoNotifications();
+        } else {
+            for (int i = 0; i < notificationResponse.length(); i++){
+                JSONObject jsonNotification = null;
+                JSONObject jsonImage = null;
+                try {
+                    jsonNotification = notificationResponse.getJSONObject(i);
+                    jsonImage = imageResponse.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                NotificationsToday notification = new NotificationsToday(jsonNotification,jsonImage);
+                mDataCache.getNotificationsTodayList().add(notification);
             }
-            NotificationsToday notification = new NotificationsToday(jsonNotification,jsonImage);
-            mDataCache.getNotificationsTodayList().add(notification);
         }
-
         mAdapter.refreshAdapter();
         refreshingData = false;
         mView.onLoadedDataFromDatabase();

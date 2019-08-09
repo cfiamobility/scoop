@@ -22,10 +22,6 @@ public class NotificationsTodayInteractor {
     protected NotificationsTodayPresenter mPresenter;
     public NetworkUtils mNetwork;
 
-    public NotificationsTodayInteractor(){
-
-    }
-
     /**
      * reference to the presenter is passed into the interactor so that we can return json results back into the presenter after performing a json request
      * @param presenter a reference to the presenter
@@ -49,10 +45,10 @@ public class NotificationsTodayInteractor {
                     @Override
                     public void onResponse(final JSONArray imageResponse) {
                         //notificationsContract.setTodayRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse); //calls notificationInterface to set the today recycler view
-//                        presenter.getTodayNotificationsCallBack(notificationResponse, imageResponse); // return results back to the presenter
+//                       presenter.getTodayNotificationsCallBack(notificationResponse, imageResponse); // return results back to the presenter
                         mPresenter.setData(notificationResponse, imageResponse);
                     }
-                }, new Response.ErrorListener() {
+                    }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();

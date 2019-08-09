@@ -11,6 +11,8 @@ public interface NotificationsRecentContract extends NotificationsTodayContract 
     interface View extends BaseView<Presenter> {
         void onLoadedDataFromDatabase();
 
+        void showNoNotifications();
+
         interface ViewHolder extends NotificationsTodayContract.View.ViewHolder{
         }
 

@@ -129,8 +129,12 @@
     <string name="minutes_ago">minutes ago</string>
     <string name="hour_ago">hour ago</string>
     <string name="hours_ago">hours ago</string>
-    <string name="notifications_no_new">No New Notifications\!</string>
+    <string name="notifications_today_no_new_title">Activity on your posts</string>
+    <string name="notifications_today_no_new_text">When someone likes or comments on one of \n
+                                                    your posts <b>today</b>, you\'ll see it here\!</string>
 
+    <!-- NotificationsRecent -->
+    <string name="notifications_today_no_new_text_recent">You\'ll see all your notifications <b>before today</b> here\!</string>
 
     <!-- Search -->
     <string name="search">Search</string>

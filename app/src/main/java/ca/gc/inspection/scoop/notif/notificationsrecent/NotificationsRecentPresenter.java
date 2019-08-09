@@ -41,26 +41,28 @@ public class NotificationsRecentPresenter extends NotificationsTodayPresenter im
             } else {
                 mDataCache.getNotificationsRecentList().clear();
             }
-            mAdapter.refreshAdapter();
             mInteractor.getNotifications(NOTIFICATION_TYPE_KEY);
         }
     }
 
     @Override
     public void setData(JSONArray notificationResponse, JSONArray imageResponse) {
-        for (int i = 0; i < notificationResponse.length(); i++){
-            JSONObject jsonNotification = null;
-            JSONObject jsonImage = null;
-            try {
-                jsonNotification = notificationResponse.getJSONObject(i);
-                jsonImage = imageResponse.getJSONObject(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (notificationResponse.length() == 0) {
+            mView.showNoNotifications();
+        } else {
+            for (int i = 0; i < notificationResponse.length(); i++){
+                JSONObject jsonNotification = null;
+                JSONObject jsonImage = null;
+                try {
+                    jsonNotification = notificationResponse.getJSONObject(i);
+                    jsonImage = imageResponse.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                NotificationsRecent notification = new NotificationsRecent(jsonNotification,jsonImage);
+                mDataCache.getNotificationsRecentList().add(notification);
             }
-            NotificationsRecent notification = new NotificationsRecent(jsonNotification,jsonImage);
-            mDataCache.getNotificationsRecentList().add(notification);
         }
-
         mAdapter.refreshAdapter();
         refreshingData = false;
         mView.onLoadedDataFromDatabase();
