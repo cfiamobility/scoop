@@ -1,10 +1,13 @@
 package ca.gc.inspection.scoop.notif.notificationstoday;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +16,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_3;
+import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class NotificationsTodayFragment extends Fragment implements
@@ -122,10 +128,51 @@ public class NotificationsTodayFragment extends Fragment implements
         noNotificationsImage.setVisibility(View.VISIBLE);
     }
 
-    public void hideNoNotifications(){
-        noNotificationsTitle.setVisibility(View.GONE);
-        noNotificationsText.setVisibility(View.GONE);
-        noNotificationsImage.setVisibility(View.GONE);
+    public static void setUserInfoListener(NotificationsTodayViewHolder viewHolder, String posterId) {
+        // tapping on profile picture will bring user to poster's profile page
+        viewHolder.fullName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                startFragmentOrActivity(context, posterId);
+            }
+        });
+
+        viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                startFragmentOrActivity(context, posterId);
+            }
+        });
+    }
+
+    /**
+     * Creates a listener for the whole post view and launches a DisplayPostActivity when clicked
+     * The activityid is store in as an intentextra and passed to the DisplayPostActivity
+     * @param viewHolder viewholder that displays the current post
+     * @param activityId activityid of the post that the viewholder contains
+     */
+    public static void setDisplayPostListener(NotificationsTodayViewHolder viewHolder, String activityId, String referenceId){
+        // tapping on any item from the view holder will go to the display post activity
+        viewHolder.activityType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                if (context.getClass() == DisplayPostActivity.class)
+                    Log.d("Notifications Today", "Already displaying post!");
+                else {
+                    Intent intent = new Intent(context, DisplayPostActivity.class);
+
+                    if (viewHolder.getActivityType().equals("comment")) {
+                        intent.putExtra(INTENT_ACTIVITY_ID_KEY, referenceId);
+                    } else {
+                        intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
+                    }
+                    context.startActivity(intent);
+                }
+            }
+        });
     }
 
 }

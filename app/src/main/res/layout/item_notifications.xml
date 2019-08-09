@@ -14,7 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginBottom="25dp"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="18dp" />
+        android:layout_marginTop="18dp"
+        android:onClick="goToProfile" />
 
     <!--<ImageView-->
         <!--android:layout_width="60dp"-->
@@ -37,7 +38,6 @@
         android:layout_marginStart="18dp"
         android:layout_marginTop="24dp"
         android:layout_toEndOf="@+id/profile_image"
-        android:onClick="goToProfile"
         android:textStyle="bold" />
 
     <TextView
@@ -61,7 +61,6 @@
         android:layout_marginEnd="2.5dp"
         android:layout_marginTop="24dp"
         android:layout_toEndOf="@+id/actiontype"
-        android:onClick="goToPost"
         android:textStyle="bold" />
 
     <TextView
@@ -74,7 +73,6 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="30dp"
         android:layout_toEndOf="@+id/profile_image"
-        android:text="1 hour ago"
         android:textSize="12sp" />
 
     <View

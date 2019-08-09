@@ -14,13 +14,11 @@ public interface NotificationsTodayContract {
         void onLoadedDataFromDatabase();
 
         void showNoNotifications();
-        void hideNoNotifications();
 
         interface ViewHolder {
             NotificationsTodayContract.View.ViewHolder setActionType(String actionType);
             NotificationsTodayContract.View.ViewHolder setActivityType(String activityType);
             NotificationsTodayContract.View.ViewHolder setTime(String time);
-            NotificationsTodayContract.View.ViewHolder hideTime() ;
             NotificationsTodayContract.View.ViewHolder setFullName(String fullName);
             NotificationsTodayContract.View.ViewHolder setImage(Bitmap bitmap);
             NotificationsTodayContract.View.ViewHolder hideImage();
@@ -42,6 +40,10 @@ public interface NotificationsTodayContract {
             void onBindViewHolderAtPosition(
                     NotificationsTodayContract.View.ViewHolder notificationsViewHolder, int i);
             int getItemCount();
+
+            String getPosterIdByIndex(int i);
+            String getActivityIdByIndex(int i);
+            String getReferenceIdByIndex(int i);
         }
 
         interface ViewHolderAPI {

@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -106,6 +108,18 @@ public class NotificationsTodayPresenter implements
                     .setFullName(notification.getValidFullName())
                     .setUserImageFromString(notification.getNotifierProfileImage());
         }
+    }
+
+    public String getPosterIdByIndex(int i) {
+        return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
+    }
+
+    public String getActivityIdByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getActivityId();
+    }
+
+    public String getReferenceIdByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getActivityReferenceId();
     }
 
 }

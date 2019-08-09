@@ -15,7 +15,7 @@ public class NotificationsToday {
 
     protected JSONObject mNotification, mImage;
 
-    public static final String NOTIFICATIONS_USER_ID_KEY = "currentuser";
+    public static final String NOTIFICATIONS_POSTER_ID_KEY = "posterid";
     public static final String NOTIFICATIONS_ACTIVITY_ID_KEY = "activityid";
     public static final String NOTIFICATIONS_MODIFIED_DATE_KEY= "modifieddate";
 
@@ -109,70 +109,6 @@ public class NotificationsToday {
         }
     }
 
-    private String setTodayTime() {
-        try {
-            String modifiedDate = mNotification.getString(NOTIFICATIONS_MODIFIED_DATE_KEY); //gets when the notification was created/modified
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // set timezone format of timestamp from server to UTC.
-            // NOTE: time zone of database is EDT, but, when queried, the database returns timestamps in UTC
-            Date parsedDate = dateFormat.parse(modifiedDate); //parses the created date to be in specified date format
-            SimpleDateFormat currentTimeFormat = new SimpleDateFormat();
-            TimeZone gmtTime = TimeZone.getTimeZone("GMT");
-            currentTimeFormat.setTimeZone(gmtTime);
-            String date = currentTimeFormat.format(new Date());
-            Date currentTime = currentTimeFormat.parse(date);
-            Timestamp currentTimestamp = new Timestamp(currentTime.getTime());
-            Log.i("postdate", date);
-            Log.i("realpostdate", parsedDate.toString());
-            Timestamp timestamp = new Timestamp(parsedDate.getTime()); //creates a timestamp from the date
-            Log.i("time", String.valueOf(timestamp.getTime()));
-            Log.i("hello", String.valueOf(currentTimestamp.getTime()));
-            long diff = currentTimestamp.getTime() - timestamp.getTime(); //gets the difference between the two timestamps
-            Log.i("helloo", String.valueOf(((diff/(1000*60*60)))));
-            String diffHours = String.valueOf((int) ((diff / (1000 * 60 * 60)))); //stores it in a string representing hours
-
-
-//            // if unit of time since notification creation is 1, then we don't use the pluralized form of "hours" or "minutes"
-//            switch(Integer.valueOf(diffHours)){ // switch case for hours
-//                case 0:
-//                    diffHours = String.valueOf((int) (TimeUnit.MILLISECONDS.toMinutes(diff)));
-//                    switch (Integer.valueOf(diffHours)){ // switch case for minutes
-//                        case 0:
-//                            return getString(R.string.just_now);
-//                        case 1:
-//                            return diffHours + " " + getString(R.string.minute_ago);
-//                        default:
-//                            return diffHours + " " + getString(R.string.minutes_ago);
-//                    }
-//                case 1:
-//                    return diffHours + " " + getString(R.string.hour_ago);
-//                default:
-//                    return diffHours + " " + getString(R.string.hours_ago);
-//            }
-
-            // if unit of time since notification creation is 1, then we don't use the pluralized form of "hours" or "minutes"
-            switch(Integer.valueOf(diffHours)){ // switch case for hours
-                case 0:
-                    diffHours = String.valueOf((int) (TimeUnit.MILLISECONDS.toMinutes(diff)));
-                    switch (Integer.valueOf(diffHours)){ // switch case for minutes
-                        case 0:
-                            return "just now";
-                        case 1:
-                            return diffHours + " " + "minute ago";
-                        default:
-                            return diffHours + " " + "minutes ago";
-                    }
-                case 1:
-                    return diffHours + " " + "hour ago";
-                default:
-                    return diffHours + " " + "hours ago";
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public String getValidFullName() {
         try {
@@ -247,5 +183,34 @@ public class NotificationsToday {
         }
     }
 
+    public String getActivityId(){
+        try {
+            return mNotification.getString(NOTIFICATIONS_ACTIVITY_ID_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String getActivityReferenceId(){
+        try {
+            return mNotification.getString(NOTIFICATIONS_ACTIVITY_REFERENCE_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String getPosterId(){
+        try {
+            return mNotification.getString(NOTIFICATIONS_POSTER_ID_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
 }

@@ -74,10 +74,8 @@ public class NotificationsTodayViewHolder extends RecyclerView.ViewHolder
         return this;
     }
 
-//    private void goToPost() {
-//        Intent intent = new Intent(MyApplication.getContext(), DisplayPostActivity.class);
-//        intent.putExtra("activityid", ); //puts the activity id into the intent
-//        MyApplication.getContext().startActivity(intent); //changes to the Post activity
-//    }
+    String getActivityType(){
+        return this.activityType.getText().toString();
+    }
 
 }

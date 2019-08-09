@@ -37,7 +37,8 @@ public class NotificationsTodayAdapter extends RecyclerView.Adapter<Notification
     public void onBindViewHolder(@NonNull NotificationsTodayViewHolder holder, int i) {
         Log.i("NOTIFICATIONS_ADAPTER", "Binding data to VIEWHOLDER " + i);
         mPresenter.onBindViewHolderAtPosition(holder, i);
-//        NotificationsToday.setUserInfoListener();
+        NotificationsTodayFragment.setDisplayPostListener(holder, mPresenter.getActivityIdByIndex(i), mPresenter.getReferenceIdByIndex(i));
+        NotificationsTodayFragment.setUserInfoListener(holder, mPresenter.getPosterIdByIndex(i));
     }
 
     @Override
