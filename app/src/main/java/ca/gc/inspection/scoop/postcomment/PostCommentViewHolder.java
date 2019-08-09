@@ -443,6 +443,9 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         hideEditText();
         setWaitingForResponse(false);
         dismissSnackBar();
+        /* must remove text watcher otherwise the edit comment cache will be repopulated and scrolling
+        will bind the stale edit text state to the viewholder */
+        editText.removeTextChangedListener(mTextEditorWatcher);
         mPresenter.onCancelEditComment(activityId);
     }
 

@@ -20,8 +20,28 @@ public class EditPostPresenter extends CreatePostPresenter implements
     private EditPostContract.View mView;
 
     EditPostPresenter(@NonNull EditPostContract.View view) {
-        mInteractor = new EditPostInteractor(this);
+        setInteractor(new EditPostInteractor(this));
+        setView(view);
+    }
+
+    /**
+     * set parent view as a casted down version without the parent creating a new object
+     *
+     * @param view
+     */
+    public void setView(@NonNull EditPostContract.View view) {
+        super.setView(view);
         mView = checkNotNull(view);
+    }
+
+    /**
+     * set parent interactor as a casted down version without the parent creating a new object
+     *
+     * @param interactor    Handles network access.
+     */
+    public void setInteractor(@NonNull EditPostInteractor interactor) {
+        super.setInteractor(interactor);
+        mInteractor = checkNotNull(interactor);
     }
 
     /*** sendPostToDatabase

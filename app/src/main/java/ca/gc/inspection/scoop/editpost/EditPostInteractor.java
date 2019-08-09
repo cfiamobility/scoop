@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.editpost;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -14,6 +15,7 @@ import ca.gc.inspection.scoop.createpost.CreatePostInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 public class EditPostInteractor extends CreatePostInteractor {
@@ -21,8 +23,18 @@ public class EditPostInteractor extends CreatePostInteractor {
     private EditPostPresenter mPresenter;
 
     EditPostInteractor(EditPostPresenter presenter) {
-        super(presenter);
-        mPresenter = presenter;
+        super();
+        setPresenter(presenter);
+    }
+
+    /**
+     * set parent presenter as a casted down version without the parent creating a new object
+     *
+     * @param presenter    Handles database callbacks
+     */
+    public void setPresenter(@NonNull EditPostPresenter presenter) {
+        super.setPresenter(presenter);
+        mPresenter = checkNotNull(presenter);
     }
 
     /**

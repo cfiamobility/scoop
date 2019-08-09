@@ -20,8 +20,28 @@ public class CreatePostPresenter implements CreatePostContract.Presenter, PostRe
     }
 
     CreatePostPresenter(@NonNull CreatePostContract.View view) {
-        mInteractor = new CreatePostInteractor(this);
+        setInteractor(new CreatePostInteractor(this));
+        setView(view);
+    }
+
+    /**
+     * Can be called by child Presenter to set the parent's view as a casted down version without
+     * the parent creating a new object
+     *
+     * @param view
+     */
+    public void setView(@NonNull CreatePostContract.View view) {
         mView = checkNotNull(view);
+    }
+
+    /**
+     * Can be called by child Presenter to set the parent's interactor as a casted down version without
+     * the parent creating a new object
+     *
+     * @param interactor    Handles network access
+     */
+    public void setInteractor(@NonNull CreatePostInteractor interactor) {
+        mInteractor = checkNotNull(interactor);
     }
 
     /*** sendPostToDatabase

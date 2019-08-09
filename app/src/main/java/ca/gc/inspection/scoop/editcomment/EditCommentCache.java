@@ -30,7 +30,7 @@ public class EditCommentCache {
         else {
             mMap.put(activityId, new EditCommentData(activityId, postText));
         }
-        Log.d("EditCommentCache", "map:" + toString());
+        Log.d("EditCommentCache", "map:" + activityId + ", " + postText);
     }
 
     public EditCommentData getEditCommentData(String activityId) {

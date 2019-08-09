@@ -22,6 +22,8 @@ import ca.gc.inspection.scoop.util.TextFormat;
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;
 import static ca.gc.inspection.scoop.postcomment.LikeState.NEUTRAL;
 import static ca.gc.inspection.scoop.postcomment.LikeState.UPVOTE;
+import static ca.gc.inspection.scoop.postcomment.PostComment.MODIFIED_DATE_LABEL;
+import static ca.gc.inspection.scoop.postcomment.PostComment.MODIFIED_JUST_NOW;
 import static ca.gc.inspection.scoop.postcomment.ViewHolderState.SnackBarState.*;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 import static java.lang.Integer.max;
@@ -283,8 +285,12 @@ public class PostCommentPresenter implements
                 String postText = editCommentData.getPostText();
                 Log.d(TAG, "editCommentCache: " + editCommentCache.toString());
                 Log.d(TAG, "activityIds: " + editCommentData.getActivityId() + ", " + postComment.getActivityId());
-                viewHolderInterface.onEditComment(i, postComment.getActivityId());
+                /* edit post text MUST be set before calling onEditComment otherwise a race condition will occur.
+                The TextWatcher may overwrite the EditCommentCache with the stale edit text data currently
+                in the ViewHolder.
+                 */
                 viewHolderInterface.setEditPostText(postText);
+                viewHolderInterface.onEditComment(i, postComment.getActivityId());
             }
             else {
                 viewHolderInterface.hideEditText();
@@ -566,7 +572,8 @@ public class PostCommentPresenter implements
         /* Update ViewHolder UI if the user has not scrolled away, otherwise rely on the onBind methods
         attaching the correct data using the EditCommentCache and ViewHolderStateCache */
         if (viewHolderHasCallBackIdentifier(viewHolderInterface, activityId)) {
-            TextFormat textFormat = getItemByIndex(i).getTextFormat();
+            TextFormat textFormat = getItemByIndex(i).getTextFormat()
+                    .setFooter(MODIFIED_DATE_LABEL + MODIFIED_JUST_NOW);
             viewHolderInterface.setPostTextWithFormat(newText, textFormat);
             viewHolderInterface.hideEditText();
             viewHolderInterface.setSnackBarEditCommentSuccess(activityId);

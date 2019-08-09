@@ -1,11 +1,10 @@
 package ca.gc.inspection.scoop.createpost;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +14,9 @@ import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-class CreatePostInteractor {
+public class CreatePostInteractor {
     private CreatePostPresenter mPresenter;
 
    /**
@@ -26,8 +26,19 @@ class CreatePostInteractor {
     }
 
     protected CreatePostInteractor(CreatePostPresenter presenter) {
-        mPresenter = presenter;
+        setPresenter(presenter);
     }
+
+    /**
+     * Can be called by child Interactor to set the parent's presenter as a casted down version without
+     * the parent creating a new object
+     *
+     * @param presenter    Handles database callbacks
+     */
+    public void setPresenter(@NonNull CreatePostPresenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
+
     /**
      * Sends post to database using RequestQueue.
      *
@@ -97,7 +108,7 @@ class CreatePostInteractor {
         };
     }
 
-    void getUserProfileImage(NetworkUtils network){
+    public void getUserProfileImage(NetworkUtils network){
         String url = Config.baseIP + "post/create-post-profile-image/" + Config.currentUser;
         StringRequest getRequest = new StringRequest(Request.Method.GET, url,
             response -> mPresenter.setUserProfileImage(CameraUtils.stringToBitmap(response)),

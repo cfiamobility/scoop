@@ -25,7 +25,8 @@ public class PostComment {
      */
     protected JSONObject mComment, mImage;
     protected TextFormat mTextFormat = null;
-    private static final String MODIFIED_DATE_LABEL = "Edited: ";
+    protected static final String MODIFIED_DATE_LABEL = "Edited: ";
+    protected static final String MODIFIED_JUST_NOW = "Just now";
 
     public static final String PROFILE_COMMENT_ACTIVITYID_KEY = "activityid";
     /*  Disambiguation: PosterId vs UserId
