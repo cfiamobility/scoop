@@ -18,17 +18,17 @@
 ///**
 // * Handles notification database request from the notifications presenter
 // */
-//public class NotificationsInteractor {
+//public class NotificationsTodayInteractor {
 //
 //    private RequestQueue requestQueue;
-//    private NotificationsPresenter presenter;
+//    private NotificationsTodayPresenter presenter;
 //
 //    /**
 //     * reference to the presenter is passed into the interactor so that we can return json results back into the presenter after performing a json request
 //     * @param presenter a reference to the presenter
 //     * @param networkUtils reference the networksUtils singleton
 //     */
-//    public NotificationsInteractor(NotificationsPresenter presenter, NetworkUtils networkUtils){
+//    public NotificationsTodayInteractor(NotificationsTodayPresenter presenter, NetworkUtils networkUtils){
 //        this.requestQueue = networkUtils.getRequestQueue();
 //        this.presenter = presenter;
 //    }

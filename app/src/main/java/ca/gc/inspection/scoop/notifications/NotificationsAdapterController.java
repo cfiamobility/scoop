@@ -23,7 +23,7 @@
 //import ca.gc.inspection.scoop.MyApplication;
 //import ca.gc.inspection.scoop.R;
 //import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
-//import ca.gc.inspection.scoop.notif.NotificationsAdapter;
+//import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayAdapter;
 //import ca.gc.inspection.scoop.util.CameraUtils;
 //
 //import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
@@ -34,7 +34,7 @@
 //
 //public class NotificationsAdapterController {
 //    private JSONObject notification, image;
-//    private NotificationsAdapter.NotificationViewHolder holder;
+//    private NotificationsTodayAdapter.NotificationViewHolder holder;
 //    //private NotificationsAdapterInterface notificationsAdapterContract;
 //    private NotificationsAdapterInterface.View notificationsAdapterInterface;
 //    private Map<String, String> ids;
@@ -42,7 +42,7 @@
 //    private String timeType;
 //    private Context context;
 //
-//    public NotificationsAdapterController(NotificationsAdapter.NotificationViewHolder holder, int i, NotificationsAdapterInterface.View notificationsAdapterInterface, JSONArray notifications, JSONArray images, Timestamp currentTime, String timeType, Context context) {
+//    public NotificationsAdapterController(NotificationsTodayAdapter.NotificationViewHolder holder, int i, NotificationsAdapterInterface.View notificationsAdapterInterface, JSONArray notifications, JSONArray images, Timestamp currentTime, String timeType, Context context) {
 //        this.holder = holder;
 //        this.notificationsAdapterInterface = notificationsAdapterInterface;
 //        try {

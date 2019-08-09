@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif;
+package ca.gc.inspection.scoop.notif.notificationsrecent;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 
 import ca.gc.inspection.scoop.R;
 
-public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsViewHolder>
-        implements NotificationsContract.View.Adapter{
+public class NotificationsRecentAdapter extends RecyclerView.Adapter<NotificationsRecentViewHolder>
+        implements NotificationsRecentContract.View.Adapter{
 
-    private NotificationsContract.Presenter.AdapterAPI mPresenter;
-    private NotificationsContract.View mView;
+    private NotificationsRecentContract.Presenter.AdapterAPI mPresenter;
+    private NotificationsRecentFragment mView;
 
-    public NotificationsAdapter(NotificationsContract.View view,
-                                NotificationsContract.Presenter.AdapterAPI presenter){
+    public NotificationsRecentAdapter(NotificationsRecentFragment view,
+                                     NotificationsRecentContract.Presenter.AdapterAPI presenter){
         Log.i("NOTIFICATIONS_ADAPTER", "Constructing Adapter");
         mView = view;
         mPresenter = presenter;
@@ -25,19 +25,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsView
 
     @NonNull
     @Override
-    public NotificationsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public NotificationsRecentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         Log.i("NOTIFICATIONS_ADAPTER", "onCreateViewHolder in Adapter");
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_notifications, viewGroup, false);
 
-        return new NotificationsViewHolder(v,
-                (NotificationsContract.Presenter.ViewHolderAPI) mPresenter);
+        return new NotificationsRecentViewHolder(v,
+                (NotificationsRecentContract.Presenter.ViewHolderAPI) mPresenter);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotificationsViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull NotificationsRecentViewHolder holder, int i) {
         Log.i("NOTIFICATIONS_ADAPTER", "Binding data to VIEWHOLDER " + i);
         mPresenter.onBindViewHolderAtPosition(holder, i);
-//        Notifications.setUserInfoListener();
+//        NotificationsRecent.setUserInfoListener();
     }
 
     @Override

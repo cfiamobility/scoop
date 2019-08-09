@@ -21,9 +21,9 @@
 //
 //import androidx.annotation.NonNull;
 //import ca.gc.inspection.scoop.R;
-//import ca.gc.inspection.scoop.notif.NotificationsAdapter;
-//import ca.gc.inspection.scoop.notif.NotificationsContract;
-//import ca.gc.inspection.scoop.notif.NotificationsPresenter;
+//import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayAdapter;
+//import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayContract;
+//import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayPresenter;
 //import ca.gc.inspection.scoop.util.NetworkUtils;
 //
 //import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
@@ -35,7 +35,7 @@
 // * View for the notifications controller
 // */
 //public class NotificationsFragment extends Fragment implements
-//        NotificationsContract.View,
+//        NotificationsTodayContract.View,
 //        SwipeRefreshLayout.OnRefreshListener {
 //
 //    private RecyclerView todayRecyclerView, recentRecyclerView;
@@ -44,12 +44,12 @@
 //    private TextView today, recent;
 //    private TextView noNotifications;
 //    private ImageView noNotificationsImage;
-//    //private NotificationsPresenter notificationsScreenController;
-//    private NotificationsContract.Presenter mPresenter;
+//    //private NotificationsTodayPresenter notificationsScreenController;
+//    private NotificationsTodayContract.Presenter mPresenter;
 //    private View view;
 //    private SwipeRefreshLayout mSwipeRefreshLayout;
 //    private int waitingCallbacksCount;
-//    private static final String TAG = "Notifications Fragment";
+//    private static final String TAG = "NotificationsToday Fragment";
 //
 //
 //    @Override
@@ -63,8 +63,8 @@
 //    public void onViewCreated(View view, Bundle savedInstanceState){
 //        super.onViewCreated(view, savedInstanceState);
 //
-//        //notificationsScreenController = new NotificationsPresenter(this,  NetworkUtils.getInstance(getContext())); //instantiates controller for notifications screen
-//        setPresenter(new NotificationsPresenter(this, NetworkUtils.getInstance(getContext())));
+//        //notificationsScreenController = new NotificationsTodayPresenter(this,  NetworkUtils.getInstance(getContext())); //instantiates controller for notifications screen
+//        setPresenter(new NotificationsTodayPresenter(this, NetworkUtils.getInstance(getContext())));
 //
 //        today = view.findViewById(R.id.fragment_notifications_txt_today); //instantiating the today textview
 //        recent = view.findViewById(R.id.fragment_notifications_txt_recent); //instantiating the recent textview
@@ -130,7 +130,7 @@
 //        recentRecyclerView.setHasFixedSize(true);
 //        recentLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
 //        recentRecyclerView.setLayoutManager(recentLayoutManager); //sets the layout manager to one chosen
-//        recentAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "recent", currentTime, getContext()); //instantiates the adapter
+//        recentAdapter = new NotificationsTodayAdapter(notificationResponse, imageResponse, requestQueue, "recent", currentTime, getContext()); //instantiates the adapter
 //        recentRecyclerView.setAdapter(recentAdapter); //sets the adapter
 //        //notificationsScreenController.listenRecentRecyclerView(recentRecyclerView);
 //        mPresenter.listenRecentRecyclerView(recentRecyclerView, notificationResponse);
@@ -150,7 +150,7 @@
 //        todayRecyclerView.setHasFixedSize(true); //
 //        todayLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); //instantiates how the layout should look like for recyclerview
 //        todayRecyclerView.setLayoutManager(todayLayoutManager); //sets the layout manager to one chosen
-//        todayAdapter = new NotificationsAdapter(notificationResponse, imageResponse, requestQueue, "today", currentTime, getContext()); //instantiates the adapter
+//        todayAdapter = new NotificationsTodayAdapter(notificationResponse, imageResponse, requestQueue, "today", currentTime, getContext()); //instantiates the adapter
 //        todayRecyclerView.setAdapter(todayAdapter); //sets the adapter
 //        //notificationsScreenController.listenTodayRecyclerView(todayRecyclerView, notificationResponse);\
 //        mPresenter.listenTodayRecyclerView(todayRecyclerView, notificationResponse);
@@ -235,7 +235,7 @@
 //    }
 //
 //    @Override
-//    public void setPresenter(@NonNull NotificationsContract.Presenter presenter) {
+//    public void setPresenter(@NonNull NotificationsTodayContract.Presenter presenter) {
 //        mPresenter = checkNotNull(presenter);
 //    }
 //

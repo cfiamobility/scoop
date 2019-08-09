@@ -15,7 +15,7 @@
 ///**
 // * Contract between notifications view and presenter (see MVP architecture for more info on contracts)
 // */
-//public interface NotificationsContract {
+//public interface NotificationsTodayContract {
 //
 //    /**
 //     * interface to be implemented by the NotificationsFragment class
@@ -48,7 +48,7 @@
 //    }
 //
 //    /**
-//     * interface to be implemented by the NotificationsPresenter class
+//     * interface to be implemented by the NotificationsTodayPresenter class
 //     */
 //    interface Presenter extends BasePresenter {
 //        void listenRecentRecyclerView(RecyclerView recentRecyclerView, JSONArray response);

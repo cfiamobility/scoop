@@ -22,7 +22,7 @@
 ///**
 // * Adapter used by the notifications recycler view
 // */
-//public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> implements NotificationsAdapterInterface.View{
+//public class NotificationsTodayAdapter extends RecyclerView.Adapter<NotificationsTodayAdapter.NotificationViewHolder> implements NotificationsAdapterInterface.View{
 //    private JSONArray notifications, images;
 //    private RequestQueue requestQueue;
 //
@@ -36,7 +36,7 @@
 //     * @param requestQueue: represents the requestQueue used for adding future requests to
 //     * @param timeType: represents whether the type of time which should be displayed is for today or for recent notifications
 //     */
-//    NotificationsAdapter(JSONArray notifs, JSONArray images, RequestQueue requestQueue, String timeType, Timestamp currentTime, Context context){
+//    NotificationsTodayAdapter(JSONArray notifs, JSONArray images, RequestQueue requestQueue, String timeType, Timestamp currentTime, Context context){
 //        this.notifications = notifs;
 //        this.images = images;
 //        this.requestQueue = requestQueue;
@@ -53,7 +53,7 @@
 //     */
 //    @NonNull
 //    @Override
-//    public NotificationsAdapter.NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+//    public NotificationsTodayAdapter.NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 //        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_notifications, viewGroup, false);
 //
 //        return new NotificationViewHolder(v);
@@ -65,7 +65,7 @@
 //     * @param i
 //     */
 //    @Override
-//    public void onBindViewHolder(@NonNull final NotificationsAdapter.NotificationViewHolder holder, int i) {
+//    public void onBindViewHolder(@NonNull final NotificationsTodayAdapter.NotificationViewHolder holder, int i) {
 //        NotificationsAdapterController controller = new NotificationsAdapterController(holder, i, this, notifications, images, currentTime, timeType, context);
 //        try {
 //            controller.displayNotifications();

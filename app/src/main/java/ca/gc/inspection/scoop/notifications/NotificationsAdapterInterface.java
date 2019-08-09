@@ -3,24 +3,24 @@
 //import android.graphics.Bitmap;
 //
 ///**
-// * Interface implemented by the NotificationsAdapter in order to conform to the MVP design pattern
+// * Interface implemented by the NotificationsTodayAdapter in order to conform to the MVP design pattern
 // */
 //public interface NotificationsAdapterInterface {
 //
 //    interface View {
-//        void setActionType(String actionType, NotificationsAdapter.NotificationViewHolder holder);
+//        void setActionType(String actionType, NotificationsTodayAdapter.NotificationViewHolder holder);
 //
-//        void setActivityType(String activityType, NotificationsAdapter.NotificationViewHolder holder);
+//        void setActivityType(String activityType, NotificationsTodayAdapter.NotificationViewHolder holder);
 //
-//        void setTime(String time, NotificationsAdapter.NotificationViewHolder holder);
+//        void setTime(String time, NotificationsTodayAdapter.NotificationViewHolder holder);
 //
-//        void hideTime(NotificationsAdapter.NotificationViewHolder holder);
+//        void hideTime(NotificationsTodayAdapter.NotificationViewHolder holder);
 //
-//        void setFullName(String fullName, NotificationsAdapter.NotificationViewHolder holder);
+//        void setFullName(String fullName, NotificationsTodayAdapter.NotificationViewHolder holder);
 //
-//        void setImage(Bitmap bitmap, NotificationsAdapter.NotificationViewHolder holder);
+//        void setImage(Bitmap bitmap, NotificationsTodayAdapter.NotificationViewHolder holder);
 //
-//        void hideImage(NotificationsAdapter.NotificationViewHolder holder);
+//        void hideImage(NotificationsTodayAdapter.NotificationViewHolder holder);
 //    }
 //
 //}

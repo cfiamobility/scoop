@@ -123,12 +123,14 @@
     <string name="invalidNameEntry">Please enter a first and last name.</string>
     <string name="liked">liked</string>
 
-    <!-- Notifications -->
+    <!-- NotificationsToday -->
     <string name="just_now">just now</string>
     <string name="minute_ago">minute ago</string>
     <string name="minutes_ago">minutes ago</string>
     <string name="hour_ago">hour ago</string>
     <string name="hours_ago">hours ago</string>
+    <string name="notifications_no_new">No New Notifications\!</string>
+
 
     <!-- Search -->
     <string name="search">Search</string>
@@ -156,10 +158,6 @@
     we\'ll remove it.</string>
     <string name="thank_you_title">Thanks for reporting this</string>
 
-    <!-- Notifications -->
-    <string name="notifications_today">Today</string>
-    <string name="notifications_recent">Recent</string>
-    <string name="notifications_no_new">No New Notifications\!</string>
 
 
 </resources>

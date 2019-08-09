@@ -13,21 +13,21 @@
 //import java.util.Date;
 //
 //import ca.gc.inspection.scoop.MyApplication;
-//import ca.gc.inspection.scoop.notif.NotificationsContract;
-//import ca.gc.inspection.scoop.notif.NotificationsInteractor;
+//import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayContract;
+//import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayInteractor;
 //import ca.gc.inspection.scoop.util.NetworkUtils;
 //
 ///**
 // * Controller for the notifications view/fragment
 // */
-//public class NotificationsPresenter implements NotificationsContract.Presenter {
+//public class NotificationsTodayPresenter implements NotificationsTodayContract.Presenter {
 //    private RequestQueue requestQueue;
 //    private Timestamp currentTime;
-//    private NotificationsContract.View notificationsView;
+//    private NotificationsTodayContract.View notificationsView;
 //    private NetworkUtils networkUtils;
 //    private int recentEmpty, todayEmpty;
 //
-//    public NotificationsPresenter(NotificationsContract.View notificationsView, NetworkUtils networkUtils){
+//    public NotificationsTodayPresenter(NotificationsTodayContract.View notificationsView, NetworkUtils networkUtils){
 //        this.networkUtils = networkUtils;
 //        this.notificationsView = notificationsView;
 //        this.requestQueue = Volley.newRequestQueue(MyApplication.getContext()); //instantiating the request queue for volley
@@ -41,7 +41,7 @@
 //     * Description: performs the request to get the notifications within the last 24 hours
 //     */
 //    public void getTodayNotifications(){
-//        NotificationsInteractor interactor = new NotificationsInteractor(this, networkUtils);
+//        NotificationsTodayInteractor interactor = new NotificationsTodayInteractor(this, networkUtils);
 //        interactor.getTodayNotifications();
 //    }
 //
@@ -60,7 +60,7 @@
 //     * Description: performs the request to get the notifications past 24 hours
 //     */
 //    public void getRecentNotifications(){
-//        NotificationsInteractor interactor = new NotificationsInteractor(this, networkUtils);
+//        NotificationsTodayInteractor interactor = new NotificationsTodayInteractor(this, networkUtils);
 //        interactor.getRecentNotifications();
 //    }
 //

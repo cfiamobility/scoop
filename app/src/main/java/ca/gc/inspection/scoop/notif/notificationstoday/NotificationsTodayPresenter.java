@@ -1,0 +1,154 @@
+package ca.gc.inspection.scoop.notif.notificationstoday;
+
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import androidx.annotation.NonNull;
+import ca.gc.inspection.scoop.util.NetworkUtils;
+
+public class NotificationsTodayPresenter implements
+        NotificationsTodayContract.Presenter,
+        NotificationsTodayContract.Presenter.AdapterAPI,
+        NotificationsTodayContract.Presenter.ViewHolderAPI{
+
+    private static final String TAG = "NOTIFICATIONS_PRESENTER";
+
+    @NonNull
+    private NotificationsTodayContract.View mView;
+    private NotificationsTodayInteractor mInteractor;
+    private NotificationsTodayContract.View.Adapter mAdapter;
+    private boolean refreshingData = false;
+    protected NotificationsDataCache mDataCache;
+
+    public NotificationsTodayPresenter(){
+
+    }
+
+    public NotificationsTodayPresenter(NotificationsTodayContract.View view, NetworkUtils network){
+        mView = view;
+        mInteractor = new NotificationsTodayInteractor(this, network);
+    }
+
+    public void setAdapter(NotificationsTodayContract.View.Adapter adapter) {
+        mAdapter = adapter;
+    }
+
+    public void loadDataFromDatabase() {
+        if (!refreshingData) {
+            refreshingData = true;
+
+            if (mDataCache == null) {
+                mDataCache = NotificationsDataCache.createWithType(NotificationsToday.class);
+            } else {
+                mDataCache.getNotificationsTodayList().clear();
+            }
+            mInteractor.getTodayNotifications();
+        }
+    }
+
+    public void setTodayData(JSONArray notificationResponse, JSONArray imageResponse) {
+        if ((notificationResponse.length() != imageResponse.length()))
+            Log.i(TAG, "length of notificationResponse != imageResponse");
+
+        for (int i = 0; i < notificationResponse.length(); i++){
+            JSONObject jsonNotification = null;
+            JSONObject jsonImage = null;
+            try {
+                jsonNotification = notificationResponse.getJSONObject(i);
+                jsonImage = imageResponse.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            NotificationsToday notification = new NotificationsToday(jsonNotification,jsonImage);
+            mDataCache.getNotificationsTodayList().add(notification);
+        }
+
+        mAdapter.refreshAdapter();
+        refreshingData = false;
+        mView.onLoadedDataFromDatabase();
+    }
+
+//    public void setRecentData(JSONArray notificationResponse, JSONArray imageResponse){
+//
+//        if ((notificationResponse.length() != imageResponse.length()))
+//            Log.i(TAG, "length of notificationResponse != imageResponse");
+//
+//        for (int i = 0; i < notificationResponse.length(); i++){
+//            JSONObject jsonNotification = null;
+//            JSONObject jsonImage = null;
+//            try {
+//                jsonNotification = notificationResponse.getJSONObject(i);
+//                jsonImage = imageResponse.getJSONObject(i);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            NotificationsToday notification = new NotificationsToday(jsonNotification,jsonImage);
+//            mDataCache.getNotificationsList().add(notification);
+//        }
+//        Log.i(TAG, Integer.toString(getItemCount()));
+//
+//        mAdapter.refreshAdapter();
+//        refreshingData = false;
+//        mView.onLoadedDataFromDatabase();
+//    }
+//
+//    /**
+//     * checks for recent data, returns boolean, if true, allows second POST request for user images
+//     * @param notificationResponse
+//     */
+//    public void checkRecentData(JSONArray notificationResponse){
+//        if(notificationResponse.length() == 0){
+//            mView.hideRecentSection();
+////            mView.requestTodayFocus();
+//            recentEmpty = 1;
+//            Log.i(TAG, "RECENT IS NOT SHOWING");
+//        } else {
+//            mView.showRecentSection();
+//            Log.i(TAG, "SHOWING RECENT");
+////            mView.requestRecentFocus();
+////            mView.hideLoadingPanel();
+//            recentEmpty = 0;
+//        }
+//        checkNothingNew();
+//    }
+
+
+    private NotificationsToday getItemByIndex(int i) {
+        if (mDataCache == null)
+            return null;
+        return mDataCache.getNotificationsTodayByIndex(i);
+    }
+
+    /**
+     * Gets the number of items in the DataCache
+     * @return the count
+     */
+    @Override
+    public int getItemCount() {
+        if (mDataCache == null)
+            return 1;
+        return mDataCache.getItemCount();
+    }
+
+
+    public void onBindViewHolderAtPosition(NotificationsTodayContract.View.ViewHolder viewHolder, int i) {
+        NotificationsToday notification = getItemByIndex(i);
+        bindNotificationDataToViewHolder(viewHolder, notification);
+        Log.i(TAG, "Binding: " + i);
+    }
+
+    public static void bindNotificationDataToViewHolder(
+            NotificationsTodayContract.View.ViewHolder viewHolder, NotificationsToday notification) {
+        if (notification != null) {
+            viewHolder.setActionType(notification.getActionType())
+                    .setActivityType(notification.getActivityType())
+                    .setTime(notification.getModifiedDate())
+                    .setFullName(notification.getValidFullName())
+                    .setUserImageFromString(notification.getNotifierProfileImage());
+        }
+    }
+
+}

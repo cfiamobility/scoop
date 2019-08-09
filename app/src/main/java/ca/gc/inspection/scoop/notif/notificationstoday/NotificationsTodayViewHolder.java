@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif;
+package ca.gc.inspection.scoop.notif.notificationstoday;
 
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
@@ -10,15 +10,15 @@ import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class NotificationsViewHolder extends RecyclerView.ViewHolder
-        implements NotificationsContract.View.ViewHolder{
+public class NotificationsTodayViewHolder extends RecyclerView.ViewHolder
+        implements NotificationsTodayContract.View.ViewHolder{
 
-    NotificationsContract.Presenter.ViewHolderAPI mPresenter;
+    NotificationsTodayContract.Presenter.ViewHolderAPI mPresenter;
 
     CircleImageView profileImage;
     TextView fullName, actionType, activityType, time;
 
-    NotificationsViewHolder(View v, NotificationsContract.Presenter.ViewHolderAPI presenter) {
+    public NotificationsTodayViewHolder(View v, NotificationsTodayContract.Presenter.ViewHolderAPI presenter) {
         super(v);
         profileImage = v.findViewById(R.id.profile_image); //instantiating the profile image imageview
         fullName = v.findViewById(R.id.fullname); //instantiating the full name linearlayout
@@ -30,42 +30,42 @@ public class NotificationsViewHolder extends RecyclerView.ViewHolder
     }
 
 
-    public NotificationsContract.View.ViewHolder setActionType(String actionType) {
+    public NotificationsTodayContract.View.ViewHolder setActionType(String actionType) {
         this.actionType.setText(actionType);
         return this;
     }
 
-    public NotificationsContract.View.ViewHolder setActivityType(String activityType) {
+    public NotificationsTodayContract.View.ViewHolder setActivityType(String activityType) {
         this.activityType.setText(activityType);
         return this;
     }
 
-    public NotificationsContract.View.ViewHolder setTime(String time){
+    public NotificationsTodayContract.View.ViewHolder setTime(String time){
         this.time.setText(time); //sets text to hours ago
         return this;
     }
 
-    public NotificationsContract.View.ViewHolder hideTime() {
+    public NotificationsTodayContract.View.ViewHolder hideTime() {
         this.time.setVisibility(View.GONE);
         return this;
     }
 
-    public NotificationsContract.View.ViewHolder setFullName(String fullName) {
+    public NotificationsTodayContract.View.ViewHolder setFullName(String fullName) {
         this.fullName.setText(fullName);
         return this;
     }
 
-    public NotificationsContract.View.ViewHolder setImage(Bitmap bitmap){
+    public NotificationsTodayContract.View.ViewHolder setImage(Bitmap bitmap){
         this.profileImage.setImageBitmap(bitmap);
         return this;
     }
 
-    public NotificationsContract.View.ViewHolder hideImage(){
+    public NotificationsTodayContract.View.ViewHolder hideImage(){
         this.profileImage.setVisibility(View.GONE);
         return this;
     }
 
-    public NotificationsContract.View.ViewHolder setUserImageFromString(String image){
+    public NotificationsTodayContract.View.ViewHolder setUserImageFromString(String image){
         if (image != null && !image.isEmpty()) {
             Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
             Log.i("image", image);

@@ -1,13 +1,15 @@
-package ca.gc.inspection.scoop.notif;
+package ca.gc.inspection.scoop.notif.notificationstoday;
 
 import java.util.ArrayList;
+
+import ca.gc.inspection.scoop.notif.notificationsrecent.NotificationsRecent;
 
 public class NotificationsDataCache {
     private Class mNotificationsDataType;
     private BaseDataCache mDataCache;
 
     public static NotificationsDataCache createWithType(Class notificationsDataType) {
-        if (!Notifications.class.isAssignableFrom(notificationsDataType))
+        if (!NotificationsToday.class.isAssignableFrom(notificationsDataType))
             return null;
         return new NotificationsDataCache(notificationsDataType);
     }
@@ -15,8 +17,10 @@ public class NotificationsDataCache {
     private NotificationsDataCache(Class notificationsDataType) {
         mNotificationsDataType = notificationsDataType;
         mDataCache = null;
-        if (notificationsDataType == Notifications.class)
+        if (mNotificationsDataType == NotificationsToday.class)
             mDataCache = new DataCache<>();
+        else if (mNotificationsDataType == NotificationsRecent.class)
+            mDataCache = new DataCache<NotificationsRecent>();
 //        else if (notificationsDataType == OfficialNotifications.class)
 //            mDataCache = new NotificationsDataCache<OfficialNotifications>();
     }
@@ -27,9 +31,16 @@ public class NotificationsDataCache {
     }
 
     @SuppressWarnings("unchecked")
-    public Notifications getNotificationsByIndex(int i) {
-        if (Notifications.class.isAssignableFrom(mNotificationsDataType))
-            return ((DataCache<Notifications>) mDataCache).getItemByIndex(i);
+    public NotificationsToday getNotificationsTodayByIndex(int i) {
+        if (NotificationsToday.class.isAssignableFrom(mNotificationsDataType))
+            return ((DataCache<NotificationsToday>) mDataCache).getItemByIndex(i);
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public NotificationsRecent getNotificationsRecentByIndex(int i) {
+        if (NotificationsRecent.class.isAssignableFrom(mNotificationsDataType))
+            return ((DataCache<NotificationsRecent>) mDataCache).getItemByIndex(i);
         return null;
     }
 
@@ -41,15 +52,23 @@ public class NotificationsDataCache {
 
     @SuppressWarnings("unchecked")
     public int getItemCount() {
-        return ((DataCache<Notifications>) mDataCache).getItemCount();
+        return ((DataCache<NotificationsToday>) mDataCache).getItemCount();
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<Notifications> getNotificationsList() {
-        if (Notifications.class.isAssignableFrom(mNotificationsDataType))
-            return ((DataCache<Notifications>) mDataCache).mList;
+    public ArrayList<NotificationsToday> getNotificationsTodayList() {
+        if (NotificationsToday.class.isAssignableFrom(mNotificationsDataType))
+            return ((DataCache<NotificationsToday>) mDataCache).mList;
         return null;
     }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<NotificationsRecent> getNotificationsRecentList() {
+        if (NotificationsRecent.class.isAssignableFrom(mNotificationsDataType))
+            return ((DataCache<NotificationsRecent>) mDataCache).mList;
+        return null;
+    }
+
 
 //    @SuppressWarnings("unchecked")
 //    public ArrayList<OfficialNotifications> getOfficialNotificationsList() {
@@ -58,7 +77,7 @@ public class NotificationsDataCache {
 //        return null;
 //    }
 
-    class DataCache<T extends Notifications> extends BaseDataCache {
+    class DataCache<T extends NotificationsToday> extends BaseDataCache {
 
         ArrayList<T> mList;
         private T t;

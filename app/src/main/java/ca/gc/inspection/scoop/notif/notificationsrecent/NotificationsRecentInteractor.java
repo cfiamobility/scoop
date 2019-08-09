@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif;
+package ca.gc.inspection.scoop.notif.notificationsrecent;
 
 import android.util.Log;
 
@@ -14,14 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
-/**
- * Handles notification database request from the notifications presenter
- */
-public class NotificationsInteractor {
+public class NotificationsRecentInteractor extends NotificationsTodayInteractor {
 
-    protected  NotificationsPresenter mPresenter;
+    protected NotificationsRecentPresenter mPresenter;
     public NetworkUtils mNetwork;
 
     /**
@@ -29,59 +27,10 @@ public class NotificationsInteractor {
      * @param presenter a reference to the presenter
      * @param network reference the networksUtils singleton
      */
-    public NotificationsInteractor(NotificationsPresenter presenter, NetworkUtils network){
+    public NotificationsRecentInteractor(NotificationsRecentPresenter presenter, NetworkUtils network){
         mNetwork = network;
         mPresenter = presenter;
     }
-
-    /**
-     * gets today notifications from the database
-     */
-//    public void getTodayNotifications(){
-//        String todayURL = Config.baseIP + "notifications/todaynotifs/" + Config.currentUser; //the url to get notifications related to today with userid
-//        JsonArrayRequest todayRequest = new JsonArrayRequest(Request.Method.GET, todayURL, null, new Response.Listener<JSONArray>() { //making a get request for today notifications
-//            @Override
-//            public void onResponse(final JSONArray notificationResponse) {
-//                String todayImagesURL = Config.baseIP + "notifications/todayimages/"  + Config.currentUser; //url for getting images related to today with user id
-//                JsonArrayRequest todayImageRequest = new JsonArrayRequest(Request.Method.GET, todayImagesURL, null, new Response.Listener<JSONArray>() { //making a get request for today images
-//                    @Override
-//                    public void onResponse(final JSONArray imageResponse) {
-//                        //notificationsContract.setTodayRecyclerView(currentTime, requestQueue, notificationResponse, imageResponse); //calls notificationInterface to set the today recycler view
-////                        presenter.getTodayNotificationsCallBack(notificationResponse, imageResponse); // return results back to the presenter
-////                        mPresenter.setTodayData(notificationResponse, imageResponse);
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        error.printStackTrace();
-//                    }
-//                }) {
-//                    @Override
-//                    public Map<String, String> getHeaders() throws AuthFailureError {
-//                        // inserting the token into the response header that will be sent to the server
-//                        Map<String, String> header = new HashMap<>();
-//                        header.put("authorization", Config.token);
-//                        return header;
-//                    }
-//                };
-//                mNetwork.addToRequestQueue(todayImageRequest); //adds image request to request queue
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                error.printStackTrace();
-//            }
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                // inserting the token into the response header that will be sent to the server
-//                Map<String, String> header = new HashMap<>();
-//                header.put("authorization", Config.token);
-//                return header;
-//            }
-//        };
-//        mNetwork.addToRequestQueue(todayRequest); //adds today request to request queue
-//    }
 
     /**
      * gets recent notifications from the database
@@ -133,4 +82,5 @@ public class NotificationsInteractor {
         };
         mNetwork.addToRequestQueue(recentRequest); //adds recent request to request queue
     }
+    
 }
