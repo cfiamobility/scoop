@@ -256,6 +256,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
      */
     private void registerSuccess(){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         getApplicationContext().startActivity(intent);
         finish();
     }

@@ -3,11 +3,11 @@ package ca.gc.inspection.scoop.displaypost;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,9 +18,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
-
-import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
-import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.editcomment.EditCommentContract;
 import ca.gc.inspection.scoop.editleavedialog.EditLeaveDialog;
@@ -28,6 +25,10 @@ import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.editpost.EditPostContract;
 import ca.gc.inspection.scoop.util.ActivityUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
+
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
+import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
 public class DisplayPostActivity extends AppCompatActivity implements
@@ -39,6 +40,7 @@ public class DisplayPostActivity extends AppCompatActivity implements
     private DisplayPostAdapter mAdapter;
 
     private String mActivityId;
+    private String mPosterId;
     private EditText mAddCommentET;
     private Button mAddCommentButton;
     private boolean canPostComment;
@@ -67,10 +69,11 @@ public class DisplayPostActivity extends AppCompatActivity implements
         mDisplayPostPresenter = checkNotNull(presenter);
     }
 
-    public boolean setActivityIdFromIntent() {
+    public boolean setDataFromIntent() {
         Intent intent = getIntent();
-        if (intent.hasExtra(INTENT_ACTIVITY_ID_KEY)) {
+        if (intent.hasExtra(INTENT_ACTIVITY_ID_KEY) && intent.hasExtra(INTENT_POSTER_ID_KEY)) {
             mActivityId = intent.getStringExtra(INTENT_ACTIVITY_ID_KEY);
+            mPosterId = intent.getStringExtra(INTENT_POSTER_ID_KEY);
             return true;
         }
         else return false;
@@ -84,12 +87,16 @@ public class DisplayPostActivity extends AppCompatActivity implements
         return mActivityId;
     }
 
+    protected String getPosterId() {
+        return mPosterId;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_post);
 
-        if (!setActivityIdFromIntent()) {
+        if (!setDataFromIntent()) {
             Toast.makeText(getApplicationContext(), "Error displaying post", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -142,7 +149,7 @@ public class DisplayPostActivity extends AppCompatActivity implements
                         //clear comment box
                         mAddCommentET.getText().clear();
 
-                        mDisplayPostPresenter.addPostComment(Config.currentUser, commentText, getActivityId());
+                        mDisplayPostPresenter.addPostComment(Config.currentUser, commentText, getActivityId(), getPosterId());
 
                         //hide keyboard
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);

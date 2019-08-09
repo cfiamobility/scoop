@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.feedpost.FeedPostViewHolder;
@@ -60,7 +61,7 @@ public class DisplayPostAdapter extends RecyclerView.Adapter<PostCommentViewHold
                     mDisplayPostPresenter.getPosterIdByIndex(i), mDisplayPostView);
         }
         PostCommentFragment.setDisplayPostListener(viewHolder,
-                mDisplayPostPresenter.getActivityIdByIndex(i));
+                mDisplayPostPresenter.getActivityIdByIndex(i), mDisplayPostPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setLikesListener(viewHolder, i);
         PostCommentFragment.setUserInfoListener(viewHolder,
                 mDisplayPostPresenter.getPosterIdByIndex(i));

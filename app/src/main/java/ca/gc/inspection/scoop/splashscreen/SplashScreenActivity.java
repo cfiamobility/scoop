@@ -113,6 +113,8 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
             String token = sharedPreferences.getString("token", "nothing");
 
             Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             Config.currentUser = userId;
             Config.token = token;
             context.startActivity(intent);
@@ -182,6 +184,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
      */
     private void loginSuccess(){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplicationContext().startActivity(intent);
         finish();
     }

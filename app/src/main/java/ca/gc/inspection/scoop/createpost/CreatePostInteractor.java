@@ -2,7 +2,6 @@ package ca.gc.inspection.scoop.createpost;
 
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 
@@ -12,16 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
 
-
-public class CreatePostInteractor {
-
+class CreatePostInteractor {
     private CreatePostPresenter mPresenter;
 
-    /**
+   /**
      * Empty constructor to allow inheritance
      */
     public CreatePostInteractor() {
@@ -30,7 +28,6 @@ public class CreatePostInteractor {
     protected CreatePostInteractor(CreatePostPresenter presenter) {
         mPresenter = presenter;
     }
-
     /**
      * Sends post to database using RequestQueue.
      *
@@ -40,7 +37,7 @@ public class CreatePostInteractor {
      * @param text          Text body of the new post
      * @param imageBitmap   Bitmap in String format
      */
-    public void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
+    void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
         String url = Config.baseIP + "post/add-post";
 
         Map<String, String>  params = new HashMap<>();
@@ -90,14 +87,29 @@ public class CreatePostInteractor {
             {
                 return params;
             }
-
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 // inserting the token into the response header that will be sent to the server
                 Map<String, String> header = new HashMap<>();
                 header.put("authorization", Config.token);
                 return header;
             }
         };
+    }
+
+    void getUserProfileImage(NetworkUtils network){
+        String url = Config.baseIP + "post/create-post-profile-image/" + Config.currentUser;
+        StringRequest getRequest = new StringRequest(Request.Method.GET, url,
+            response -> mPresenter.setUserProfileImage(CameraUtils.stringToBitmap(response)),
+            error -> mPresenter.setUserProfileImage(null)) {
+            @Override
+            public Map<String, String> getHeaders() {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+        network.addToRequestQueue(getRequest);
     }
 }

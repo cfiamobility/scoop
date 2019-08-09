@@ -1,11 +1,11 @@
 package ca.gc.inspection.scoop.createpost;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import org.json.JSONObject;
 
 import ca.gc.inspection.scoop.util.NetworkUtils;
-
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class CreatePostPresenter implements CreatePostContract.Presenter, PostRequestReceiver {
@@ -13,7 +13,6 @@ public class CreatePostPresenter implements CreatePostContract.Presenter, PostRe
      * Implements the Presenter in the CreatePostContract interface to follow MVP architecture.
      *
      */
-
     private CreatePostInteractor mInteractor;
     private CreatePostContract.View mView;
 
@@ -24,7 +23,6 @@ public class CreatePostPresenter implements CreatePostContract.Presenter, PostRe
         mInteractor = new CreatePostInteractor(this);
         mView = checkNotNull(view);
     }
-
 
     /*** sendPostToDatabase
      * Simple Post request to store the newly created Post to the postcomment table
@@ -51,4 +49,8 @@ public class CreatePostPresenter implements CreatePostContract.Presenter, PostRe
     public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
         mView.onDatabaseResponse(success);
     }
+
+    public void setUserProfileImage(Bitmap profileImage) {mView.setUserProfileImage(profileImage);}
+
+    public void getUserProfileImage(NetworkUtils network) {mInteractor.getUserProfileImage(network);}
 }

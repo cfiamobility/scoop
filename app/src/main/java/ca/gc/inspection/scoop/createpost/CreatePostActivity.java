@@ -37,6 +37,7 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.ImageFilePath;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -49,11 +50,12 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
     protected static final int TEXT_CHAR_LIMIT = 255;
     private CreatePostContract.Presenter mPresenter;
-    protected EditText postTitle;
-    protected EditText postText;
+    protected EditText postTitle, postText;
     protected ImageView postImage;
     protected CoordinatorLayout mCoordinatorLayout;
     protected Button removeImage;
+    private CircleImageView profileImage;
+
 
     protected TextView counter;
     protected TextWatcher mTextEditorWatcher;
@@ -123,6 +125,9 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         postImage = findViewById(R.id.activity_create_post_img_post);
         removeImage = findViewById(R.id.activity_create_post_btn_remove_image);
         mCoordinatorLayout = findViewById(R.id.activity_create_post_coordinator);
+
+        profileImage = findViewById(R.id.activity_create_post_img_profile);
+        mPresenter.getUserProfileImage(NetworkUtils.getInstance(this));
 
         Button camera = findViewById(R.id.activity_create_post_btn_camera);
         Button cameraRoll = findViewById(R.id.activity_create_post_btn_image);
@@ -343,5 +348,14 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
             });
             mSnackbar.show();
         }
+    }
+
+    /**
+     * Sets the profileImageCircle with the users profileimage taken from the database.
+     * @param profileImageBitmap
+     */
+    @Override
+    public void setUserProfileImage(Bitmap profileImageBitmap) {
+        profileImage.setImageBitmap(profileImageBitmap);
     }
 }

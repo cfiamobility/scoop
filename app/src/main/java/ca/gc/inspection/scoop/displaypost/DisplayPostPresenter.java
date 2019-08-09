@@ -143,8 +143,8 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     }
 
     @Override
-    public void addPostComment(String currentUserId, String commentText, String activityId) {
-        mDisplayPostInteractor.addPostComment(currentUserId, commentText, activityId);
+    public void addPostComment(String currentUserId, String commentText, String activityId, String posterId) {
+        mDisplayPostInteractor.addPostComment(currentUserId, commentText, activityId, posterId);
     }
 
     /**

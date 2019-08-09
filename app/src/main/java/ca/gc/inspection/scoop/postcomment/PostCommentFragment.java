@@ -199,7 +199,7 @@ public abstract class PostCommentFragment extends Fragment implements
      * @param viewHolder viewholder that displays the current post
      * @param activityId activityid of the post that the viewholder contains
      */
-    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId){
+    public static void setDisplayPostListener(PostCommentViewHolder viewHolder, String activityId, String posterId){
         // tapping on any item from the view holder will go to the display post activity
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,6 +210,7 @@ public abstract class PostCommentFragment extends Fragment implements
                 else {
                     Intent intent = new Intent(context, DisplayPostActivity.class);
                     intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
+                    intent.putExtra(INTENT_POSTER_ID_KEY, posterId);
                     context.startActivity(intent);
                 }
             }
