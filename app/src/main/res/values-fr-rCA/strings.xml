@@ -1,6 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -150,10 +149,10 @@
     <string name="reason">Choose a reason for reporting this post:</string>
     <string name="submit">Submit</string>
     <string name="OK">Ok</string>
-    <string name="thank_you_message">Thank you for helping keep the Scoop community safe and
-        fun for everyone. Remember, we don\'t reveal who submitted reports to the person who
-        created the post or comment.\n\nOur team will review the post and if it violates our
-        Community Guidelines or Terms of Use, we\'ll remove it.</string>
+    <string name="thank_you_message">Thank you for helping keep the Scoop community safe
+        and fun for everyone. Remember, we don\'t reveal who submitted reports to the person
+        who created the post or comment.\n\nOur team will review the post and if it violates
+        our Community Guidelines or Terms of Use, we\'ll remove it.</string>
     <string name="thank_you_title">Thanks for reporting this</string>
 
     <!-- Notifications -->
@@ -161,25 +160,21 @@
     <string name="notifications_recent">Recent</string>
     <string name="notifications_no_new">No New Notifications\!</string>
 
-
-
     <!-- Scoop 101 -->
-    <string name="scoopable_main_title">The Scoop 101</string>
-    <string name="scoop_objective">Objective</string>
-    <string name="scoop_objective_description">To help CFIA employees keep up-to-date on initiatives and projects under the Agency\'s Responding to Today, Building for the Future Framework</string>
+    <string name="scoopable_main_title">LE SCOOP 101</string>
+    <string name="scoop_objective">OBJECTIF</string>
+    <string name="scoop_objective_description">Maintenir les employés de l\'ACIA au courant des initiatives et des projets qui s\'inscrivent dans le cadre de Répondre aux besoins d\'aujourd\'hui et bâtir pour l\'avenir de l\'Agence.</string>
 
-    <string name="scoopable_title">What\'s \'Scoopable\'</string>
-    <string name="scoopable_description">Short, focused statements that provide updates or information about how we are using innovation or engagement to work towards our 5 strategic priorities:</string>
+    <string name="scoopable_title">QUE PEUT-ON INCLURE AU SCOOP?</string>
+    <string name="scoopable_description">Les déclarations courtes et ciblées qui fournissent une mise à jour ou des renseignements sur la façon dont nous utilisons l\'innovation et la mobilisation pour mettre en oeuvre nos 5 priorités stratégiques:</string>
 
-    <string name="strategic_approach1">Modern Regulatory Toolkit</string>
-    <string name="strategic_approach2">Integrated Risk Management</string>
-    <string name="strategic_approach3">Consistent and Efficient Inspections</string>
-    <string name="strategic_approach4">Digital-First Tools and Services</string>
-    <string name="strategic_approach5">Global Leader</string>
+    <string name="strategic_approach1">Outils de réglementation moderne</string>
+    <string name="strategic_approach2">Intégration du risque</string>
+    <string name="strategic_approach3">Inspections cohérentes et efficaces</string>
+    <string name="strategic_approach4">Priorité aux outils et services numériques</string>
+    <string name="strategic_approach5">Chef de file mondial</string>
 
-    <string name="not_scoopable_title">What\'s NOT \'Scoopable\'</string>
-    <string name="not_scoopable_description">Corporate priorities such as news, events and information about things like the GCWCC, National Public Service Week, administrative and operational day-to-day information such as new HR processes, organizational structure updates or collective bargaining. For this type of information, check in with Internal Communications to use the InfoBulletin, Contact, or Express messages.</string>
-
-
+    <string name="not_scoopable_title">QUE DEVRAIT-ON ÉVITER D\'INCLURE AU SCOOP?</string>
+    <string name="not_scoopable_description">Les priorités de l\'organisation comme les nouvelles, les évènements et les renseignements qui concernent, entre autres, la CCMTGC et la Semaine nationale de la fonction publique, de même que les renseignements administratifs et opérationnels quotidiens qui concernent, entre autres, les nouveaux processus des RH, les mises à jour de la structure organisationnelle ou les négociations collectives. Pour ce type de renseignements, informez-vous auprès des communications internes afin d\'utiliser l\'InfoBulletin, Contact ou les messages Express.</string>
 
 </resources>
