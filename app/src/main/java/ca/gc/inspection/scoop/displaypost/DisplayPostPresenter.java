@@ -22,8 +22,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 class DisplayPostPresenter extends FeedPostPresenter implements
         DisplayPostContract.Presenter,
         DisplayPostContract.Presenter.FragmentAPI,
-        DisplayPostContract.Presenter.FragmentAPI.AdapterAPI,
-        EditLeaveEventListener.Presenter {
+        DisplayPostContract.Presenter.FragmentAPI.AdapterAPI {
 
     private static final String TAG = "DisplayPostPresenter";
 
@@ -192,7 +191,7 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     }
 
     /**
-     * Helper method to let EditLeaveEventListener.View know if it needs to create an EditLeaveDialog
+     * Helper method to let EditLeaveEventListener know if it needs to create an EditLeaveDialog
      * to ask the user to confirm leaving their unsaved edits.
      *
      * @return True if there are unsaved edits for a post comment

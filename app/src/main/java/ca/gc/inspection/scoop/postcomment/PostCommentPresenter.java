@@ -262,29 +262,6 @@ public class PostCommentPresenter implements
         }
     }
 
-
-    /**
-     * Updates a viewHolder's saved state by setting it to the opposite Boolean value of its current state
-     * UI is updated and then the appropriate network request is made through a call to the Interactor
-     * @param viewHolderInterface interface used to communicate with the View/viewHolder
-     * @param i position of the view
-     * @throws JSONException
-     */
-    public void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException {
-        PostComment postComment = getItemByIndex(i);
-        String activityid = postComment.getActivityId();
-        if (getItemByIndex(i) != null) {
-            Boolean savedState = postComment.getSavedState();
-            getItemByIndex(i).setSavedState(!savedState);
-            viewHolderInterface.setSavedState(!savedState);
-            if (!savedState){
-                mPostCommentInteractor.savePost(activityid, Config.currentUser);
-            } else {
-                mPostCommentInteractor.unsavePost(activityid, Config.currentUser);
-            }
-        }
-    }
-
     /**
      * Helper method to bind the unsaved edit comment text to a post comment. Called when RecyclerView
      * scrolls and new data has to be attached to the existing view holders.
@@ -361,6 +338,28 @@ public class PostCommentPresenter implements
                 ViewHolder is still on screen.*/
                 if (viewHolderState.isWaitingForResponse())
                     viewHolderInterface.setCallBackIdentifier(activityId);
+            }
+        }
+    }
+
+    /**
+     * Updates a viewHolder's saved state by setting it to the opposite Boolean value of its current state
+     * UI is updated and then the appropriate network request is made through a call to the Interactor
+     * @param viewHolderInterface interface used to communicate with the View/viewHolder
+     * @param i position of the view
+     * @throws JSONException
+     */
+    public void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException {
+        PostComment postComment = getItemByIndex(i);
+        String activityid = postComment.getActivityId();
+        if (getItemByIndex(i) != null) {
+            Boolean savedState = postComment.getSavedState();
+            getItemByIndex(i).setSavedState(!savedState);
+            viewHolderInterface.setSavedState(!savedState);
+            if (!savedState){
+                mPostCommentInteractor.savePost(activityid, Config.currentUser);
+            } else {
+                mPostCommentInteractor.unsavePost(activityid, Config.currentUser);
             }
         }
     }

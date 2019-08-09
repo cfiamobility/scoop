@@ -2,6 +2,11 @@ package ca.gc.inspection.scoop.postcomment;
 
 import android.support.annotation.NonNull;
 
+/**
+ * Stores the state of a ViewHolder such as the current SnackBar messages being shown, and whether
+ * it is waiting for a database response. Used in a Presenter's onBind methods to restore the
+ * state of the ViewHolder when they are recycled during scrolling.
+ */
 public class ViewHolderState {
 
     public enum SnackBarState {
@@ -21,16 +26,25 @@ public class ViewHolderState {
         return mPosition;
     }
 
-    public void setPosition(int i) {
+    public ViewHolderState setPosition(int i) {
         mPosition = i;
+        return this;
     }
 
-    public void incrementPosition() {
+    /**
+     * The estimated adapter position may get out of sync with the Presenter's DataCache
+     * when items are added, removed, or reordered. Despite this, we provide a method to update
+     * the estimated position when a post comment is added as a best effort to keep this value
+     * in sync.
+     */
+    public ViewHolderState incrementPosition() {
         mPosition += 1;
+        return this;
     }
 
-    public void setSnackBarState(SnackBarState snackBarState) {
+    public ViewHolderState setSnackBarState(SnackBarState snackBarState) {
         mSnackBarState = snackBarState;
+        return this;
     }
 
     @NonNull
@@ -42,7 +56,8 @@ public class ViewHolderState {
         return mWaitingForResponse;
     }
 
-    public void setWaitingForResponse(boolean waitingForResponse) {
+    public ViewHolderState setWaitingForResponse(boolean waitingForResponse) {
         mWaitingForResponse = waitingForResponse;
+        return this;
     }
 }

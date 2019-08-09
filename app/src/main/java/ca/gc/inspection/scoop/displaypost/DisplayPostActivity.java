@@ -32,7 +32,7 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 public class DisplayPostActivity extends AppCompatActivity implements
         DisplayPostContract.View,
-        EditLeaveEventListener.View.EditLeaveDialogAPI {
+        EditLeaveEventListener {
 
     private DisplayPostContract.Presenter mDisplayPostPresenter;
     private DisplayPostFragment mDisplayPostFragment;
@@ -48,16 +48,17 @@ public class DisplayPostActivity extends AppCompatActivity implements
         finish();
     }
 
-    public static void confirmLoseEdits(FragmentManager fragmentManager,
-                                 EditLeaveEventListener.Presenter presenter,
-                                 EditLeaveEventListener.View.EditLeaveDialogAPI editLeaveEventListener) {
-
-        if (presenter.unsavedEditsExist()) {
+    /**
+     * Check if there are unsaved changes for the post comment. If so, prompt the user if they want
+     * to leave the editing UI and lose their unsaved changes.
+     */
+    public void confirmLoseEdits() {
+        if (mDisplayPostPresenter.unsavedEditsExist()) {
             EditLeaveDialog editLeaveDialog = new EditLeaveDialog();
-            editLeaveDialog.setEditLeaveEventListener(editLeaveEventListener);
-            editLeaveDialog.show(fragmentManager, EditLeaveDialog.TAG);
+            editLeaveDialog.setEditLeaveEventListener(this);
+            editLeaveDialog.show(getSupportFragmentManager(), EditLeaveDialog.TAG);
         } else {
-            editLeaveEventListener.confirmLeaveEvent();
+            confirmLeaveEvent();
         }
     }
 
@@ -156,7 +157,7 @@ public class DisplayPostActivity extends AppCompatActivity implements
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmLoseEdits(getSupportFragmentManager(), mDisplayPostPresenter, DisplayPostActivity.this);
+                confirmLoseEdits();
             }
         });
     }
@@ -177,10 +178,13 @@ public class DisplayPostActivity extends AppCompatActivity implements
     }
 
     /**
+     * Callback for EditLeaveDialog confirm option.
      * User has confirmed they want to leave the activity and lose their unsaved edits.
+     *
+     * @param params    contains the activityId.
      */
     @Override
-    public void confirmLeaveEvent() {
+    public void confirmLeaveEvent(String... params) {
         finish();
     }
 

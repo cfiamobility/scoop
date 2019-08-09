@@ -25,6 +25,16 @@ public class EditPostInteractor extends CreatePostInteractor {
         mPresenter = presenter;
     }
 
+    /**
+     * Saves the changes to the post title, text, and image (if it was modified) to the database.
+     *
+     * @param network       An instance of the singleton class which encapsulates the RequestQueue
+     * @param activityId    Unique identifier of a post
+     * @param title         Even if the title was not edited, we still pass in the current title
+     * @param text          Even if the text was not edited, we still pass in the current text
+     * @param imageBitmap   Bitmap in String format. If this is null, no changes are made to the
+     *                      database.
+     */
     public void sendPostToDatabase(NetworkUtils network, final String activityId, final String title, final String text, final String imageBitmap) {
         String urlPrefix = Config.baseIP + "post/edit-post/";
         String urlText = urlPrefix + "text/";
@@ -50,6 +60,13 @@ public class EditPostInteractor extends CreatePostInteractor {
         }
     }
 
+    /**
+     * Retrieves the post image from the database. Called if EditPostActivity did not
+     * receive the post image from the bundle.
+     *
+     * @param network       Singleton network access object which encapsulates access to RequestQueue.
+     * @param activityId    Unique identifier for a post.
+     */
     public void getPostImage(NetworkUtils network, final String activityId) {
         Log.d("EditPostInteractor", "activityId:"+activityId);
         String url = Config.baseIP + "post/get-image/";
@@ -61,6 +78,13 @@ public class EditPostInteractor extends CreatePostInteractor {
         network.addToRequestQueue(postRequest);
     }
 
+    /**
+     * Helper method to create the StringRequest for getPostImage.
+     *
+     * @param url       route in the middle-tier to get the post image
+     * @param params    contains activityId
+     * @return a StringRequest which can be added to the NetworkUtils' RequestQueue.
+     */
     public StringRequest newImagePostRequest(String url, Map<String, String> params) {
         return new StringRequest(Request.Method.POST, url,
                 mPresenter::onDatabaseImageResponse,

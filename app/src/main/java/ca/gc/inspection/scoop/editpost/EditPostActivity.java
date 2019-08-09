@@ -15,12 +15,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import java.util.Objects;
 import ca.gc.inspection.scoop.createpost.CreatePostActivity;
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveDialog;
 import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
-import static ca.gc.inspection.scoop.displaypost.DisplayPostActivity.confirmLoseEdits;
 import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
 import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
@@ -28,7 +28,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class EditPostActivity extends CreatePostActivity implements
         EditPostContract.View,
-        EditLeaveEventListener.View.EditLeaveDialogAPI {
+        EditLeaveEventListener {
     private static final String TAG = "EditPostActivity";
     /**
      * Implements the View in the EditPostContract interface to follow MVP architecture.
@@ -59,6 +59,21 @@ public class EditPostActivity extends CreatePostActivity implements
         intent.putExtra(FEED_POST_IMAGE_PATH_KEY, editPostData.getPostImagePath());
         context.startActivity(intent);
     }
+
+    /**
+     * Check if there are unsaved changes for the post comment. If so, prompt the user if they want
+     * to leave the editing UI and lose their unsaved changes.
+     */
+    public void confirmLoseEdits() {
+        if (unsavedEditsExist()) {
+            EditLeaveDialog editLeaveDialog = new EditLeaveDialog();
+            editLeaveDialog.setEditLeaveEventListener(this);
+            editLeaveDialog.show(getSupportFragmentManager(), EditLeaveDialog.TAG);
+        } else {
+            confirmLeaveEvent();
+        }
+    }
+
 
     public void returnToPrevious (View view) {
         finish();
@@ -120,7 +135,7 @@ public class EditPostActivity extends CreatePostActivity implements
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmLoseEdits(getSupportFragmentManager(), mPresenter, EditPostActivity.this);
+                confirmLoseEdits();
             }
         });
     }
@@ -229,11 +244,14 @@ public class EditPostActivity extends CreatePostActivity implements
     }
 
     /**
+     * Callback for EditLeaveDialog confirm option.
      * User has confirmed they want to leave the activity and lose their unsaved edits.
      * Edit post does not have any caches to clear.
+     *
+     * @param params    contains the activityId.
      */
     @Override
-    public void confirmLeaveEvent() {
+    public void confirmLeaveEvent(String... params) {
         finish();
     }
 

@@ -11,14 +11,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
+
 /**
  * Prompts the user if they want to leave their unsaved edits for a post or comment, thereby losing
  * their changes.
  */
 public class EditLeaveDialog extends DialogFragment {
     public static final String TAG = "EditLeaveDialog";
-    EditLeaveEventListener.View.EditLeaveDialogAPI mEditLeaveEventListener;
+    EditLeaveEventListener mEditLeaveEventListener;
     Button confirmBtn, cancelBtn;
+    private String mActivityId;
+
+    /**
+     * Used by PostCommentViewHolder to pass the activityId to the EditLeaveDialog through the Bundle.
+     *
+     * @param activityId    unique identifier of post comment.
+     * @return              EditLeaveDialog containing the activityId.
+     */
+    public static EditLeaveDialog newInstance(String activityId) {
+        EditLeaveDialog editLeaveDialog = new EditLeaveDialog();
+
+        // bundle arguments
+        Bundle bundle = new Bundle();
+        bundle.putString(INTENT_ACTIVITY_ID_KEY, activityId);
+        editLeaveDialog.setArguments(bundle);
+
+        return editLeaveDialog;
+    }
 
     public EditLeaveDialog() {
     }
@@ -27,6 +47,9 @@ public class EditLeaveDialog extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, 0);
+        if (savedInstanceState != null) {
+            mActivityId = savedInstanceState.getString(INTENT_ACTIVITY_ID_KEY);
+        }
     }
 
     @Nullable
@@ -43,7 +66,7 @@ public class EditLeaveDialog extends DialogFragment {
 
         confirmBtn.setOnClickListener(v -> {
             if (mEditLeaveEventListener != null) {
-                mEditLeaveEventListener.confirmLeaveEvent();
+                mEditLeaveEventListener.confirmLeaveEvent(mActivityId);
             }
             dismiss();
         });
@@ -66,7 +89,7 @@ public class EditLeaveDialog extends DialogFragment {
      *                                  unsaved edits from.
      */
     public void setEditLeaveEventListener(
-            EditLeaveEventListener.View.EditLeaveDialogAPI editLeaveEventListener) {
+            EditLeaveEventListener editLeaveEventListener) {
         mEditLeaveEventListener = editLeaveEventListener;
     }
 }

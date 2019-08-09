@@ -2,34 +2,23 @@ package ca.gc.inspection.scoop.editleavedialog;
 
 
 /**
- * Defined relationship between the View and Presenter when prompting a user to leave an activity
- * which contains unsaved edits for a Post or Comment.
+ * Provides callback methods for EditLeaveDialog's buttons. Implemented by the View layer such as
+ * an Activity, Fragment, or ViewHolder.
  */
 public interface EditLeaveEventListener {
 
     /**
-     * Defines how the Presenter can interact with the View (Activity/Fragment).
-     * Not necessary in this case but kept to keep contract structure consistent with MVP and to make
-     * it easier to extend in the future.
+     * Variable length params are used as leaving EditPostActivity and DisplayPostActivity does not
+     * require a return value when leaving unsaved edits but cancelling an edit for a post comment
+     * must send the activityId.
+     *
+     * Note: Once ViewHolders are refactored to include activityId as the unique identifier, params
+     * may not be necessary.
+     *
+     * @param params    variable length string. Currently only used by PostCommentViewHolder to pass
+     *                  the activityId.
      */
-    interface View {
+    void confirmLeaveEvent(String... params);
 
-        /**
-         * Provides callback methods for EditLeaveDialog's buttons
-         */
-        interface EditLeaveDialogAPI {
-            void confirmLeaveEvent();
-            void cancelLeaveEvent();
-        }
-    }
-
-    /**
-     * Defines how the View (Activity/Fragment) can interact with the Presenter
-     */
-    interface Presenter {
-
-        boolean unsavedEditsExist();
-
-    }
-
+    void cancelLeaveEvent();
 }

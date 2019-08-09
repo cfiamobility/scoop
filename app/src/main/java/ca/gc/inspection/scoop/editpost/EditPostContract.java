@@ -23,7 +23,7 @@ public interface EditPostContract extends CreatePostContract {
         boolean unsavedEditsExist();
     }
 
-    interface Presenter extends CreatePostContract.Presenter, EditLeaveEventListener.Presenter {
+    interface Presenter extends CreatePostContract.Presenter {
 
         void getPostImage(NetworkUtils network, String activityId);
     }

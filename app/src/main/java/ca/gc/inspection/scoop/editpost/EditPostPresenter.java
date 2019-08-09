@@ -10,8 +10,7 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class EditPostPresenter extends CreatePostPresenter implements
-        EditPostContract.Presenter,
-        EditLeaveEventListener.Presenter {
+        EditPostContract.Presenter {
     /**
      * Implements the Presenter in the EditPostContract interface to follow MVP architecture.
      *
@@ -28,8 +27,8 @@ public class EditPostPresenter extends CreatePostPresenter implements
     /*** sendPostToDatabase
      * Simple Post request to store the newly created Post to the postcomment table
      *
-     * @param network NetworkUtils
-     * @param activityId
+     * @param network   An instance of the singleton class which encapsulates the RequestQueue
+     * @param activityId    unique identifier of a post
      * @param title     user inputted title (Mandatory)
      * @param text      user inputted test (Mandatory)
      * @param imageBitmap   user inputted image (Optional)
@@ -39,11 +38,24 @@ public class EditPostPresenter extends CreatePostPresenter implements
         mInteractor.sendPostToDatabase(network, activityId, title, text, imageBitmap);
     }
 
+    /**
+     * Allows the View to access the Interactor and retrieve the post image (which is missing from the bundle)
+     * when starting EditPostActivity.
+     *
+     * @param network       An instance of the singleton class which encapsulates the RequestQueue
+     * @param activityId    Unique identifier of a post
+     */
     @Override
     public void getPostImage(NetworkUtils network, String activityId) {
         mInteractor.getPostImage(network, activityId);
     }
 
+    /**
+     * Routes the database callback to the View layer to set the post image from the database image
+     * response.
+     *
+     * @param image String from the database.
+     */
     public void onDatabaseImageResponse(String image) {
         mView.onDatabaseImageResponse(image);
     }
@@ -58,15 +70,5 @@ public class EditPostPresenter extends CreatePostPresenter implements
     @Override
     public void onDatabaseResponse(boolean success, InteractorBundle interactorBundle) {
         mView.onDatabaseResponse(success);
-    }
-
-    /**
-     * Calls EditLeaveEventListener.View
-     * The cost of this extra method invocation is reasonable to follow MVP architecture
-     * @return if there are unsaved edits
-     */
-    @Override
-    public boolean unsavedEditsExist() {
-        return mView.unsavedEditsExist();
     }
 }

@@ -58,9 +58,11 @@ public interface DisplayPostContract extends FeedPostContract {
      * EditLeaveEventListener.Presenter deals with functionality of prompting a user to confirm
      * leaving their unsaved edits for post comments.
      */
-    interface Presenter extends EditLeaveEventListener.Presenter {
+    interface Presenter extends BasePresenter {
 
         void addPostComment(String currentUserId, String commentText, String activityId);
+
+        boolean unsavedEditsExist();
 
         interface FragmentAPI extends FeedPostContract.Presenter {
             void setFragmentView(DisplayPostContract.View.Fragment fragmentView);
