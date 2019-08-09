@@ -64,7 +64,6 @@ public class SignUpInteractor {
 
                     getSettings(network, userid, response);
                     // Helper method to store token and user id into shared preferences
-                    //mSignUpPresenter.storePreferences(userid, response);
                 }
             }
         }, new Response.ErrorListener() {
@@ -95,6 +94,12 @@ public class SignUpInteractor {
         network.addToRequestQueue(stringRequest);
     }
 
+    /**
+     * gets all setting values for the user
+     * @param network
+     * @param userid
+     * @param token
+     */
     private void getSettings(final NetworkUtils network, String userid, String token) {
         String URL = Config.baseIP + "settings/getUserSettings";
 
@@ -105,7 +110,6 @@ public class SignUpInteractor {
 
                     try {
                         mSignUpPresenter.storePreferences(userid, token, new JSONArray(response));
-                        //mSignUpPresenter.publishLocalPreferences(new JSONArray(response));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -61,7 +61,6 @@ public class SplashScreenInteractor {
                     Log.i("USER ID", userid); // user id
 
                     // Helper method to store token and user id into shared preferences
-                    //mSplashScreenPresenter.storePreferences(userid, response);
                     getSettings(network, userid, response);
                 }
 
@@ -94,6 +93,12 @@ public class SplashScreenInteractor {
 
     }
 
+    /**
+     * Gets all setting values for the user
+     * @param network
+     * @param userid
+     * @param token
+     */
     private void getSettings(NetworkUtils network, String userid, String token) {
         String URL = Config.baseIP + "settings/getUserSettings";
 
