@@ -22,6 +22,7 @@ public class NotificationsTodayPresenter implements
     private NotificationsTodayContract.View.Adapter mAdapter;
     private boolean refreshingData = false;
     protected NotificationsDataCache mDataCache;
+    private String NOTIFICATION_TYPE_KEY = "today";
 
     public NotificationsTodayPresenter(){
 
@@ -45,11 +46,12 @@ public class NotificationsTodayPresenter implements
             } else {
                 mDataCache.getNotificationsTodayList().clear();
             }
-            mInteractor.getTodayNotifications();
+            mAdapter.refreshAdapter();
+            mInteractor.getNotifications(NOTIFICATION_TYPE_KEY);
         }
     }
 
-    public void setTodayData(JSONArray notificationResponse, JSONArray imageResponse) {
+    public void setData(JSONArray notificationResponse, JSONArray imageResponse) {
         if ((notificationResponse.length() != imageResponse.length()))
             Log.i(TAG, "length of notificationResponse != imageResponse");
 
@@ -70,51 +72,6 @@ public class NotificationsTodayPresenter implements
         refreshingData = false;
         mView.onLoadedDataFromDatabase();
     }
-
-//    public void setRecentData(JSONArray notificationResponse, JSONArray imageResponse){
-//
-//        if ((notificationResponse.length() != imageResponse.length()))
-//            Log.i(TAG, "length of notificationResponse != imageResponse");
-//
-//        for (int i = 0; i < notificationResponse.length(); i++){
-//            JSONObject jsonNotification = null;
-//            JSONObject jsonImage = null;
-//            try {
-//                jsonNotification = notificationResponse.getJSONObject(i);
-//                jsonImage = imageResponse.getJSONObject(i);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            NotificationsToday notification = new NotificationsToday(jsonNotification,jsonImage);
-//            mDataCache.getNotificationsList().add(notification);
-//        }
-//        Log.i(TAG, Integer.toString(getItemCount()));
-//
-//        mAdapter.refreshAdapter();
-//        refreshingData = false;
-//        mView.onLoadedDataFromDatabase();
-//    }
-//
-//    /**
-//     * checks for recent data, returns boolean, if true, allows second POST request for user images
-//     * @param notificationResponse
-//     */
-//    public void checkRecentData(JSONArray notificationResponse){
-//        if(notificationResponse.length() == 0){
-//            mView.hideRecentSection();
-////            mView.requestTodayFocus();
-//            recentEmpty = 1;
-//            Log.i(TAG, "RECENT IS NOT SHOWING");
-//        } else {
-//            mView.showRecentSection();
-//            Log.i(TAG, "SHOWING RECENT");
-////            mView.requestRecentFocus();
-////            mView.hideLoadingPanel();
-//            recentEmpty = 0;
-//        }
-//        checkNothingNew();
-//    }
-
 
     private NotificationsToday getItemByIndex(int i) {
         if (mDataCache == null)

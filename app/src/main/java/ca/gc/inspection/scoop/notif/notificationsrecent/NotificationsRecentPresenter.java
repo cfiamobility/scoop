@@ -19,16 +19,19 @@ public class NotificationsRecentPresenter extends NotificationsTodayPresenter im
     private NotificationsRecentInteractor mInteractor;
     private NotificationsRecentContract.View.Adapter mAdapter;
     private boolean refreshingData = false;
+    private String NOTIFICATION_TYPE_KEY = "recent";
 
     NotificationsRecentPresenter(NotificationsRecentContract.View view, NetworkUtils network){
         mView = view;
         mInteractor = new NotificationsRecentInteractor(this, network);
     }
 
+    @Override
     public void setAdapter(NotificationsRecentContract.View.Adapter adapter) {
         mAdapter = adapter;
     }
 
+    @Override
     public void loadDataFromDatabase() {
         if (!refreshingData) {
             refreshingData = true;
@@ -38,11 +41,13 @@ public class NotificationsRecentPresenter extends NotificationsTodayPresenter im
             } else {
                 mDataCache.getNotificationsRecentList().clear();
             }
-            mInteractor.getRecentNotifications();
+            mAdapter.refreshAdapter();
+            mInteractor.getNotifications(NOTIFICATION_TYPE_KEY);
         }
     }
 
-    public void setRecentData(JSONArray notificationResponse, JSONArray imageResponse) {
+    @Override
+    public void setData(JSONArray notificationResponse, JSONArray imageResponse) {
         for (int i = 0; i < notificationResponse.length(); i++){
             JSONObject jsonNotification = null;
             JSONObject jsonImage = null;
@@ -66,18 +71,6 @@ public class NotificationsRecentPresenter extends NotificationsTodayPresenter im
             return null;
         return mDataCache.getNotificationsRecentByIndex(i);
     }
-
-    /**
-     * Gets the number of items in the DataCache
-     * @return the count
-     */
-    @Override
-    public int getItemCount() {
-        if (mDataCache == null)
-            return 1;
-        return mDataCache.getItemCount();
-    }
-
 
     public void onBindViewHolderAtPosition(NotificationsRecentContract.View.ViewHolder viewHolder, int i) {
         NotificationsRecent notification = getItemByIndex(i);
