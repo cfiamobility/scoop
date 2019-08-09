@@ -9,42 +9,37 @@ import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
 
-class SettingsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    TextView settingTextView;
+/**
+ * View holder for use with SettingWithSwitch objects
+ */
+class SettingWithSwitchViewHolder extends RecyclerView.ViewHolder {
+    TextView settingTextView; // Label
     Switch toggle;
-    SettingsAdapter.ItemClickListener mClickListener;
     SettingsAdapter.SwitchToggleListener mSwitchToggleListener;
     String mSettingType;
 
 
-    public SettingsViewHolder(@NonNull View itemView, SettingsAdapter.ItemClickListener itemClickListener, SettingsAdapter.SwitchToggleListener switchToggleListener) {
+    public SettingWithSwitchViewHolder(@NonNull View itemView, SettingsAdapter.SwitchToggleListener switchToggleListener) {
         super(itemView);
 
         settingTextView = itemView.findViewById(R.id.SettingsTextView);
-        mClickListener = itemClickListener;
-        itemView.setOnClickListener(this);
 
+        // set up the switch
         mSwitchToggleListener = switchToggleListener;
         toggle = itemView.findViewById(R.id.setting_switch);
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mSwitchToggleListener.onSwitchToggle(itemView, getAdapterPosition(), mSettingType, isChecked);
+                mSwitchToggleListener.onSwitchToggle(itemView, getAdapterPosition(), mSettingType, isChecked); // call back to SettingsActivity upon switch toggle
             }
         });
 
 
     }
 
-    @Override
-    public void onClick(View view) {
-        if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-    }
-
     public void setType(String type){
         mSettingType = type;
     }
-
 
     public void setValue(boolean value) { toggle.setChecked(value); }
 }

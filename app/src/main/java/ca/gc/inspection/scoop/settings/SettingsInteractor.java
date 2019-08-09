@@ -23,6 +23,9 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
+/**
+ * Integrator used by the SettingsPresenter to fetch data from the server/database
+ */
 class SettingsInteractor {
 
     private SettingsPresenter mPresenter;
@@ -33,18 +36,17 @@ class SettingsInteractor {
         mNetwork = network;
     }
 
+    /**
+     * Sends settings which the user edited to the server to be updated in the database
+     * @param settingsMap Hash map containing ONLY settings which have been edited. Setting which the user didn't touch won't be sent
+     */
     public void updateSettings(HashMap<String, String> settingsMap) {
         String URL = Config.baseIP + "settings/updateSettings";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
                 response -> {
-                    // response
-                    Log.d("Response", response);
                     if (response.contains(DATABASE_RESPONSE_SUCCESS)){
                         mPresenter.updateLocalPreferences();
-                    }
-                    else {
-                        //TODO: HANDLE ERROR
                     }
                 },
                 error -> {
@@ -72,6 +74,10 @@ class SettingsInteractor {
 
     }
 
+    /**
+     * Fetches all the user's setting values from the database
+     *  - called upon initially opening the settings activity
+     */
     public void loadSettings() {
         String URL = Config.baseIP + "settings/getUserSettings";
 
@@ -109,21 +115,32 @@ class SettingsInteractor {
         };
         mNetwork.addToRequestQueue(postRequest);
 
-        /**
+    }
 
-        // Requesting response be sent back as a JSON Object
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, URL, null,  new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                mPresenter.setSettings(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("error", error.toString());
-            }
-        }) {
 
+    /**
+     * Fetches all the user's setting values from the database
+     * - called upon destroying the settings activity
+     */
+    public void getUserSettings() {
+        String URL = Config.baseIP + "settings/getUserSettings";
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
+                response -> {
+                    // response
+                    Log.d("Response", response);
+
+                    try {
+                        mPresenter.publishLocalPreferences(new JSONArray(response));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    // error
+                    Log.d("Error.Response", String.valueOf(error));
+                }
+        ) {
             @Override
             protected Map<String, String> getParams()
             {
@@ -140,9 +157,6 @@ class SettingsInteractor {
                 return header;
             }
         };
-
-        mNetwork.addToRequestQueue(jsonArrayRequest);
-         */
-
+        mNetwork.addToRequestQueue(postRequest);
     }
 }

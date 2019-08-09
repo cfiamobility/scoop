@@ -1,6 +1,7 @@
 package ca.gc.inspection.scoop.settings;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -15,50 +16,85 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
+/**
+ * Presenter for the settings activity
+ */
 public class SettingsPresenter implements SettingsContract.Presenter {
 
     private SettingsInteractor mInteractor;
     private SettingsContract.View mView;
     private Context mActivityContext;
-    private HashMap<String, String> mSettingsMap;
+    private HashMap<String, String> mSettingsMap; // Will contain ONLY settings which have been edited. Setting which the user didn't touch will not be in this list
 
     SettingsPresenter(@NonNull SettingsContract.View view, NetworkUtils networkUtils, Context context) {
         mInteractor = new SettingsInteractor(this, networkUtils);
         mView = checkNotNull(view);
         mActivityContext = context;
         mSettingsMap = new HashMap<String, String>();
+
     }
 
-
+    /**
+     * Sends all edited setting values to the server database
+     */
     @Override
     public void updateSettings() {
         mInteractor.updateSettings(mSettingsMap);
     }
 
+    /**
+     * loads settings from the server
+     * - called upon initially opening the settings activity
+     */
     @Override
     public void loadSettings() {
         mInteractor.loadSettings();
     }
 
-    public void updateLocalPreferences() {
-        //TODO: update local preferences
-        //SharedPreferences prefs = mActivityContext.getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-        //prefs.edit().putString(settingType, String.valueOf(value)).apply();
-    }
-
+    /**
+     * Gets user settings from the database for use in updating the local preferences
+     */
     @Override
-    public void updateSetting(String settingType, boolean value) {
-        mSettingsMap.put(settingType, String.valueOf(value));
+    public void updateLocalPreferences() {
+        mInteractor.getUserSettings();
     }
 
-
-    public void setSettings(JSONArray response) throws JSONException {
-        Log.d("THIS HAD BEEN", String.valueOf(response.getJSONObject(0)));
-
-
+    /**
+     * Update the local preferences using settings fetched from the database
+     * @param response // JSONArray containing all user settings fetched from the server
+     * @throws JSONException
+     */
+    public void publishLocalPreferences(JSONArray response) throws JSONException {
+        HashMap<String, String> prefsMap = new HashMap<>();
         JSONObject setting = response.getJSONObject(0);
         Iterator<String> keys = setting.keys();
+        while(keys.hasNext()){
+            String settingKey = keys.next();
+            if (settingKey.equals("userid")){ continue;}
+            prefsMap.put(settingKey, setting.getString(settingKey));
+        }
+        mView.publishLocalPreferences(prefsMap);
+    }
 
+    /**
+     * When a user edits a setting, this method stores the updated value to the setting map to be later sent to the server
+     * @param settingType unique setting id taken from Settings.java
+     * @param value updated settings value
+     */
+    @Override
+    public void updateSetting(String settingType, String value) {
+        mSettingsMap.put(settingType, value);
+    }
+
+
+    /**
+     * After fetching initial user setting values from the server, this method sends the values to the view to be used by the recycler view
+     * @param response JSONArray containing all of the users settings and values
+     * @throws JSONException
+     */
+    public void setSettings(JSONArray response) throws JSONException {
+        JSONObject setting = response.getJSONObject(0);
+        Iterator<String> keys = setting.keys();
 
         while(keys.hasNext()){
             String settingKey = keys.next();
@@ -67,10 +103,6 @@ public class SettingsPresenter implements SettingsContract.Presenter {
             Log.d("settingKey", settingKey);
             Log.d("settingValue", setting.getString(settingKey));
         }
-
-
-            //mView.addBuilding(jsonBuilding.toString());
-
 
         mView.setUpRecyclerView();
     }

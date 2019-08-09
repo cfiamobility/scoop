@@ -1,5 +1,8 @@
 package ca.gc.inspection.scoop.signup;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.util.NetworkUtils;
@@ -14,7 +17,7 @@ public interface SignUpContract {
      * View interface implemented by SignUpActivity
      */
     interface View extends BaseView<SignUpContract.Presenter> {
-        void storePreferences(String userid, String response);
+        void storePreferences(String userid, String response, JSONArray settings) throws JSONException;
         void displayErrorMessage(String message);
     }
 

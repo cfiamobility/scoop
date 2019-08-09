@@ -13,8 +13,16 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Iterator;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.MainActivity;
@@ -231,13 +239,22 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
      * Invoked by the Presenter and adds the userid and response token to the Shared Preferences and application
      * config file
      * @param userid Unique user ID passed from Interactor/Model
-     * @param response Unique reponse token from Interactor/Model
+     * @param token Unique reponse token from Interactor/Model
      */
-    public void storePreferences(String userid, String response){
-        // storing the token into shared preferences
+    public void storePreferences(String userid, String token, JSONArray settings) throws JSONException {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("ca.gc.inspection.scoop", Context.MODE_PRIVATE);
-        sharedPreferences.edit().putString("token", response).apply();
-        Config.token = response;
+
+        JSONObject setting = settings.getJSONObject(0);
+        Iterator<String> keys = setting.keys();
+        while(keys.hasNext()){
+            String settingKey = keys.next();
+            if (settingKey.equals("userid")){ continue;}
+            sharedPreferences.edit().putString(settingKey, setting.getString(settingKey)).apply();
+        }
+
+        // storing the token into shared preferences
+        sharedPreferences.edit().putString("token", token).apply();
+        Config.token = token;
 
         // storing the user id into shared preferences
         sharedPreferences.edit().putString("userid", userid).apply();

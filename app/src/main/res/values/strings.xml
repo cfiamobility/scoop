@@ -156,6 +156,16 @@
     we\'ll remove it.</string>
     <string name="thank_you_title">Thanks for reporting this</string>
 
+    <!-- Settings -->
+    <string-array name="languages_array">
+        <item>English</item>
+        <item>French</item>
+    </string-array>
+    <string name="push_notifications">Push Notifications</string>
+    <string name="push_notifications_description">Only affects community feed notifications</string>
+    <string name="Languages">Languages</string>
+
+
 
 
 </resources>

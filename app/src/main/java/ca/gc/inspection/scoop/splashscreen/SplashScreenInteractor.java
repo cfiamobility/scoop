@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.splashscreen;
 
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -9,6 +10,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +61,8 @@ public class SplashScreenInteractor {
                     Log.i("USER ID", userid); // user id
 
                     // Helper method to store token and user id into shared preferences
-                    mSplashScreenPresenter.storePreferences(userid, response);
+                    //mSplashScreenPresenter.storePreferences(userid, response);
+                    getSettings(network, userid, response);
                 }
 
             }
@@ -87,5 +92,43 @@ public class SplashScreenInteractor {
         // adds the request to the request queue
         network.addToRequestQueue(stringRequest);
 
+    }
+
+    private void getSettings(NetworkUtils network, String userid, String token) {
+        String URL = Config.baseIP + "settings/getUserSettings";
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
+                response -> {
+                    // response
+                    Log.d("Response", response);
+
+                    try {
+                        mSplashScreenPresenter.storePreferences(userid, token , new JSONArray(response));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    // error
+                    Log.d("Error.Response", String.valueOf(error));
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>(); // shallow copy settingsMap
+                params.put("userid", userid);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+        network.addToRequestQueue(postRequest);
     }
 }
