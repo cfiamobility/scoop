@@ -52,7 +52,7 @@ public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder
     public void onBindViewHolder(@NonNull SearchPostViewHolder searchPostViewHolder, int i) {
         mSearchPostPresenter.onBindViewHolderAtPosition(searchPostViewHolder, i);
         PostCommentFragment.setDisplayPostListener(searchPostViewHolder,
-                mSearchPostPresenter.getActivityIdByIndex(i));
+                mSearchPostPresenter.getActivityIdByIndex(i), mSearchPostPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setLikesListener(searchPostViewHolder, i);
         PostCommentFragment.setUserInfoListener(searchPostViewHolder,
                 mSearchPostPresenter.getPosterIdByIndex(i));
