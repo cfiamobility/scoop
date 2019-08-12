@@ -6,15 +6,22 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
+
+import static ca.gc.inspection.scoop.Config.CERTIFIED_TYPE_KEY;
+import static ca.gc.inspection.scoop.Config.USERID_KEY;
 
 /**
  * SplashScreenInteractor used by the Presenter to create POST request and store data into the Model(database/server)
@@ -58,6 +65,8 @@ public class SplashScreenInteractor {
 
                     // Helper method to store token and user id into shared preferences
                     mSplashScreenPresenter.storePreferences(userid, response);
+
+                    getOfficialCertificationType(network, userid);
                 }
 
             }
@@ -86,6 +95,42 @@ public class SplashScreenInteractor {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // adds the request to the request queue
         network.addToRequestQueue(stringRequest);
+    }
 
+
+    private void getOfficialCertificationType(NetworkUtils network, String userId) {
+        Log.i("getOfficialCertificationType", "called");
+        //URL for which the http request will be made, corresponding to Node.js code
+        String URL = Config.baseIP + "signup/certifiedtype";
+
+        Map<String, String> params = new HashMap<>();
+        params.put(USERID_KEY, userId); //puts the required parameters into the Hashmap which is sent to Node.js code
+        params.put("authorization", Config.token);
+
+        JSONObject parameters = new JSONObject(params);
+        //Setting up the request as a Post request
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, parameters, response -> {
+            // the response string that is received from the user
+            Log.i("getOfficialCertificationType", response.toString());
+
+            // Helper method to set official certification type
+            try {
+                mSplashScreenPresenter.setOfficialCertificationType(response.getString(CERTIFIED_TYPE_KEY));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }, error -> {
+            Log.i("error info", error.toString()); //if there is an error, it will log the error
+
+        });
+
+        // refrains Volley from sending information twice
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // adds the request to the request queue
+        network.addToRequestQueue(jsonObjectRequest);
     }
 }

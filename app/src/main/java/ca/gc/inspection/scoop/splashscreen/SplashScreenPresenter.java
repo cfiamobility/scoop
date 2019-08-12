@@ -1,5 +1,9 @@
 package ca.gc.inspection.scoop.splashscreen;
 
+import android.util.Log;
+
+import ca.gc.inspection.scoop.CertifiedType;
+import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
@@ -62,4 +66,8 @@ public class SplashScreenPresenter implements SplashScreenContract.Presenter {
         mSplashScreenView.storePreferences(userid, response);
     }
 
+    public void setOfficialCertificationType(String officialCertificationType) {
+        Config.certifiedType = CertifiedType.getCertifiedTypeFrom(officialCertificationType);
+        Log.d("CertifiedType", Config.certifiedType.getDatabaseValue());
+    }
 }

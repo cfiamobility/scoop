@@ -10,6 +10,7 @@ public class Config {
 
     //gets changed in splash screen
     public static String currentUser = "";
+    public static CertifiedType certifiedType = CertifiedType.NONE;
 
     //For Post/Comment activity
     public static int postType = 1;
@@ -24,6 +25,9 @@ public class Config {
     public static String INTENT_ACTIVITY_ID_KEY = "ACTIVITY_ID";
     public static String INTENT_POSTER_ID_KEY = "posterid";
     public static String INTENT_ACTIVITY_TYPE_KEY = "activitytype";
+
+    // shared preference key
+    public static String CERTIFIED_TYPE_KEY = "certifiedtype";
 
     // swipe refresh colours
     public static int SWIPE_REFRESH_COLOUR_1 = android.R.color.holo_green_dark;
