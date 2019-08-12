@@ -62,6 +62,7 @@ public class NotificationsRecentPresenter extends NotificationsTodayPresenter im
                 NotificationsRecent notification = new NotificationsRecent(jsonNotification,jsonImage);
                 mDataCache.getNotificationsRecentList().add(notification);
             }
+            mView.hideNoNotifications();
         }
         mAdapter.refreshAdapter();
         refreshingData = false;
@@ -86,7 +87,8 @@ public class NotificationsRecentPresenter extends NotificationsTodayPresenter im
                     .setActivityType(notification.getActivityType())
                     .setTime(notification.getModifiedDate())
                     .setFullName(notification.getValidFullName())
-                    .setUserImageFromString(notification.getNotifierProfileImage());
+                    .setUserImageFromString(notification.getNotifierProfileImage())
+                    .setPostImageFromString(notification.getPostImage());
         }
     }
     

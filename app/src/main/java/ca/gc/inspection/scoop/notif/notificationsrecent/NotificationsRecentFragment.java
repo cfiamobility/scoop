@@ -124,4 +124,10 @@ public class NotificationsRecentFragment extends Fragment implements
         noNotificationsImage.setVisibility(View.VISIBLE);
     }
 
+    public void hideNoNotifications(){
+        noNotificationsTitle.setVisibility(View.GONE);
+        noNotificationsText.setVisibility(View.GONE);
+        noNotificationsImage.setVisibility(View.GONE);
+    }
+
 }

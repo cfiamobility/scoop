@@ -14,8 +14,9 @@ public interface NotificationsTodayContract {
         void onLoadedDataFromDatabase();
 
         void showNoNotifications();
+        void hideNoNotifications();
 
-        interface ViewHolder {
+            interface ViewHolder {
             NotificationsTodayContract.View.ViewHolder setActionType(String actionType);
             NotificationsTodayContract.View.ViewHolder setActivityType(String activityType);
             NotificationsTodayContract.View.ViewHolder setTime(String time);
@@ -23,6 +24,7 @@ public interface NotificationsTodayContract {
             NotificationsTodayContract.View.ViewHolder setImage(Bitmap bitmap);
             NotificationsTodayContract.View.ViewHolder hideImage();
             NotificationsTodayContract.View.ViewHolder setUserImageFromString(String image);
+            NotificationsTodayContract.View.ViewHolder setPostImageFromString(String image);
         }
 
         interface Adapter {

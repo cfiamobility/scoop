@@ -69,6 +69,7 @@ public class NotificationsTodayPresenter implements
                 NotificationsToday notification = new NotificationsToday(jsonNotification,jsonImage);
                 mDataCache.getNotificationsTodayList().add(notification);
             }
+            mView.hideNoNotifications();
         }
         mAdapter.refreshAdapter();
         refreshingData = false;
@@ -106,7 +107,8 @@ public class NotificationsTodayPresenter implements
                     .setActivityType(notification.getActivityType())
                     .setTime(notification.getModifiedDate())
                     .setFullName(notification.getValidFullName())
-                    .setUserImageFromString(notification.getNotifierProfileImage());
+                    .setUserImageFromString(notification.getNotifierProfileImage())
+                    .setPostImageFromString(notification.getPostImage());
         }
     }
 

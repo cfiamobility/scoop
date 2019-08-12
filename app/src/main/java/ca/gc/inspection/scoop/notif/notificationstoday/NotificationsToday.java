@@ -5,11 +5,13 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import ca.gc.inspection.scoop.MyApplication;
+import ca.gc.inspection.scoop.R;
 
 public class NotificationsToday {
 
@@ -25,6 +27,7 @@ public class NotificationsToday {
     public static final String NOTIFICATIONS_NOTIFIER_FIRSTNAME = "firstname";
     public static final String NOTIFICATIONS_NOTIFIER_LASTNAME = "lastname";
     public static final String NOTIFICATIONS_NOTIFIER_PROFILE_IMAGE = "profileimage";
+    public static final String NOTIFICATIONS_POST_IMAGE = "postimage";
 
     public NotificationsToday(JSONObject jsonNotification, JSONObject jsonImage){
         mNotification = jsonNotification;
@@ -47,30 +50,12 @@ public class NotificationsToday {
             Log.i("postdate", date);
             Log.i("realpostdate", parsedDate.toString());
             Timestamp timestamp = new Timestamp(parsedDate.getTime()); //creates a timestamp from the date
-            Log.i("time", String.valueOf(timestamp.getTime()));
-            Log.i("hello", String.valueOf(currentTimestamp.getTime()));
+            Log.i("SERVER TIME", String.valueOf(timestamp.getTime()));
+            Log.i("APP TIME", String.valueOf(currentTimestamp.getTime()));
             long diff = currentTimestamp.getTime() - timestamp.getTime(); //gets the difference between the two timestamps
-            Log.i("helloo", String.valueOf(((diff/(1000*60*60)))));
+            Log.i("RAW", String.valueOf(((diff/(1000*60*60)))));
             String diffHours = String.valueOf((int) ((diff / (1000 * 60 * 60)))); //stores it in a string representing hours
 
-
-//            // if unit of time since notification creation is 1, then we don't use the pluralized form of "hours" or "minutes"
-//            switch(Integer.valueOf(diffHours)){ // switch case for hours
-//                case 0:
-//                    diffHours = String.valueOf((int) (TimeUnit.MILLISECONDS.toMinutes(diff)));
-//                    switch (Integer.valueOf(diffHours)){ // switch case for minutes
-//                        case 0:
-//                            return getString(R.string.just_now);
-//                        case 1:
-//                            return diffHours + " " + getString(R.string.minute_ago);
-//                        default:
-//                            return diffHours + " " + getString(R.string.minutes_ago);
-//                    }
-//                case 1:
-//                    return diffHours + " " + getString(R.string.hour_ago);
-//                default:
-//                    return diffHours + " " + getString(R.string.hours_ago);
-//            }
 
             // if unit of time since notification creation is 1, then we don't use the pluralized form of "hours" or "minutes"
             switch(Integer.valueOf(diffHours)){ // switch case for hours
@@ -78,31 +63,18 @@ public class NotificationsToday {
                     diffHours = String.valueOf((int) (TimeUnit.MILLISECONDS.toMinutes(diff)));
                     switch (Integer.valueOf(diffHours)){ // switch case for minutes
                         case 0:
-                            return "just now";
+                            return MyApplication.getContext().getResources().getString(R.string.just_now);
                         case 1:
-                            return diffHours + " " + "minute ago";
+                            return diffHours + " " + MyApplication.getContext().getResources().getString(R.string.minute_ago);
                         default:
-                            return diffHours + " " + "minutes ago";
+                            return diffHours + " " + MyApplication.getContext().getResources().getString(R.string.minutes_ago);
                     }
                 case 1:
-                    return diffHours + " " + "hour ago";
+                    return diffHours + " " + MyApplication.getContext().getResources().getString(R.string.hour_ago);
                 default:
-                    return diffHours + " " + "hours ago";
+                    return diffHours + " " + MyApplication.getContext().getResources().getString(R.string.hours_ago);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private String setRecentTime() {
-        try {
-            String time = mNotification.getString("modifieddate"); //gets when notification was created/modified
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); //formats the date accordingly
-            Date parsedDate = dateFormat.parse(time); //parses the created date to be in specified date format
-            DateFormat properDateFormat = new SimpleDateFormat("MMMM d 'at' h:mm a"); //formats the date to be how we want it to output
-            return properDateFormat.format(parsedDate);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -146,6 +118,16 @@ public class NotificationsToday {
     public String getNotifierProfileImage() {
         try {
             return mImage.getString(NOTIFICATIONS_NOTIFIER_PROFILE_IMAGE);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String getPostImage() {
+        try {
+            return mImage.getString(NOTIFICATIONS_POST_IMAGE);
         }
         catch (Exception e) {
             e.printStackTrace();

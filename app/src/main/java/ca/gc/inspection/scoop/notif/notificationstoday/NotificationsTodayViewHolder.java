@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.gc.inspection.scoop.R;
@@ -16,6 +17,7 @@ public class NotificationsTodayViewHolder extends RecyclerView.ViewHolder
     NotificationsTodayContract.Presenter.ViewHolderAPI mPresenter;
 
     CircleImageView profileImage;
+    ImageView postImage;
     TextView fullName, actionType, activityType, time;
 
     public NotificationsTodayViewHolder(View v, NotificationsTodayContract.Presenter.ViewHolderAPI presenter) {
@@ -25,6 +27,7 @@ public class NotificationsTodayViewHolder extends RecyclerView.ViewHolder
         actionType = v.findViewById(R.id.actiontype); //instantiating the action type textview
         activityType = v.findViewById(R.id.activitytype); //instantiating the activity type textview
         time = v.findViewById(R.id.time); //instantiating the time textview
+        postImage = v.findViewById(R.id.post_image);
 
         mPresenter = presenter;
     }
@@ -68,8 +71,16 @@ public class NotificationsTodayViewHolder extends RecyclerView.ViewHolder
     public NotificationsTodayContract.View.ViewHolder setUserImageFromString(String image){
         if (image != null && !image.isEmpty()) {
             Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
-            Log.i("image", image);
             profileImage.setImageBitmap(bitmap);
+        }
+        return this;
+    }
+
+    public NotificationsTodayContract.View.ViewHolder setPostImageFromString(String image){
+        Log.i("VIEWHOLDER", image);
+        if (image != null && !image.isEmpty()) {
+            Bitmap bitmap = CameraUtils.stringToBitmap(image); //converts image string to bitmap
+            postImage.setImageBitmap(bitmap);
         }
         return this;
     }

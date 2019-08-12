@@ -128,6 +128,12 @@ public class NotificationsTodayFragment extends Fragment implements
         noNotificationsImage.setVisibility(View.VISIBLE);
     }
 
+    public void hideNoNotifications(){
+        noNotificationsTitle.setVisibility(View.GONE);
+        noNotificationsText.setVisibility(View.GONE);
+        noNotificationsImage.setVisibility(View.GONE);
+    }
+
     public static void setUserInfoListener(NotificationsTodayViewHolder viewHolder, String posterId) {
         // tapping on profile picture will bring user to poster's profile page
         viewHolder.fullName.setOnClickListener(new View.OnClickListener() {
