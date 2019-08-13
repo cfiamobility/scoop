@@ -23,7 +23,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import ca.gc.inspection.scoop.createofficialpost.CreateOfficialPostActivity;
 import ca.gc.inspection.scoop.createpost.CreatePostActivity;
+import ca.gc.inspection.scoop.createpostoptionsdialog.CreatePostOptionsDialogFragment;
+import ca.gc.inspection.scoop.createpostoptionsdialog.CreatePostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.info.InfoActivity;
 import ca.gc.inspection.scoop.feedpost.SavedPostActivity;
 import ca.gc.inspection.scoop.profile.OtherUserFragment;
@@ -33,7 +36,10 @@ import ca.gc.inspection.scoop.splashscreen.SplashScreenActivity;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
+public class MainActivity extends AppCompatActivity implements
+        MainContract.View,
+        CreatePostOptionsDialogReceiver.CreateCommunityPostReceiver,
+        CreatePostOptionsDialogReceiver.CreateOfficialPostBPCReceiver {
 
     private MainContract.Presenter mPresenter;
 
@@ -75,7 +81,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), CreatePostActivity.class));
+                if (Config.certifiedType == CertifiedType.NONE) {
+                    createCommunityPost();
+                }
+                else {
+                    showCreatePostOptionsDialog();
+                }
             }
         });
 
@@ -171,6 +182,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         });
     }
 
+    private void showCreatePostOptionsDialog() {
+        CreatePostOptionsDialogFragment dialog = new CreatePostOptionsDialogFragment();
+
+        dialog.setCreateCommunityPostReceiver(this);
+        dialog.setCreateOfficialPostBPCReceiver(this);
+
+        final Context context = this;
+        FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+        dialog.show(fragmentManager, "CreatePostOptionsDialogFragment");
+    }
+
     @Override
     public void onBackPressed() {
 	    getSupportActionBar().setTitle(OtherUserFragment.title);
@@ -199,5 +221,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void createCommunityPost() {
+        startActivity(new Intent(this, CreatePostActivity.class));
+    }
+
+    @Override
+    public void createOfficialPostBCP() {
+        startActivity(new Intent(this, CreateOfficialPostActivity.class));
     }
 }

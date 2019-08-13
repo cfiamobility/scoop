@@ -111,7 +111,7 @@ public class SplashScreenInteractor {
         //Setting up the request as a Post request
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, parameters, response -> {
             // the response string that is received from the user
-            Log.i("getOfficialCertificationType", response.toString());
+            Log.i("getOfficialCertificationType", "response:" + response.toString());
 
             // Helper method to set official certification type
             try {

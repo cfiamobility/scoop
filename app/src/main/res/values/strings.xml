@@ -17,6 +17,9 @@
     <string name="create_post_title_empty_error">Add a title to continue</string>
     <string name="create_post_text_empty_error">Add a message to continue</string>
 
+    <!-- Create Official Post: BCP -->
+    <string name="create_official_bcp_post">Create Official Post: BCP</string>
+
     <!-- Edit Post -->
     <string name="edit_post_title">Edit Post</string>
     <string name="edit_post_success">Post edited!</string>
@@ -179,5 +182,8 @@
     <string name="notifications_today">Today</string>
     <string name="notifications_recent">Recent</string>
     <string name="notifications_no_new">No New Notifications\!</string>
+    <string name="create_official_bcp_post_building">Building name</string>
+    <string name="create_official_bcp_post_reason_for_closure">Reason for closure</string>
+    <string name="create_official_bcp_post_action_required">Action required</string>
 
 </resources>

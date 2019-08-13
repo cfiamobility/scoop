@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_create_official_post_coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".createpost.CreatePostActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/activity_create_official_post_btn_back"
+            android:layout_width="29dp"
+            android:layout_height="32dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="13dp"
+            android:background="?attr/actionModeCloseDrawable"
+            android:backgroundTint="@color/secondary"
+            android:onClick="returnToPrevious" />
+
+        <TextView
+            android:id="@+id/activity_create_official_post_txt_create_post_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/create_official_bcp_post"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/activity_create_official_post_btn_post"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toEndOf="@+id/activity_create_official_post_txt_create_post_title"
+            android:background="@drawable/button_shape"
+            android:backgroundTint="@color/secondary"
+            android:fontFamily="@font/roboto"
+            android:text="@string/post"
+            android:textAllCaps="false"
+            android:textColor="@color/primary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:id="@+id/activity_create_official_post_sv_post"
+            android:layout_width="match_parent"
+            android:layout_height="512dp"
+            android:layout_above="@+id/divider"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/activity_create_official_post_txt_create_post_title"
+
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="15dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/activity_create_official_post_img_profile"
+                    android:layout_width="52dp"
+                    android:layout_height="49dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="TODO"
+                    app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+                <EditText
+                    android:id="@+id/activity_create_official_post_et_title"
+                    android:layout_width="252dp"
+                    android:layout_height="29dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toEndOf="@+id/activity_create_official_post_img_profile"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/roboto"
+                    android:hint="@string/title"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/create_official_bcp_post_building"
+                    android:hint="@string/create_official_bcp_post_building"
+                    android:inputType="text"
+                    android:layout_below="@+id/activity_create_official_post_img_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <AutoCompleteTextView
+                    android:id="@+id/create_official_bcp_post_reason_for_closure"
+                    android:hint="@string/create_official_bcp_post_reason_for_closure"
+                    android:inputType="text"
+                    android:layout_below="@+id/create_official_bcp_post_building"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <AutoCompleteTextView
+                    android:id="@+id/create_official_bcp_post_action_required"
+                    android:hint="@string/create_official_bcp_post_action_required"
+                    android:inputType="text"
+                    android:layout_below="@+id/create_official_bcp_post_reason_for_closure"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
