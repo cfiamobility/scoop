@@ -74,6 +74,7 @@ public class CreateOfficialPostActivity extends AppCompatActivity implements
         Bundle bundle = getIntent().getExtras();
 
         setPresenter(newPresenter());
+        mPresenter.loadDataFromDatabase(NetworkUtils.getInstance(this));
 
         /* Initialize edit texts, image view, and buttons for create official Post xml
          *  postTitle: title of the Post

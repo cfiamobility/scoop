@@ -5,7 +5,12 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +20,7 @@ import ca.gc.inspection.scoop.createpost.CreatePostInteractor;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.searchbuilding.SearchBuildingInteractor.getAllBuildingsForReceiver;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -66,5 +72,9 @@ public class CreateOfficialPostInteractor extends CreatePostInteractor {
             }
         };
         network.addToRequestQueue(getRequest);
+    }
+
+    public void getAllBuildings(NetworkUtils network) {
+        getAllBuildingsForReceiver(network, mPresenter);
     }
 }

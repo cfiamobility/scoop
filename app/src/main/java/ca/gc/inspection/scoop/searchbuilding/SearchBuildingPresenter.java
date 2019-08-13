@@ -18,7 +18,9 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 /**
  * Presenter for the search building activity
  */
-class SearchBuildingPresenter implements SearchBuildingContract.Presenter {
+class SearchBuildingPresenter implements
+        SearchBuildingContract.Presenter,
+        BuildingListReceiver {
 
     private SearchBuildingContract.View mView;          // stores the view
     private SearchBuildingInteractor mInteractor;       // stores the interactor
@@ -53,7 +55,7 @@ class SearchBuildingPresenter implements SearchBuildingContract.Presenter {
      * - also builds a hashmap containing a <address,buildingid> key-value pair because we need to pass the correct building id back to the edit profile activity after selecting an address
      * @param response json array containing all building addresses fetched from the database
      */
-    public void updateData(JSONArray response){
+    public void setBuildingsData(JSONArray response){
         for (int i = 0; i < response.length(); i++){
             JSONObject jsonBuilding = null;
             try {

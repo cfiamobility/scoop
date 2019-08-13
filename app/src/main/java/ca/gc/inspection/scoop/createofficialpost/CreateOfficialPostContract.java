@@ -27,5 +27,7 @@ public interface CreateOfficialPostContract {
         void onDatabaseResponse(boolean success, InteractorBundle interactorBundle);
 
         void getUserProfileImage(NetworkUtils instance);
+
+        void loadDataFromDatabase(NetworkUtils network);
     }
 }

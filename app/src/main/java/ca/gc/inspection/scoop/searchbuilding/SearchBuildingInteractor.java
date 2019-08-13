@@ -36,13 +36,17 @@ public class SearchBuildingInteractor {
      * fetches list of all building addresses from the data base
      */
     public void getAllBuildings() {
+        getAllBuildingsForReceiver(mNetwork, mPresenter);
+    }
+
+    public static void getAllBuildingsForReceiver(NetworkUtils network, BuildingListReceiver buildingListReceiver) {
         String URL = Config.baseIP + "profile/getallbuildings";
 
         // Requesting response be sent back as a JSON Object
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null,  new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                mPresenter.updateData(response);
+                buildingListReceiver.setBuildingsData(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -59,7 +63,6 @@ public class SearchBuildingInteractor {
             }
         };
 
-        mNetwork.addToRequestQueue(jsonArrayRequest);
-
+        network.addToRequestQueue(jsonArrayRequest);
     }
 }
