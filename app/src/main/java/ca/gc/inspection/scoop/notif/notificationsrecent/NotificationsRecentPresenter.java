@@ -19,7 +19,8 @@ public class NotificationsRecentPresenter extends NotificationsTodayPresenter im
     private NotificationsRecentInteractor mInteractor;
     private NotificationsRecentContract.View.Adapter mAdapter;
     private boolean refreshingData = false;
-    private String NOTIFICATION_TYPE_KEY = "recent";
+    private notificationType NOTIFICATION_TYPE_KEY = notificationType.RECENT;
+
 
     NotificationsRecentPresenter(NotificationsRecentContract.View view, NetworkUtils network){
         mView = view;
@@ -41,7 +42,7 @@ public class NotificationsRecentPresenter extends NotificationsTodayPresenter im
             } else {
                 mDataCache.getNotificationsRecentList().clear();
             }
-            mInteractor.getNotifications(NOTIFICATION_TYPE_KEY);
+            mInteractor.getNotifications(NOTIFICATION_TYPE_KEY.toString().toLowerCase());
         }
     }
 

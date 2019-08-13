@@ -26,6 +26,10 @@ import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_3;
 import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
+/**
+ * NotificationsTodayFragment which acts as the main view for the viewing the Notifications Today Tab Fragment
+ * Responsible for creating the Presenter and Adapter and communicating whether the fragment needs to be refreshed
+ */
 public class NotificationsTodayFragment extends Fragment implements
         NotificationsTodayContract.View,
         SwipeRefreshLayout.OnRefreshListener{
@@ -43,6 +47,10 @@ public class NotificationsTodayFragment extends Fragment implements
     private TextView noNotificationsTitle, noNotificationsText;
     private ImageView noNotificationsImage;
 
+    /**
+     * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
+     * @param presenter Presenter to be associated with the View and refereneced later
+     */
     @Override
     public void setPresenter(NotificationsTodayContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
@@ -85,6 +93,10 @@ public class NotificationsTodayFragment extends Fragment implements
 //        mPresenter.listenTodayRecyclerView(mRecyclerView, notificationResponse);
     }
 
+    /**
+     * Sets the swipe refresh layout and it's color schemes
+     * @param view NotificationsToday View that holds the swipe layout
+     */
     protected void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_notifications_today_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -102,16 +114,25 @@ public class NotificationsTodayFragment extends Fragment implements
         loadDataFromDatabase();
     }
 
+    /**
+     * Once data has been loaded, this method is invoked to set refreshing status to false
+     */
     @Override
     public void onLoadedDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * Sets the refreshing status to true and loads the data from the database through the Presenter and Interactor
+     */
     private void loadDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(true);
         mPresenter.loadDataFromDatabase();
     }
 
+    /**
+     * Overrides Android Callback onResume to load data from the database when a user goes to the fragment
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -120,7 +141,7 @@ public class NotificationsTodayFragment extends Fragment implements
     }
 
     /**
-     * Description: shows no new notification text and icon
+     * Sets the Views for when there are no notifications to VISIBLE
      */
     public void showNoNotifications(){
         noNotificationsTitle.setVisibility(View.VISIBLE);
@@ -128,55 +149,56 @@ public class NotificationsTodayFragment extends Fragment implements
         noNotificationsImage.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Sets the Views for when there are no notifications to GONE
+     */
     public void hideNoNotifications(){
         noNotificationsTitle.setVisibility(View.GONE);
         noNotificationsText.setVisibility(View.GONE);
         noNotificationsImage.setVisibility(View.GONE);
     }
 
-    public static void setUserInfoListener(NotificationsTodayViewHolder viewHolder, String posterId) {
-        // tapping on profile picture will bring user to poster's profile page
-        viewHolder.fullName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context context = v.getContext();
-                startFragmentOrActivity(context, posterId);
-            }
+    /**
+     * Creates and sets a listener for a notification view and launches the notifier's user profile
+     * when the FullName View or ProfileImage View is click
+     * @param viewHolder viewholder that displays the current notification
+     * @param notifierId user id of the notifier
+     */
+    public static void setUserInfoListener(NotificationsTodayViewHolder viewHolder, String notifierId) {
+        viewHolder.fullName.setOnClickListener(v -> {
+            Context context = v.getContext();
+            startFragmentOrActivity(context, notifierId);
         });
 
-        viewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context context = v.getContext();
-                startFragmentOrActivity(context, posterId);
-            }
+        viewHolder.profileImage.setOnClickListener(v -> {
+            Context context = v.getContext();
+            startFragmentOrActivity(context, notifierId);
         });
     }
 
     /**
-     * Creates a listener for the whole post view and launches a DisplayPostActivity when clicked
-     * The activityid is store in as an intentextra and passed to the DisplayPostActivity
-     * @param viewHolder viewholder that displays the current post
-     * @param activityId activityid of the post that the viewholder contains
+     * Creates and sets a listener for a notification view and launches a DisplayPostActivity
+     * when the ActivityType View is clicked
+     * If the activityType of the notification is a comment, then it will store the referenceId as an extra in the intent,
+     * Otherwise it will store the activityid as this means the activityType is a post
+     * @param viewHolder viewholder that displays the current notification
+     * @param activityId activityid of a post
+     * @param referenceId referenceid of a comment
      */
     public static void setDisplayPostListener(NotificationsTodayViewHolder viewHolder, String activityId, String referenceId){
-        // tapping on any item from the view holder will go to the display post activity
-        viewHolder.activityType.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context context = v.getContext();
-                if (context.getClass() == DisplayPostActivity.class)
-                    Log.d("Notifications Today", "Already displaying post!");
-                else {
-                    Intent intent = new Intent(context, DisplayPostActivity.class);
+        viewHolder.activityType.setOnClickListener(v -> {
+            Context context = v.getContext();
+            if (context.getClass() == DisplayPostActivity.class)
+                Log.d("Notifications Today", "Already displaying post!");
+            else {
+                Intent intent = new Intent(context, DisplayPostActivity.class);
 
-                    if (viewHolder.getActivityType().equals("comment")) {
-                        intent.putExtra(INTENT_ACTIVITY_ID_KEY, referenceId);
-                    } else {
-                        intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
-                    }
-                    context.startActivity(intent);
+                if (viewHolder.getActivityType().equals("comment")) {
+                    intent.putExtra(INTENT_ACTIVITY_ID_KEY, referenceId);
+                } else {
+                    intent.putExtra(INTENT_ACTIVITY_ID_KEY, activityId);
                 }
+                context.startActivity(intent);
             }
         });
     }

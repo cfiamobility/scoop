@@ -21,13 +21,9 @@ public class NotificationsDataCache {
             mDataCache = new DataCache<>();
         else if (mNotificationsDataType == NotificationsRecent.class)
             mDataCache = new DataCache<NotificationsRecent>();
-//        else if (notificationsDataType == OfficialNotifications.class)
-//            mDataCache = new NotificationsDataCache<OfficialNotifications>();
     }
 
-
     private class BaseDataCache {
-
     }
 
     @SuppressWarnings("unchecked")
@@ -43,12 +39,6 @@ public class NotificationsDataCache {
             return ((DataCache<NotificationsRecent>) mDataCache).getItemByIndex(i);
         return null;
     }
-
-//    public OfficialNotifications getOfficialNotificationsByIndex(int i) {
-//        if (OfficialNotifications.class.isAssignableFrom(mNotificationsDataType))
-//            return ((NotificationsDataCache.DataCache<OfficialNotifications>) mDataCache).getItemByIndex(i);
-//        return null;
-//    }
 
     @SuppressWarnings("unchecked")
     public int getItemCount() {
@@ -69,13 +59,6 @@ public class NotificationsDataCache {
         return null;
     }
 
-
-//    @SuppressWarnings("unchecked")
-//    public ArrayList<OfficialNotifications> getOfficialNotificationsList() {
-//        if (ProfileComment.class.isAssignableFrom(mNotificationsDataType))
-//            return ((NotificationsDataCache.DataCache<OfficialNotifications>) mDataCache).mList;
-//        return null;
-//    }
 
     class DataCache<T extends NotificationsToday> extends BaseDataCache {
 

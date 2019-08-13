@@ -1,7 +1,5 @@
 package ca.gc.inspection.scoop.notif.notificationstoday;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,12 +9,17 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+/**
+ * NotificationsTodayPresenter is the Presenter for Today Notifications action case.
+ * It is the base Presenter for the Notification inheritance hierarchy and implements the AdapterAPI and
+ * ViewHolderAPI to allow adapter and viewHolder to communicate with the Presenter
+ * Contains methods for loading data and binding it to the viewHolder
+ *
+ */
 public class NotificationsTodayPresenter implements
         NotificationsTodayContract.Presenter,
         NotificationsTodayContract.Presenter.AdapterAPI,
         NotificationsTodayContract.Presenter.ViewHolderAPI{
-
-    private static final String TAG = "NOTIFICATIONS_PRESENTER";
 
     @NonNull
     private NotificationsTodayContract.View mView;
@@ -24,21 +27,43 @@ public class NotificationsTodayPresenter implements
     private NotificationsTodayContract.View.Adapter mAdapter;
     private boolean refreshingData = false;
     protected NotificationsDataCache mDataCache;
-    private String NOTIFICATION_TYPE_KEY = "today";
+    private notificationType NOTIFICATION_TYPE_KEY = notificationType.TODAY;
 
-    public NotificationsTodayPresenter(){
+    // enum for notification type - more concrete as a data type than just strings
+    public enum notificationType{
+        TODAY,
+        RECENT,
+    }
+
+    /**
+     * Protected Default Constructor to allow for inheritance between Presenters
+     */
+    protected NotificationsTodayPresenter(){
 
     }
 
-    public NotificationsTodayPresenter(NotificationsTodayContract.View view, NetworkUtils network){
+    /**
+     * Constructor that instantiates the View and constructs/instantiates the Interactor
+     * @param view
+     * @param network
+     */
+    NotificationsTodayPresenter(NotificationsTodayContract.View view, NetworkUtils network){
         mView = view;
         mInteractor = new NotificationsTodayInteractor(this, network);
     }
 
+    /**
+     * Instantiates the member variable adapter to allow for communication between the Presenter and Adapter
+     * @param adapter recycler view adapter
+     */
     public void setAdapter(NotificationsTodayContract.View.Adapter adapter) {
         mAdapter = adapter;
     }
 
+    /**
+     * Instantiates the member Data Cache, communicates to the Adapter to prepare the View and calls
+     * the Interactor to get data from the database
+     */
     public void loadDataFromDatabase() {
         if (!refreshingData) {
             refreshingData = true;
@@ -49,10 +74,18 @@ public class NotificationsTodayPresenter implements
                 mDataCache.getNotificationsTodayList().clear();
             }
             mAdapter.refreshAdapter();
-            mInteractor.getNotifications(NOTIFICATION_TYPE_KEY);
+            mInteractor.getNotifications(NOTIFICATION_TYPE_KEY.toString().toLowerCase());
         }
     }
 
+    /**
+     * Invoked on response from the Interactor; if the JSONArray contains results then iterate through add each to
+     * the Data Cache
+     * Otherwise, display noNotifications content
+     * Once data is set, communicate to View that data is loaded
+     * @param notificationResponse
+     * @param imageResponse
+     */
     public void setData(JSONArray notificationResponse, JSONArray imageResponse) {
         if (notificationResponse.length() == 0){
             mView.showNoNotifications();
@@ -76,6 +109,11 @@ public class NotificationsTodayPresenter implements
         mView.onLoadedDataFromDatabase();
     }
 
+    /**
+     * Helper method to get NotificationsToday object corresponding to a position in the Data Cache
+     * @param i position in the Data Cache
+     * @return NotificationsToday object at position i in the Data Cache
+     */
     private NotificationsToday getItemByIndex(int i) {
         if (mDataCache == null)
             return null;
@@ -94,13 +132,22 @@ public class NotificationsTodayPresenter implements
     }
 
 
+    /**
+     * Method that sets instantiates a NotificationsToday object to a corresponding position in the recycler View
+     * @param viewHolder corresponding viewHolder in recycler View to be set with NotificationsToday object data
+     * @param i position in recycler view
+     */
     public void onBindViewHolderAtPosition(NotificationsTodayContract.View.ViewHolder viewHolder, int i) {
         NotificationsToday notification = getItemByIndex(i);
         bindNotificationDataToViewHolder(viewHolder, notification);
-        Log.i(TAG, "Binding: " + i);
     }
 
-    public static void bindNotificationDataToViewHolder(
+    /**
+     * Helper method that invokes the viewHolder setter methods with the necessary parameters
+     * @param viewHolder viewHolder whose UI is being set
+     * @param notification notificationsToday object with the necessary information
+     */
+    private static void bindNotificationDataToViewHolder(
             NotificationsTodayContract.View.ViewHolder viewHolder, NotificationsToday notification) {
         if (notification != null) {
             viewHolder.setActionType(notification.getActionType())
@@ -112,14 +159,32 @@ public class NotificationsTodayPresenter implements
         }
     }
 
-    public String getPosterIdByIndex(int i) {
-        return Objects.requireNonNull(getItemByIndex(i)).getPosterId();
+    /**
+     * Gets the user id of a notifier based on its position in the ViewHolder
+     * Used to set parameters of setlistener methods invoked in the adapter
+     * @param i position of notification in the recycler view
+     * @return userid of notifier as a string
+     */
+    public String getNotifierIdByIndex(int i) {
+        return Objects.requireNonNull(getItemByIndex(i)).getNotifierId();
     }
 
+    /**
+     * Gets the activityid of a post/comment based on its position in the ViewHolder
+     * Used to set parameters of setlistener methods invoked in the adapter
+     * @param i position of notification in the recycler view
+     * @return activity id as a string
+     */
     public String getActivityIdByIndex(int i){
         return Objects.requireNonNull(getItemByIndex(i)).getActivityId();
     }
 
+    /**
+     * Gets the activity reference id of a post/comment based on its position in the ViewHolder
+     * Used to set parameters of setlistener methods invoked in the adapter
+     * @param i position of notification in the recycler view
+     * @return activity reference id as a string
+     */
     public String getReferenceIdByIndex(int i){
         return Objects.requireNonNull(getItemByIndex(i)).getActivityReferenceId();
     }
