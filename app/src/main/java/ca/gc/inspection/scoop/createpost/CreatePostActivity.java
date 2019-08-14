@@ -352,7 +352,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
     /**
      * Sets the profileImageCircle with the users profileimage taken from the database.
-     * @param profileImageBitmap
+     * @param profileImageBitmap    Bitmap created from database response
      */
     @Override
     public void setUserProfileImage(Bitmap profileImageBitmap) {

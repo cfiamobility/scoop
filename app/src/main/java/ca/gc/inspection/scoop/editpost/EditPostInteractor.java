@@ -23,7 +23,7 @@ public class EditPostInteractor extends CreatePostInteractor {
     private EditPostPresenter mPresenter;
 
     EditPostInteractor(EditPostPresenter presenter) {
-        super();
+        super(presenter);
         setPresenter(presenter);
     }
 
@@ -33,7 +33,6 @@ public class EditPostInteractor extends CreatePostInteractor {
      * @param presenter    Handles database callbacks
      */
     public void setPresenter(@NonNull EditPostPresenter presenter) {
-        super.setPresenter(presenter);
         mPresenter = checkNotNull(presenter);
     }
 

@@ -17,13 +17,9 @@ import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class CreatePostInteractor {
-    private CreatePostPresenter mPresenter;
+    private static final String TAG = "CreatePostInteractor";
 
-   /**
-     * Empty constructor to allow inheritance
-     */
-    public CreatePostInteractor() {
-    }
+    private CreatePostPresenter mPresenter;
 
     protected CreatePostInteractor(CreatePostPresenter presenter) {
         setPresenter(presenter);
@@ -58,7 +54,7 @@ public class CreatePostInteractor {
         params.put("posttext", text);
         params.put("postimage", imageBitmap);
 
-        Log.d("CreatePostInteractor", params.toString());
+        Log.d(TAG + ".sendPostToDatabase", params.toString());
 
         StringRequest postRequest = newPostRequest(mPresenter, null, url, params);
         network.addToRequestQueue(postRequest);
@@ -78,9 +74,9 @@ public class CreatePostInteractor {
         return new StringRequest(Request.Method.POST, url,
                 response -> {
                     // response
-                    Log.d("Response", response.getClass().toString() + ": " + response);
+                    Log.d(TAG + ".newPostRequest", response.getClass().toString() + ": " + response);
                     if (response.contains(DATABASE_RESPONSE_SUCCESS)){
-                        Log.i("Info", "We good");
+                        Log.i(TAG + ".newPostRequest", "response success");
                         postRequestReceiver.onDatabaseResponse(true, interactorBundle);
                     }
                     else {
@@ -89,7 +85,7 @@ public class CreatePostInteractor {
                 },
                 error -> {
                     // error
-                    Log.d("Error.Response", String.valueOf(error));
+                    Log.d(TAG + ".newPostRequest", "Error.Response: " + String.valueOf(error));
                     postRequestReceiver.onDatabaseResponse(false, interactorBundle);
                 }
         ) {
@@ -111,8 +107,8 @@ public class CreatePostInteractor {
     public void getUserProfileImage(NetworkUtils network){
         String url = Config.baseIP + "post/create-post-profile-image/" + Config.currentUser;
         StringRequest getRequest = new StringRequest(Request.Method.GET, url,
-            response -> mPresenter.setUserProfileImage(CameraUtils.stringToBitmap(response)),
-            error -> mPresenter.setUserProfileImage(null)) {
+            response -> mPresenter.setUserProfileImageFromDatabaseResponse(CameraUtils.stringToBitmap(response)),
+            error -> mPresenter.setUserProfileImageFromDatabaseResponse(null)) {
             @Override
             public Map<String, String> getHeaders() {
                 // inserting the token into the response header that will be sent to the server

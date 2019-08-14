@@ -29,12 +29,13 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class EditPostActivity extends CreatePostActivity implements
         EditPostContract.View,
         EditLeaveEventListener {
-    private static final String TAG = "EditPostActivity";
     /**
      * Implements the View in the EditPostContract interface to follow MVP architecture.
      * Allows the user to create a new post by adding a title, text, and using the camera or camera roll
      * to add an image.
      */
+
+    private static final String TAG = "EditPostActivity";
 
     private EditPostContract.Presenter mPresenter;
     private Bitmap mInitialBitmap;

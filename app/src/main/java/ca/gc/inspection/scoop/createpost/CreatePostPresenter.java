@@ -70,7 +70,8 @@ public class CreatePostPresenter implements CreatePostContract.Presenter, PostRe
         mView.onDatabaseResponse(success);
     }
 
-    public void setUserProfileImage(Bitmap profileImage) {mView.setUserProfileImage(profileImage);}
+    public void setUserProfileImageFromDatabaseResponse(Bitmap profileImage) {mView.setUserProfileImage(profileImage);}
 
+    @Override
     public void getUserProfileImage(NetworkUtils network) {mInteractor.getUserProfileImage(network);}
 }
