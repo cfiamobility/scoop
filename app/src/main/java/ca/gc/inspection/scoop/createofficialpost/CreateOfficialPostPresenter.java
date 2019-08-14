@@ -2,6 +2,7 @@ package ca.gc.inspection.scoop.createofficialpost;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import org.json.JSONArray;
@@ -11,7 +12,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.createpost.CreatePostPresenter;
@@ -24,6 +27,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class CreateOfficialPostPresenter implements
         CreateOfficialPostContract.Presenter,
+        CreateOfficialPostContract.Presenter.BuildingAdapterAPI,
         BuildingListReceiver,
         PostRequestReceiver {
     private static final String OFFICIAL_POST_BCP_REASON_ID_KEY = "reasonid";
@@ -41,7 +45,10 @@ public class CreateOfficialPostPresenter implements
     private CreateOfficialPostInteractor mInteractor;
     private CreateOfficialPostContract.View mView;
     private HashMap<String, Integer> buildingsMap = new HashMap<>();
-    private HashMap<List<String>, Integer> reasonsMap, actionsMap = new HashMap<>();
+    // HashMap where the key is a list containing the english and french text
+    private HashMap<List<String>, Integer> reasonsMap = new HashMap<>();
+    private HashMap<List<String>, Integer> actionsMap = new HashMap<>();
+    private Integer mBuildingId;
 
     CreateOfficialPostPresenter(@NonNull CreateOfficialPostContract.View view) {
         setInteractor(new CreateOfficialPostInteractor(this));
@@ -68,8 +75,19 @@ public class CreateOfficialPostPresenter implements
      * @param network   An instance of the singleton class which encapsulates the RequestQueue
      */
     @Override
-    public void sendPostToDatabase(NetworkUtils network, String postTitle, int buildingId, int reasonForClosure, int actionRequired) {
-        mInteractor.sendPostToDatabase(network, postTitle, buildingId, reasonForClosure, actionRequired);
+    public void sendPostToDatabase(NetworkUtils network, String postTitle, String building, String reasonForClosure, String actionRequired) {
+        int buildingId = -1;
+        int reasonId = -1;
+        int actionId = -1;
+
+        if (buildingsMap.containsKey(building)) {
+            buildingId = buildingsMap.get(building);
+        }
+
+        if (buildingId == -1) {
+            mView.displayInvalidInputError();
+        }
+//        mInteractor.sendPostToDatabase(network, postTitle, buildingId, reasonId, actionId);
     }
 
     /**
@@ -93,6 +111,14 @@ public class CreateOfficialPostPresenter implements
      */
     public void loadDataFromDatabase(NetworkUtils network) {
         mInteractor.getAllBuildings(network);
+        mInteractor.getAllReasons(network);
+        mInteractor.getAllActions(network);
+    }
+
+    @Override
+    public void setCurrentBuilding(String buildingName) {
+        mBuildingId = buildingsMap.get(buildingName);
+        Log.d("CreateOfficialPostPresenter", "current building:" + buildingName + ", id:" + mBuildingId);
     }
 
     @Override
@@ -108,12 +134,14 @@ public class CreateOfficialPostPresenter implements
             try {
                 if (jsonBuilding != null) {
                     buildingsMap.put(jsonBuilding.getString("building"), jsonBuilding.getInt("buildingid"));
+//                    Log.d("CreateOfficialPostPresenter", "building: "+jsonBuilding.getString("building"));
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+        mView.setBuildingsData(buildingsMap.keySet());
     }
 
     public void setBuildingClosureReasonsData(JSONArray response) {
@@ -130,12 +158,13 @@ public class CreateOfficialPostPresenter implements
                     reasonsMap.put(Arrays.asList(
                                     jsonReason.getString(OFFICIAL_POST_BCP_REASON_NAME_EN_KEY),
                                     jsonReason.getString(OFFICIAL_POST_BCP_REASON_NAME_FR_KEY)),
-                            jsonReason.getInt(OFFICIAL_POST_BCP_REASON_ID_KEY));                }
-
+                            jsonReason.getInt(OFFICIAL_POST_BCP_REASON_ID_KEY));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+        mView.setReasonsData(getEnglishWords(reasonsMap));
     }
 
     public void setRequiredActionsData(JSONArray response) {
@@ -149,14 +178,24 @@ public class CreateOfficialPostPresenter implements
 
             try {
                 if (jsonAction != null) {
-                    reasonsMap.put(Arrays.asList(
+                    actionsMap.put(Arrays.asList(
                             jsonAction.getString(OFFICIAL_POST_BCP_ACTION_NAME_EN_KEY),
                             jsonAction.getString(OFFICIAL_POST_BCP_ACTION_NAME_FR_KEY)),
-                            jsonAction.getInt(OFFICIAL_POST_BCP_ACTION_ID_KEY));                }
-
+                            jsonAction.getInt(OFFICIAL_POST_BCP_ACTION_ID_KEY));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+        mView.setActionsData(getEnglishWords(actionsMap));
+    }
+
+    private Set<String> getEnglishWords(HashMap<List<String>, Integer> map) {
+        Set<String> setOfEnglishWords = new HashSet<>();
+        for (List<String> englishAndFrenchTuple: map.keySet()) {
+            setOfEnglishWords.add(englishAndFrenchTuple.get(0));
+        }
+        Log.d("CreateOfficialPostPresenter", setOfEnglishWords.toString());
+        return setOfEnglishWords;
     }
 }

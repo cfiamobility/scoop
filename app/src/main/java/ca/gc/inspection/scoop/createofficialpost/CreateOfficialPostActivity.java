@@ -1,11 +1,7 @@
 package ca.gc.inspection.scoop.createofficialpost;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import ca.gc.inspection.scoop.R;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,27 +9,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import java.util.Objects;
-
-import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.createpost.CreatePostActivity;
-import ca.gc.inspection.scoop.editleavedialog.EditLeaveDialog;
-import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
-import ca.gc.inspection.scoop.util.CameraUtils;
+import java.util.Set;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
-import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
-import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
-import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+
 
 public class CreateOfficialPostActivity extends AppCompatActivity implements
         CreateOfficialPostContract.View {
@@ -43,6 +27,7 @@ public class CreateOfficialPostActivity extends AppCompatActivity implements
     protected AutoCompleteTextView mBuildingName, mReasonForClosure, mActionRequired;
     protected CoordinatorLayout mCoordinatorLayout;
     private CircleImageView profileImage;
+    private Button sendButton;
     /**
      * Implements the View in the CreateOfficialPostContract interface to follow MVP architecture.
      * Allows a privileged user to create a new official BCP post by adding the title, building,
@@ -54,6 +39,7 @@ public class CreateOfficialPostActivity extends AppCompatActivity implements
 
     private Snackbar mSnackbar;
     private boolean waitingForResponse = false;
+    private ArrayAdapter<String> mBuildingAdapter, mReasonsAdapter, mActionsAdapter;
 
     public void returnToPrevious (View view) {
         finish();
@@ -89,26 +75,36 @@ public class CreateOfficialPostActivity extends AppCompatActivity implements
         mActionRequired = findViewById(R.id.create_official_bcp_post_action_required);
 
         mBackButton = findViewById(R.id.activity_create_official_post_btn_back);
-
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+        sendButton = findViewById(R.id.activity_create_official_post_btn_post);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendPostToDatabase(postTitle.getText().toString(),
+                        mBuildingName.getText().toString(),
+                        mReasonForClosure.getText().toString(),
+                        mActionRequired.getText().toString());
+            }
+        });
     }
 
-    public void sendPostToDatabase(String postTitle, int buildingId, int reasonForClosure, int actionRequired) {
+    public void sendPostToDatabase(String postTitle, String building, String reasonForClosure, String actionRequired) {
         if (postTitle.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_title_empty_error, Snackbar.LENGTH_SHORT).show();
-        } else if (buildingId == -1) {
+        } else if (building.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_text_empty_error, Snackbar.LENGTH_SHORT).show();
-        } else if (reasonForClosure == -1) {
+        } else if (reasonForClosure.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_text_empty_error, Snackbar.LENGTH_SHORT).show();
-        } else if (actionRequired == -1) {
+        } else if (actionRequired.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_text_empty_error, Snackbar.LENGTH_SHORT).show();
         } else if (!waitingForResponse) {
-            mPresenter.sendPostToDatabase(NetworkUtils.getInstance(this), postTitle, buildingId, reasonForClosure, actionRequired);
+            mPresenter.sendPostToDatabase(NetworkUtils.getInstance(this), postTitle, building, reasonForClosure, actionRequired);
         }
     }
 
@@ -132,9 +128,9 @@ public class CreateOfficialPostActivity extends AppCompatActivity implements
                 public void onClick(View v) {
                     sendPostToDatabase(
                             postTitle.getText().toString(),
-                            -1,
-                            -1,
-                            -1);
+                            mBuildingName.getText().toString(),
+                            mReasonForClosure.getText().toString(),
+                            mActionRequired.getText().toString());
                 }
             });
             mSnackbar.show();
@@ -148,5 +144,33 @@ public class CreateOfficialPostActivity extends AppCompatActivity implements
     @Override
     public void setUserProfileImage(Bitmap profileImageBitmap) {
         profileImage.setImageBitmap(profileImageBitmap);
+    }
+
+    @Override
+    public void setBuildingsData(Set<String> buildings) {
+        mBuildingAdapter = new ArrayAdapter<>(this, R.layout.autocomplete_textview_building);
+        Log.d(TAG, buildings.toString());
+//        mBuildingAdapter.setPresenter((CreateOfficialPostContract.Presenter.BuildingAdapterAPI) mPresenter);
+        mBuildingAdapter.addAll(buildings);
+        mBuildingName.setAdapter(mBuildingAdapter);
+    }
+
+    @Override
+    public void setReasonsData(Set<String> reasons) {
+        mReasonsAdapter = new ArrayAdapter<>(this, R.layout.autocomplete_textview_building);
+        mReasonsAdapter.addAll(reasons);
+        mReasonForClosure.setAdapter(mReasonsAdapter);
+    }
+
+    @Override
+    public void setActionsData(Set<String> actions) {
+        mActionsAdapter = new ArrayAdapter<>(this, R.layout.autocomplete_textview_building);
+        mActionsAdapter.addAll(actions);
+        mActionRequired.setAdapter(mActionsAdapter);
+    }
+
+    @Override
+    public void displayInvalidInputError() {
+        Snackbar.make(mCoordinatorLayout, R.string.create_post_invalid_option_error, Snackbar.LENGTH_SHORT).show();
     }
 }

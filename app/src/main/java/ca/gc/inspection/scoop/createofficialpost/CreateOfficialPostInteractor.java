@@ -24,12 +24,11 @@ import static ca.gc.inspection.scoop.searchbuilding.SearchBuildingInteractor.get
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
-public class CreateOfficialPostInteractor extends CreatePostInteractor {
+public class CreateOfficialPostInteractor {
 
     private CreateOfficialPostPresenter mPresenter;
 
     CreateOfficialPostInteractor(CreateOfficialPostPresenter presenter) {
-        super();
         setPresenter(presenter);
     }
 
@@ -53,8 +52,8 @@ public class CreateOfficialPostInteractor extends CreatePostInteractor {
         Map<String, String>  params = new HashMap<>();
         params.put("userid", Config.currentUser);
 
-        StringRequest postRequest = newPostRequest(mPresenter, null, urlText, params);
-        network.addToRequestQueue(postRequest);
+//        StringRequest postRequest = newPostRequest(mPresenter, null, urlText, params);
+//        network.addToRequestQueue(postRequest);
     }
 
     // TODO reuse code from create post
@@ -76,5 +75,59 @@ public class CreateOfficialPostInteractor extends CreatePostInteractor {
 
     public void getAllBuildings(NetworkUtils network) {
         getAllBuildingsForReceiver(network, mPresenter);
+    }
+
+    public void getAllReasons(NetworkUtils network) {
+        String URL = Config.baseIP + "post/official/bcp/getallreasons";
+
+        // Requesting response be sent back as a JSON Object
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null,  new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                mPresenter.setBuildingClosureReasonsData(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("error", error.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+
+        network.addToRequestQueue(jsonArrayRequest);
+    }
+
+    public void getAllActions(NetworkUtils network) {
+        String URL = Config.baseIP + "post/official/bcp/getallactions";
+
+        // Requesting response be sent back as a JSON Object
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null,  new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                mPresenter.setRequiredActionsData(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("error", error.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                // inserting the token into the response header that will be sent to the server
+                Map<String, String> header = new HashMap<>();
+                header.put("authorization", Config.token);
+                return header;
+            }
+        };
+
+        network.addToRequestQueue(jsonArrayRequest);
     }
 }

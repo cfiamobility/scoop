@@ -19,6 +19,7 @@
 
     <!-- Create Official Post: BCP -->
     <string name="create_official_bcp_post">Create Official Post: BCP</string>
+    <string name="create_post_invalid_option_error">Please select the options from the drop down menu</string>
 
     <!-- Edit Post -->
     <string name="edit_post_title">Edit Post</string>
