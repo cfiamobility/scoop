@@ -32,8 +32,7 @@ public class NotificationsTodayAdapter extends RecyclerView.Adapter<Notification
 
 
     /**
-     * Create the ViewHolder objects
-     *
+     * Creates the ViewHolder object
      * @param viewGroup The RecyclerView will be automatically passed in by Android - used for layout parameters
      * @param i item iterator for each row of the recycler view
      * @returns a new view holder
@@ -51,8 +50,8 @@ public class NotificationsTodayAdapter extends RecyclerView.Adapter<Notification
      * Binds new data to the ViewHolder as the user scrolls through the RecyclerView.
      * Calls the Presenter (interface) to retrieve the data and update the ViewHolder through the View.ViewHolder contract.
      * Calls the View object to set the listeners for the ViewHolders - contract not necessary as this is intra-View communication.
-     * @param holder
-     * @param i
+     * @param holder a NotificationsTodayViewHolder in the recycler view
+     * @param i the position of the ViewHolder in the recycler view
      */
     @Override
     public void onBindViewHolder(@NonNull NotificationsTodayViewHolder holder, int i) {

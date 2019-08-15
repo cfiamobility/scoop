@@ -10,11 +10,10 @@ import androidx.annotation.NonNull;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
- * NotificationsTodayPresenter is the Presenter for Today Notifications action case.
+ * NotificationsTodayPresenter is the Presenter for Notifications Today action case.
  * It is the base Presenter for the Notification inheritance hierarchy and implements the AdapterAPI and
- * ViewHolderAPI to allow adapter and viewHolder to communicate with the Presenter
- * Contains methods for loading data and binding it to the viewHolder
- *
+ * ViewHolderAPI to allow to the Adapter and ViewHolder to communicate with the Presenter
+ * Specifically, it contains methods for loading data and binding it to the ViewHolder
  */
 public class NotificationsTodayPresenter implements
         NotificationsTodayContract.Presenter,
@@ -44,8 +43,8 @@ public class NotificationsTodayPresenter implements
 
     /**
      * Constructor that instantiates the View and constructs/instantiates the Interactor
-     * @param view
-     * @param network
+     * @param view main View
+     * @param network singleton NetworkUtils to make network request
      */
     NotificationsTodayPresenter(NotificationsTodayContract.View view, NetworkUtils network){
         mView = view;
@@ -83,8 +82,8 @@ public class NotificationsTodayPresenter implements
      * the Data Cache
      * Otherwise, display noNotifications content
      * Once data is set, communicate to View that data is loaded
-     * @param notificationResponse
-     * @param imageResponse
+     * @param notificationResponse JSONArray containing data for each notification
+     * @param imageResponse JSONArray containing image data for each notification
      */
     public void setData(JSONArray notificationResponse, JSONArray imageResponse) {
         if (notificationResponse.length() == 0){
@@ -145,7 +144,7 @@ public class NotificationsTodayPresenter implements
     /**
      * Helper method that invokes the viewHolder setter methods with the necessary parameters
      * @param viewHolder viewHolder whose UI is being set
-     * @param notification notificationsToday object with the necessary information
+     * @param notification NotificationsToday object with the necessary information
      */
     private static void bindNotificationDataToViewHolder(
             NotificationsTodayContract.View.ViewHolder viewHolder, NotificationsToday notification) {

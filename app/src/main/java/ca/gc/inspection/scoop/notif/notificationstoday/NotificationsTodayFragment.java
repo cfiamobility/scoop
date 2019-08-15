@@ -27,7 +27,7 @@ import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragme
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
- * NotificationsTodayFragment which acts as the main view for the viewing the Notifications Today Tab Fragment
+ * NotificationsTodayFragment which acts as the main view for the Notifications Today Tab Fragment
  * Responsible for creating the Presenter and Adapter and communicating whether the fragment needs to be refreshed
  */
 public class NotificationsTodayFragment extends Fragment implements
@@ -39,7 +39,6 @@ public class NotificationsTodayFragment extends Fragment implements
     private NotificationsTodayAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    //private NotificationsTodayPresenter notificationsScreenController;
     private NotificationsTodayContract.Presenter mPresenter;
     private View view;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -49,7 +48,7 @@ public class NotificationsTodayFragment extends Fragment implements
 
     /**
      * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
-     * @param presenter Presenter to be associated with the View and refereneced later
+     * @param presenter Presenter to be associated with the View and referenced later
      */
     @Override
     public void setPresenter(NotificationsTodayContract.Presenter presenter) {
@@ -159,7 +158,7 @@ public class NotificationsTodayFragment extends Fragment implements
     }
 
     /**
-     * Creates and sets a listener for a notification view and launches the notifier's user profile
+     * Statically creates and sets a listener for a notification view and launches the notifier's user profile
      * when the FullName View or ProfileImage View is click
      * @param viewHolder viewholder that displays the current notification
      * @param notifierId user id of the notifier
@@ -177,7 +176,7 @@ public class NotificationsTodayFragment extends Fragment implements
     }
 
     /**
-     * Creates and sets a listener for a notification view and launches a DisplayPostActivity
+     * Statically creates and sets a listener for a notification view and launches a DisplayPostActivity
      * when the ActivityType View is clicked
      * If the activityType of the notification is a comment, then it will store the referenceId as an extra in the intent,
      * Otherwise it will store the activityid as this means the activityType is a post

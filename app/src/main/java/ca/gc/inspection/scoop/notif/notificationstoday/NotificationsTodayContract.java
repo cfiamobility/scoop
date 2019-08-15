@@ -59,6 +59,7 @@ public interface NotificationsTodayContract {
             void refreshAdapter();
         }
     }
+
     /**
      * Implemented by the Presenter (ie. NotificationsTodayPresenter).
      * Methods specified here in the Presenter but not in the nested Presenter.Adapter and Presenter.ViewHolder interfaces
@@ -67,8 +68,10 @@ public interface NotificationsTodayContract {
     interface Presenter extends BasePresenter {
         void loadDataFromDatabase();
 
+        /**
+         * No methods required to communicate between Presenter and ViewHolder
+         */
         interface ViewHolderAPI {
-        // No methods required to communicate between Presenter and ViewHolder
         }
 
         /**

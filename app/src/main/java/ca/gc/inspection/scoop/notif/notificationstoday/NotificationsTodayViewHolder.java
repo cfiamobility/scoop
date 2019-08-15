@@ -13,7 +13,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * ViewHolder for NotificationToday; it is the base ViewHolder for notifications and
  * represents a single View of a NoficationToday
- * Parent View Holder for NotificationsRecentViewHolder
+ * Parent ViewHolder for NotificationsRecentViewHolder
  */
 public class NotificationsTodayViewHolder extends RecyclerView.ViewHolder
         implements NotificationsTodayContract.View.ViewHolder{
@@ -27,7 +27,7 @@ public class NotificationsTodayViewHolder extends RecyclerView.ViewHolder
     TextView fullName, actionType, activityType, time;
 
     /**
-     * Constructor that instatiates the Android Views from the given ViewGroup to the member UI variables
+     * Constructor that instantiates the Android Views from the given ViewGroup to the member UI variables
      * @param v viewgroup from item_notifications.xml
      * @param presenter presenter to be referenced
      */
