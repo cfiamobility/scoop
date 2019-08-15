@@ -2,23 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.gc.inspection.scoop">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera"
-        android:required="false"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
-        android:name="ca.gc.inspection.scoop.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".displaypost.DisplayPostActivity"></activity>
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".info.InfoOpenSourceLibraries"></activity>
+        <activity android:name=".info.InfoTOS" />
+        <activity android:name=".info.InfoDataPolicy" />
+        <activity android:name=".info.InfoScoop101" />
+        <activity android:name=".displaypost.DisplayPostActivity" />
         <activity
             android:name=".search.SearchActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -32,7 +38,7 @@
         <activity
             android:name=".signup.SignUpActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".splashscreen.SplashScreenActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
@@ -45,7 +51,6 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".profile.OtherUserActivity" />
-
         <activity
             android:name=".searchbuilding.SearchBuildingActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -61,9 +66,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

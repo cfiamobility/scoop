@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="0dp"
     tools:context=".info.InfoActivity">
+
+    <TextView
+        android:id="@+id/activity_info_scoop101_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/roboto"
+        android:text="@string/info"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/activity_info_btn_back"
@@ -17,28 +33,115 @@
         android:backgroundTint="@color/secondary"
         android:onClick="finishActivity" />
 
-    <TextView
-        android:id="@+id/activity_info_txt_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:fontFamily="@font/roboto"
-        android:text="@string/info"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
     <View
         android:id="@+id/divider7"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/activity_info_txt_title"
+        android:layout_below="@+id/activity_info_scoop101_title"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="0dp"
-        android:elevation="5dp"
-        android:background="?android:attr/listDivider" />
+        android:background="?android:attr/listDivider"
+        android:elevation="5dp" />
+
+    <TextView
+        android:id="@+id/info_scoop_101"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider7"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/roboto"
+        android:padding="12dp"
+        android:text="@string/scoopable_main_title"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/info_data_policy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_scoop_101"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/roboto"
+        android:padding="12dp"
+        android:text="@string/info_data_policy"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/info_tos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_data_policy"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/roboto"
+        android:padding="12dp"
+        android:text="@string/info_tos"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/info_open_source_lib"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_tos"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/roboto"
+        android:padding="12dp"
+        android:text="@string/info_open_source_libraries"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_below="@+id/divider7"
+        android:layout_alignEnd="@+id/info_scoop_101"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:padding="10dp"
+        app:srcCompat="@drawable/rightarrow" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_alignTop="@+id/info_data_policy"
+        android:layout_alignEnd="@+id/info_scoop_101"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:padding="10dp"
+        app:srcCompat="@drawable/rightarrow" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_below="@+id/info_data_policy"
+        android:layout_alignEnd="@+id/info_scoop_101"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:padding="10dp"
+        app:srcCompat="@drawable/rightarrow" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_alignTop="@+id/info_open_source_lib"
+        android:layout_alignEnd="@+id/info_scoop_101"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:padding="10dp"
+        app:srcCompat="@drawable/rightarrow" />
+
 </RelativeLayout>

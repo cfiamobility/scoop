@@ -1,37 +1,49 @@
 package ca.gc.inspection.scoop.info;
 
 import ca.gc.inspection.scoop.*;
-import android.support.annotation.NonNull;
+
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
-import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
-
-public class InfoActivity extends AppCompatActivity implements InfoContract.View {
-
-    private InfoContract.Presenter mPresenter;
+public class InfoActivity extends AppCompatActivity {
 
     // when the back button is pressed
     public void finishActivity(View view) {
         finish();
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
-
-        setPresenter(new InfoPresenter(this));
-
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
-    }
+        TextView scoop101 = findViewById(R.id.info_scoop_101);
+        scoop101.setOnClickListener(v -> {
+            startActivity(new Intent(v.getContext(), InfoScoop101.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        });
 
-    @Override
-    public void setPresenter(@NonNull InfoContract.Presenter presenter) {
-        mPresenter = checkNotNull(presenter);
+        TextView dataPolicy = findViewById(R.id.info_data_policy);
+        dataPolicy.setOnClickListener(v -> {
+            startActivity(new Intent(v.getContext(), InfoDataPolicy.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        });
+
+        TextView termsOfUse = findViewById(R.id.info_tos);
+        termsOfUse.setOnClickListener(v -> {
+            startActivity(new Intent(v.getContext(), InfoTOS.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        });
+
+        TextView openSourceLibrary = findViewById(R.id.info_open_source_lib);
+        openSourceLibrary.setOnClickListener(v -> {
+            startActivity(new Intent(v.getContext(), InfoOpenSourceLibraries.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        });
     }
 }
