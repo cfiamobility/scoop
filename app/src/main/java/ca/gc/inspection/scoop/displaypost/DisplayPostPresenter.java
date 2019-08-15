@@ -198,6 +198,7 @@ class DisplayPostPresenter extends FeedPostPresenter implements
      */
     @Override
     public boolean unsavedEditsExist() {
+        Log.d(TAG + ".unsavedEditsExist", "mEditCommentCache:" + mEditCommentCache.toString());
         return (mEditCommentCache != null && mEditCommentCache.size() != 0);
     }
 }

@@ -520,7 +520,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
      */
     @Override
     public void setWaitingForResponse(boolean waitingForResponse) {
-        Log.d("PostCommentViewHolder", "set waiting for response");
+        Log.d("PostCommentViewHolder", "set waiting for response: " + waitingForResponse);
         this.waitingForResponse = waitingForResponse;
     }
 

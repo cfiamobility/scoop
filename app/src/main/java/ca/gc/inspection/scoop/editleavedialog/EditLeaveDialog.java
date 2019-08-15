@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class EditLeaveDialog extends DialogFragment {
         Bundle bundle = new Bundle();
         bundle.putString(INTENT_ACTIVITY_ID_KEY, activityId);
         editLeaveDialog.setArguments(bundle);
+        Log.d(TAG + ".newInstance", "activityId: " + activityId);
 
         return editLeaveDialog;
     }
@@ -47,8 +49,11 @@ public class EditLeaveDialog extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, 0);
-        if (savedInstanceState != null) {
-            mActivityId = savedInstanceState.getString(INTENT_ACTIVITY_ID_KEY);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mActivityId = bundle.getString(INTENT_ACTIVITY_ID_KEY);
+            Log.d(TAG + ".onCreate", "mActivityId: " + mActivityId);
         }
     }
 

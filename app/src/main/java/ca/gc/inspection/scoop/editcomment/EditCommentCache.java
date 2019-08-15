@@ -30,7 +30,6 @@ public class EditCommentCache {
         else {
             mMap.put(activityId, new EditCommentData(activityId, postText));
         }
-        Log.d("EditCommentCache", "map:" + activityId + ", " + postText);
     }
 
     public EditCommentData getEditCommentData(String activityId) {
@@ -39,6 +38,7 @@ public class EditCommentCache {
 
     public void removeEditCommentData(String activityId) {
         mMap.remove(activityId);
+        Log.d("EditCommentCache.removeEditCommentData", "remove by activityId: "+ activityId);
     }
 
     public int size() {
@@ -47,6 +47,10 @@ public class EditCommentCache {
 
     @Override
     public String toString() {
-        return mMap.toString();
+        StringBuilder stringBuffer = new StringBuilder();
+        for (EditCommentData editCommentData : mMap.values()) {
+            stringBuffer.append("[").append(editCommentData.getPostText()).append("] ");
+        }
+        return stringBuffer.toString();
     }
 }
