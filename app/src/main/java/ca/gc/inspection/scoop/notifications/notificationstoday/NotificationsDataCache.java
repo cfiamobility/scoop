@@ -1,8 +1,8 @@
-package ca.gc.inspection.scoop.notif.notificationstoday;
+package ca.gc.inspection.scoop.notifications.notificationstoday;
 
 import java.util.ArrayList;
 
-import ca.gc.inspection.scoop.notif.notificationsrecent.NotificationsRecent;
+import ca.gc.inspection.scoop.notifications.notificationsrecent.NotificationsRecent;
 
 public class NotificationsDataCache {
     private Class mNotificationsDataType;

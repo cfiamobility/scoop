@@ -1,12 +1,12 @@
-package ca.gc.inspection.scoop.notif;
+package ca.gc.inspection.scoop.notifications;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import ca.gc.inspection.scoop.notif.notificationsofficial.NotificationsOfficialFragment;
-import ca.gc.inspection.scoop.notif.notificationsrecent.NotificationsRecentFragment;
-import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayFragment;
+import ca.gc.inspection.scoop.notifications.notificationsofficial.NotificationsOfficialFragment;
+import ca.gc.inspection.scoop.notifications.notificationsrecent.NotificationsRecentFragment;
+import ca.gc.inspection.scoop.notifications.notificationstoday.NotificationsTodayFragment;
 
 /**
  * Notifications Pager Adapter that is responsible for switching to the respective Tab Fragments

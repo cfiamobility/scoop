@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif.notificationstoday;
+package ca.gc.inspection.scoop.notifications.notificationstoday;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;

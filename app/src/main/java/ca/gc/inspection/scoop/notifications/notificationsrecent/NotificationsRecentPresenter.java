@@ -1,12 +1,12 @@
-package ca.gc.inspection.scoop.notif.notificationsrecent;
+package ca.gc.inspection.scoop.notifications.notificationsrecent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import androidx.annotation.NonNull;
-import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsDataCache;
-import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayPresenter;
+import ca.gc.inspection.scoop.notifications.notificationstoday.NotificationsDataCache;
+import ca.gc.inspection.scoop.notifications.notificationstoday.NotificationsTodayPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**

@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif.notificationsofficial;
+package ca.gc.inspection.scoop.notifications.notificationsofficial;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif.notificationsrecent;
+package ca.gc.inspection.scoop.notifications.notificationsrecent;
 
 import org.json.JSONObject;
 
@@ -6,7 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsToday;
+import ca.gc.inspection.scoop.notifications.notificationstoday.NotificationsToday;
 
 /**
  * Data class which stores information for a single NotificationRecent Object

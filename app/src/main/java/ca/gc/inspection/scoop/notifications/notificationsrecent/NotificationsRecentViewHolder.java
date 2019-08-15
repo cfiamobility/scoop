@@ -1,8 +1,8 @@
-package ca.gc.inspection.scoop.notif.notificationsrecent;
+package ca.gc.inspection.scoop.notifications.notificationsrecent;
 
 import android.view.View;
 
-import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayViewHolder;
+import ca.gc.inspection.scoop.notifications.notificationstoday.NotificationsTodayViewHolder;
 
 /**
  * ViewHolder for NotificationRecent; it is the base ViewHolder for notifications and

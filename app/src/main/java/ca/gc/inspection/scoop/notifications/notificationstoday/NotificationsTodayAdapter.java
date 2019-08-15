@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif.notificationstoday;
+package ca.gc.inspection.scoop.notifications.notificationstoday;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

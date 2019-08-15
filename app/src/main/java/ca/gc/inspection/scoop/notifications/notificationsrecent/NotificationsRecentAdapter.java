@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif.notificationsrecent;
+package ca.gc.inspection.scoop.notifications.notificationsrecent;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

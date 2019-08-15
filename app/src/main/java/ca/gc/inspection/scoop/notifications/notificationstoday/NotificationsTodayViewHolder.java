@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif.notificationstoday;
+package ca.gc.inspection.scoop.notifications.notificationstoday;
 
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;

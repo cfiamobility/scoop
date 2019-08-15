@@ -1,4 +1,4 @@
-package ca.gc.inspection.scoop.notif.notificationstoday;
+package ca.gc.inspection.scoop.notifications.notificationstoday;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;

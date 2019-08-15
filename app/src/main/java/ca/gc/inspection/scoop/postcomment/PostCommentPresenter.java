@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop.postcomment;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -11,9 +10,6 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.feedpost.FeedPost;
-import ca.gc.inspection.scoop.profilelikes.ProfileLike;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.postcomment.LikeState.DOWNVOTE;

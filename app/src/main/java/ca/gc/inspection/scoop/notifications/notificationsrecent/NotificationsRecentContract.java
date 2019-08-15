@@ -1,7 +1,7 @@
-package ca.gc.inspection.scoop.notif.notificationsrecent;
+package ca.gc.inspection.scoop.notifications.notificationsrecent;
 
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayContract;
+import ca.gc.inspection.scoop.notifications.notificationstoday.NotificationsTodayContract;
 
 /**
  * Subclass of NotificationsTodayContract and describes the communication between the View and Presenter

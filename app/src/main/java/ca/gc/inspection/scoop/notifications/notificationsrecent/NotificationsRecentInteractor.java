@@ -1,6 +1,6 @@
-package ca.gc.inspection.scoop.notif.notificationsrecent;
+package ca.gc.inspection.scoop.notifications.notificationsrecent;
 
-import ca.gc.inspection.scoop.notif.notificationstoday.NotificationsTodayInteractor;
+import ca.gc.inspection.scoop.notifications.notificationstoday.NotificationsTodayInteractor;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
