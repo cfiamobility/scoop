@@ -32,9 +32,9 @@
     <string name="edit_comment_failed">Failed to edit comment</string>
     <string name="edit_comment_in_progress">Editing comment&#8230;</string>
     <string name="edit_comment_empty_text_error">Please add comment message</string>
-    <string name="edit_comment_lose_data">Are you sure you want to proceed? \nYou will lose your current unsaved edits.</string>
-    <string name="confirm">Confirm</string>
-    <string name="cancel">Cancel</string>
+    <string name="edit_comment_lose_data">Discard changes? \nYou will lose your current unsaved changes.</string>
+    <string name="edit_comment_lose_data_discard">Discard</string>
+    <string name="edit_comment_lose_data_cancel">Cancel</string>
 
     <!-- Navigation Drawer -->
     <string name="saved">Saved Posts</string>

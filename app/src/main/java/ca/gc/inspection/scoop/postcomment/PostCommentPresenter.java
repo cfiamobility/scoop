@@ -29,7 +29,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 import static java.lang.Integer.max;
 
 /**
- * Presenter for replying to a post action. Tt is the most generic presenter
+ * Presenter for replying to a post action. It is the most generic presenter
  * related to "posting" actions. Parent presenter for ProfilePostPresenter.
  * Implements the AdapterAPI and ViewHolderAPI to allow adapter and viewHolder to communicate with
  * the presenter.
