@@ -165,18 +165,6 @@
     <string name="scoop_objective">OBJECTIF</string>
     <string name="scoop_objective_description">Maintenir les employés de l\'ACIA au courant des initiatives et des projets qui s\'inscrivent dans le cadre de Répondre aux besoins d\'aujourd\'hui et bâtir pour l\'avenir de l\'Agence.</string>
 
-    <string name="scoopable_title">QUE PEUT-ON INCLURE AU SCOOP?</string>
-    <string name="scoopable_description">Les déclarations courtes et ciblées qui fournissent une mise à jour ou des renseignements sur la façon dont nous utilisons l\'innovation et la mobilisation pour mettre en oeuvre nos 5 priorités stratégiques:</string>
-
-    <string name="strategic_approach1">Outils de réglementation moderne</string>
-    <string name="strategic_approach2">Intégration du risque</string>
-    <string name="strategic_approach3">Inspections cohérentes et efficaces</string>
-    <string name="strategic_approach4">Priorité aux outils et services numériques</string>
-    <string name="strategic_approach5">Chef de file mondial</string>
-
-    <string name="not_scoopable_title">QUE DEVRAIT-ON ÉVITER D\'INCLURE AU SCOOP?</string>
-    <string name="not_scoopable_description">Les priorités de l\'organisation comme les nouvelles, les évènements et les renseignements qui concernent, entre autres, la CCMTGC et la Semaine nationale de la fonction publique, de même que les renseignements administratifs et opérationnels quotidiens qui concernent, entre autres, les nouveaux processus des RH, les mises à jour de la structure organisationnelle ou les négociations collectives. Pour ce type de renseignements, informez-vous auprès des communications internes afin d\'utiliser l\'InfoBulletin, Contact ou les messages Express.</string>
-
     <!-- INFO - Data Policy -->
     <string name="info_data_policy">Data Policy</string>
     <string name="info_data_policy_content_intro">Going Digital Development built the Scoop app as a Free app. This SERVICE is provided by Going Digital Development at no cost and is intended for use as is. \n\n
@@ -200,25 +188,33 @@
     <string name="info_data_policy_security_title">Security</string>
     <string name="info_data_policy_security">We value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and we cannot guarantee its absolute security.</string>
 
-
     <!-- INFO - Terms of Service/Use -->
     <string name="info_tos">Terms of Use</string>
+
     <string name="info_tos_terms_and_conditions_title">Terms and Conditions</string>
     <string name="info_tos_terms_and_conditions">These terms and conditions ("Terms", "Agreement") are an agreement between Mobile Application Developer ("Mobile Application Developer", "us", "we" or "our") and you ("User", "you" or "your"). This Agreement sets forth the general terms and conditions of your use of the scoop mobile application and any of its products or services (collectively, "Mobile Application" or "Services").</string>
+
     <string name="info_tos_accounts_and_membership_title">Accounts and membership</string>
     <string name="info_tos_accounts_and_membership">If you create an account in the Mobile Application, you are responsible for maintaining the security of your account and you are fully responsible for all activities that occur under the account and any other actions taken in connection with it. We may monitor and review new accounts before you may sign in and use our Services. Providing false contact information of any kind may result in the termination of your account. You must immediately notify us of any unauthorized uses of your account or any other breaches of security. We will not be liable for any acts or omissions by you, including any damages of any kind incurred as a result of such acts or omissions. We may suspend, disable, or delete your account (or any part thereof) if we determine that you have violated any provision of this Agreement or that your conduct or content would tend to damage our reputation and goodwill. If we delete your account for the foregoing reasons, you may not re-register for our Services. We may block your email address and Internet protocol address to prevent further registration.</string>
+
     <string name="info_tos_user_content_title">User content</string>
     <string name="info_tos_user_content">We do not own any data, information or material ("Content") that you submit in the Mobile Application in the course of using the Service. You shall have sole responsibility for the accuracy, quality, integrity, legality, reliability, appropriateness, and intellectual property ownership or right to use of all submitted Content. We may monitor and review Content in the Mobile Application submitted or created using our Services by you. Unless specifically permitted by you, your use of the Mobile Application does not grant us the license to use, reproduce, adapt, modify, publish or distribute the Content created by you or stored in your user account for commercial, marketing or any similar purpose. But you grant us permission to access, copy, distribute, store, transmit, reformat, display and perform the Content of your user account solely as required for the purpose of providing the Services to you. Without limiting any of those representations or warranties, we have the right, though not the obligation, to, in our own sole discretion, refuse or remove any Content that, in our reasonable opinion, violates any of our policies or is in any way harmful or objectionable.</string>
+
     <string name="info_tos_backups_title">Backups</string>
     <string name="info_tos_backups">We perform regular backups of the Content and will do our best to ensure completeness and accuracy of these backups. In the event of the hardware failure or data loss we will restore backups automatically to minimize the impact and downtime.</string>
+
     <string name="info_tos_links_to_other_mobile_apps_title">Links to other mobile applications</string>
     <string name="info_tos_links_to_other_mobile_apps">Although this Mobile Application may link to other mobile applications, we are not, directly or indirectly, implying any approval, association, sponsorship, endorsement, or affiliation with any linked mobile application, unless specifically stated herein. Some of the links in the Mobile Application may be "affiliate links". This means if you click on the link and purchase an item, Mobile Application Developer will receive an affiliate commission. We are not responsible for examining or evaluating, and we do not warrant the offerings of, any businesses or individuals or the content of their mobile applications. We do not assume any responsibility or liability for the actions, products, services, and content of any other third-parties. You should carefully review the legal statements and other conditions of use of any mobile application which you access through a link from this Mobile Application. Your linking to any other off-site mobile applications is at your own risk.</string>
+
     <string name="info_tos_intellectual_property_rights_title">Intellectual property rights</string>
     <string name="info_tos_intellectual_property_rights">This Agreement does not transfer to you any intellectual property owned by Mobile Application Developer or third-parties, and all rights, titles, and interests in and to such property will remain (as between the parties) solely with Mobile Application Developer. All trademarks, service marks, graphics and logos used in connection with our Mobile Application or Services, are trademarks or registered trademarks of Mobile Application Developer or Mobile Application Developer licensors. Other trademarks, service marks, graphics and logos used in connection with our Mobile Application or Services may be the trademarks of other third-parties. Your use of our Mobile Application and Services grants you no right or license to reproduce or otherwise use any Mobile Application Developer or third-party trademarks.</string>
+
     <string name="info_tos_changes_and_amendments_title">Changes and amendments</string>
     <string name="info_tos_changes_and_amendments">We reserve the right to modify this Agreement or its policies relating to the Mobile Application or Services at any time, effective upon posting of an updated version of this Agreement in the Mobile Application. When we do, we will send you an email to notify you. Continued use of the Mobile Application after any such changes shall constitute your consent to such changes. </string>
+
     <string name="info_tos_acceptance_of_terms_title">Acceptance of these terms</string>
     <string name="info_tos_acceptance_of_terms">You acknowledge that you have read this Agreement and agree to all its terms and conditions. By using the Mobile Application or its Services you agree to be bound by this Agreement. If you do not agree to abide by the terms of this Agreement, you are not authorized to use or access the Mobile Application and its Services.</string>
+
     <string name="info_tos_contact_us_title">Contacting us</string>
     <string name="info_tos_contact_us">If you have any questions about this Agreement, please contact us. \n\n <i>This document was last updated on August 13, 2019</i></string>
 

@@ -9,6 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+/** Main activity for the info page. This holds all the buttons to navigate through different info
+ * Scoop 101 - how to guide on what is "scoopable" - PDF that was cut up to work better for mobile use
+ * PDF is from: http://merlin/about-the-cfia/building-for-the-future/how-to-submit-a-scoop/eng/1528132422705/1528132423064
+ * Data policy - data policy template from a generator
+ * Terms of use - TOS template from a generator
+ * Open source lib - list of open source libraries used for the project
+ */
 public class InfoActivity extends AppCompatActivity {
 
     // when the back button is pressed

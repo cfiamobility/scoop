@@ -167,18 +167,6 @@
     <string name="scoop_objective">Objective</string>
     <string name="scoop_objective_description">To help CFIA employees keep up-to-date on initiatives and projects under the Agency\'s Responding to Today, Building for the Future Framework</string>
 
-    <string name="scoopable_title">What\'s \'Scoopable\'</string>
-    <string name="scoopable_description">Short, focused statements that provide updates or information about how we are using innovation or engagement to work towards our 5 strategic priorities:</string>
-
-    <string name="strategic_approach1">Modern Regulatory Toolkit</string>
-    <string name="strategic_approach2">Integrated Risk Management</string>
-    <string name="strategic_approach3">Consistent and Efficient Inspections</string>
-    <string name="strategic_approach4">Digital-First Tools and Services</string>
-    <string name="strategic_approach5">Global Leader</string>
-
-    <string name="not_scoopable_title">What\'s NOT \'Scoopable\'</string>
-    <string name="not_scoopable_description">Corporate priorities such as news, events and information about things like the GCWCC, National Public Service Week, administrative and operational day-to-day information such as new HR processes, organizational structure updates or collective bargaining. For this type of information, check in with Internal Communications to use the InfoBulletin, Contact, or Express messages.</string>
-
     <!-- INFO - Data Policy -->
     <string name="info_data_policy">Data Policy</string>
     <string name="info_data_policy_content_intro">Canadian Food Inspection Agency built the Scoop app as a Free app. This SERVICE is provided by Canadian Food Inspection Agency at no cost and is intended for use as is.
