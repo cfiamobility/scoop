@@ -98,6 +98,20 @@ public interface PostCommentContract {
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException;
+
+            /**
+             * Check if unsaved edits exist for a specific post comment. Used to check whether the
+             * PostCommentViewHolder should save the changes to the database through the Presenter or
+             * show a SnackBar message stating that no changes were made.
+             *
+             * Disambiguation:
+             * This is different from unsavedEditsExist (no parameters) which is used in an Activity/Fragment
+             * to check if the user should be prompted to leave their unsaved edits.
+             *
+             * @param i             Estimated adapter position
+             * @param activityId    Unique identifier for post comment
+             * @return  True if there are unsaved edits in the EditCommentCache
+             */
             boolean unsavedEditsExistForViewHolder(int i, String activityId);
             String getPostTextById(int i);
         }

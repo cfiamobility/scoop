@@ -62,6 +62,12 @@ public interface DisplayPostContract extends FeedPostContract {
 
         void addPostComment(String currentUserId, String commentText, String activityId, String posterId);
 
+        /**
+         * Helper method to let EditLeaveEventListener know if it needs to create an EditLeaveDialog
+         * to ask the user to confirm leaving their unsaved edits.
+         *
+         * @return True if there are unsaved edits for a post comment
+         */
         boolean unsavedEditsExist();
 
         interface FragmentAPI extends FeedPostContract.Presenter {

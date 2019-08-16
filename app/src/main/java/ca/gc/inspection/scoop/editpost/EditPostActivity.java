@@ -29,11 +29,6 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class EditPostActivity extends CreatePostActivity implements
         EditPostContract.View,
         EditLeaveEventListener {
-    /**
-     * Implements the View in the EditPostContract interface to follow MVP architecture.
-     * Allows the user to create a new post by adding a title, text, and using the camera or camera roll
-     * to add an image.
-     */
 
     private static final String TAG = "EditPostActivity";
 
@@ -164,13 +159,6 @@ public class EditPostActivity extends CreatePostActivity implements
         mImageModified = true;
     }
 
-    /**
-     * Callback to set post image from database response.
-     * The bundle did not contain a post image, so we fetch it from the database and handle
-     * the response here.
-     *
-     * @param image post image from the database
-     */
     @Override
     public void onDatabaseImageResponse(String image) {
         waitingForResponse = false;
@@ -178,11 +166,6 @@ public class EditPostActivity extends CreatePostActivity implements
         setPostImageFromBitmap(mInitialBitmap);
     }
 
-    /**
-     * Called by the Presenter to know if their are unsaved edits.
-     *
-     * @return whether the image, post title, and/or post text was modified.
-     */
     @Override
     public boolean unsavedEditsExist() {
         return (mImageModified ||

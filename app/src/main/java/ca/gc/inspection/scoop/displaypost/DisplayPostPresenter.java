@@ -190,12 +190,6 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         }
     }
 
-    /**
-     * Helper method to let EditLeaveEventListener know if it needs to create an EditLeaveDialog
-     * to ask the user to confirm leaving their unsaved edits.
-     *
-     * @return True if there are unsaved edits for a post comment
-     */
     @Override
     public boolean unsavedEditsExist() {
         Log.d(TAG + ".unsavedEditsExist", "mEditCommentCache:" + mEditCommentCache.toString());

@@ -11,10 +11,6 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 public class EditPostPresenter extends CreatePostPresenter implements
         EditPostContract.Presenter {
-    /**
-     * Implements the Presenter in the EditPostContract interface to follow MVP architecture.
-     *
-     */
 
     private EditPostInteractor mInteractor;
     private EditPostContract.View mView;
@@ -58,13 +54,6 @@ public class EditPostPresenter extends CreatePostPresenter implements
         mInteractor.sendPostToDatabase(network, activityId, title, text, imageBitmap);
     }
 
-    /**
-     * Allows the View to access the Interactor and retrieve the post image (which is missing from the bundle)
-     * when starting EditPostActivity.
-     *
-     * @param network       An instance of the singleton class which encapsulates the RequestQueue
-     * @param activityId    Unique identifier of a post
-     */
     @Override
     public void getPostImage(NetworkUtils network, String activityId) {
         mInteractor.getPostImage(network, activityId);

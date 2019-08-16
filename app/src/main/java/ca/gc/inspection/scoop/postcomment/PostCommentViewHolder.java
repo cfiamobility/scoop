@@ -144,9 +144,6 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         };
     }
 
-    /**
-     * Hides the UI for editing the comment text.
-     */
     @Override
     public void hideEditText() {
         if (editText != null && editButton != null && counter != null) {
@@ -172,12 +169,6 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         }
     }
 
-    /**
-     * Called during onBind if there are unsaved edits in the EditCommentCache which is relevant to
-     * this ViewHolder.
-     *
-     * @param postText
-     */
     @Override
     public PostCommentContract.View.ViewHolder setEditPostText(String postText) {
         this.editText.setText(postText);
@@ -472,19 +463,6 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         }
     }
 
-    /**
-     * Getter for call back identifier.
-     *
-     * When editing a post comment there is a brief period between sending the comment to the database
-     * and receiving the database response. Upon the database response, the presenter needs to know
-     * if the ViewHolder is still relevant or if it is displaying a different post comment.
-     *
-     * If the ViewHolder was scrolled and recycled, we don't want it to update UI as it may be
-     * showing a completely different post comment. Instead the correct view holder will eventually
-     * have its UI updated using the onBind methods and Presenter-scoped Cache objects.
-     *
-     * @return String of unique identifier for post comment (ie. activityId)
-     */
     @NonNull
     @Override
     public String getCallBackIdentifier() {
@@ -494,47 +472,22 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
             return mCallBackIdentifier;
     }
 
-    /**
-     * Setter for call back identifier. This is set by the Presenter prior to editing the comment.
-     *
-     * See documentation for getCallBackIdentifier.
-     *
-     * @param callBackIdentifier    String of unique identifier for post comment (ie. activityId)
-     */
     @Override
     public void setCallBackIdentifier(String callBackIdentifier) {
         mCallBackIdentifier = callBackIdentifier;
     }
 
-    /**
-     * Clears the call back identifier every time we bind new data to the ViewHolder. This occurs
-     * when scrolling or refreshing.
-     *
-     * See documentation for getCallBackIdentifier.
-     */
     @Override
     public void clearCallBackIdentifier() {
         mCallBackIdentifier = null;
     }
 
-    /**
-     * Used by the Presenter's onBind methods to persist whether the post comment is waiting
-     * for a database response.
-     *
-     * @param waitingForResponse    This specific post comment cannot send another database request
-     *                              until a response is received.
-     */
     @Override
     public void setWaitingForResponse(boolean waitingForResponse) {
         Log.d("PostCommentViewHolder", "set waiting for response: " + waitingForResponse);
         this.waitingForResponse = waitingForResponse;
     }
 
-    /**
-     * Used by the Presenter's onBind methods to persist Snackbar for comment in progress.
-     *
-     * @param activityId        Unique indentifier of post comment.
-     */
     @Override
     public void setSnackBarForCommentInProgress(String activityId) {
         Log.d("PostCommentViewHolder", "snackbar edit comment in progress");
@@ -543,11 +496,6 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         mSnackbar.show();
     }
 
-    /**
-     * Used by the Presenter's onBind methods to persist Snackbar for comment success.
-     *
-     * @param activityId        Unique indentifier of post comment.
-     */
     @Override
     public void setSnackBarEditCommentSuccess(String activityId) {
         Log.d("PostCommentViewHolder", "snackbar edit comment success");
@@ -562,12 +510,6 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         mSnackbar.show();
     }
 
-    /**
-     * Used by the Presenter's onBind methods to persist Snackbar for comment retry.
-     *
-     * @param i                 adapter position
-     * @param activityId        Unique indentifier of post comment.
-     */
     @Override
     public void setSnackBarEditCommentRetry(int i, String activityId) {
         Log.d("PostCommentViewHolder", "snackbar edit comment retry");

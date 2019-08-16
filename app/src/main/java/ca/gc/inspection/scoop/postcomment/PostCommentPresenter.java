@@ -396,28 +396,6 @@ public class PostCommentPresenter implements
         return Objects.requireNonNull(getItemByIndex(i)).getSavedState();
     }
 
-    /**
-     * Called by PostCommentViewHolder to save the edit for a post comment to the database.
-     *
-     * @param viewHolderInterface   Interface to update when the database response is received. Note that a
-     *                              callback identifier must be set (in this case, the activityId) so that
-     *                              when the Presenter receives the database response, it knows if the ViewHolder
-     *                              is still the correct one. If the ViewHolder was scrolled and recycled, we don't
-     *                              want it to update UI as it may be showing a completely different post comment.
-     *                              Instead the correct view holder will eventually have its UI updated using the
-     *                              onBind methods and Presenter-scoped Cache objects.
-     *
-     * @param i                     Estimated adapter position. This may shift if comments are added/deleted
-     *                              or if the user initiates a pull down to refresh while the viewholder is waiting
-     *                              for a database response for editing a comment. Nonetheless, this value
-     *                              provides a starting point to search by activityId - it reduces the need
-     *                              for an O(n) scan of the DataCache to locate the correct item to update by
-     *                              activityId.
-     *
-     * @param activityId            Unique identifier for the post comment.
-     *
-     * @param newText               The new text to update the post comment to.
-     */
     @Override
     public void sendCommentToDatabase(PostCommentContract.View.ViewHolder viewHolderInterface, int i, String activityId, String newText) {
         viewHolderInterface.setCallBackIdentifier(activityId);
@@ -435,29 +413,11 @@ public class PostCommentPresenter implements
         mPostCommentInteractor.updatePostComment(editCommentBundle, activityId, newText);
     }
 
-    /**
-     * Need to store the unsaved changes in the EditCommentCache so that when the user scrolls through
-     * the RecyclerView when editing a comment, the correct data can be re-attached to the view holder.
-     *
-     * @param activityId    Unique identifier of a post comment. Adapter position may shift and cannot be
-     *                      used here.
-     * @param postText      The current unsaved text.
-     */
     @Override
     public void cacheEditCommentData(String activityId, String postText) {
         mEditCommentCache.insertOrUpdateExistingEditCommentDataWithPostText(activityId, postText);
     }
 
-    /**
-     * When the user cancels their edit for a specific post comment, we must drop the data from the
-     * EditCommentCache and ViewHolderStateCache, otherwise when the user scrolls through the RecyclerView,
-     * the dropped changes and irrelevant SnackBar states may show up. It is not enough to set the
-     * ViewHolder's waitingForResponse to False, we must update the ViewHolderStateCache to prevent
-     * onBind methods from resetting the ViewHolderState to a stale value.
-     *
-     * @param activityId    Unique identifier of a post comment. Adapter position may shift and cannot be
-     *                      used here.
-     */
     @Override
     public void onCancelEditComment(String activityId) {
         mEditCommentCache.removeEditCommentData(activityId);
@@ -644,30 +604,11 @@ public class PostCommentPresenter implements
         mViewHolderStateCache.incrementPositionForAll();
     }
 
-    /**
-     * Need to update the ViewHolderStateCache otherwise the SnackBar will be reshown every time
-     * onBind is called on the ViewHolder.
-     *
-     * @param activityId    Unique identifier for post comment
-     */
     @Override
     public void onSnackBarDismissed(String activityId) {
         mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(NONE);
     }
 
-    /**
-     * Check if unsaved edits exist for a specific post comment. Used to check whether the
-     * PostCommentViewHolder should save the changes to the database through the Presenter or
-     * show a SnackBar message stating that no changes were made.
-     *
-     * Disambiguation:
-     * This is different from unsavedEditsExist (no parameters) which is used in an Activity/Fragment
-     * to check if the user should be prompted to leave their unsaved edits.
-     *
-     * @param i             Estimated adapter position
-     * @param activityId    Unique identifier for post comment
-     * @return  True if there are unsaved edits in the EditCommentCache
-     */
     @Override
     public boolean unsavedEditsExistForViewHolder(int i, String activityId) {
         if (mEditCommentCache == null)
