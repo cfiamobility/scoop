@@ -33,6 +33,7 @@ import ca.gc.inspection.scoop.util.TextFormat;
 
 import static android.view.View.GONE;
 import static ca.gc.inspection.scoop.searchprofile.view.SearchProfileViewHolder.getSpannableStringBuilderWithFormat;
+import static ca.gc.inspection.scoop.util.ActivityUtils.hideKeyboardFrom;
 
 /**
  * ViewHolder for replying to a post action; it is the most generic View Holder
@@ -46,6 +47,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         PostOptionsDialogReceiver.EditCommentReceiver,
         EditLeaveEventListener {
 
+    private static final String TAG = "PostCommentViewHolder";
     private static final int SNACKBAR_LENGTH_VERY_SHORT = 1000;
     PostCommentContract.Presenter.ViewHolderAPI mPresenter;
 
@@ -148,6 +150,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
     @Override
     public void hideEditText() {
         if (editText != null && editButton != null && counter != null) {
+            optionsMenu.setVisibility(View.VISIBLE);
             postText.setVisibility(View.VISIBLE);
             editText.setVisibility(View.GONE);
             editButton.setVisibility(View.GONE);
@@ -160,8 +163,10 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
      */
     public void showEditText() {
         if (editText != null && editButton != null && counter != null) {
+            optionsMenu.setVisibility(View.INVISIBLE);
             postText.setVisibility(View.GONE);
             editText.setVisibility(View.VISIBLE);
+            editText.requestFocus();
             editButton.setVisibility(View.VISIBLE);
             counter.setVisibility(View.VISIBLE);
         }
@@ -441,6 +446,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
      */
     private void cancelEdit(String activityId) {
         hideEditText();
+        hideKeyboardFrom(mView);
         setWaitingForResponse(false);
         dismissSnackBar();
         /* must remove text watcher otherwise the edit comment cache will be repopulated and scrolling
@@ -458,7 +464,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
      */
     private void sendCommentToDatabase(int i, String activityId) {
         if (!waitingForResponse) {
-            ActivityUtils.hideKeyboardFrom(mView.getContext(), mView);
+            ActivityUtils.hideKeyboardFrom(mView);
             waitingForResponse = true;
 
             String newText = editText.getText().toString();

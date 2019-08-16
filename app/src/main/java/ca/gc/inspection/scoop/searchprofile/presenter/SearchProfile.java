@@ -17,7 +17,6 @@ public class SearchProfile {
 
     JSONObject mProfile;
     private static final String TAG = "SearchPost";
-    private static final String RELEVANCE_LABEL = "Relevance: ";
     private static final double SEARCH_POST_NAME_WEIGHT_MULTIPLIER = 2;
 
     public static final String SEARCH_PROFILE_POSITION_KEY = "positionname";
@@ -37,7 +36,6 @@ public class SearchProfile {
     }
 
     public void setFormatForSearchQuery(SearchQuery searchQuery) {
-        String relevanceFooter = RELEVANCE_LABEL + getRelevance();
         mFullNameFormat = new TextFormat(searchQuery.getQueryWords(), getFullName(), null);
         mPositionFormat = new TextFormat(searchQuery.getQueryWords(), getPosition(), null);
         mDivisionFormat = new TextFormat(searchQuery.getQueryWords(), getDivision(), null);

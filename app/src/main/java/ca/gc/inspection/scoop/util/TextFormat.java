@@ -57,12 +57,12 @@ public class TextFormat {
         return this;
     }
 
-    public TextFormat appendFooter(String footer, String seperator) {
+    public TextFormat appendFooter(String footer, String separator) {
         if (mFooter == null) {
             mFooter = footer;
         }
         else {
-            mFooter = mFooter + seperator + footer;
+            mFooter = mFooter + separator + footer;
         }
         return this;
     }

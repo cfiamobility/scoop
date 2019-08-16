@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.Toast;
 
@@ -22,9 +23,6 @@ import ca.gc.inspection.scoop.report.ReportDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_TYPE_KEY;
-import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
-import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
-import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -37,6 +35,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     //UI Declarations
     Button editButton, shareButton, deleteButton, reportButton;
     TableRow editTR, shareTR, deleteTR, reportTR;
+    ImageView editImage;
 
     //reference to the presenter
     private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
@@ -129,6 +128,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         deleteTR = view.findViewById(R.id.dialog_post_options_tr_delete);
         reportTR = view.findViewById(R.id.dialog_post_options_tr_report);
 
+        // need to initialize all the images
+        editImage = view.findViewById(R.id.dialog_post_options_img_edit);
+
         // WILL ALWAYS BE SET - onClick listener for sharing a post
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,24 +195,43 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         return view;
     }
 
+    /**
+     * Shows or hides the edit option depending on where the dialog was opened from.
+     * Sets the OnClickListener for the edit option.
+     * @param posterId      userId of the user who created the post/comment which was clicked
+     * @param activityType  Post or comment
+     * @param activityId    Unique identifier of a post/comment
+     */
     private void setupEditOption(String posterId, int activityType, String activityId) {
         if (posterId != null && posterId.equals(Config.currentUser) && !inProfileLikes(activityType)) {
             showEditOption();
-            editButton.setOnClickListener((View v) -> {
-                if (activityType == Config.postType) {
-                    mEditPostReceiver.onEditPost(position);
-                }
-                else {
-                    mEditCommentReceiver.onEditComment(position, activityId);
-                }
-                if (getFragmentManager() != null) {
-                    getFragmentManager().beginTransaction().remove(this).commit();
-                }
-            });
+            editTR.setOnClickListener(getEditOptionOnClickListener(activityType, activityId));
+            editImage.setOnClickListener(getEditOptionOnClickListener(activityType, activityId));
+            editButton.setOnClickListener(getEditOptionOnClickListener(activityType, activityId));
         }
         else {
             hideEditOption();
         }
+    }
+
+    /**
+     * Helper method for setupEditOption. Provides the OnClickListener for the edit option.
+     * @param activityType  Post or comment
+     * @param activityId    Unique identifier of a post/comment
+     * @return
+     */
+    public View.OnClickListener getEditOptionOnClickListener(int activityType, String activityId) {
+        return v -> {
+            if (activityType == Config.postType) {
+                mEditPostReceiver.onEditPost(position);
+            }
+            else {
+                mEditCommentReceiver.onEditComment(position, activityId);
+            }
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction().remove(PostOptionsDialogFragment.this).commit();
+            }
+        };
     }
 
     private boolean inProfileLikes(int activityType) {
