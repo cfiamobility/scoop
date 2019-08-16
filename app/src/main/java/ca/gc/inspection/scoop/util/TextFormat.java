@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextFormat {
+    private static final String TAG = "TextFormat";
+
     public static final int POST_TEXT_FORMAT_BOLD_COLOUR = Color.BLACK;
     public static final int POST_TEXT_FORMAT_HIGHLIGHT_COLOUR = Color.YELLOW;
     public static final String TEXT_FORMAT_FOOTER_SEPARATOR = "\n\n";
@@ -22,8 +24,8 @@ public class TextFormat {
     }
 
     public TextFormat setBoldTextPositions(String[] boldedWords, String text) {
+        mBoldedWords = boldedWords;
         if (mBoldedWords != null) {
-            mBoldedWords = boldedWords;
             mBoldTextPositions = new ArrayList<>();
 
             for (String boldWord : mBoldedWords) {
@@ -35,10 +37,10 @@ public class TextFormat {
                         if (wordStart >= 0) {
                             wordEnd = wordStart + boldWord.length();
                             mBoldTextPositions.add(Pair.create(wordStart, wordEnd));
-                            Log.d("TextFormat", boldWord + " at index: " + wordStart + ", " + wordEnd);
+                            Log.d(TAG + ".setBoldTextPositions", boldWord + " at index: " + wordStart + ", " + wordEnd);
                         }
                     }
-                } else Log.d("TextFormat", "empty word!");
+                } else Log.d(TAG + ".setBoldTextPositions", "empty word!");
             }
         }
         return this;
