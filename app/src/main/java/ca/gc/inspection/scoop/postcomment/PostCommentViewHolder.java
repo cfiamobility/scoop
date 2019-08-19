@@ -362,7 +362,11 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         if (!waitingForResponse) {
             mTextEditorWatcher = getEditCommentTextWatcher(activityId);
             editText.addTextChangedListener(mTextEditorWatcher);
-            editText.setText(mPresenter.getPostTextById(i));
+            /* Only reset the edit text to the post text if the edit text is empty. This will prevent
+            overwriting the Presenter's bindEditCommentDataToViewHolder method */
+            if (editText.getText().toString().isEmpty()) {
+                editText.setText(mPresenter.getPostTextById(i));
+            }
 
             setEditButtonOnClickListener(i, activityId);
             setCancelButtonOnClickListener(i, activityId);
@@ -443,6 +447,7 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         /* must remove text watcher otherwise the edit comment cache will be repopulated and scrolling
         will bind the stale edit text state to the viewholder */
         editText.removeTextChangedListener(mTextEditorWatcher);
+        editText.setText("");   // clear edit text so that it will be reset to the post text if it is edited again
         mPresenter.onCancelEditComment(activityId);
     }
 

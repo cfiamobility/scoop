@@ -279,21 +279,23 @@ public class PostCommentPresenter implements
     public static void bindEditCommentDataToViewHolder(
             PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment, int i, EditCommentCache editCommentCache) {
         Log.d(TAG, "bindEditCommentDataToViewHolder");
-        if (postComment != null && editCommentCache != null) {
-            EditCommentData editCommentData = editCommentCache.getEditCommentData(postComment.getActivityId());
-            if (editCommentData != null) {
-                String postText = editCommentData.getPostText();
+        if (postComment != null) {
+            viewHolderInterface.setEditPostText(postComment.getPostText());
+            if (editCommentCache != null) {
+                EditCommentData editCommentData = editCommentCache.getEditCommentData(postComment.getActivityId());
                 Log.d(TAG, "editCommentCache: " + editCommentCache.toString());
-                Log.d(TAG, "activityIds: " + editCommentData.getActivityId() + ", " + postComment.getActivityId());
-                /* edit post text MUST be set before calling onEditComment otherwise a race condition will occur.
-                The TextWatcher may overwrite the EditCommentCache with the stale edit text data currently
-                in the ViewHolder.
-                 */
-                viewHolderInterface.setEditPostText(postText);
-                viewHolderInterface.onEditComment(i, postComment.getActivityId());
-            }
-            else {
-                viewHolderInterface.hideEditText();
+                if (editCommentData != null) {
+                    String editPostText = editCommentData.getPostText();
+                    Log.d(TAG, "activityIds: " + editCommentData.getActivityId() + ", " + postComment.getActivityId());
+                    /* edit post text MUST be set before calling onEditComment otherwise a race condition will occur.
+                    The TextWatcher may overwrite the EditCommentCache with the stale edit text data currently
+                    in the ViewHolder.
+                     */
+                    viewHolderInterface.setEditPostText(editPostText);
+                    viewHolderInterface.onEditComment(i, postComment.getActivityId());
+                } else {
+                    viewHolderInterface.hideEditText();
+                }
             }
         }
     }

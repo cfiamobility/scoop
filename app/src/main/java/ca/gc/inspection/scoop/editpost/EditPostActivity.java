@@ -162,8 +162,10 @@ public class EditPostActivity extends CreatePostActivity implements
     @Override
     public void onDatabaseImageResponse(String image) {
         waitingForResponse = false;
-        mInitialBitmap = CameraUtils.stringToBitmap(image);
-        setPostImageFromBitmap(mInitialBitmap);
+        if (image != null && !image.isEmpty()) {
+            mInitialBitmap = CameraUtils.stringToBitmap(image);
+            setPostImageFromBitmap(mInitialBitmap);
+        }
     }
 
     @Override

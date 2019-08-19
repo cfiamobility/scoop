@@ -4,8 +4,13 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import ca.gc.inspection.scoop.util.TextFormat;
 
+import static ca.gc.inspection.scoop.Config.TIME_ZONE;
+import static ca.gc.inspection.scoop.Config.TIME_ZONE_FORMAT;
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.LikeState.NULL;
 
@@ -65,7 +70,7 @@ public class PostComment {
         mImage = jsonImage;
         String modifiedDatefooter = null;
         if (getModifiedDate() != null && !getModifiedDate().isEmpty() && !getModifiedDate().equals(getCreatedDate()))
-            modifiedDatefooter = MODIFIED_DATE_LABEL + getModifiedDate();
+            modifiedDatefooter = MODIFIED_DATE_LABEL + getFormattedModifiedDate();
         mTextFormat = new TextFormat(null, getPostText(), modifiedDatefooter);
     }
 
@@ -122,6 +127,17 @@ public class PostComment {
             e.printStackTrace();
             return "";
         }
+    }
+
+    /**
+     * @return the modified date formatted with the time zone defined in the Config class.
+     */
+    public String getFormattedModifiedDate() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(TIME_ZONE_FORMAT)
+                .withZone(TIME_ZONE);
+
+        ZonedDateTime zonedModifiedDate = ZonedDateTime.parse(getModifiedDate());
+        return dateTimeFormatter.format(zonedModifiedDate);
     }
 
     public String getFirstName() {
