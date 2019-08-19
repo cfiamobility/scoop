@@ -368,11 +368,18 @@ public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
                 editText.setText(mPresenter.getPostTextById(i));
             }
 
+            // Cache the edit in case no edits were made and the user refreshes or scrolls away
+            mPresenter.cacheEditCommentData(activityId, editText.getText().toString());
             setEditButtonOnClickListener(i, activityId);
             setCancelButtonOnClickListener(i, activityId);
             showEditText();
         }
         else Log.d("PostCommentViewHolder", "waitingForResponse for onEditComment");
+    }
+
+    @Override
+    public void removeTextEditorWatcher() {
+        editText.removeTextChangedListener(mTextEditorWatcher);
     }
 
     /**

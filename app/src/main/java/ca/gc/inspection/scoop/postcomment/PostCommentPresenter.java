@@ -280,6 +280,8 @@ public class PostCommentPresenter implements
             PostCommentContract.View.ViewHolder viewHolderInterface, PostComment postComment, int i, EditCommentCache editCommentCache) {
         Log.d(TAG, "bindEditCommentDataToViewHolder");
         if (postComment != null) {
+            // Need to remove the TextEditorWatcher when setting the edit post text otherwise it may overwrite the editCommentCache
+            viewHolderInterface.removeTextEditorWatcher();
             viewHolderInterface.setEditPostText(postComment.getPostText());
             if (editCommentCache != null) {
                 EditCommentData editCommentData = editCommentCache.getEditCommentData(postComment.getActivityId());
@@ -528,7 +530,6 @@ public class PostCommentPresenter implements
 
         // must be updated so that scrolling binds the updated text to the ViewHolders (if the activity was not refreshed)
         updateDataCachePostTextForActivityId(i, activityId, newText);
-        mEditCommentCache.removeEditCommentData(activityId);
         mViewHolderStateCache.getViewHolderState(activityId).setSnackBarState(EDIT_COMMENT_SUCCESS);
 
         /* Update ViewHolder UI if the user has not scrolled away, otherwise rely on the onBind methods
@@ -539,7 +540,12 @@ public class PostCommentPresenter implements
             viewHolderInterface.setPostTextWithFormat(newText, textFormat);
             viewHolderInterface.hideEditText();
             viewHolderInterface.setSnackBarEditCommentSuccess(activityId);
+            viewHolderInterface.removeTextEditorWatcher();
         }
+
+        /* Called after removeTextEditorWatcher since the TextEditorWatcher could overwrite
+        mEditCommentCache as long as it is still attached */
+        mEditCommentCache.removeEditCommentData(activityId);
     }
 
     /**

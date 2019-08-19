@@ -2,13 +2,9 @@ package ca.gc.inspection.scoop.postcomment;
 
 import org.json.JSONException;
 
-import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.editcomment.EditCommentContract;
-import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
-import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.util.TextFormat;
 
 /**
@@ -74,6 +70,12 @@ public interface PostCommentContract {
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
             ViewHolder setSavedState(Boolean savedState);
+
+            /**
+             * Remove the TextEditorWatcher when setting the edit post text otherwise it may overwrite
+             * the current contents of EditCommentCache.
+             */
+            void removeTextEditorWatcher();
         }
     }
 

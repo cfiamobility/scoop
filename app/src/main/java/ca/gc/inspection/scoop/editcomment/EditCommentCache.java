@@ -10,6 +10,7 @@ import java.util.HashMap;
  * can change if comments are added, deleted or if the order is refreshed.
  */
 public class EditCommentCache {
+    private static final String TAG = "EditCommentCache";
     protected HashMap<String, EditCommentData> mMap;
 
     public EditCommentCache() {
@@ -30,6 +31,7 @@ public class EditCommentCache {
         else {
             mMap.put(activityId, new EditCommentData(activityId, postText));
         }
+        Log.d(TAG + ".insertOrUpdateExistingEditCommentDataWithPostText", "mMap: " + toString());
     }
 
     public EditCommentData getEditCommentData(String activityId) {
