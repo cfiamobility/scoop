@@ -1,7 +1,5 @@
 package ca.gc.inspection.scoop;
 
-import java.time.ZoneId;
-
 public class Config {
     public static String baseIP = "http://10.0.2.2:3000/";
 
@@ -30,8 +28,6 @@ public class Config {
     // must be the same as the DATABASE_RESPONSE_SUCCESS constant in the scoop middle-tier repository
     public static final String DATABASE_RESPONSE_SUCCESS = "Success";
 
-    // time zone for displaying dates
-    public static final ZoneId TIME_ZONE = ZoneId.systemDefault();
     // used by DateTimeFormatter
-    public static final String TIME_ZONE_FORMAT = "MM-dd-yyyy 'at' hh:mma z";
+    public static final String TIME_ZONE_FORMAT = "MM-dd-yyyy 'at' hh:mma";
 }
