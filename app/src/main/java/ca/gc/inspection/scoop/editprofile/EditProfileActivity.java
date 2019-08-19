@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop.editprofile;
 
-import ca.gc.inspection.scoop.R;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
@@ -9,16 +8,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -42,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.ImageFilePath;
+import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.searchbuilding.SearchBuildingActivity;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
@@ -85,87 +83,13 @@ public class EditProfileActivity extends AppCompatActivity implements
 
 	// Application Side Variable Declarations
 	static String userID, currentPhotoPath;
-	Uri mMediaUri;
-	static Bitmap bitmap;
+	Bitmap bitmap;
+	private static final String TAG = "EditProfileActivity";
 
 	// stored local variables
 	String mBuildingId;
 
 	private boolean editingProfile = false;
-
-	// The method that runs when save is pressed
-	private View.OnClickListener save = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if (!editingProfile) {
-				editingProfile = true;
-				// changes the bitmap into a string encoded using base64
-				String image = CameraUtils.bitmapToString(bitmap);
-
-				// putting all the edittext fields into a hashmap to be passed into nodejs
-				if (!(firstNameET.getText().toString().isEmpty()) && !(lastNameET.getText().toString().isEmpty())) {
-					Map<String, String> params = new HashMap<>();
-					params.put("userid", userID);
-					params.put("firstname", firstNameET.getText().toString());
-					params.put("lastname", lastNameET.getText().toString());
-					params.put("position", positionET.getText().toString());
-					params.put("division", divisionET.getText().toString());
-					params.put("building", enterBuildingBTN.getText().toString());
-
-					// params cant be null so we set buildingid to -1 if its empty
-					if (mBuildingId != null) {
-						params.put("buildingid", mBuildingId);
-					} else {
-						params.put("buildingid", String.valueOf(-1));
-					}
-
-					Log.d("buildingid", Integer.toString(getIntent().getIntExtra("buildingid", -1)));
-					params.put("linkedin", linkedinET.getText().toString());
-					params.put("twitter", twitterET.getText().toString());
-					params.put("instagram", instagramET.getText().toString());
-					params.put("facebook", facebookET.getText().toString());
-					params.put("image", image);
-					mPresenter.updateUserInfo(NetworkUtils.getInstance(getApplicationContext()), params);
-				} else {
-					Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
-				}
-			}
-		}
-	};
-
-
-	private View.OnClickListener chooseBuilding = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent(getApplicationContext(), SearchBuildingActivity.class);
-			startActivityForResult(intent, CHOOSE_BUILDING_REQUEST_CODE);
-		}
-	};
-
-	private View.OnClickListener deleteBuilding = new View.OnClickListener(){
-		@Override
-		public void onClick(View v) {
-			enterBuildingBTN.setText(null);
-			mBuildingId = null;
-		}
-	};
-
-
-	// method for the back button
-	public void finishActivity(View view) {
-		finish();
-	}
-
-	public void onProfileUpdated(boolean success) {
-		editingProfile = false;
-		if (success) {
-			finish();
-		}
-		else {
-			// implement retry snackbar
-			finish();
-		}
-    }
 
     @Override
     public void setPresenter(@NonNull EditProfileContract.Presenter presenter) {
@@ -225,6 +149,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 
 		// Searches for user's info to autofill the edittext
 		mPresenter.initialFill(NetworkUtils.getInstance(this));
+//		Log.i(TAG + ".onCreate", CameraUtils.bitmapToString(bitmap));
 
 		// Sets up the Position, Office Address and Division AutoCompletes
 		autoComplete();
@@ -285,8 +210,9 @@ public class EditProfileActivity extends AppCompatActivity implements
 				lastNameET.setText(lastNameText);
 
 				// Profile picture setting and gtting
-				bitmap = CameraUtils.stringToBitmap(response.get("profileimage").toString());
-				previewProfilePic.setImageBitmap(bitmap);
+                bitmap = CameraUtils.stringToBitmap(response.get("profileimage").toString());
+                previewProfilePic.setImageBitmap(bitmap);
+				Log.i(TAG + ".setInitialFill", response.get("profileimage").toString());
 
 				// If user has already inputted a position
 				if (!response.get("positionid").toString().equals("null")) {
@@ -562,12 +488,88 @@ public class EditProfileActivity extends AppCompatActivity implements
                 String textChanged = mTextView.getText().toString();
                 String textChangedCapitalized = capitalizeFirstLetter(textChanged);
                 autoComplete(textChangedCapitalized);
+                Log.i(TAG + ".onTextChanged", CameraUtils.bitmapToString(bitmap));
             }
         }
 
         @Override
         public void afterTextChanged(Editable s) {
             // necessary to implement interface
+        }
+    }
+
+    // The method that runs when save is pressed
+    private View.OnClickListener save = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!editingProfile) {
+                editingProfile = true;
+                // changes the bitmap into a string encoded using base64
+                String image = CameraUtils.bitmapToString(bitmap);
+                Log.i(TAG+".onClick - Save", image);
+
+                // putting all the edittext fields into a hashmap to be passed into nodejs
+                if (!(firstNameET.getText().toString().isEmpty()) && !(lastNameET.getText().toString().isEmpty())) {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("userid", userID);
+                    params.put("firstname", firstNameET.getText().toString());
+                    params.put("lastname", lastNameET.getText().toString());
+                    params.put("position", positionET.getText().toString());
+                    params.put("division", divisionET.getText().toString());
+                    params.put("building", enterBuildingBTN.getText().toString());
+
+                    // params cant be null so we set buildingid to -1 if its empty
+                    if (mBuildingId != null) {
+                        params.put("buildingid", mBuildingId);
+                    } else {
+                        params.put("buildingid", String.valueOf(-1));
+                    }
+
+                    Log.d("buildingid", Integer.toString(getIntent().getIntExtra("buildingid", -1)));
+                    params.put("linkedin", linkedinET.getText().toString());
+                    params.put("twitter", twitterET.getText().toString());
+                    params.put("instagram", instagramET.getText().toString());
+                    params.put("facebook", facebookET.getText().toString());
+                    params.put("image", image);
+                    mPresenter.updateUserInfo(NetworkUtils.getInstance(getApplicationContext()), params);
+                } else {
+                    Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
+
+    private View.OnClickListener chooseBuilding = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), SearchBuildingActivity.class);
+            startActivityForResult(intent, CHOOSE_BUILDING_REQUEST_CODE);
+        }
+    };
+
+    private View.OnClickListener deleteBuilding = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            enterBuildingBTN.setText(null);
+            mBuildingId = null;
+        }
+    };
+
+
+    // method for the back button
+    public void finishActivity(View view) {
+        finish();
+    }
+
+    public void onProfileUpdated(boolean success) {
+        editingProfile = false;
+        if (success) {
+            finish();
+        }
+        else {
+            // implement retry snackbar
+            finish();
         }
     }
 

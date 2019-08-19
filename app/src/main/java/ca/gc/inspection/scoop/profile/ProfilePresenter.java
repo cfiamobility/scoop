@@ -39,11 +39,6 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         mInteractor.getUserInfo(userid);
     }
 
-//    public void getOtherUserInfo(String userid){
-//        mInteractor.getOtherUserInfo(userid);
-//    }
-
-
     /**
      * Parses and maps the response Strings for each Profile Info field
      * @param response JSONObject pulled from the middle-tier
@@ -71,7 +66,6 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -102,69 +96,5 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         }
         return "";
     }
-
 }
-
-
-
-
-
-
-
-
-//	// Request to get the current user's profile information
-//	public void getUserInfo(Context context) {
-//		RequestQueue requestQueue = Volley.newRequestQueue(context);
-//
-//		String url = Config.baseIP + "profile/initialfill/" + Config.currentUser;
-//
-//		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//			@Override
-//			public void onResponse(JSONObject response) {
-//				// Sending the response back to be decomposed
-//				ProfileFragment.informationResponse(response);
-//			}
-//		}, new Response.ErrorListener() {
-//			@Override
-//			public void onErrorResponse(VolleyError error) {}
-//		}) {
-//			@Override
-//			public Map<String, String> getHeaders() throws AuthFailureError {
-//				// inserting the token into the response header that will be sent to the server
-//				Map<String, String> header = new HashMap<>();
-//				header.put("authorization", Config.token);
-//				return header;
-//			}
-//		};
-//		// submitting the request
-//		requestQueue.add(jsonObjectRequest);
-//	}
-//
-//	// Request to get the clicked on user's profile information
-//	public static void getOtherUserInfo(Context context, String userid) {
-//		RequestQueue requestQueue = Volley.newRequestQueue(context);
-//
-//		String url = Config.baseIP + "profile/initialfill/" + userid;
-//
-//		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//			@Override
-//			public void onResponse(JSONObject response) {
-//				// Sending the response back to be decomposed
-//				OtherUserFragment.otherInformationRespone(response);
-//			}
-//		}, new Response.ErrorListener() {
-//			@Override
-//			public void onErrorResponse(VolleyError error) {}
-//		}) {
-//			@Override
-//			public Map<String, String> getHeaders() throws AuthFailureError {
-//				// inserting the token into the response header that will be sent to the server
-//				Map<String, String> header = new HashMap<>();
-//				header.put("authorization", Config.token);
-//				return header;
-//			}
-//		};
-//		// submitting the request
-//		requestQueue.add(jsonObjectRequest);
-//	}
 

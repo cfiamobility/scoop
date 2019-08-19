@@ -1,29 +1,19 @@
 package ca.gc.inspection.scoop.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TableRow;
-import android.widget.TextView;
-
-import java.util.HashMap;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.editprofile.EditProfileActivity;
-import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
-import de.hdodenhof.circleimageview.CircleImageView;
-
 
 /**
  * - ProfileFragment is the screen that is displayed when the profile tab is clicked in the navigation bar
@@ -32,36 +22,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ProfileFragment extends OtherUserFragment {
 
-    // UI Declarations
-    static CircleImageView profileImageIV;
-    ImageView facebookIV, instagramIV, twitterIV, linkedinIV;
-    TextView fullNameTV, roleTV, locationTV;
-    Activity activity;
-    TableRow facebookTR, instagramTR, twitterTR, linkedinTR;
     Button editProfile;
-    TextView facebookTV, instagramTV, twitterTV, linkedinTV;
-
-    // reference to the Presenter
-    private ProfileContract.Presenter mProfilePresenter;
-
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
 
     /**
-     * Invoked by the View in onCreateView in which it constructs the Presenter
-     * @param presenter Presenter to be associated with the View and access later
+     * Required empty default constructor for Fragments
      */
-    public void setPresenter(ProfileContract.Presenter presenter) {
-        mProfilePresenter = presenter;
+    public ProfileFragment() {
     }
 
     /**
      * Creates the View and populates it with the associate Android Views of the Profile Screen
+     * Note: Same as OtherUserFragment, but contains an Edit Profile button
      * @param inflater
      * @param container
      * @param savedInstanceState
-     * @return
+     * @return view with appropriate tablerows and imageviews and tab fragments
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,9 +49,6 @@ public class ProfileFragment extends OtherUserFragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
-//        // Getting the activity from the view
-//        activity = (Activity) view.getContext();
 
         // ImageView Definitions
         profileImageIV = view.findViewById(R.id.fragment_profile_img_profile);
@@ -104,12 +76,7 @@ public class ProfileFragment extends OtherUserFragment {
         editProfile = view.findViewById(R.id.fragment_profile_btn_edit_profile);
 
         // onClick Listener for Edit Button
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), EditProfileActivity.class));
-            }
-        });
+        editProfile.setOnClickListener(v -> startActivity(new Intent(getContext(), EditProfileActivity.class)));
 
         // initializing the tab layout for profile -> posts, likes, comments
         TabLayout tabLayout = view.findViewById(R.id.fragment_profile_tl_profile);
@@ -139,38 +106,13 @@ public class ProfileFragment extends OtherUserFragment {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
         return view;
     }
 
-
     /**
-     * Invoked by the Presenter and stores all profile information pulled from database into respective Views
-     * @param profileInfoFields HashMap of profile information for each field
+     * Overrides Android callback to load in user information on the profile when fragment is resumed
+     * Invokes Presenter method, which invokes Interactor method to get data
      */
-    public void setProfileInfoFields(HashMap<String, String> profileInfoFields) {
-        fullNameTV.setText(profileInfoFields.get("fullname"));
-        profileImageIV.setImageBitmap(CameraUtils.stringToBitmap(profileInfoFields.get("profileImageEncoded")));
-
-        displaySocialMediaTR(profileInfoFields.get("twitterURL"), twitterTR, twitterTV, "twitter");
-        displaySocialMediaTR(profileInfoFields.get("linkedinURL"), linkedinTR, linkedinTV, "linkedin");
-        displaySocialMediaTR(profileInfoFields.get("facebookURL"), facebookTR, facebookTV, "facebook");
-        displaySocialMediaTR(profileInfoFields.get("instagramURL"), instagramTR, instagramTV, "instagram");
-
-        if (profileInfoFields.get("role").equals("")) {
-            roleTV.setVisibility(View.GONE);
-        } else {
-            roleTV.setText(profileInfoFields.get("role"));
-        }
-
-        Log.i("LOCATION:",profileInfoFields.get("location"));
-        if (profileInfoFields.get("location").equals("")) {
-            locationTV.setVisibility(View.GONE);
-        } else {
-            locationTV.setText(profileInfoFields.get("location"));
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();

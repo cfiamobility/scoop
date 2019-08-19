@@ -1,6 +1,5 @@
 package ca.gc.inspection.scoop.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +22,9 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * - OtherUserFragment is the screen that is displayed when a users profile/name is clicked on any screen
+ * - OtherUserFragment is the screen that is displayed when a users profile/name other than the current user is clicked on any screen
  * - It holds the profile information as well as a frame (ViewPagerAdapater) to display the three profile tabs and the respective fragments
  * - This is one of two Views for the Profile action case
- * - IMPORTANT NOTE: If user clicks on their own profile/name not via the Profile tab, this View is used instead of the ProfileFragment View
  */
 public class OtherUserFragment extends Fragment implements ProfileContract.View {
 
@@ -35,17 +32,18 @@ public class OtherUserFragment extends Fragment implements ProfileContract.View 
 	static CircleImageView profileImageIV;
 	ImageView facebookIV, instagramIV, twitterIV, linkedinIV;
 	TextView fullNameTV, roleTV, locationTV;
-	Activity activity;
 	TableRow facebookTR, instagramTR, twitterTR, linkedinTR;
 	TextView facebookTV, instagramTV, twitterTV, linkedinTV;
 
 	public static String title;
 
-    private ProfileContract.Presenter mProfilePresenter;
+    protected ProfileContract.Presenter mProfilePresenter;
     private String userid;
 
+    /**
+     * Required empty default constructor for Fragments
+     */
     public OtherUserFragment() {
-		// Required empty public constructor
 	}
 
     /**
@@ -61,7 +59,7 @@ public class OtherUserFragment extends Fragment implements ProfileContract.View 
      * @param inflater
      * @param container
      * @param savedInstanceState
-     * @return
+     * @return view with appropriate tablerows and imageviews and tab fragments
      */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -176,42 +174,43 @@ public class OtherUserFragment extends Fragment implements ProfileContract.View 
     }
 
     /**
-     * Setting onclick listeners for the social media text views
+     * Setting onclick listeners for the social media table rows and opens the social media profile
+     * in browser
      *
-     * @param url
-     * @param tableRow
+     * @param url user's personal social media url
+     * @param tableRow social media table row
      */
     protected void SocialClicked(final String url, final TableRow tableRow, String socialMediaType) {
         if (url != null) {
-            tableRow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Opens social media on chosen application
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            tableRow.setOnClickListener(v -> {
+                // Opens social media on chosen application
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
 
-                    switch(socialMediaType){
-                        case ("facebook"):
-                            intent.setData(Uri.parse("http://www.facebook.com/" + url));
-                            break;
-                        case ("instagram"):
-                            intent.setData(Uri.parse("http://www.instagram.com/" + url));
-                            break;
-                        case ("linkedin"):
-                            intent.setData(Uri.parse("http://www.linkedin.com/in/" + url));
-                            break;
-                        case ("twitter"):
-                            intent.setData(Uri.parse("http://www.twitter.com/" + url));
-                            break;
-                    }
-
-                    getContext().startActivity(intent);
+                switch(socialMediaType){
+                    case ("facebook"):
+                        intent.setData(Uri.parse("http://www.facebook.com/" + url));
+                        break;
+                    case ("instagram"):
+                        intent.setData(Uri.parse("http://www.instagram.com/" + url));
+                        break;
+                    case ("linkedin"):
+                        intent.setData(Uri.parse("http://www.linkedin.com/in/" + url));
+                        break;
+                    case ("twitter"):
+                        intent.setData(Uri.parse("http://www.twitter.com/" + url));
+                        break;
                 }
+                getContext().startActivity(intent);
             });
         }
     }
 
+    /**
+     * Overrides Android callback to load in updated other user information on the profile when fragment is resumed
+     * Invokes Presenter method, which invokes Interactor method to get data
+     */
     @Override
     public void onResume() {
         super.onResume();
