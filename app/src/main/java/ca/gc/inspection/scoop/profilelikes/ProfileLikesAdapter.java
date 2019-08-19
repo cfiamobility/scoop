@@ -51,13 +51,15 @@ public class ProfileLikesAdapter extends RecyclerView.Adapter<ProfileLikesViewHo
     public void onBindViewHolder(@NonNull ProfileLikesViewHolder profilePostViewHolder, int i) {
         mProfileLikesPresenter.onBindViewHolderAtPosition(profilePostViewHolder, i);
         PostCommentFragment.setDisplayPostListener(profilePostViewHolder,
-                mProfileLikesPresenter.getActivityIdByIndex(i));
+                mProfileLikesPresenter.getActivityIdByIndex(i), mProfileLikesPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setLikesListener(profilePostViewHolder, i);
         PostCommentFragment.setUserInfoListener(profilePostViewHolder,
                 mProfileLikesPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setPostOptionsListener(profilePostViewHolder, i,
-                mProfileLikesPresenter.getActivityIdByIndex(i), mProfileLikesPresenter.getPosterIdByIndex(i), mProfileLikesPresenter.getSavedStatusByIndex(i),
+                mProfileLikesPresenter.getActivityIdByIndex(i), mProfileLikesPresenter.getPosterIdByIndex(i), mProfileLikesPresenter.getSavedStateByIndex(i),
                 mProfileLikesPresenter.getPosterIdByIndex(0), mProfileLikesView);
+        PostCommentFragment.setSaveListener(profilePostViewHolder, i);
+        PostCommentFragment.setUnsaveListener(profilePostViewHolder, i);
     }
 
     @Override

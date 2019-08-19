@@ -37,6 +37,7 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.ImageFilePath;
 import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -52,6 +53,8 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     private EditText postTitle, postText;
     private ImageView postImage;
     private CoordinatorLayout mCoordinatorLayout;
+    private CircleImageView profileImage;
+
 
     private TextView counter;
     private final TextWatcher mTextEditorWatcher = new TextWatcher() {
@@ -105,6 +108,9 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         counter = findViewById(R.id.activity_create_post_txt_word_counter);
 
         mCoordinatorLayout = findViewById(R.id.activity_create_post_coordinator);
+
+        profileImage = findViewById(R.id.activity_create_post_img_profile);
+        mPresenter.getUserProfileImage(NetworkUtils.getInstance(this));
 
         Button camera = findViewById(R.id.activity_create_post_btn_camera);
         Button cameraRoll = findViewById(R.id.activity_create_post_btn_image);
@@ -297,5 +303,14 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
             });
             mSnackbar.show();
         }
+    }
+
+    /**
+     * Sets the profileImageCircle with the users profileimage taken from the database.
+     * @param profileImageBitmap
+     */
+    @Override
+    public void setUserProfileImage(Bitmap profileImageBitmap) {
+        profileImage.setImageBitmap(profileImageBitmap);
     }
 }

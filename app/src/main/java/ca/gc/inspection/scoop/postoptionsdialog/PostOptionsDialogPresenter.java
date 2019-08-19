@@ -26,27 +26,10 @@ public class PostOptionsDialogPresenter implements PostOptionsDialogContract.Pre
         mInteractor = new PostOptionsDialogInteractor(this);
     }
 
-    /**
-     * Provides save post information from the View and passes it the Interactor
-     * @param network Allows save post information to be added to singleton request queue
-     * @param activityid ID of the activity in which the user is click on
-     * @param userid ID of the user
-     */
-    public void savePost(NetworkUtils network, final String activityid, final String userid, PostCommentViewHolder viewHolder, Boolean savedStatus, int i){
-        viewHolder.updateSavedStatus(i, savedStatus);
-        mInteractor.savePost(network, activityid, userid);
-    }
-
     public void deletePost(NetworkUtils network, final String activityid, final String userid){
         Log.i("inside", "postoptionsdialogpresenter");
         mInteractor.deletePost(network, activityid, userid);
     }
-
-
-   public void setSaveResponseMessage(String response){
-        mView.setSaveResponseMessage(response);
-   }
-
 
     public void setDeleteResponseMessage(String response) {
         mView.setDeleteResponseMessage(response);

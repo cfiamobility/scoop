@@ -40,7 +40,7 @@ class DisplayPostInteractor extends FeedPostInteractor {
      * @param comment user inputted comment
      * @param otherPostActivity the Post the current user is commenting to
      */
-    public void addPostComment(final String userId, final String comment, final String otherPostActivity){
+    public void addPostComment(final String userId, final String comment, final String otherPostActivity, final String posterId){
         String URL = Config.baseIP + "add-comment";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
@@ -77,6 +77,7 @@ class DisplayPostInteractor extends FeedPostInteractor {
                 params.put("activitytype", Integer.toString(Config.commentType));
                 params.put("posttext", comment);
                 params.put("activityreference", otherPostActivity);
+                params.put("posterid", posterId);
                 return params;
             }
 

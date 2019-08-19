@@ -166,6 +166,10 @@
     <string name="Languages">Languages</string>
 
 
+    <!-- Notifications -->
+    <string name="notifications_today">Today</string>
+    <string name="notifications_recent">Recent</string>
+    <string name="notifications_no_new">No New Notifications\!</string>
 
 
 </resources>

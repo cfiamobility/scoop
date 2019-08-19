@@ -59,7 +59,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
     public void onBindViewHolder(@NonNull PostCommentViewHolder postCommentViewHolder, int i) {
         mPostCommentPresenter.onBindViewHolderAtPosition(postCommentViewHolder, i);
         PostCommentFragment.setDisplayPostListener(postCommentViewHolder,
-                mPostCommentPresenter.getActivityIdByIndex(i));
+                mPostCommentPresenter.getActivityIdByIndex(i), mPostCommentPresenter.getPosterIdByIndex(i));
         PostCommentFragment.setLikesListener(postCommentViewHolder, i);
         PostCommentFragment.setUserInfoListener(postCommentViewHolder,
                 mPostCommentPresenter.getPosterIdByIndex(i));

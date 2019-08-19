@@ -4,6 +4,7 @@ import org.json.JSONException;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
+import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
 import ca.gc.inspection.scoop.util.TextFormat;
 
 /**
@@ -61,7 +62,7 @@ public interface PostCommentContract {
             ViewHolder setLikeState(LikeState likeState);
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
-            ViewHolder setSavedStatus(Boolean savedStatus);
+            ViewHolder setSavedState(Boolean savedState);
         }
     }
 
@@ -76,13 +77,13 @@ public interface PostCommentContract {
             int getItemCount();
             String getPosterIdByIndex(int i);   // TODO can move into ViewHolderAPI
             String getActivityIdByIndex(int i); // TODO can move into ViewHolderAPI
-            Boolean getSavedStatusByIndex(int i);
+            Boolean getSavedStateByIndex(int i);
         }
 
         interface ViewHolderAPI {
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
-            void updateSavedStatus(PostCommentContract.View.ViewHolder viewHolderInterface, int i, Boolean savedStatus) throws JSONException;
+            void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException;
         }
 
     }
