@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ca.gc.inspection.scoop">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -17,38 +18,58 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".displaypost.DisplayPostActivity"></activity>
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".displaypost.DisplayPostActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".search.SearchActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".info.InfoActivity" />
-        <activity android:name=".settings.SettingsActivity" />
-        <activity android:name=".editprofile.EditProfileActivity" />
-        <activity android:name=".feedpost.SavedPostActivity" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".info.InfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".editprofile.EditProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".feedpost.SavedPostActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".createpost.CreatePostActivity"
-            android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
+            android:windowSoftInputMode="adjustResize|stateAlwaysVisible"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".signup.SignUpActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".splashscreen.SplashScreenActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".profile.OtherUserActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".profile.OtherUserActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".searchbuilding.SearchBuildingActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"
@@ -61,7 +82,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
     </application>
