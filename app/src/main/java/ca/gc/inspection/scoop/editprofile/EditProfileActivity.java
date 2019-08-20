@@ -49,22 +49,23 @@ import static ca.gc.inspection.scoop.util.CameraUtils.imageOrientationValidator;
 import static ca.gc.inspection.scoop.util.StringUtils.capitalizeFirstLetter;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
+/**
+ * The EditProfileActivity is the screen the user sees when they attempt to edit their profile
+ * This is the View for the Edit Profile action case
+ * Allows the user to edit their profile information such as their first name, last name, address,
+ * location, position, division, and social media.
+ */
 public class EditProfileActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener, EditProfileContract.View {
-	/**
-	 * Implements the View in the EditProfileContract interface to follow MVP architecture.
-	 * Allows the user to edit their profile information such as their first name, last name, address,
-     * and social media.
-	 */
 
     private enum EditTextType {
-        POSITION, ADDRESS, DIVISION
+        POSITION, DIVISION
     }
 
     private EditProfileContract.Presenter mPresenter;
+    private static final String TAG = "EditProfileActivity";
 
-	// Request codes for intents
-	public static final int TAKE_PIC_REQUEST_CODE = 0;
+    // Request codes for intents
 	public static final int CHOOSE_PIC_REQUEST_CODE = 1;
 	public static final int CHOOSE_BUILDING_REQUEST_CODE = 2;
 	private static final int MY_CAMERA_PERMISSION_CODE = 100;
@@ -80,12 +81,9 @@ public class EditProfileActivity extends AppCompatActivity implements
 	TextView enterBuildingBTN;
 	ImageButton deleteBuildingBTN;
 
-
 	// Application Side Variable Declarations
-	static String userID, currentPhotoPath;
+	static String userID;
 	Bitmap bitmap;
-	private static final String TAG = "EditProfileActivity";
-
 	// stored local variables
 	String mBuildingId;
 
@@ -101,8 +99,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_profile);
 
-
-		setPresenter(new EditProfilePresenter(this));
+		setPresenter(new EditProfilePresenter(this, NetworkUtils.getInstance(this)));
 
 		// EditText Definitions
 		firstNameET = findViewById(R.id.activity_edit_profile_et_first_name);
@@ -140,16 +137,13 @@ public class EditProfileActivity extends AppCompatActivity implements
 		// DEFAULT TO BE CHANGED TO ""
 		userID = sharedPreferences.getString("userid", "");
 
-		Log.i("userid", userID + "_");
-
 		// If userID is unavailable.
 		if (userID.equals("")) {
 			finish();
 		}
 
 		// Searches for user's info to autofill the edittext
-		mPresenter.initialFill(NetworkUtils.getInstance(this));
-//		Log.i(TAG + ".onCreate", CameraUtils.bitmapToString(bitmap));
+		mPresenter.initialFill();
 
 		// Sets up the Position, Office Address and Division AutoCompletes
 		autoComplete();
@@ -212,7 +206,6 @@ public class EditProfileActivity extends AppCompatActivity implements
 				// Profile picture setting and gtting
                 bitmap = CameraUtils.stringToBitmap(response.get("profileimage").toString());
                 previewProfilePic.setImageBitmap(bitmap);
-				Log.i(TAG + ".setInitialFill", response.get("profileimage").toString());
 
 				// If user has already inputted a position
 				if (!response.get("positionid").toString().equals("null")) {
@@ -260,10 +253,10 @@ public class EditProfileActivity extends AppCompatActivity implements
 		}
 	}
 
-    /** Method to establish/set up the auto complete text views for position, division and building
+    /**
+     * Method to establish/set up the auto complete text views for position, division and building
      */
 	private void autoComplete() {
-
 		// Autocomplete for position edittext
 		addTextChangedListenerTo(positionET, EditTextType.POSITION);
 
@@ -276,7 +269,6 @@ public class EditProfileActivity extends AppCompatActivity implements
     }
 
     /** Method to setup the front end of autocomplete text view for positions
-     *
      * @param positionAutoComplete
      */
     public void setPositionETAdapter(ArrayList<String> positionAutoComplete) {
@@ -308,36 +300,31 @@ public class EditProfileActivity extends AppCompatActivity implements
 
 		// Button to take a picture
 		Button takePhotoButton = dialog.findViewById(R.id.dialog_change_profile_picture_btn_photo);
-		takePhotoButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// closing the dialog box
-				dialog.dismiss();
+		takePhotoButton.setOnClickListener(v -> {
+            // closing the dialog box
+            dialog.dismiss();
 
-				// Checks for permission to write (implicit read) externnal data and camera permissions
-				if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-					requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_CAMERA_PERMISSION_CODE);
-				} else {
-					// Goes to this method to open camera
-					takePicture();
-				}
-			}
-		});
+            // Checks for permission to write (implicit read) externnal data and camera permissions
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_CAMERA_PERMISSION_CODE);
+            } else {
+                // Goes to this method to open camera
+                takePicture();
+            }
+        });
 
 		// Button to open gallery and choose a picture
 		Button photoGalleryButton = dialog.findViewById(R.id.dialog_change_profile_picture_btn_gallery);
-		photoGalleryButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Closing the dialog box
-				dialog.dismiss();
+		photoGalleryButton.setOnClickListener(v -> {
+            // Closing the dialog box
+            dialog.dismiss();
 
-				// Intent to open gallery
-				Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
-				choosePictureIntent.setType("image/*");
-				startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), CHOOSE_PIC_REQUEST_CODE);
-			}
-		});
+            // Intent to open gallery
+            Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            choosePictureIntent.setType("image/*");
+            startActivityForResult(Intent.createChooser(choosePictureIntent, "Select Picture"), CHOOSE_PIC_REQUEST_CODE);
+        });
 
 		// so the buttons are shown
 		takePhotoButton.setEnabled(true);
@@ -346,7 +333,6 @@ public class EditProfileActivity extends AppCompatActivity implements
 		// show the custom dialog
 		dialog.show();
 	}
-
 
 	// Method thats runs when the user selects take a picture when changing profile picture
 	public void takePicture() {
@@ -466,10 +452,10 @@ public class EditProfileActivity extends AppCompatActivity implements
         private void autoComplete(String textChangedCapitalized) {
 	        switch (mType) {
                 case POSITION:
-                    mPresenter.getPositionAutoCompleteFromDB(NetworkUtils.getInstance(getApplicationContext()), textChangedCapitalized);
+                    mPresenter.getPositionAutoCompleteFromDB(textChangedCapitalized);
                     break;
                 case DIVISION:
-                    mPresenter.getDivisionAutoCompleteFromDB(NetworkUtils.getInstance(getApplicationContext()), textChangedCapitalized);
+                    mPresenter.getDivisionAutoCompleteFromDB(textChangedCapitalized);
                     break;
 	        }
         }
@@ -531,7 +517,7 @@ public class EditProfileActivity extends AppCompatActivity implements
                     params.put("instagram", instagramET.getText().toString());
                     params.put("facebook", facebookET.getText().toString());
                     params.put("image", image);
-                    mPresenter.updateUserInfo(NetworkUtils.getInstance(getApplicationContext()), params);
+                    mPresenter.updateUserInfo(params);
                 } else {
                     Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
                 }
@@ -539,13 +525,9 @@ public class EditProfileActivity extends AppCompatActivity implements
         }
     };
 
-
-    private View.OnClickListener chooseBuilding = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(getApplicationContext(), SearchBuildingActivity.class);
-            startActivityForResult(intent, CHOOSE_BUILDING_REQUEST_CODE);
-        }
+    private View.OnClickListener chooseBuilding = v -> {
+        Intent intent = new Intent(getApplicationContext(), SearchBuildingActivity.class);
+        startActivityForResult(intent, CHOOSE_BUILDING_REQUEST_CODE);
     };
 
     private View.OnClickListener deleteBuilding = new View.OnClickListener(){
@@ -556,7 +538,6 @@ public class EditProfileActivity extends AppCompatActivity implements
         }
     };
 
-
     // method for the back button
     public void finishActivity(View view) {
         finish();
@@ -566,9 +547,8 @@ public class EditProfileActivity extends AppCompatActivity implements
         editingProfile = false;
         if (success) {
             finish();
-        }
-        else {
-            // implement retry snackbar
+        } else {
+            //TODO: implement retry snackbar
             finish();
         }
     }

@@ -206,12 +206,11 @@
                 android:id="@+id/activity_edit_profile_txt_linkedin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/divider13"
-                android:layout_below="@+id/divider11"
+                android:layout_below="@+id/divider14"
                 android:layout_alignEnd="@+id/activity_edit_profile_txt_instagram"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="0dp"
                 android:fontFamily="@font/roboto"
@@ -223,8 +222,7 @@
                 android:id="@+id/activity_edit_profile_linkedin_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/divider13"
-                android:layout_below="@+id/divider11"
+                android:layout_below="@+id/divider14"
                 android:layout_alignParentEnd="false"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
@@ -239,7 +237,7 @@
                 android:id="@+id/activity_edit_profile_et_linkedin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider11"
+                android:layout_below="@+id/divider14"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="22dp"
@@ -256,7 +254,7 @@
                 android:id="@+id/divider13"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/activity_edit_profile_et_linkedin"
+                android:layout_below="@+id/activity_edit_profile_et_facebook"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
@@ -266,7 +264,7 @@
                 android:id="@+id/activity_edit_profile_txt_twitter"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider13"
+                android:layout_below="@+id/divider19"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="9dp"
@@ -279,7 +277,7 @@
                 android:id="@+id/activity_edit_profile_twitter_url"
                 android:layout_width="98dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider13"
+                android:layout_below="@+id/divider19"
                 android:layout_alignParentEnd="false"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
@@ -293,7 +291,7 @@
                 android:id="@+id/activity_edit_profile_et_twitter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider13"
+                android:layout_below="@+id/divider19"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="22dp"
@@ -310,7 +308,7 @@
                 android:id="@+id/divider14"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/activity_edit_profile_et_twitter"
+                android:layout_below="@+id/activity_edit_profile_et_instagram"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
@@ -330,10 +328,10 @@
                 android:id="@+id/activity_edit_profile_txt_facebook"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider14"
+                android:layout_below="@+id/divider11"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto"
                 android:text="@string/facebook"
                 android:textSize="18sp"
@@ -343,10 +341,10 @@
                 android:id="@+id/activity_edit_profile_facebook_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider14"
+                android:layout_below="@+id/divider11"
                 android:layout_alignParentEnd="false"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_txt_facebook"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/roboto"
@@ -356,11 +354,11 @@
 
             <EditText
                 android:id="@+id/activity_edit_profile_et_facebook"
-                android:layout_width="106dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider14"
+                android:layout_below="@+id/divider11"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="22dp"
                 android:layout_toEndOf="@+id/activity_edit_profile_facebook_url"
                 android:background="@android:color/transparent"
@@ -375,7 +373,7 @@
                 android:id="@+id/divider15"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/activity_edit_profile_txt_instagram"
+                android:layout_below="@+id/activity_edit_profile_txt_twitter"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="0dp"
@@ -479,7 +477,7 @@
                 android:id="@+id/activity_edit_profile_txt_instagram"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider19"
+                android:layout_below="@+id/divider13"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="8dp"
@@ -492,7 +490,7 @@
                 android:id="@+id/activity_edit_profile_instagram_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider19"
+                android:layout_below="@+id/divider13"
                 android:layout_alignParentEnd="false"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
@@ -501,14 +499,13 @@
                 android:fontFamily="@font/roboto"
                 android:text="@string/instagramURL"
                 android:textSize="18sp" />
-            android:textSize="18sp"
-            android:textStyle="bold" />
+
 
             <EditText
                 android:id="@+id/activity_edit_profile_et_instagram"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/divider19"
+                android:layout_below="@+id/divider13"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="22dp"
@@ -521,7 +518,6 @@
                 android:inputType="textPersonName"
                 android:textCursorDrawable="@color/medium_blue" />
 
-
             <View
                 android:id="@+id/divider26"
                 android:layout_width="match_parent"
@@ -532,8 +528,6 @@
                 android:layout_marginEnd="0dp"
                 android:background="?android:attr/listDivider"
                 android:elevation="5dp" />
-            android:background="?android:attr/listDivider"
-            android:elevation="5dp" />
 
             <ImageButton
                 android:id="@+id/delete_building_button"
@@ -545,10 +539,9 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="3dp"
                 android:layout_marginBottom="3dp"
-                android:tint="@color/secondary"
-                app:srcCompat="@android:drawable/ic_input_delete"
                 android:background="@android:color/transparent"
-                />
+                android:tint="@color/secondary"
+                app:srcCompat="@android:drawable/ic_input_delete" />
 
         </RelativeLayout>
     </ScrollView>

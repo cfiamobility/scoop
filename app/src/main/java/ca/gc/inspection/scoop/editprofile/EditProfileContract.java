@@ -5,36 +5,40 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
-import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 
+/**
+ * This interface is the contract that communicates the methods between the Edit
+ * Profile View (EditProfileActivity) and the Edit Profile Presenter (EditProfilePresenter)
+ */
 public interface EditProfileContract {
+
+    /**
+     * View interface implemented by EditProfileFragment
+     */
     interface View extends BaseView<Presenter> {
 
         void setPositionETAdapter(ArrayList<String> positionAutoComplete);
-
-        //void setBuildingETAdapter(ArrayList<String> buildingsAutoComplete);
 
         void setDivisionETAdapter(ArrayList<String> divisionsAutoComplete);
 
         void setInitialFill(JSONObject response);
 
-        // void setAddressSuggestionList(ArrayList<String> cityAL, ArrayList<String> provinceAL);
-
         void onProfileUpdated(boolean success);
     }
 
+    /**
+     * Presenter interface implemented by EditProfilePresenter
+     */
     interface Presenter extends BasePresenter {
 
-        void initialFill(NetworkUtils instance);
+        void initialFill();
 
-        void getPositionAutoCompleteFromDB(NetworkUtils instance, String positionChangedCapped);
+        void getPositionAutoCompleteFromDB(String positionChangedCapped);
 
-        //void getAddressAutoCompleteFromDB(NetworkUtils instance, String addressChangedCapitalized);
+        void getDivisionAutoCompleteFromDB(String divisionChangedCapitalized);
 
-        void getDivisionAutoCompleteFromDB(NetworkUtils instance, String divisionChangedCapitalized);
-
-        void updateUserInfo(NetworkUtils network, Map<String, String> params);
+        void updateUserInfo(Map<String, String> params);
     }
 }
