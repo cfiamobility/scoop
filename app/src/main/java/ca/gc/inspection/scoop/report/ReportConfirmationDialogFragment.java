@@ -16,9 +16,6 @@ import ca.gc.inspection.scoop.R;
  * - The ReportConfirmationDialogFragment is the dialog that appears when users submit a report from the ReportOptionsDialog
  */
 public class ReportConfirmationDialogFragment extends DialogFragment {
-
-    public static String TAG = "Report Thank You Dialog";
-
     // UI Declarations
     Button okButton;
 
@@ -37,15 +34,14 @@ public class ReportConfirmationDialogFragment extends DialogFragment {
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         okButton = view.findViewById(R.id.dialog_report_ok_btn);
-        okButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        okButton.setOnClickListener(v -> dismiss());
 
         return view;
     }
 
+    /**
+     * Sets dimensions of report dialog layout similar to ReportDialogFragment
+     */
     @Override
     public void onStart() {
         super.onStart();

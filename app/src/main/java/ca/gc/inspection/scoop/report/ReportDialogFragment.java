@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +30,6 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
  * - This is the View for the Report action case
  */
 public class ReportDialogFragment extends DialogFragment implements ReportContract.View{
-
-    public static String TAG = "Report Dialog Full Screen";
-
     // UI Declarations
     Button submitButton;
     EditText reportBodyET;
@@ -88,7 +84,7 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
             public boolean isEnabled(int position){
                 if (position == 0) {
                     // Disable the first item from Spinner
-                    // First item will be use for hint
+                    // First item will be used for hint
                     return false;
                 } else {
                     return true;
@@ -117,26 +113,21 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
         spinner.setAdapter(adapter);
 
         //listener for the submit button
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String activityId = getArguments().getString("ACTIVITY_ID");
-                String posterId = getArguments().getString("POSTER_ID");
-                String reportReason = spinner.getSelectedItem().toString();
-                String reportBody = reportBodyET.getText().toString();
+        submitButton.setOnClickListener(v -> {
+            String activityId = getArguments().getString("ACTIVITY_ID");
+            String posterId = getArguments().getString("POSTER_ID");
+            String reportReason = spinner.getSelectedItem().toString();
+            String reportBody = reportBodyET.getText().toString();
 
-                Log.i("REPORT_REASON", reportReason);
-                Log.i("REPORT_BODY", reportBody);
-
-                //sets error messages, otherwise Presenter calls submitReport with necessary parameters
-                if (reportReason.equals("Select a reason…")){
-                    setReportFailMessage("Please select one of the reasons listed from the dropdown");
-                } else if(reportBody.equals("")){
-                    setReportFailMessage("Please give us more details about the reason for your report");
-                } else {
-                    mPresenter.submitReport(activityId, posterId, Config.currentUser, reportReason, reportBody);
-                }
-
+            //sets error messages, otherwise Presenter calls submitReport with necessary parameters
+            if (reportReason.equals("Select a reason…")){
+                setReportFailMessage("ERROR_REASON_REPORT");
+            } else if(reportBody.equals("")){
+                setReportFailMessage("ERROR_BODY_REPORT");
+            } else {
+                mPresenter.submitReport(activityId, posterId, Config.currentUser, reportReason, reportBody);
             }
+
         });
         return view;
     }
@@ -163,17 +154,29 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
     public void reportConfirmation(){
         ReportConfirmationDialogFragment dialog = new ReportConfirmationDialogFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        dialog.show(ft, ReportConfirmationDialogFragment.TAG);
-        Log.i("BUTTON PRESSED", "Thank you report");
+        dialog.show(ft, "ReportConfirmationDialogFragment");
         dismiss();
     }
 
     /**
      * Method to set a toast message on report form submission error
-     * @param message error message
      */
     public void setReportFailMessage(String message){
-        Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
+        String errorMessage;
+        switch (message){
+            case "ERROR_REASON_REPORT":
+                errorMessage = getResources().getString(R.string.report_error_reason);
+                break;
+            case "ERROR_BODY_REPORT":
+                errorMessage = getResources().getString(R.string.report_error_body);
+                break;
+            case "ERROR_DUPLICATE_REPORT":
+                errorMessage = getResources().getString(R.string.report_error_duplicate);
+                break;
+            default:
+                errorMessage = getResources().getString(R.string.report_error_default);
+        }
+        Toast.makeText(getContext(),errorMessage,Toast.LENGTH_SHORT).show();
     }
 
 }

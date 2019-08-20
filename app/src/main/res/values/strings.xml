@@ -47,7 +47,7 @@
 
 
     <string name="title">TITLE</string>
-    <string name="post_template">Write something...</string>
+    <string name="post_template">Write something…</string>
 
     <!-- Post Options -->
     <string name="share">Share</string>
@@ -155,7 +155,11 @@
     <string name="tell_more">Help us understand what\'s happening&#8230;</string>
     <string name="reason">Choose a reason for reporting this post:</string>
     <string name="submit">Submit</string>
-    <string name="OK">Ok</string>
+    <string name="OK">OK</string>
+    <string name="report_error_duplicate">Failed to report post. You may have already reported this post. Thank you.</string>
+    <string name="report_error_reason">Please select one of the reasons listed from the dropdown</string>
+    <string name="report_error_body">Please give us more details about the reason for your report</string>
+    <string name="report_error_default">Something went wrong. Please try again later.</string>
     <string name="thank_you_message">Thank you for helping keep the Scoop community safe
     and fun for everyone. Remember, we don\'t reveal who submitted reports to the person
         who created the post or comment.\n\nOur team will review the post and if it violates our Community Guidelines or Terms of Use,
