@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/dialog_lose_edits_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_marginStart="15dp"
+        android:textAlignment="textStart"
+        android:text="@string/edit_comment_lose_data"/>
+
+    <Button
+        android:id="@+id/dialog_lose_edits_cancel"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/dialog_lose_edits_text"
+        android:layout_marginStart="30dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/light_blue"
+        android:fontFamily="@font/roboto"
+        android:padding="15dp"
+        android:text="@string/edit_comment_lose_data_cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/dialog_lose_edits_confirm"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/dialog_lose_edits_text"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/secondary"
+        android:fontFamily="@font/roboto"
+        android:padding="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="@string/edit_comment_lose_data_discard"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

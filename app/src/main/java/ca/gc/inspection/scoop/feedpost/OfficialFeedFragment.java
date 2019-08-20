@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -19,7 +20,8 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  */
 public class OfficialFeedFragment extends Fragment implements
         FeedPostContract.View,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widget
     private RecyclerView mRecyclerView;
@@ -98,7 +100,6 @@ public class OfficialFeedFragment extends Fragment implements
     public void onDeletePostComment(boolean isPost) {
         onRefresh();
     }
-
 
 //    /**
 //     * FROM ADAPTER

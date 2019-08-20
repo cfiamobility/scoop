@@ -1,5 +1,6 @@
 package ca.gc.inspection.scoop.createpost;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -13,12 +14,27 @@ import ca.gc.inspection.scoop.util.CameraUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
+import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-class CreatePostInteractor {
+public class CreatePostInteractor {
+    private static final String TAG = "CreatePostInteractor";
+
     private CreatePostPresenter mPresenter;
-    CreatePostInteractor(CreatePostPresenter presenter) {
-        mPresenter = presenter;
+
+    protected CreatePostInteractor(CreatePostPresenter presenter) {
+        setPresenter(presenter);
     }
+
+    /**
+     * Can be called by child Interactor to set the parent's presenter as a casted down version without
+     * the parent creating a new object
+     *
+     * @param presenter    Handles database callbacks
+     */
+    public void setPresenter(@NonNull CreatePostPresenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
+
     /**
      * Sends post to database using RequestQueue.
      *
@@ -30,33 +46,52 @@ class CreatePostInteractor {
      */
     void sendPostToDatabase(NetworkUtils network, final String userId, final String title, final String text, final String imageBitmap) {
         String url = Config.baseIP + "post/add-post";
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+
+        Map<String, String>  params = new HashMap<>();
+        params.put("userid", userId);
+        params.put("activitytype", Integer.toString(Config.postType));
+        params.put("posttitle", title);
+        params.put("posttext", text);
+        params.put("postimage", imageBitmap);
+
+        Log.d(TAG + ".sendPostToDatabase", params.toString());
+
+        StringRequest postRequest = newPostRequest(mPresenter, null, url, params);
+        network.addToRequestQueue(postRequest);
+    }
+
+    /**
+     * Static helper method to create a StringRequest of type Post.
+     * Unlike GET, POST passes parameters in the message body instead of url
+     * @param postRequestReceiver   Instance which implements the PostRequestReceiver to receive callbacks
+     * @param interactorBundle      Any implementation of interactor Bundle
+     * @param url
+     * @param params
+     * @return
+     */
+    public static StringRequest newPostRequest(PostRequestReceiver postRequestReceiver, InteractorBundle interactorBundle,
+                                               String url, Map<String, String> params) {
+        return new StringRequest(Request.Method.POST, url,
                 response -> {
                     // response
-                    Log.d("Response", response);
+                    Log.d(TAG + ".newPostRequest", response.getClass().toString() + ": " + response);
                     if (response.contains(DATABASE_RESPONSE_SUCCESS)){
-                        Log.i("Info", "We good");
-                        mPresenter.onPostCreated(true);
+                        Log.i(TAG + ".newPostRequest", "response success");
+                        postRequestReceiver.onDatabaseResponse(true, interactorBundle);
                     }
                     else {
-                        mPresenter.onPostCreated(false);
+                        postRequestReceiver.onDatabaseResponse(false, interactorBundle);
                     }
                 },
                 error -> {
                     // error
-                    Log.d("Error.Response", String.valueOf(error));
-                    mPresenter.onPostCreated(false);
+                    Log.d(TAG + ".newPostRequest", "Error.Response: " + String.valueOf(error));
+                    postRequestReceiver.onDatabaseResponse(false, interactorBundle);
                 }
         ) {
             @Override
             protected Map<String, String> getParams()
             {
-                Map<String, String>  params = new HashMap<>();
-                params.put("userid", userId); // Post test user
-                params.put("activitytype", Integer.toString(Config.postType));
-                params.put("posttitle", title);
-                params.put("posttext", text);
-                params.put("postimage", imageBitmap);
                 return params;
             }
             @Override
@@ -67,14 +102,13 @@ class CreatePostInteractor {
                 return header;
             }
         };
-        network.addToRequestQueue(postRequest);
     }
 
-    void getUserProfileImage(NetworkUtils network){
+    public void getUserProfileImage(NetworkUtils network){
         String url = Config.baseIP + "post/create-post-profile-image/" + Config.currentUser;
         StringRequest getRequest = new StringRequest(Request.Method.GET, url,
-            response -> mPresenter.setUserProfileImage(CameraUtils.stringToBitmap(response)),
-            error -> mPresenter.setUserProfileImage(null)) {
+            response -> mPresenter.setUserProfileImageFromDatabaseResponse(CameraUtils.stringToBitmap(response)),
+            error -> mPresenter.setUserProfileImageFromDatabaseResponse(null)) {
             @Override
             public Map<String, String> getHeaders() {
                 // inserting the token into the response header that will be sent to the server

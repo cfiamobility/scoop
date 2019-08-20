@@ -1,10 +1,7 @@
 package ca.gc.inspection.scoop.profilelikes;
 
-
-import org.json.JSONException;
-
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
 
 
@@ -30,8 +27,7 @@ public interface ProfileLikesContract extends ProfileCommentContract {
      * If communication is required within the View only or Presenter only, the object itself should be passed in
      * to avoid leaking access to internal methods in the contract.
      *
-     * ProfileCommentContract is the base contract and is extended by ProfileLikesContract which
-     * is further extended by FeedPostContract.
+     * See PostCommentContract for inheritance hierarchy for Posts/Comments
      */
 
     interface View extends BaseView<Presenter> {
@@ -43,11 +39,11 @@ public interface ProfileLikesContract extends ProfileCommentContract {
 
         void onLoadedDataFromDatabase();
 
-
         interface Adapter extends ProfileCommentContract.View.Adapter {
         }
 
         interface ViewHolder extends ProfileCommentContract.View.ViewHolder {
+
             ViewHolder setPostTitle(String postTitle);
             ViewHolder setCommentCount(String commentCount);
 
@@ -55,13 +51,19 @@ public interface ProfileLikesContract extends ProfileCommentContract {
     }
 
     interface Presenter extends ProfileCommentContract.Presenter {
+
         interface AdapterAPI extends ProfileCommentContract.Presenter.AdapterAPI {
+
             void setAdapter(ProfileLikesContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
                     ProfileLikesContract.View.ViewHolder postCommentViewHolder, int i);
+
         }
 
         interface ViewHolderAPI extends ProfileCommentContract.Presenter.ViewHolderAPI {
+
+            EditPostData getEditPostData(int i);
+
         }
     }
 }

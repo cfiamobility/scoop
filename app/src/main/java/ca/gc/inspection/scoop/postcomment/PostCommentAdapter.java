@@ -10,7 +10,6 @@ import ca.gc.inspection.scoop.R;
 
 public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHolder>
         implements PostCommentContract.View.Adapter {
-
     /**
      * Adapter used to create ViewHolders and bind new data to them for a RecyclerView.
      * Considered to be part of the View.
@@ -63,8 +62,10 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentViewHold
         PostCommentFragment.setLikesListener(postCommentViewHolder, i);
         PostCommentFragment.setUserInfoListener(postCommentViewHolder,
                 mPostCommentPresenter.getPosterIdByIndex(i));
-        PostCommentFragment.setPostOptionsListener(postCommentViewHolder,
-                mPostCommentPresenter.getActivityIdByIndex(i),mPostCommentPresenter.getPosterIdByIndex(i), mPostCommentView);
+        PostCommentFragment.setPostOptionsListener(postCommentViewHolder, i,
+                mPostCommentPresenter.getActivityIdByIndex(i),
+                mPostCommentPresenter.getPosterIdByIndex(i),
+                mPostCommentView);
     }
 
     /**

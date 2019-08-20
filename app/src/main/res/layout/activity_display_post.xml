@@ -14,8 +14,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:background="?attr/actionModeCloseDrawable"
-        android:backgroundTint="@color/secondary"
-        android:onClick="goBack" />
+        android:backgroundTint="@color/secondary" />
 
     <TextView
         android:id="@+id/activity_display_post_txt_title"

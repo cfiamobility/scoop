@@ -1,7 +1,6 @@
 package ca.gc.inspection.scoop.postoptionsdialog;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,14 +16,13 @@ import android.widget.TableRow;
 import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.MainActivity;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.report.ReportDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
-import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_TYPE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -35,8 +33,9 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class PostOptionsDialogFragment extends BottomSheetDialogFragment implements PostOptionsDialogContract.View {
 
     //UI Declarations
-    Button shareButton, deleteButton, reportButton;
-    TableRow shareTR, deleteTR, reportTR;
+    Button editButton, shareButton, deleteButton, reportButton;
+    TableRow editTR, shareTR, deleteTR, reportTR;
+    ImageView editImage;
 
     //reference to the presenter
     private PostOptionsDialogContract.Presenter mPostOptionsDialogPresenter;
@@ -44,8 +43,11 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     private PostCommentViewHolder mViewHolder;
     private Context currContext;
 
-    private PostOptionsDialogReceiver mPostOptionsDialogReceiver; // Interface implemented by DisplayPostFragment (used to refresh view after comment is deleted)
-    private int postPosition;
+    private PostOptionsDialogReceiver.DeleteCommentReceiver mDeleteCommentReceiver; // Interface implemented by DisplayPostFragment (used to refresh view after comment is deleted)
+    private PostOptionsDialogReceiver.EditCommentReceiver mEditCommentReceiver;
+    private PostOptionsDialogReceiver.EditPostReceiver mEditPostReceiver;
+
+    private int position;
 
     /**
      * Invoked by the Presenter and stores a reference to itself (Presenter) after being constructed by the View
@@ -63,10 +65,30 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
     /**
      * Invoked by DisplayPostPresenter to pass a reference of itself to this class
-     * @param postOptionsDialogReceiver
+     * @param deleteCommentReceiver
      */
-    public void setPostOptionsDialogReceiver(PostOptionsDialogReceiver postOptionsDialogReceiver) {
-        mPostOptionsDialogReceiver = postOptionsDialogReceiver;
+    public void setDeleteCommentReceiver(PostOptionsDialogReceiver.DeleteCommentReceiver deleteCommentReceiver) {
+        mDeleteCommentReceiver = deleteCommentReceiver;
+    }
+
+    /**
+     * Allows the View layer to pass an instance of itself to this class. The receiver provides access to
+     * callback methods for clicking different options.
+     *
+     * @param editCommentReceiver   ie. PostCommentViewHolder
+     */
+    public void setEditCommentReceiver(PostOptionsDialogReceiver.EditCommentReceiver editCommentReceiver) {
+        mEditCommentReceiver = editCommentReceiver;
+    }
+
+    /**
+     * Allows the View layer to pass an instance of itself to this class. The receiver provides access to
+     * callback methods for clicking different options.
+     *
+     * @param editPostReceiver      ie. FeedPostViewHolder
+     */
+    public void setEditPostReceiver(PostOptionsDialogReceiver.EditPostReceiver editPostReceiver) {
+        mEditPostReceiver = editPostReceiver;
     }
 
 
@@ -88,21 +110,26 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         //contains activity id and posterid of the specific post in the Recycler View in which its options menu was clicked
         String activityId = getArguments().getString("ACTIVITY_ID");
         String posterId = getArguments().getString("POSTER_ID");
-        postPosition = getArguments().getInt("POST_POSITION");
+        position = getArguments().getInt("POST_POSITION");
         String firstPosterId = getArguments().getString("FIRST_POSTER_ID");
-
+        int activityType = getArguments().getInt(INTENT_ACTIVITY_TYPE_KEY);
 
         setPresenter(new PostOptionsDialogPresenter(this));
 
         // initializing all of the buttons
         shareButton = view.findViewById(R.id.dialog_post_options_btn_share);
+        editButton = view.findViewById(R.id.dialog_post_options_btn_edit);
         deleteButton = view.findViewById(R.id.dialog_post_options_btn_delete);
         reportButton = view.findViewById(R.id.dialog_post_options_btn_report);
 
         // initializing all of the rows
         shareTR = view.findViewById(R.id.dialog_post_options_tr_share);
+        editTR = view.findViewById(R.id.dialog_post_options_tr_edit);
         deleteTR = view.findViewById(R.id.dialog_post_options_tr_delete);
         reportTR = view.findViewById(R.id.dialog_post_options_tr_report);
+
+        // need to initialize all the images
+        editImage = view.findViewById(R.id.dialog_post_options_img_edit);
 
         // WILL ALWAYS BE SET - onClick listener for sharing a post
         shareButton.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +140,9 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
             }
         });
 
-        if (getActivity().toString().contains("DisplayPostActivity") && firstPosterId.equals(Config.currentUser)){
+        setupEditOption(posterId, activityType, activityId);
+
+        if (getActivity().toString().contains("DisplayPostActivity") && firstPosterId!= null && firstPosterId.equals(Config.currentUser)){
             deleteButton.setVisibility(View.VISIBLE);
             deleteTR.setVisibility(View.VISIBLE);
             reportButton.setVisibility(View.VISIBLE);
@@ -128,6 +157,7 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
                     dismiss();
                 }
             });
+
             setReportOnClickListener(activityId, posterId);
 
 
@@ -163,6 +193,59 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
         }
 
         return view;
+    }
+
+    /**
+     * Shows or hides the edit option depending on where the dialog was opened from.
+     * Sets the OnClickListener for the edit option.
+     * @param posterId      userId of the user who created the post/comment which was clicked
+     * @param activityType  Post or comment
+     * @param activityId    Unique identifier of a post/comment
+     */
+    private void setupEditOption(String posterId, int activityType, String activityId) {
+        if (posterId != null && posterId.equals(Config.currentUser) && !inProfileLikes(activityType)) {
+            showEditOption();
+            editTR.setOnClickListener(getEditOptionOnClickListener(activityType, activityId));
+            editImage.setOnClickListener(getEditOptionOnClickListener(activityType, activityId));
+            editButton.setOnClickListener(getEditOptionOnClickListener(activityType, activityId));
+        }
+        else {
+            hideEditOption();
+        }
+    }
+
+    /**
+     * Helper method for setupEditOption. Provides the OnClickListener for the edit option.
+     * @param activityType  Post or comment
+     * @param activityId    Unique identifier of a post/comment
+     * @return
+     */
+    public View.OnClickListener getEditOptionOnClickListener(int activityType, String activityId) {
+        return v -> {
+            if (activityType == Config.postType) {
+                mEditPostReceiver.onEditPost(position);
+            }
+            else {
+                mEditCommentReceiver.onEditComment(position, activityId);
+            }
+            if (getFragmentManager() != null) {
+                getFragmentManager().beginTransaction().remove(PostOptionsDialogFragment.this).commit();
+            }
+        };
+    }
+
+    private boolean inProfileLikes(int activityType) {
+        return (activityType == Config.commentType && getActivity().getClass().equals(MainActivity.class));
+    }
+
+    private void showEditOption() {
+        editTR.setVisibility(View.VISIBLE);
+        editButton.setVisibility(View.VISIBLE);
+    }
+
+    private void hideEditOption() {
+        editTR.setVisibility(View.GONE);
+        editButton.setVisibility(View.GONE);
     }
 
 
@@ -206,16 +289,16 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
     /**
-     * Refreshes view which implements the PostOptionsDialogReceiver
+     * Refreshes view which implements the DeleteCommentReceiver
      */
     public void refresh(){
         boolean isPost;
-        if (postPosition == 0){
+        if (position == 0){
             isPost = true;
         }
         else{
             isPost = false;
         }
-        mPostOptionsDialogReceiver.onDeletePostComment(isPost);
+        mDeleteCommentReceiver.onDeletePostComment(isPost);
     }
 }

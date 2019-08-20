@@ -9,14 +9,32 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Create Post -->
     <string name="create_a_post">Create A Post</string>
     <string name="create_post_success">Post created!</string>
     <string name="create_post_failed">Failed to create post</string>
-    <string name="create_post_retry">Retry</string>
     <string name="create_post_in_progress">Creating post&#8230;</string>
     <string name="create_post_title_empty_error">Add a title to continue</string>
     <string name="create_post_text_empty_error">Add a message to continue</string>
+
+    <!-- Edit Post -->
+    <string name="edit_post_title">Edit Post</string>
+    <string name="edit_post_success">Post edited!</string>
+    <string name="edit_post_failed">Failed to edit post</string>
+    <string name="edit_post_in_progress">Editing post&#8230;</string>
+    <string name="edit_post_no_changes">No unsaved changes</string>
+
     <string name="post">Post</string>
+    <string name="retry_action">Retry</string>
+
+    <!-- Edit Comment -->
+    <string name="edit_comment_success">Comment edited!</string>
+    <string name="edit_comment_failed">Failed to edit comment</string>
+    <string name="edit_comment_in_progress">Editing comment&#8230;</string>
+    <string name="edit_comment_empty_text_error">Please add comment message</string>
+    <string name="edit_comment_lose_data">Discard changes?</string>
+    <string name="edit_comment_lose_data_discard">Discard</string>
+    <string name="edit_comment_lose_data_cancel">Cancel</string>
 
     <!-- Navigation Drawer -->
     <string name="saved">Saved Posts</string>
@@ -51,6 +69,7 @@
 
     <!-- Post Options -->
     <string name="share">Share</string>
+    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="report">Report</string>
 
@@ -161,7 +180,6 @@
         who created the post or comment.\n\nOur team will review the post and if it violates our Community Guidelines or Terms of Use,
     we\'ll remove it.</string>
     <string name="thank_you_title">Thanks for reporting this</string>
-
 
 
 </resources>
