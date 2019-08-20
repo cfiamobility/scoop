@@ -35,7 +35,7 @@ public class SearchPostFragment extends Fragment implements
         SearchPostContract.View,
         SearchContract.View.Fragment,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;

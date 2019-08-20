@@ -29,7 +29,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class ProfilePostFragment extends Fragment implements
         ProfilePostContract.View,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -148,4 +148,5 @@ public class ProfilePostFragment extends Fragment implements
     public void onDeletePostComment(boolean isPost) {
         loadDataFromDatabase();
     }
+
 }

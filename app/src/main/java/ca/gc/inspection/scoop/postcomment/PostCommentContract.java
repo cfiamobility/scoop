@@ -2,9 +2,9 @@ package ca.gc.inspection.scoop.postcomment;
 
 import org.json.JSONException;
 
-import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
+import ca.gc.inspection.scoop.editcomment.EditCommentContract;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.TextFormat;
 
 /**
@@ -33,9 +33,11 @@ import ca.gc.inspection.scoop.util.TextFormat;
  *      ^
  *      ProfileComment - extends above but with post title
  *      ^
- *      ProfilePost - extends above but overrides post title and contains comment count
+ *      ProfileLike - extends above but overrides post title and contains comment count
  *      ^
- *      FeedPost - extends above but contains
+ *      ProfilePost - similar to above but used for profile posts
+ *      ^
+ *      FeedPost - extends above but contains a post image (in addition to the profile image)
  */
 
 public interface PostCommentContract {
@@ -50,10 +52,15 @@ public interface PostCommentContract {
         void onLoadedDataFromDatabase();
 
         interface Adapter {
+
             void refreshAdapter();
+
         }
 
-        interface ViewHolder {
+        interface ViewHolder extends
+                PostOptionsDialogReceiver.EditCommentReceiver,
+                EditCommentContract.View.ViewHolder {
+
             ViewHolder setPostText(String postText);
             ViewHolder setPostTextWithFormat(String postText, TextFormat textFormat);
             ViewHolder setUserName(String userName);
@@ -63,27 +70,52 @@ public interface PostCommentContract {
             ViewHolder setUserImageFromString(String image);
             ViewHolder hideDate();
             ViewHolder setSavedState(Boolean savedState);
+
+            /**
+             * Remove the TextEditorWatcher when setting the edit post text otherwise it may overwrite
+             * the current contents of EditCommentCache.
+             */
+            void removeTextEditorWatcher();
         }
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter extends EditCommentContract.Presenter {
 
         void loadDataFromDatabase(String activityId);
 
         interface AdapterAPI {
+
             void setAdapter(PostCommentContract.View.Adapter adapter);
             void onBindViewHolderAtPosition(
                     PostCommentContract.View.ViewHolder postCommentViewHolder, int i);
             int getItemCount();
-            String getPosterIdByIndex(int i);   // TODO can move into ViewHolderAPI
-            String getActivityIdByIndex(int i); // TODO can move into ViewHolderAPI
+            String getPosterIdByIndex(int i);
+            String getActivityIdByIndex(int i);
             Boolean getSavedStateByIndex(int i);
+
         }
 
-        interface ViewHolderAPI {
+        interface ViewHolderAPI extends EditCommentContract.Presenter.ViewHolderAPI {
+
             void changeUpvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void changeDownvoteLikeState(View.ViewHolder viewHolderInterface, int i) throws JSONException;
             void updateSavedState(PostCommentContract.View.ViewHolder viewHolderInterface, int i) throws JSONException;
+
+            /**
+             * Check if unsaved edits exist for a specific post comment. Used to check whether the
+             * PostCommentViewHolder should save the changes to the database through the Presenter or
+             * show a SnackBar message stating that no changes were made.
+             *
+             * Disambiguation:
+             * This is different from unsavedEditsExist (no parameters) which is used in an Activity/Fragment
+             * to check if the user should be prompted to leave their unsaved edits.
+             *
+             * @param i             Estimated adapter position
+             * @param activityId    Unique identifier for post comment
+             * @return  True if there are unsaved edits in the EditCommentCache
+             */
+            boolean unsavedEditsExistForViewHolder(int i, String activityId);
+            String getPostTextById(int i);
         }
 
     }

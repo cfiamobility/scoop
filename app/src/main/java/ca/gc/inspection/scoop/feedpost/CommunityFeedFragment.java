@@ -28,7 +28,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class CommunityFeedFragment extends Fragment implements
         FeedPostContract.View,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -150,4 +150,5 @@ public class CommunityFeedFragment extends Fragment implements
     public void onDeletePostComment(boolean isPost) {
         loadDataFromDatabase();
     }
+
 }

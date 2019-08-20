@@ -7,12 +7,14 @@ import android.widget.TextView;
 
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.TextFormat;
 
 import static ca.gc.inspection.scoop.searchprofile.view.SearchProfileViewHolder.getSpannableStringBuilderWithFormat;
 
-public class ProfileCommentViewHolder extends PostCommentViewHolder
-        implements ProfileCommentContract.View.ViewHolder {
+public class ProfileCommentViewHolder extends PostCommentViewHolder implements
+        ProfileCommentContract.View.ViewHolder,
+        PostOptionsDialogReceiver.EditCommentReceiver {
     /**
      * ViewHolder for replying to a post action; it is the most generic View Holder
      * and contains the minimum views (no comment count, options menus, or images)

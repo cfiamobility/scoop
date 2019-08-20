@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.feedpost.FeedPost;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.feedpost.FeedPostPresenter;
@@ -136,6 +138,8 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         PostComment postComment = getItemByIndex(i);
         bindPostCommentDataToViewHolder(viewHolderInterface, postComment);
+        bindEditCommentDataToViewHolder(viewHolderInterface, postComment, i, mEditCommentCache);
+        bindViewHolderStateToViewHolder(viewHolderInterface, postComment, i, mViewHolderStateCache);
     }
 
     @Override
@@ -143,9 +147,52 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         mDisplayPostInteractor.addPostComment(currentUserId, commentText, activityId, posterId);
     }
 
+    /**
+     * Callback for database response for adding a post comment.
+     * Deals with reloading data from the database.
+     *
+     * @param success       True if a comment was successfully added to the post
+     * @param activityId    activityId of the post to reload
+     */
     public void onAddPostComment(boolean success, String activityId) {
-        if (success)
+        if (success) {
+            onItemAdded();
+            mAdapter.refreshAdapter();
             loadDataFromDatabase(activityId);
+        }
         mActivityView.onAddPostComment(success);
+    }
+
+    /**
+     * EditPostData used to store current state of post to start EditPostActivity.
+     * The relevant data is retrieved from the DataCache using the adapter position i.
+     * Display post only contains a single post and the rest are comments - this method is only
+     * needed for the post item.
+     *
+     * @param i     adapter position
+     * @return EditPostData is a data class which stores the current edits for a post
+     */
+    @Override
+    public EditPostData getEditPostData(int i) {
+        if (i == 0) {
+            FeedPost feedPost = (FeedPost) getItemByIndex(0);
+            return new EditPostData(feedPost.getActivityId(),
+                    feedPost.getPostTitle(),
+                    feedPost.getPostText(),
+                    feedPost.getFeedPostImagePath());
+        }
+        else {
+            PostComment postComment = getItemByIndex(i);
+            return new EditPostData(postComment.getActivityId(),
+                    null,
+                    postComment.getPostText(),
+                    null);
+        }
+    }
+
+    @Override
+    public boolean unsavedEditsExist() {
+        Log.d(TAG + ".unsavedEditsExist", "mEditCommentCache:" + mEditCommentCache.toString());
+        return (mEditCommentCache != null && mEditCommentCache.size() != 0);
     }
 }
