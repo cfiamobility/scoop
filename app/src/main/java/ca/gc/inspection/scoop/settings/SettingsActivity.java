@@ -79,8 +79,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
      */
     @Override
     public void onItemClick(View view, int position) {
-        // TODO: do stuff
-        //finish();
+        // click listener not used yet
     }
 
     /**
@@ -92,7 +91,6 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
      */
     @Override
     public void onSwitchToggle(View view, int position, String settingType, boolean value) {
-        //Toast.makeText(this, String.valueOf(value), Toast.LENGTH_SHORT).show();
         mPresenter.updateSetting(settingType, String.valueOf(value));
     }
 
