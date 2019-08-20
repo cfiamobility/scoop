@@ -1,7 +1,6 @@
 package ca.gc.inspection.scoop.postoptionsdialog;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,19 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.displaypost.DisplayPostActivity;
-import ca.gc.inspection.scoop.postcomment.PostComment;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.report.ReportDialogFragment;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
-import static ca.gc.inspection.scoop.postcomment.PostCommentFragment.startFragmentOrActivity;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -187,21 +182,18 @@ public class PostOptionsDialogFragment extends BottomSheetDialogFragment impleme
 
 
     private void setReportOnClickListener(String activityId, String posterId) {
-        reportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                ReportDialogFragment dialog = new ReportDialogFragment();
+        reportButton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            ReportDialogFragment dialog = new ReportDialogFragment();
 
-                bundle.putString("ACTIVITY_ID", activityId);
-                bundle.putString("POSTER_ID", posterId);
-                dialog.setArguments(bundle);
+            bundle.putString("ACTIVITY_ID", activityId);
+            bundle.putString("POSTER_ID", posterId);
+            dialog.setArguments(bundle);
 
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                dialog.show(ft, ReportDialogFragment.TAG);
-                Log.i("BUTTON PRESSED", "Report");
-                dismiss();
-            }
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            dialog.show(ft, "ReportDialogFragment");
+            Log.i("BUTTON PRESSED", "Report");
+            dismiss();
         });
     }
 

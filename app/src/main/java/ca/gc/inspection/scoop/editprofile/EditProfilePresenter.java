@@ -91,7 +91,7 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        mView.setInitialFill();
+        mView.setInitialFill(response);
     }
 
 	// takes care of the requests when the text is changed in the positions edittext
