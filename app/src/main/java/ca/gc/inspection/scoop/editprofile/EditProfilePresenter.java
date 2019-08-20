@@ -34,63 +34,6 @@ class EditProfilePresenter implements EditProfileContract.Presenter {
 	}
 
 	void setInitialFill(JSONObject response) {
-        try {
-//			// If the user id was correct/matching
-//			if (response.get("userid").toString().equals(userID)) {
-//				// Name gets and sets
-//				String firstNameText = response.get("firstname").toString();
-//                String lastNameText = response.get("lastname").toString();
-//				firstNameET.setText(firstNameText);
-//				lastNameET.setText(lastNameText);
-//
-//				// Profile picture setting and gtting
-//                bitmap = CameraUtils.stringToBitmap(response.get("profileimage").toString());
-//                previewProfilePic.setImageBitmap(bitmap);
-//
-//				// If user has already inputted a position
-//				if (!response.get("positionid").toString().equals("null")) {
-//                    String positionText = response.get("positionname").toString();
-//					positionET.setText(positionText);
-//				}
-//				// If user has already inputted a division
-//				if (!response.get("divisionid").toString().equals("null")) {
-//                    String divisionText = response.get("division_en").toString();
-//					divisionET.setText(divisionText);
-//				}// If user has already inputted an office address
-//				if (!response.get("buildingid").toString().equals("null")) {
-//                    String buildingText = response.get("address").toString();
-//					enterBuildingBTN.setText(buildingText);
-//
-//					mBuildingId = response.get("buildingid").toString();
-//					Log.d("setbuildingid", mBuildingId);
-//
-//					enterBuildingBTN.setTextColor(Color.parseColor("black"));
-//					//getBuilding(); // gets building address in the case that the previous activity was "searchBuildingActivity" and the user selected a new building there
-//				}
-//				// If the user has already inputted a facebook url
-//				if (!response.get("facebook").toString().equals("null")) {
-//                    String facebookText = response.get("facebook").toString();
-//					facebookET.setText(facebookText);
-//				}
-//				// if the user has already inputted a twitter url
-//				if (!response.get("twitter").toString().equals("null")) {
-//                    String twitterText = response.get("twitter").toString();
-//					twitterET.setText(twitterText);
-//				}
-//				// If the user has already inputted a linkedin url
-//				if (!response.get("linkedin").toString().equals("null")) {
-//                    String linkedinText = response.get("linkedin").toString();
-//					linkedinET.setText(linkedinText);
-//				}
-//				// If the user has already inputted an instagram url
-//				if (!response.get("instagram").toString().equals("null")) {
-//                    String instagramText = response.get("instagram").toString();
-//					instagramET.setText(instagramText);
-//				}
-//			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
         mView.setInitialFill(response);
     }
 
