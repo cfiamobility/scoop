@@ -79,10 +79,6 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
         }
     }
 
-    public String getReferenceIdByIndex(int i){
-        return Objects.requireNonNull(getItemByIndex(i)).getReferenceID();
-    }
-
     @Override
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
 
@@ -111,6 +107,8 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
         ProfileComment profileComment = getItemByIndex(i);
         bindProfileCommentDataToViewHolder(viewHolderInterface, profileComment);
+        bindEditCommentDataToViewHolder(viewHolderInterface, profileComment, i, mEditCommentCache);
+        bindViewHolderStateToViewHolder(viewHolderInterface, profileComment, i, mViewHolderStateCache);
     }
 
     public static void bindProfileCommentDataToViewHolder(
@@ -119,5 +117,9 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
             bindPostCommentDataToViewHolder(viewHolderInterface, profileComment);
             viewHolderInterface.setPostTitle(profileComment.getPostTitle());
         }
+    }
+    
+    public String getReferenceIdByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getReferenceID();
     }
 }

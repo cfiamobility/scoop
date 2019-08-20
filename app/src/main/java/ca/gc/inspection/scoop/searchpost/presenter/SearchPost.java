@@ -11,7 +11,7 @@ import ca.gc.inspection.scoop.profilepost.ProfilePost;
 
 public class SearchPost extends ProfilePost {
     private static final String TAG = "SearchPost";
-    private static final String RELEVANCE_LABEL = "relevance: ";
+    private static final String RELEVANCE_LABEL = "Relevance: ";
     private static final double LIKE_COUNT_LOGARITHMIC_WEIGHTING = 0.25;
     private static final double SEARCH_POST_TITLE_WEIGHT_MULTIPLIER = 2;
 
@@ -30,7 +30,6 @@ public class SearchPost extends ProfilePost {
 
     private double mRelevance = 0;
     private TextFormat mPostTitleFormat = null;
-    private TextFormat mTextFormat = null;
 
     protected SearchPost(JSONObject jsonPost, JSONObject jsonImage) {
         super(jsonPost, jsonImage);
@@ -38,7 +37,8 @@ public class SearchPost extends ProfilePost {
 
     public void setFormatForSearchQuery(SearchQuery searchQuery) {
         String relevanceFooter = RELEVANCE_LABEL + getRelevance();
-        mTextFormat = new TextFormat(searchQuery.getQueryWords(), getPostText(), relevanceFooter);
+        mTextFormat.setBoldTextPositions(searchQuery.getQueryWords(), getPostText())
+                .appendFooter(relevanceFooter, "\n");
         mPostTitleFormat = new TextFormat(searchQuery.getQueryWords(), getPostTitle(), null);
     }
 

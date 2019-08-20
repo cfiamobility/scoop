@@ -8,9 +8,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.postcomment.PostComment;
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.profilelikes.ProfileLike;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
@@ -135,6 +133,19 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
         }
     }
 
-
-
+    /**
+     * EditPostData used to store current state of post to start EditPostActivity.
+     * The relevant data is retrieved from the DataCache using the adapter position i.
+     *
+     * @param i     adapter position
+     * @return EditPostData is a data class which stores the current edits for a post
+     */
+    @Override
+    public EditPostData getEditPostData(int i) {
+        ProfileLike profileLike = getItemByIndex(i);
+        return new EditPostData(profileLike.getActivityId(),
+                profileLike.getPostTitle(),
+                profileLike.getPostText(),
+                null);
+    }
 }

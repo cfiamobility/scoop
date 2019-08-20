@@ -131,6 +131,4 @@ public class ProfilePostPresenter extends ProfileLikesPresenter implements
         }
     }
 
-
-
 }

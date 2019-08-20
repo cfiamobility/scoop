@@ -1,8 +1,11 @@
 package ca.gc.inspection.scoop.displaypost;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,6 +19,10 @@ import android.widget.Toast;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.R;
+import ca.gc.inspection.scoop.editcomment.EditCommentContract;
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveDialog;
+import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
+import ca.gc.inspection.scoop.editpost.EditPostContract;
 import ca.gc.inspection.scoop.util.ActivityUtils;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
@@ -24,7 +31,9 @@ import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
-public class DisplayPostActivity extends AppCompatActivity implements DisplayPostContract.View {
+public class DisplayPostActivity extends AppCompatActivity implements
+        DisplayPostContract.View,
+        EditLeaveEventListener {
 
     private DisplayPostContract.Presenter mDisplayPostPresenter;
     private DisplayPostFragment mDisplayPostFragment;
@@ -35,9 +44,24 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
     private EditText mAddCommentET;
     private Button mAddCommentButton;
     private boolean canPostComment;
+    private Button mBackButton;
 
     public void goBack (View view) {
         finish();
+    }
+
+    /**
+     * Check if there are unsaved changes for the post comment. If so, prompt the user if they want
+     * to leave the editing UI and lose their unsaved changes.
+     */
+    public void confirmLoseEdits() {
+        if (mDisplayPostPresenter.unsavedEditsExist()) {
+            EditLeaveDialog editLeaveDialog = new EditLeaveDialog();
+            editLeaveDialog.setEditLeaveEventListener(this);
+            editLeaveDialog.show(getSupportFragmentManager(), EditLeaveDialog.TAG);
+        } else {
+            confirmLeaveEvent();
+        }
     }
 
     @Override
@@ -117,7 +141,7 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
                 String commentText = mAddCommentET.getText().toString();
                 if (canPostComment) {
                     if (commentText.isEmpty()) {
-                        Toast.makeText(DisplayPostActivity.this, "Please add comment message", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DisplayPostActivity.this, R.string.edit_comment_empty_text_error, Toast.LENGTH_SHORT).show();
                         Log.i("comment", commentText);
                     } else {
                         canPostComment = false;
@@ -135,8 +159,20 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
             }
         });
         canPostComment = true;
+
+        mBackButton = findViewById(R.id.activity_display_post_btn_back);
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmLoseEdits();
+            }
+        });
     }
 
+    /**
+     * Callback to show a success toast message or error toast message when adding a post comment
+     * @param success True if a comment was added
+     */
     @Override
     public void onAddPostComment(boolean success) {
         canPostComment = true;
@@ -146,5 +182,25 @@ public class DisplayPostActivity extends AppCompatActivity implements DisplayPos
         else
             toastMessage = "Failed to post comment";
         Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Callback for EditLeaveDialog confirm option.
+     * User has confirmed they want to leave the activity and lose their unsaved edits.
+     *
+     * @param params    contains the activityId.
+     */
+    @Override
+    public void confirmLeaveEvent(String... params) {
+        finish();
+    }
+
+    /**
+     * Callback for EditLeaveDialog's option to cancel leave event.
+     * Not necessary but included to be consistent with attaching a callback to a Dialog button.
+     */
+    @Override
+    public void cancelLeaveEvent() {
+
     }
 }

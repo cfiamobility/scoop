@@ -75,6 +75,18 @@
             android:fontFamily="@font/roboto"/>
 
         <Button
+            android:id="@+id/activity_create_post_btn_remove_image"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/activity_create_post_btn_image"
+            android:background="@drawable/ic_remove_image_24dp"
+            android:backgroundTint="@color/secondary"
+            android:fontFamily="@font/roboto"/>
+
+        <Button
             android:id="@+id/activity_create_post_btn_post"
             android:layout_width="wrap_content"
             android:layout_height="28dp"

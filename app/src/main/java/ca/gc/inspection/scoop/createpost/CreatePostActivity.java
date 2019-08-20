@@ -1,6 +1,6 @@
 package ca.gc.inspection.scoop.createpost;
 
-import ca.gc.inspection.scoop.*;
+import ca.gc.inspection.scoop.R;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,7 +22,6 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +31,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.ImageFilePath;
@@ -48,28 +48,40 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
      * to add an image.
      */
 
-    private static final int TEXT_CHAR_LIMIT = 255;
+    protected static final int TEXT_CHAR_LIMIT = 255;
     private CreatePostContract.Presenter mPresenter;
-    private EditText postTitle, postText;
-    private ImageView postImage;
-    private CoordinatorLayout mCoordinatorLayout;
+    protected EditText postTitle, postText;
+    protected ImageView postImage;
+    protected CoordinatorLayout mCoordinatorLayout;
+    protected Button removeImage;
     private CircleImageView profileImage;
 
 
-    private TextView counter;
-    private final TextWatcher mTextEditorWatcher = new TextWatcher() {
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
+    protected TextView counter;
+    protected TextWatcher mTextEditorWatcher;
 
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            //This sets a textview to the current length
-            counter.setText(String.valueOf(s.length()) + "/255");
-        }
+    /**
+     * Creates a TextWatcher to show the current word count out of the maximum allowed for a post/comment
+     * @param textView of a word counter TextView
+     * @return TextWatcher
+     */
+    public static TextWatcher getTextWatcher(TextView textView) {
+        return new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-        public void afterTextChanged(Editable s) {
-        }
-    };
-    private boolean creatingPost = false;
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a TextView to the current length
+                textView.setText(String.format(Locale.CANADA, "%s/%d",
+                        String.valueOf(s.length()), TEXT_CHAR_LIMIT));
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+    }
+
+    protected boolean waitingForResponse = false;
 
     public void returnToPrevious (View view) {
         finish();
@@ -80,6 +92,10 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         mPresenter = checkNotNull(presenter);
     }
 
+    public CreatePostContract.Presenter newPresenter() {
+        return new CreatePostPresenter(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +104,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         // set the system status bar color
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.primary_dark));
 
-        setPresenter(new CreatePostPresenter(this));
+        setPresenter(newPresenter());
 
         /** Initialize edit texts, image view, and buttons for create Post xml
          *  postTitle: title of the Post
@@ -99,14 +115,15 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
          */
         postTitle = findViewById(R.id.activity_create_post_et_title);
 
+        counter = findViewById(R.id.activity_create_post_txt_word_counter);
+        mTextEditorWatcher = getTextWatcher(counter);
+
         postText = findViewById(R.id.activity_create_post_et_post_content);
         postText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(TEXT_CHAR_LIMIT)});
         postText.addTextChangedListener(mTextEditorWatcher);
 
         postImage = findViewById(R.id.activity_create_post_img_post);
-
-        counter = findViewById(R.id.activity_create_post_txt_word_counter);
-
+        removeImage = findViewById(R.id.activity_create_post_btn_remove_image);
         mCoordinatorLayout = findViewById(R.id.activity_create_post_coordinator);
 
         profileImage = findViewById(R.id.activity_create_post_img_profile);
@@ -148,12 +165,23 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createPost(
+                sendPostToDatabase(
                         postTitle.getText().toString(),
                         postText.getText().toString(),
                         postImage.getDrawable());
             }
         });
+
+        removeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeImageOnClick();
+            }
+        });
+    }
+
+    protected void removeImageOnClick() {
+        postImage.setImageDrawable(null);
     }
 
     public void takePicture() {
@@ -206,6 +234,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         if (resultCode == RESULT_OK) {
             String path = null;
             Uri uri = null;
+            // Select image from camera roll
             if (requestCode == CameraUtils.CHOOSE_PIC_REQUEST_CODE) {
                 if (data == null) {
                     Toast.makeText(getApplicationContext(), "Image cannot be null!", Toast.LENGTH_LONG).show();
@@ -217,7 +246,9 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                         e.printStackTrace();
                     }
                 }
-            } else {
+            }
+            else {
+                // Create file for image from camera
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 File f = new File(CameraUtils.currentPhotoPath);
                 uri = Uri.fromFile(f);
@@ -226,6 +257,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                 path = CameraUtils.currentPhotoPath;
             }
 
+            // If image exists, update UI
             if (path != null || uri != null) {
                 BitmapFactory.Options bmOptions = new BitmapFactory.Options();
                 bmOptions.inJustDecodeBounds = true;
@@ -241,9 +273,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                 }
                 Bitmap newBitmap = CameraUtils.imageOrientationValidator(bitmap, path);
 
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
-                setBitmapWithLayout(layoutParams, newBitmap);
+                setPostImageFromBitmap(newBitmap);
             } else {
                 Toast.makeText(this, "Something went wrong while uploading, please try again!", Toast.LENGTH_SHORT).show();
             }
@@ -263,14 +293,14 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
     }
 
-    public void createPost(String postTitle, String postText, Drawable postImage) {
+    public void sendPostToDatabase(String postTitle, String postText, Drawable postImage) {
         if (postTitle.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_title_empty_error, Snackbar.LENGTH_SHORT).show();
         } else if (postText.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_text_empty_error, Snackbar.LENGTH_SHORT).show();
-        } else if (!creatingPost) {
+        } else if (!waitingForResponse) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_in_progress, Snackbar.LENGTH_INDEFINITE).show();
-            creatingPost = true;
+            waitingForResponse = true;
             String imageBitmap = "";
             if (postImage != null) {
                 imageBitmap = CameraUtils.bitmapToString(((BitmapDrawable) postImage).getBitmap());
@@ -280,22 +310,37 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
     }
 
-    public void setBitmapWithLayout(ViewGroup.LayoutParams layoutParams, Bitmap newBitmap) {
+    /**
+     * Helper method to encapsulate setting a post image to a bitmap including the layout parameters
+     * @param newBitmap to set post image to
+     */
+    public void setPostImageFromBitmap(Bitmap newBitmap) {
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.activity_create_post_et_post_content);
+
         postImage.setLayoutParams(layoutParams);
         postImage.setImageBitmap(newBitmap);
     }
 
-    public void onPostCreated(boolean success) {
-        creatingPost = false;
+    /**
+     * Callback method to update the UI based on the database response. If a post was created successfully,
+     * the activity finishes, otherwise, display a SnackBar to retry sending the post.
+     * Presenter's onDatabaseResponse calls this since the Presenter it can only work with Java objects,
+     * not Android objects
+     *
+     * @param success True if a post was created
+     */
+    public void onDatabaseResponse(boolean success) {
+        waitingForResponse = false;
         if (success) {
             finish();
         }
         else {
             Snackbar mSnackbar = Snackbar.make(mCoordinatorLayout, R.string.create_post_failed, Snackbar.LENGTH_INDEFINITE);
-            mSnackbar.setAction(R.string.create_post_retry, new View.OnClickListener() {
+            mSnackbar.setAction(R.string.retry_action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    createPost(
+                    sendPostToDatabase(
                             postTitle.getText().toString(),
                             postText.getText().toString(),
                             postImage.getDrawable());
@@ -307,7 +352,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
     /**
      * Sets the profileImageCircle with the users profileimage taken from the database.
-     * @param profileImageBitmap
+     * @param profileImageBitmap    Bitmap created from database response
      */
     @Override
     public void setUserProfileImage(Bitmap profileImageBitmap) {

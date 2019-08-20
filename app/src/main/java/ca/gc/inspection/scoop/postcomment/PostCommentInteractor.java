@@ -9,17 +9,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.createpost.InteractorBundle;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
+import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
+import static ca.gc.inspection.scoop.createpost.CreatePostInteractor.newPostRequest;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_ACTIVITYID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_POSTERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
@@ -165,6 +170,18 @@ public class PostCommentInteractor {
         String responseUrl = Config.baseIP + "post/display-comments/images/" + activityId;
         JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(commentRequest);
+    }
+
+    public void updatePostComment(InteractorBundle interactorBundle, final String activityId, final String text) {
+        String url = Config.baseIP + "post/edit-post/text/";
+
+        Map<String, String>  params = new HashMap<>();
+        params.put("activityid", activityId);
+        params.put("activitytype", Integer.toString(Config.commentType));
+        params.put("posttext", text);
+
+        StringRequest postRequest = newPostRequest(mPresenter, interactorBundle, url, params);
+        mNetwork.addToRequestQueue(postRequest);
     }
 
 
