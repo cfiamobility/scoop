@@ -159,7 +159,7 @@ public class ReportDialogFragment extends DialogFragment implements ReportContra
     }
 
     /**
-     * Method to set a toast message on report form submission error
+     * Sets a toast message on report form submission error
      */
     public void setReportFailMessage(String message){
         String errorMessage;

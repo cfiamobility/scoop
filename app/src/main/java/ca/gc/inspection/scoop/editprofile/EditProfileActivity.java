@@ -61,9 +61,7 @@ public class EditProfileActivity extends AppCompatActivity implements
     private enum EditTextType {
         POSITION, DIVISION
     }
-
     private EditProfileContract.Presenter mPresenter;
-    private static final String TAG = "EditProfileActivity";
 
     // Request codes for intents
 	public static final int CHOOSE_PIC_REQUEST_CODE = 1;
@@ -87,9 +85,10 @@ public class EditProfileActivity extends AppCompatActivity implements
 	// stored local variables
 	String mBuildingId;
 
-	private boolean editingProfile = false;
-
-    @Override
+    /**
+     * Sets the Presenter for the View
+     * @param presenter
+     */
     public void setPresenter(@NonNull EditProfileContract.Presenter presenter) {
 	    mPresenter = checkNotNull(presenter);
     }
@@ -159,8 +158,67 @@ public class EditProfileActivity extends AppCompatActivity implements
 		});
 	}
 
-	/**
-	 * gets building data from the intent received after a user returns from selecting a building in the search building activity
+    /**
+     * Helper onClickListener for the save button
+     * Creates a HashMap to store edited data and invokes presenter method to update the database
+     */
+    private View.OnClickListener save = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // changes the bitmap into a string encoded using base64
+            String image = CameraUtils.bitmapToString(bitmap);
+
+            // putting all the edittext fields into a hashmap to be passed into nodejs
+            if (!(firstNameET.getText().toString().isEmpty()) && !(lastNameET.getText().toString().isEmpty())) {
+                Map<String, String> params = new HashMap<>();
+                params.put("userid", userID);
+                params.put("firstname", firstNameET.getText().toString());
+                params.put("lastname", lastNameET.getText().toString());
+                params.put("position", positionET.getText().toString());
+                params.put("division", divisionET.getText().toString());
+                params.put("building", enterBuildingBTN.getText().toString());
+
+                // params cant be null so we set buildingid to -1 if its empty
+                if (mBuildingId != null) {
+                    params.put("buildingid", mBuildingId);
+                } else {
+                    params.put("buildingid", String.valueOf(-1));
+                }
+
+                Log.d("buildingid", Integer.toString(getIntent().getIntExtra("buildingid", -1)));
+                params.put("linkedin", linkedinET.getText().toString());
+                params.put("twitter", twitterET.getText().toString());
+                params.put("instagram", instagramET.getText().toString());
+                params.put("facebook", facebookET.getText().toString());
+                params.put("image", image);
+                mPresenter.updateUserInfo(params);
+            } else {
+                Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    /**
+     * Helper onClickListener for choosing a building
+     */
+    private View.OnClickListener chooseBuilding = v -> {
+        Intent intent = new Intent(getApplicationContext(), SearchBuildingActivity.class);
+        startActivityForResult(intent, CHOOSE_BUILDING_REQUEST_CODE);
+    };
+
+    /**
+     * Helper onClickListener for deleting a building selection
+     */
+    private View.OnClickListener deleteBuilding = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            enterBuildingBTN.setText(null);
+            mBuildingId = null;
+        }
+    };
+
+    /**
+	 * Gets building data from the intent received after a user returns from selecting a building in the search building activity
 	 * @param intent intent received after a user returns from selecting a building in the search building activity
 	 */
 	private void getBuilding(Intent intent) {
@@ -189,9 +247,10 @@ public class EditProfileActivity extends AppCompatActivity implements
 	}
 
 	/**
-     * Method to fill the existing boxes with information in the database
-     * Runs when edit profile is clicked
-	 * @param response
+     * Fills the existing EditText Views with current profile information retrieved from the database
+     * Note: Consider moving getting JSONObject strings and logic to Presenter to keep consistent with the project's
+     * current MVP design pattern
+     * @param response JSONObject containing profile data to be displayed
 	 */
 	public void setInitialFill(JSONObject response) {
 		try {
@@ -254,7 +313,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 	}
 
     /**
-     * Method to establish/set up the auto complete text views for position, division and building
+     * Set up the auto complete text views for position and division
      */
 	private void autoComplete() {
 		// Autocomplete for position edittext
@@ -264,6 +323,11 @@ public class EditProfileActivity extends AppCompatActivity implements
 		addTextChangedListenerTo(divisionET, EditTextType.DIVISION);
 	}
 
+    /**
+     * Helper method to add text changed listeners
+     * @param textView the text view being attached to a listener
+     * @param type the type of the edit text view
+     */
 	private void addTextChangedListenerTo(AutoCompleteTextView textView, EditTextType type) {
         textView.addTextChangedListener(new EditProfileTextWatcher(textView, type));
     }
@@ -287,8 +351,12 @@ public class EditProfileActivity extends AppCompatActivity implements
         divisionET.setAdapter(divisionAdapter);
     }
 
-	// when the change profile picture text is tapped
-	public void changeProfilePicture(View view) {
+    /**
+     * Constructs a dialog when user attempts to change profile picture with the options of choosing from
+     * the gallery or taking a picture with camera
+     * @param view current view that has the onclick attribute in the xml
+     */
+    public void changeProfilePicture(View view) {
 
 		// custom dialog box
 		final Dialog dialog = new Dialog(EditProfileActivity.this);
@@ -304,7 +372,7 @@ public class EditProfileActivity extends AppCompatActivity implements
             // closing the dialog box
             dialog.dismiss();
 
-            // Checks for permission to write (implicit read) externnal data and camera permissions
+            // Checks for permission to write (implicit read) external data and camera permissions
             if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                     checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_CAMERA_PERMISSION_CODE);
@@ -334,11 +402,20 @@ public class EditProfileActivity extends AppCompatActivity implements
 		dialog.show();
 	}
 
-	// Method thats runs when the user selects take a picture when changing profile picture
+    /**
+     * Invoked when the user selects take a picture when changing profile picture
+     */
 	public void takePicture() {
 		CameraUtils.takePicture(this);
 	}
 
+    /**
+     * Used to handle the numerous activities that may be set up from this View
+     * Note: Consider making building search activity a dialog instead
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -366,8 +443,7 @@ public class EditProfileActivity extends AppCompatActivity implements
 						// Gets the bitmap of the image to be editted to be rightside up
 						Bitmap oldBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 
-						// sends the old bitmap through the orientation validator because android sucks and it takes pictures in landscape mode
-						// android camera is a J O K E
+						// sends the old bitmap through the orientation validator because it takes pictures in landscape mode
 						bitmap = imageOrientationValidator(oldBitmap, realPath);
 
 						// Sets the imageview to the corrected bitmap
@@ -421,10 +497,9 @@ public class EditProfileActivity extends AppCompatActivity implements
      * Receives the permission result. Starts an activity to take a picture if permission was granted
      * by the user.
      * Overrides Android Activity method.
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
+     * @param requestCode code for activity request
+     * @param permissions user system permissions
+     * @param grantResults results of users choice
      */
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -439,117 +514,71 @@ public class EditProfileActivity extends AppCompatActivity implements
 		}
 	}
 
+    /**
+     * Finishes activity when the back button is pressed
+     * @param view view that contains onclick attribute in xml
+     */
+    public void finishActivity(View view) {
+        finish();
+    }
 
+    /**
+     * If edit saves successfully, finish app
+     * Otherwise, snackbar displays error and prompts retry
+     * @param success boolean to signify if network successfully stored edits
+     */
+    public void onProfileUpdated(boolean success) {
+        if (success) {
+            finish();
+        } else {
+            //TODO: implement retry snackbar
+            finish();
+        }
+    }
+
+    /**
+     * Nested private class to implement text watching functionality
+     */
     private class EditProfileTextWatcher implements TextWatcher {
-	    private AutoCompleteTextView mTextView;
-	    private EditTextType mType;
+        private AutoCompleteTextView mTextView;
+        private EditTextType mType;
 
-	    EditProfileTextWatcher(AutoCompleteTextView textView, EditTextType type) {
-	        mTextView = textView;
+        EditProfileTextWatcher(AutoCompleteTextView textView, EditTextType type) {
+            mTextView = textView;
             mType = type;
         }
 
         private void autoComplete(String textChangedCapitalized) {
-	        switch (mType) {
+            switch (mType) {
                 case POSITION:
                     mPresenter.getPositionAutoCompleteFromDB(textChangedCapitalized);
                     break;
                 case DIVISION:
                     mPresenter.getDivisionAutoCompleteFromDB(textChangedCapitalized);
                     break;
-	        }
+            }
         }
 
-        // Mandatory Method
+        // Required to override
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
 
-        // Runs whenever the text is changed
+        // Override to start autocomplete suggestions when there are more 2 characters
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // Only submits request if the entered text is >= 3 characters for specificity
+            // Only submits request if the entered text is >= 2 characters for specificity
             if (mTextView.getText().length() >= 2) {
                 // Text inputted converted to have a cap letter to start ie. "start" -> "Start"
                 String textChanged = mTextView.getText().toString();
                 String textChangedCapitalized = capitalizeFirstLetter(textChanged);
                 autoComplete(textChangedCapitalized);
-                Log.i(TAG + ".onTextChanged", CameraUtils.bitmapToString(bitmap));
             }
         }
 
         @Override
         public void afterTextChanged(Editable s) {
             // necessary to implement interface
-        }
-    }
-
-    // The method that runs when save is pressed
-    private View.OnClickListener save = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (!editingProfile) {
-                editingProfile = true;
-                // changes the bitmap into a string encoded using base64
-                String image = CameraUtils.bitmapToString(bitmap);
-                Log.i(TAG+".onClick - Save", image);
-
-                // putting all the edittext fields into a hashmap to be passed into nodejs
-                if (!(firstNameET.getText().toString().isEmpty()) && !(lastNameET.getText().toString().isEmpty())) {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("userid", userID);
-                    params.put("firstname", firstNameET.getText().toString());
-                    params.put("lastname", lastNameET.getText().toString());
-                    params.put("position", positionET.getText().toString());
-                    params.put("division", divisionET.getText().toString());
-                    params.put("building", enterBuildingBTN.getText().toString());
-
-                    // params cant be null so we set buildingid to -1 if its empty
-                    if (mBuildingId != null) {
-                        params.put("buildingid", mBuildingId);
-                    } else {
-                        params.put("buildingid", String.valueOf(-1));
-                    }
-
-                    Log.d("buildingid", Integer.toString(getIntent().getIntExtra("buildingid", -1)));
-                    params.put("linkedin", linkedinET.getText().toString());
-                    params.put("twitter", twitterET.getText().toString());
-                    params.put("instagram", instagramET.getText().toString());
-                    params.put("facebook", facebookET.getText().toString());
-                    params.put("image", image);
-                    mPresenter.updateUserInfo(params);
-                } else {
-                    Toast.makeText(EditProfileActivity.this, getResources().getString(R.string.invalidNameEntry), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    };
-
-    private View.OnClickListener chooseBuilding = v -> {
-        Intent intent = new Intent(getApplicationContext(), SearchBuildingActivity.class);
-        startActivityForResult(intent, CHOOSE_BUILDING_REQUEST_CODE);
-    };
-
-    private View.OnClickListener deleteBuilding = new View.OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            enterBuildingBTN.setText(null);
-            mBuildingId = null;
-        }
-    };
-
-    // method for the back button
-    public void finishActivity(View view) {
-        finish();
-    }
-
-    public void onProfileUpdated(boolean success) {
-        editingProfile = false;
-        if (success) {
-            finish();
-        } else {
-            //TODO: implement retry snackbar
-            finish();
         }
     }
 

@@ -18,6 +18,10 @@ import ca.gc.inspection.scoop.util.NetworkUtils;
 import static ca.gc.inspection.scoop.Config.DATABASE_RESPONSE_SUCCESS;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
+/**
+ *  EditProfileInteractor used by Presenter to create GET requests to retrieve current profile data
+ *  and autocomplete suggestions, and create a PUT request to update and edited profile information
+ */
 class EditProfileInteractor {
     private EditProfilePresenter mPresenter;
     private NetworkUtils mNetwork;
@@ -27,10 +31,12 @@ class EditProfileInteractor {
         mNetwork = network;
     }
 
+    /**
+     * GET request for current profile data to be filled in EditText fields
+     * Calls Presenter method on response to have data set in the View
+     */
     void initialFill() {
-        // URL TO BE CHANGED - userID passed as a parameter to NodeJS
-        String URL = Config.baseIP + "edituser/getinitial/" + EditProfileActivity.userID;
-
+        String URL = Config.baseIP + "edituser/get-initial/" + Config.currentUser;
         // Requesting response be sent back as a JSON Object
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null,
                 response -> mPresenter.setInitialFill(response), error -> Log.i("error", error.toString())) {
@@ -45,8 +51,12 @@ class EditProfileInteractor {
         mNetwork.addToRequestQueue(jsonObjectRequest);
     }
 
+    /**
+     * GET request for top 3 suggestions for autocompletion of the position field
+     * Note: Text watcher invokes the Presenter call to this call every time the text is changed
+     * @param positionChangedCapitalized string that the user has typed in (capitalized)
+     */
     void getPositionAutoCompleteFromDB(String positionChangedCapitalized) {
-        // URL TO BE CHANGED - position entered passed to NodeJS as a parameter
         String URL = Config.baseIP + "edituser/positionchanged/" + positionChangedCapitalized;
 
         // Asking for an array from response (will send back 3 objects in an array)
@@ -63,7 +73,11 @@ class EditProfileInteractor {
         mNetwork.addToRequestQueue(getRequest);
     }
 
-    // takes care of the requests when the text is changed in the divisions edittext
+    /**
+     * GET request for top 3 suggestions for autocompletion of the division
+     * Note: Text watcher invokes the Presenter call to this call every time the text is changed
+     * @param divisionChangedCapitalized string that the user has typed in (capitalized)
+     */
     void getDivisionAutoCompleteFromDB(String divisionChangedCapitalized) {
         // Inputted division is passed as a parameter to NodeJS
         String URL = Config.baseIP + "edituser/divisionchanged/" + divisionChangedCapitalized;
@@ -83,6 +97,11 @@ class EditProfileInteractor {
         mNetwork.addToRequestQueue(jsonArrayRequest);
     }
 
+    /**
+     * PUT request to send edited information to the database and refreshes the ProfileFragment on response
+     * Invoked when the user by method in Presenter when user clicks save
+     * @param params map of edited profile fields
+     */
     void updateUserInfo(Map<String, String> params) {
         // Request url
         String URL = Config.baseIP + "edituser/updatedatabase";
