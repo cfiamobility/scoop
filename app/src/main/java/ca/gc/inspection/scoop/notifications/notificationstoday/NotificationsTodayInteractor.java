@@ -67,6 +67,6 @@ public class NotificationsTodayInteractor {
                 return header;
             }
         };
-        mNetwork.addToRequestQueue(todayRequest); //adds today request to request queue
+        mNetwork.addToRequestQueue(todayRequest); //adds to request queue
     }
 }

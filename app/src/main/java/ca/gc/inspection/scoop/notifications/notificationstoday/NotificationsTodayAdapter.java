@@ -30,7 +30,6 @@ public class NotificationsTodayAdapter extends RecyclerView.Adapter<Notification
         mPresenter.setAdapter(this);
     }
 
-
     /**
      * Creates the ViewHolder object
      * @param viewGroup The RecyclerView will be automatically passed in by Android - used for layout parameters

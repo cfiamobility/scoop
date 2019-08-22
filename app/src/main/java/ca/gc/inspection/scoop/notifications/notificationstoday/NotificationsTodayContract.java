@@ -52,7 +52,6 @@ public interface NotificationsTodayContract {
             NotificationsTodayContract.View.ViewHolder setFullName(String fullName);
             NotificationsTodayContract.View.ViewHolder setUserImageFromString(String image);
             NotificationsTodayContract.View.ViewHolder setPostImageFromString(String image);
-
         }
 
         interface Adapter {

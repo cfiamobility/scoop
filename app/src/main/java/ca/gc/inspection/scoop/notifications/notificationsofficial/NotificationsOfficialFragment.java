@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import ca.gc.inspection.scoop.R;
 
+/**
+ * To implement, but set up already to allow for tab fragment selection
+ */
 public class NotificationsOfficialFragment extends Fragment
 //        implements NotificationsOfficialContract.View,
 //        SwipeRefreshLayout.OnRefreshListener
