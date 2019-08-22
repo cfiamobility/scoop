@@ -302,6 +302,11 @@ public class PostComment {
         }
     }
 
+    /**
+     * Used by the Presenter's onBind methods to format the post text. Formatting includes highlighting
+     * any number of words as well as an italicized footer which can contain any number of lines.
+     * @return
+     */
     public TextFormat getTextFormat() {
         return mTextFormat;
     }

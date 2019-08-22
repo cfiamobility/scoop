@@ -127,6 +127,10 @@ public class CommunityFeedFragment extends Fragment implements
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * Helper method to load the posts from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void loadDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(true);
         mFeedPostPresenter.loadDataFromDatabase(getFeedType());

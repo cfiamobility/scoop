@@ -7,12 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
-
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.profilelikes.ProfileLikesPresenter;
 import ca.gc.inspection.scoop.util.NetworkUtils;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -88,6 +85,11 @@ public class ProfilePostPresenter extends ProfileLikesPresenter implements
         }
     }
 
+    /**
+     * Update the DataCache with the ProfilePosts data to be displayed in the RecyclerView.
+     * @param postsResponse
+     * @param imagesResponse
+     */
     @Override
     public void setData(JSONArray postsResponse, JSONArray imagesResponse) {
 

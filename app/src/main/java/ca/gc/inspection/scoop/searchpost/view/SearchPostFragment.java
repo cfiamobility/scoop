@@ -99,6 +99,10 @@ public class SearchPostFragment extends Fragment implements
         }
     }
 
+    /**
+     * Helper method to load the posts from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_search_post_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);

@@ -94,6 +94,11 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         }
     }
 
+    /**
+     * Update the DataCache with the FeedPost data to be displayed in the RecyclerView.
+     * @param feedPostsResponse
+     * @param imagesResponse
+     */
     @Override
     public void setData(JSONArray feedPostsResponse, JSONArray imagesResponse) {
         if ((feedPostsResponse.length() != imagesResponse.length()))

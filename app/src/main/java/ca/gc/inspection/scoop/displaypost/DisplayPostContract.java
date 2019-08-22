@@ -2,8 +2,6 @@ package ca.gc.inspection.scoop.displaypost;
 
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
-import ca.gc.inspection.scoop.editcomment.EditCommentContract;
-import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.postcomment.PostCommentContract;
 
@@ -47,6 +45,9 @@ public interface DisplayPostContract extends FeedPostContract {
 
         interface Fragment extends BaseView<Presenter.FragmentAPI> {
 
+            /**
+             * Used for updating the SwipeRefreshLayout after loading has finished
+             */
             void onLoadedDataFromDatabase();
 
             interface Adapter extends FeedPostContract.View.Adapter {

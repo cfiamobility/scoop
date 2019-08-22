@@ -31,13 +31,17 @@ import static ca.gc.inspection.scoop.Config.INTENT_POSTER_ID_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
+/**
+ * Displays a Post and its comments. Must have the activityId and posterId passed in through an
+ * Intent when starting the Activity. DisplayPostActivity handles adding comments and creates the
+ * DisplayPostFragment which contains the RecyclerView for displaying the post and its comments.
+ */
 public class DisplayPostActivity extends AppCompatActivity implements
         DisplayPostContract.View,
         EditLeaveEventListener {
 
     private DisplayPostContract.Presenter mDisplayPostPresenter;
     private DisplayPostFragment mDisplayPostFragment;
-    private DisplayPostAdapter mAdapter;
 
     private String mActivityId;
     private String mPosterId;
@@ -69,6 +73,12 @@ public class DisplayPostActivity extends AppCompatActivity implements
         mDisplayPostPresenter = checkNotNull(presenter);
     }
 
+    /**
+     * When starting Display Post, the activityId and posterId must be passed in so we know which
+     * post and user data to retrieve from the database.
+     *
+     * @return whether or not the data was successfully retrieved from the Intent
+     */
     public boolean setDataFromIntent() {
         Intent intent = getIntent();
         if (intent.hasExtra(INTENT_ACTIVITY_ID_KEY) && intent.hasExtra(INTENT_POSTER_ID_KEY)) {
@@ -83,10 +93,19 @@ public class DisplayPostActivity extends AppCompatActivity implements
         return (DisplayPostContract.Presenter.FragmentAPI) mDisplayPostPresenter;
     }
 
+    /**
+     * Used within view layer to get the activityId of the post being displayed.
+     * @return
+     */
     protected String getActivityId() {
         return mActivityId;
     }
 
+    /**
+     * Used within view layer to get the activityId of the post being displayed.
+     * Currently only used within DisplayPostActivity.
+     * @return
+     */
     protected String getPosterId() {
         return mPosterId;
     }

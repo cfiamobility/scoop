@@ -40,7 +40,6 @@ import static ca.gc.inspection.scoop.util.ActivityUtils.hideKeyboardFrom;
  * and contains the minimum views (no comment count, options menus, or images)
  * related to "posting" actions. Parent View Holder for ProfilePostViewHolder.
  */
-
 public class PostCommentViewHolder extends RecyclerView.ViewHolder implements
         PostCommentContract.View.ViewHolder,
         UserProfileListener,

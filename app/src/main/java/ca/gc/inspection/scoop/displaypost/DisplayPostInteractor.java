@@ -35,7 +35,7 @@ class DisplayPostInteractor extends FeedPostInteractor {
         mNetwork = network;
     }
 
-    /** add post comment to a d
+    /** add post comment to the database
      *
      * @param userId current userID
      * @param comment user inputted comment

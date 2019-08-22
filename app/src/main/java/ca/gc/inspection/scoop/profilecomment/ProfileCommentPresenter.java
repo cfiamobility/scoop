@@ -79,6 +79,11 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
         }
     }
 
+    /**
+     * Update the DataCache with the ProfileComments data to be displayed in the RecyclerView.
+     * @param commentsResponse
+     * @param imagesResponse
+     */
     @Override
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
 

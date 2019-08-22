@@ -88,6 +88,10 @@ public class SearchProfileFragment extends Fragment implements
         }
     }
 
+    /**
+     * Helper method to load the profiles from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_search_people_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);
