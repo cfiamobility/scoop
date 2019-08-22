@@ -19,13 +19,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ca.gc.inspection.scoop.settings.SettingsAdapter.*;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
  * View class for the settings
  * To add a setting: add new settingItem object to the settingsList
  */
-public class SettingsActivity extends AppCompatActivity implements SettingsAdapter.ItemClickListener, SettingsAdapter.SwitchToggleListener, SettingsAdapter.SpinnerListener ,SettingsContract.View {
+public class SettingsActivity extends AppCompatActivity implements ItemClickListener, SwitchToggleListener, SpinnerListener ,SettingsContract.View {
     void generateSettingsList(){
         //////////////////////////////////////////////////////////////
         //  LIST CONTAINING ALL SETTING OBJECTS                     //
@@ -153,7 +154,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
     }
 
     /**
-     * Before closing the settings view, publish the updated settings to the users's local preferences to be accesses later
+     * Before closing the settings view, publish the updated settings to the users's local preferences to be accessed later
      * @param prefsMap
      */
     @Override
@@ -182,10 +183,16 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
      * Super class which all settings object's MUST inherit from
      */
     public static class SettingsItem{
+        private ViewHolderType mViewHolderType;
         private String mType;   // unique identifier of the setting. Value taken from Settings.java
         private String mValue;  // initial value of the setting
         public String getType() { return mType; }
+        public ViewHolderType getViewHolderType(){return mViewHolderType;}
         public void setValue(String value) {mValue = value;}
+        public SettingsItem(String type, ViewHolderType viewHolderType){
+            mViewHolderType = viewHolderType;
+            mType = type;
+        }
     }
 
     /**
@@ -194,8 +201,8 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
     public static class SettingWithSwitch extends SettingsItem{
         private String mLabel; // Label used for the setting in the UI
         SettingWithSwitch(String label, String type){
+            super(type, ViewHolderType.SettingWithSwitch);
             mLabel = label;
-            super.mType = type;
         }
         public String getText(){ // Returns the label for this setting
             return mLabel;
@@ -210,9 +217,9 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
         private String mLabel; // Label used for the setting in the UI
         private String mSubLabel; // Sub label used for the settings in the UI
         SettingWithSwitchAndSubLabel(String label, String sublabel, String type){
+            super(type, ViewHolderType.SettingWithSwitchAndSubLabel);
             mLabel = label;
             mSubLabel = sublabel;
-            super.mType = type;
         }
         public String getText(){ // Returns the label for this setting
             return mLabel;
@@ -228,8 +235,8 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
         private String mLabel; // Label used for the setting in the UI
         private ArrayList<String> mOptions; // List of drop down items for the spinner of this item
         SettingWithSpinner(String label, String type, ArrayList<String> options){
+            super(type, ViewHolderType.SettingWithSpinner);
             mLabel = label;
-            super.mType = type;
             mOptions = options;
         }
         public String getText(){ // Returns the label for this setting
