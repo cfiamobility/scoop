@@ -10,12 +10,12 @@ import ca.gc.inspection.scoop.R;
 import ca.gc.inspection.scoop.postcomment.PostCommentFragment;
 import ca.gc.inspection.scoop.searchpost.SearchPostContract;
 
+/**
+ * Adapter used to create ViewHolders and bind new data to them for a RecyclerView.
+ * Considered to be part of the View.
+ */
 public class SearchPostAdapter extends RecyclerView.Adapter<SearchPostViewHolder>
     implements SearchPostContract.View.Adapter {
-    /**
-     * Adapter used to create ViewHolders and bind new data to them for a RecyclerView.
-     * Considered to be part of the View.
-     */
 
 	private SearchPostContract.Presenter.AdapterAPI mSearchPostPresenter;
     private SearchPostFragment mSearchPostView;

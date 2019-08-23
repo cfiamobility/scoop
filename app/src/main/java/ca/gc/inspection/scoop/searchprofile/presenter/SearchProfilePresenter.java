@@ -107,6 +107,10 @@ public class SearchProfilePresenter implements
         }
     }
 
+    /**
+     * Update the ProfileDataCache with the profiles data to be displayed in the RecyclerView.
+     * @param response
+     */
     public void setData(JSONArray response) {
 
         for (int i=0; i<response.length(); i++) {

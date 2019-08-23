@@ -2,6 +2,9 @@ package ca.gc.inspection.scoop.searchprofile.presenter;
 
 import java.util.ArrayList;
 
+/**
+ * Similar to PostDataCache but for user profiles
+ */
 public class ProfileDataCache {
     private Class mPostDataType;
     private BaseDataCache mDataCache;
