@@ -183,7 +183,7 @@ public class SettingsActivity extends AppCompatActivity implements ItemClickList
      * Super class which all settings object's MUST inherit from
      */
     public static class SettingsItem{
-        private ViewHolderType mViewHolderType;
+        private ViewHolderType mViewHolderType; // enum which indicates the type of view holder needed for this settings item
         private String mType;   // unique identifier of the setting. Value taken from Settings.java
         private String mValue;  // initial value of the setting
         public String getType() { return mType; }

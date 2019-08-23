@@ -37,6 +37,8 @@ import static ca.gc.inspection.scoop.util.StringUtils.capitalizeFirstLetter;
  */
 
 public class SignUpActivity extends AppCompatActivity implements SignUpContract.View{
+    // constants
+    private static final String useridStr = "userid";
     // Initializing the buttons, edit texts, and string variables
     String firstNameText, lastNameText, emailText, passwordText, reEnterPasswordText;
     Button registerBTN;
@@ -248,7 +250,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
         Iterator<String> keys = setting.keys();
         while(keys.hasNext()){
             String settingKey = keys.next();
-            if (settingKey.equals("userid")){ continue;}
+            if (settingKey.equals(useridStr)){ continue;}
             sharedPreferences.edit().putString(settingKey, setting.getString(settingKey)).apply();
         }
 
@@ -257,7 +259,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
         Config.token = token;
 
         // storing the user id into shared preferences
-        sharedPreferences.edit().putString("userid", userid).apply();
+        sharedPreferences.edit().putString(useridStr, userid).apply();
         Config.currentUser = userid;
 
         // change activities once register is successful

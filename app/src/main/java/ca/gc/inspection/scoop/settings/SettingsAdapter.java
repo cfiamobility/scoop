@@ -95,7 +95,7 @@ class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static List<SettingsItem> mData;                        // Contains list of all setting objects
     private static LayoutInflater mInflator;
-    private ItemClickListener mClickListener;
+    private ItemClickListener mClickListener;                       // Listener for clicks (not being used at the moment)
     private static SwitchToggleListener mSwitchToggleListener;      // Listener for switches
     private static SpinnerListener mSpinnerListener;                // Listener for spinners
     private static Context context;                                 // Activity context is stored because it's sometimes used by different view holders (i.e. spinners required a context)
@@ -161,6 +161,29 @@ class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mData.get(id);
     }
 
+    //////////////////////////////////////////////////////////
+    // Listener Interfaces
+    // - these are implemented by the SettingsActivity
+    //////////////////////////////////////////////////////////
+    /**
+     * Listener interface for clicks
+     */
+    public interface ItemClickListener{
+        void onItemClick(View view, int position);
+    }
+    /**
+     * Listener interface for toggling of switches
+     */
+    public interface SwitchToggleListener{
+        void onSwitchToggle(View view, int position, String settingType, boolean value);
+    }
+    /**
+     * Listener interface for spinners
+     */
+    public interface SpinnerListener{
+        void onSpinnerStateChange(View view, int position, String settingType, int value );
+    }
+
     //////////////////////////////////////////
     // Set Listener Methods
     //////////////////////////////////////////
@@ -184,28 +207,5 @@ class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     void setSpinnerListener(SpinnerListener spinnerListener){
         this.mSpinnerListener = spinnerListener;
-    }
-
-    //////////////////////////////////////////////////////////
-    // Listener Interfaces
-    // - these are implemented by the SettingsActivity
-    //////////////////////////////////////////////////////////
-    /**
-     * Listener interface for clicks
-     */
-    public interface ItemClickListener{
-        void onItemClick(View view, int position);
-    }
-    /**
-     * Listener interface for toggling of switches
-     */
-    public interface SwitchToggleListener{
-        void onSwitchToggle(View view, int position, String settingType, boolean value);
-    }
-    /**
-     * Listener interface for spinners
-     */
-    public interface SpinnerListener{
-        void onSpinnerStateChange(View view, int position, String settingType, int value );
     }
 }
