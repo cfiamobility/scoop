@@ -46,8 +46,7 @@ public class NotificationsTodayAdapter extends RecyclerView.Adapter<Notification
     }
 
     /**
-     * Binds new data to the ViewHolder as the user scrolls through the RecyclerView.
-     * Calls the Presenter (interface) to retrieve the data and update the ViewHolder through the View.ViewHolder contract.
+     * Binds new data to the ViewHolder as the user scrolls through the RecyclerView and sets its listeners
      * Calls the View object to set the listeners for the ViewHolders - contract not necessary as this is intra-View communication.
      * @param holder a NotificationsTodayViewHolder in the recycler view
      * @param i the position of the ViewHolder in the recycler view
