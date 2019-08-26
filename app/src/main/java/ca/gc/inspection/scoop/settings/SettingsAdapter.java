@@ -42,7 +42,7 @@ class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 settingWithSwitchViewHolder.setValue(settingWithSwitchObj.getValue());
             }
         },
-        SettingWithSwitchAndSubLabel { // enum for settings with a switch and sub label
+        SettingWithSwitchAndSubLabel { // enum for settings with a switch and a sub label
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
                 View view = mInflator.inflate(R.layout.settings_row_with_switch_and_extra_text, parent, false);
@@ -81,6 +81,7 @@ class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         };
 
+        // Functions implemented by each enum
         public abstract RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent);               // unique onCreateViewHolder method required by each enum
         public abstract void onBindViewHolder(RecyclerView.ViewHolder settingsViewHolder, int i);   // unique onBindViewHolder method required by each enum
 
@@ -98,7 +99,7 @@ class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ItemClickListener mClickListener;                       // Listener for clicks (not being used at the moment)
     private static SwitchToggleListener mSwitchToggleListener;      // Listener for switches
     private static SpinnerListener mSpinnerListener;                // Listener for spinners
-    private static Context context;                                 // Activity context is stored because it's sometimes used by different view holders (i.e. spinners required a context)
+    private static Context context;                                 // Activity context is stored because it's sometimes needed by different view holders (i.e. spinners required a context)
 
     /**
      * Constructor for the adapter
@@ -145,7 +146,7 @@ class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      * This method associates each setting's object class with a unique ID
      * @param position
-     * @return
+     * @return unique ID
      */
     @Override
     public int getItemViewType(int position) {
