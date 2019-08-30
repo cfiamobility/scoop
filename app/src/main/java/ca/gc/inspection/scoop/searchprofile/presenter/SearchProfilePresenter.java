@@ -94,6 +94,9 @@ public class SearchProfilePresenter implements
             if (mDataCache == null)
                 mDataCache = ProfileDataCache.createWithType(SearchProfile.class);
             else mDataCache.getSearchProfileList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
 
             currentSearchQuery = new SearchQuery(search);
             String parsedQuery = currentSearchQuery.getParsedQuery();

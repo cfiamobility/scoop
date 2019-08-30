@@ -76,6 +76,9 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         if (!refreshingData) {
             refreshingData = true;
             mDataCache.getFeedPostList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
             wasDataSet = false;
             Log.d(TAG, "data cache length = " + getItemCount());
             mDisplayPostInteractor.getDetailedPost(activityId);
