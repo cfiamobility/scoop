@@ -85,6 +85,9 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
             if (mDataCache == null)
                 mDataCache = PostDataCache.createWithType(ProfileLike.class);
             else mDataCache.getProfileLikesList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
 
             mProfileLikesInteractor.getProfileLikes(userId);
         }

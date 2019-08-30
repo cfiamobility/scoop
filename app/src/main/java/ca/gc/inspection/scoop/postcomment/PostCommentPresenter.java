@@ -98,6 +98,9 @@ public class PostCommentPresenter implements
         if (mDataCache == null)
             mDataCache = PostDataCache.createWithType(PostComment.class);
         else mDataCache.getPostCommentList().clear();
+        /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+        to access an item which no longer exists when scrolling during a pull down to refresh */
+        mAdapter.refreshAdapter();
 
         mPostCommentInteractor.getPostComments(currentUser);
     }
