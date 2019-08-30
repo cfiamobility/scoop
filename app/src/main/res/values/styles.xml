@@ -40,4 +40,20 @@
         <item name="colorControlActivated">@color/secondary</item>
         <item name="colorControlNormal">@color/black</item>
     </style>
+
+
+    <!-- Theme for switches in settings activity -->
+    <style name="settingSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/secondary_light</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/light_grey
+        </item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/light_grey
+        </item>
+    </style>
+
 </resources>

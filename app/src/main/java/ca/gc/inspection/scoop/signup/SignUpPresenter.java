@@ -1,5 +1,8 @@
 package ca.gc.inspection.scoop.signup;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
@@ -82,10 +85,10 @@ class SignUpPresenter implements SignUpContract.Presenter{
     /**
      * Provides the userid and response token from the Interactor and passes it to the View
      * @param userid Unique user ID
-     * @param response Unique response token associated each session
+     * @param token Unique response token associated each session
      */
-	public void storePreferences(String userid, String response){
-		mSignUpView.storePreferences(userid, response);
+	public void storePreferences(String userid, String token, JSONArray settings) throws JSONException {
+		mSignUpView.storePreferences(userid, token, settings);
 	}
 
 	public void setErrorMessage(String response){
