@@ -2,6 +2,9 @@ package ca.gc.inspection.scoop;
 
 import android.app.Application;
 
+/**
+ * Consider changing this into a static singleton instead of subclassing Application
+ */
 public class MyApplication extends Application {
     private static MyApplication mContext;
 
