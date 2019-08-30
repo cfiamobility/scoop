@@ -6,17 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
-
-import ca.gc.inspection.scoop.Config;
-import ca.gc.inspection.scoop.postcomment.PostComment;
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
-import ca.gc.inspection.scoop.profilelikes.ProfileLike;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesInteractor;
-import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentPresenter;
+import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -87,11 +80,19 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
             if (mDataCache == null)
                 mDataCache = PostDataCache.createWithType(ProfileLike.class);
             else mDataCache.getProfileLikesList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
 
             mProfileLikesInteractor.getProfileLikes(userId);
         }
     }
 
+    /**
+     * Update the DataCache with the ProfileLikes data to be displayed in the RecyclerView.
+     * @param postsResponse
+     * @param imagesResponse
+     */
     @Override
     public void setData(JSONArray postsResponse, JSONArray imagesResponse) {
 
@@ -135,6 +136,19 @@ public class ProfileLikesPresenter extends ProfileCommentPresenter implements
         }
     }
 
-
-
+    /**
+     * EditPostData used to store current state of post to start EditPostActivity.
+     * The relevant data is retrieved from the DataCache using the adapter position i.
+     *
+     * @param i     adapter position
+     * @return EditPostData is a data class which stores the current edits for a post
+     */
+    @Override
+    public EditPostData getEditPostData(int i) {
+        ProfileLike profileLike = getItemByIndex(i);
+        return new EditPostData(profileLike.getActivityId(),
+                profileLike.getPostTitle(),
+                profileLike.getPostText(),
+                null);
+    }
 }

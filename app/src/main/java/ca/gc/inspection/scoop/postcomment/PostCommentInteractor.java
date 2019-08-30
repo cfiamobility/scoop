@@ -17,9 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.gc.inspection.scoop.Config;
+import ca.gc.inspection.scoop.createpost.InteractorBundle;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
+import static ca.gc.inspection.scoop.createpost.CreatePostInteractor.newPostRequest;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_ACTIVITYID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_POSTERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LIKE_TYPE_KEY;
@@ -45,6 +47,14 @@ public class PostCommentInteractor {
         mNetwork = network;
     }
 
+    /**
+     * Helper method to retrieve posts/comments data and call the Presenter's setData method which
+     * stores the data in its PostDataCache.
+     *
+     * @param url           Url of middle-tier route to get post/comment text
+     * @param responseUrl   Url of middle-tier route to get post/comment images
+     * @return
+     */
     public JsonArrayRequest newProfileJsonArrayRequest(String url, String responseUrl) {
         return new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -165,6 +175,24 @@ public class PostCommentInteractor {
         String responseUrl = Config.baseIP + "post/display-comments/images/" + activityId;
         JsonArrayRequest commentRequest = newProfileJsonArrayRequest(url, responseUrl);
         mNetwork.addToRequestQueue(commentRequest);
+    }
+
+    /**
+     * Save post comment edit to the database
+     * @param interactorBundle  see InteractorBundle documentation - used to pass values to Presenter's callback method
+     * @param activityId        unique identifier of post comment
+     * @param text              updated post text
+     */
+    public void updatePostComment(InteractorBundle interactorBundle, final String activityId, final String text) {
+        String url = Config.baseIP + "post/edit-post/text/";
+
+        Map<String, String>  params = new HashMap<>();
+        params.put("activityid", activityId);
+        params.put("activitytype", Integer.toString(Config.commentType));
+        params.put("posttext", text);
+
+        StringRequest postRequest = newPostRequest(mPresenter, interactorBundle, url, params);
+        mNetwork.addToRequestQueue(postRequest);
     }
 
 

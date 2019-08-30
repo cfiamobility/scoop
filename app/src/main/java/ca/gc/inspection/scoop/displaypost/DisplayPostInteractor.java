@@ -25,6 +25,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 class DisplayPostInteractor extends FeedPostInteractor {
 
+    private static final String TAG = "DisplayPostInteractor";
     private DisplayPostPresenter mDisplayPostPresenter;
 
     DisplayPostInteractor(@NonNull DisplayPostPresenter presenter, NetworkUtils network) {
@@ -34,7 +35,7 @@ class DisplayPostInteractor extends FeedPostInteractor {
         mNetwork = network;
     }
 
-    /** add post comment to a d
+    /** add post comment to the database
      *
      * @param userId current userID
      * @param comment user inputted comment
@@ -49,9 +50,9 @@ class DisplayPostInteractor extends FeedPostInteractor {
                     @Override
                     public void onResponse(String response) {
                         // response
-                        Log.d("Response", response);
+                        Log.d(TAG, "addPostComment: " + response);
                         if (response.contains(DATABASE_RESPONSE_SUCCESS)){
-                            Log.i("Info", "We good");
+                            Log.i(TAG, "addPostComment response success");
                             mDisplayPostPresenter.onAddPostComment(true, otherPostActivity);
                         }
                         else {

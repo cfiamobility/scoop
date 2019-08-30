@@ -45,6 +45,9 @@ public interface DisplayPostContract extends FeedPostContract {
 
         interface Fragment extends BaseView<Presenter.FragmentAPI> {
 
+            /**
+             * Used for updating the SwipeRefreshLayout after loading has finished
+             */
             void onLoadedDataFromDatabase();
 
             interface Adapter extends FeedPostContract.View.Adapter {
@@ -52,9 +55,21 @@ public interface DisplayPostContract extends FeedPostContract {
         }
     }
 
+    /**
+     * EditLeaveEventListener.Presenter deals with functionality of prompting a user to confirm
+     * leaving their unsaved edits for post comments.
+     */
     interface Presenter extends BasePresenter {
 
         void addPostComment(String currentUserId, String commentText, String activityId, String posterId);
+
+        /**
+         * Helper method to let EditLeaveEventListener know if it needs to create an EditLeaveDialog
+         * to ask the user to confirm leaving their unsaved edits.
+         *
+         * @return True if there are unsaved edits for a post comment
+         */
+        boolean unsavedEditsExist();
 
         interface FragmentAPI extends FeedPostContract.Presenter {
             void setFragmentView(DisplayPostContract.View.Fragment fragmentView);

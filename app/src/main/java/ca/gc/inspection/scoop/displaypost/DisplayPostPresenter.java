@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.feedpost.FeedPost;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
 import ca.gc.inspection.scoop.feedpost.FeedPostPresenter;
@@ -75,6 +76,9 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         if (!refreshingData) {
             refreshingData = true;
             mDataCache.getFeedPostList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
             wasDataSet = false;
             Log.d(TAG, "data cache length = " + getItemCount());
             mDisplayPostInteractor.getDetailedPost(activityId);
@@ -82,6 +86,12 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         }
     }
 
+    /**
+     * Update the DataCache with the Post data (implemented as a FeedPost) of the first item being
+     * displayed in the RecyclerView.
+     * @param postTextResponse
+     * @param postImageResponse
+     */
     public void setDetailedPostData(JSONArray postTextResponse, JSONArray postImageResponse) {
         JSONObject jsonPost = null;
         JSONObject jsonImage = null;
@@ -94,6 +104,8 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         FeedPost feedPost = new FeedPost(jsonPost, jsonImage);
         mDataCache.getFeedPostList().add(0, feedPost);
 
+        /* Notify the adapter when both the post and comment data has been loaded - avoids having the
+        first PostComment data being casted to a FeedPost during onBind */
         if (wasDataSet) {
             refreshingData = false;
             mAdapter.refreshAdapter();
@@ -102,6 +114,11 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         wasDataSet = true;
     }
 
+    /**
+     * Update the DataCache with the PostComments data to be displayed in the RecyclerView.
+     * @param commentsResponse
+     * @param imagesResponse
+     */
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
 
         if ((commentsResponse.length() != imagesResponse.length()))
@@ -120,6 +137,8 @@ class DisplayPostPresenter extends FeedPostPresenter implements
             mDataCache.getPostCommentList().add(postComment);
         }
 
+        /* Notify the adapter when both the post and comment data has been loaded - avoids having the
+        first PostComment data being casted to a FeedPost during onBind */
         if (wasDataSet) {
             refreshingData = false;
             mAdapter.refreshAdapter();
@@ -136,6 +155,8 @@ class DisplayPostPresenter extends FeedPostPresenter implements
     public void onBindViewHolderAtPosition(PostCommentContract.View.ViewHolder viewHolderInterface, int i) {
         PostComment postComment = getItemByIndex(i);
         bindPostCommentDataToViewHolder(viewHolderInterface, postComment);
+        bindEditCommentDataToViewHolder(viewHolderInterface, postComment, i, mEditCommentCache);
+        bindViewHolderStateToViewHolder(viewHolderInterface, postComment, i, mViewHolderStateCache);
     }
 
     @Override
@@ -143,9 +164,52 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         mDisplayPostInteractor.addPostComment(currentUserId, commentText, activityId, posterId);
     }
 
+    /**
+     * Callback for database response for adding a post comment.
+     * Deals with reloading data from the database.
+     *
+     * @param success       True if a comment was successfully added to the post
+     * @param activityId    activityId of the post to reload
+     */
     public void onAddPostComment(boolean success, String activityId) {
-        if (success)
+        if (success) {
+            onItemAdded();
+            mAdapter.refreshAdapter();
             loadDataFromDatabase(activityId);
+        }
         mActivityView.onAddPostComment(success);
+    }
+
+    /**
+     * EditPostData used to store current state of post to start EditPostActivity.
+     * The relevant data is retrieved from the DataCache using the adapter position i.
+     * Display post only contains a single post and the rest are comments - this method is only
+     * needed for the post item.
+     *
+     * @param i     adapter position
+     * @return EditPostData is a data class which stores the current edits for a post
+     */
+    @Override
+    public EditPostData getEditPostData(int i) {
+        if (i == 0) {
+            FeedPost feedPost = (FeedPost) getItemByIndex(0);
+            return new EditPostData(feedPost.getActivityId(),
+                    feedPost.getPostTitle(),
+                    feedPost.getPostText(),
+                    feedPost.getFeedPostImagePath());
+        }
+        else {
+            PostComment postComment = getItemByIndex(i);
+            return new EditPostData(postComment.getActivityId(),
+                    null,
+                    postComment.getPostText(),
+                    null);
+        }
+    }
+
+    @Override
+    public boolean unsavedEditsExist() {
+        Log.d(TAG + ".unsavedEditsExist", "mEditCommentCache:" + mEditCommentCache.toString());
+        return (mEditCommentCache != null && mEditCommentCache.size() != 0);
     }
 }

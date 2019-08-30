@@ -1,5 +1,7 @@
 package ca.gc.inspection.scoop.profilelikes;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,14 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ca.gc.inspection.scoop.editpost.EditPostActivity;
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postcomment.PostCommentViewHolder;
 import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.R;
 
+import static ca.gc.inspection.scoop.Config.INTENT_ACTIVITY_ID_KEY;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_1;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_2;
 import static ca.gc.inspection.scoop.Config.SWIPE_REFRESH_COLOUR_3;
+import static ca.gc.inspection.scoop.feedpost.FeedPost.FEED_POST_IMAGE_PATH_KEY;
+import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_POST_TEXT_KEY;
+import static ca.gc.inspection.scoop.profilepost.ProfilePost.PROFILE_POST_TITLE_KEY;
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 
@@ -29,7 +37,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class ProfileLikesFragment extends Fragment implements
         ProfileLikesContract.View,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -99,6 +107,10 @@ public class ProfileLikesFragment extends Fragment implements
         postRecyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * Helper method to load the posts from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_profile_likes_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);

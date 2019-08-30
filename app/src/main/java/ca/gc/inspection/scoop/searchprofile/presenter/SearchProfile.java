@@ -13,11 +13,21 @@ import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_FIR
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_LAST_NAME_KEY;
 import static ca.gc.inspection.scoop.postcomment.PostComment.PROFILE_COMMENT_PROFILE_IMAGE_KEY;
 
+/**
+ * Data class which stores information for a single user profile that was searched.
+ * Should only interact with the Presenter as this class is a helper data class.
+ * - Not an inner class of Presenter to simplify inheritance.
+ *
+ * The data is stored in the Json format provided by the database.
+ * Static string keys are used to access the relevant values in the Json objects
+ *
+ */
 public class SearchProfile {
 
     JSONObject mProfile;
     private static final String TAG = "SearchPost";
-    private static final String RELEVANCE_LABEL = "relevance: ";
+    /* When calculating relevance, this multiplier determines how much weight matching the name has
+       over other fields such as position or location */
     private static final double SEARCH_POST_NAME_WEIGHT_MULTIPLIER = 2;
 
     public static final String SEARCH_PROFILE_POSITION_KEY = "positionname";
@@ -37,7 +47,6 @@ public class SearchProfile {
     }
 
     public void setFormatForSearchQuery(SearchQuery searchQuery) {
-        String relevanceFooter = RELEVANCE_LABEL + getRelevance();
         mFullNameFormat = new TextFormat(searchQuery.getQueryWords(), getFullName(), null);
         mPositionFormat = new TextFormat(searchQuery.getQueryWords(), getPosition(), null);
         mDivisionFormat = new TextFormat(searchQuery.getQueryWords(), getDivision(), null);
@@ -60,6 +69,12 @@ public class SearchProfile {
         return mLocationFormat;
     }
 
+    /**
+     * See SearchPost.setRelevance documentation
+     *
+     * @param searchQuery
+     * @param weighting
+     */
     public void setRelevance(SearchQuery searchQuery,
                              MatchedWordWeighting weighting) {
 

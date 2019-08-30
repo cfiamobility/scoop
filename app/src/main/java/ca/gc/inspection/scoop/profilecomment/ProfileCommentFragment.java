@@ -28,7 +28,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class ProfileCommentFragment extends Fragment implements
         ProfileCommentContract.View,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView commentsRecyclerView;
@@ -80,6 +80,10 @@ public class ProfileCommentFragment extends Fragment implements
         setRecyclerView();
     }
 
+    /**
+     * Helper method to load the comments from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_profile_comments_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);

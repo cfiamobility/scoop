@@ -1,5 +1,8 @@
 package ca.gc.inspection.scoop.splashscreen;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import ca.gc.inspection.scoop.base.BasePresenter;
 import ca.gc.inspection.scoop.base.BaseView;
 import ca.gc.inspection.scoop.util.NetworkUtils;
@@ -18,7 +21,7 @@ public interface SplashScreenContract {
 
         void setEmailLayoutError(String error);
 
-        void storePreferences(String userid, String response);
+        void storePreferences(String userid, String token, JSONArray settings) throws JSONException;
     }
 
     /**

@@ -35,7 +35,7 @@ public class SearchPostFragment extends Fragment implements
         SearchPostContract.View,
         SearchContract.View.Fragment,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -99,6 +99,10 @@ public class SearchPostFragment extends Fragment implements
         }
     }
 
+    /**
+     * Helper method to load the posts from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_search_post_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);

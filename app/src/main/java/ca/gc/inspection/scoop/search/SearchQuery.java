@@ -32,10 +32,16 @@ public class SearchQuery {
         }
     }
 
+    /**
+     * @return query which can be passed to the Interactor
+     */
     public String getParsedQuery() {
         return mParsedQuery;
     }
 
+    /**
+     * @return array of words from the search query which should be highlighted in TextFormat
+     */
     public String[] getQueryWords() {
         return mWords;
     }
@@ -68,6 +74,7 @@ public class SearchQuery {
                         matches += Math.log(wordMatches + 1) * wordMatchWeight;     // log base e
                     }
                     else {
+                        // default: weighting == MatchedWordWeighting.LINEAR
                         matches += wordMatches * wordMatchWeight;
                     }
                     Log.d(TAG, "wordMatches = " + wordMatches + ", weight = " + wordMatchWeight + " for " + mWord);

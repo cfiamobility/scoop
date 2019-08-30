@@ -22,7 +22,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class SavedPostFragment extends Fragment implements
         FeedPostContract.View,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -103,11 +103,18 @@ public class SavedPostFragment extends Fragment implements
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * Helper method to load the posts from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void loadDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(true);
         mFeedPostPresenter.loadDataFromDatabase(getFeedType());
     }
 
+    /**
+     * Reload the post/comments data when returning to the Fragment
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -147,4 +154,5 @@ public class SavedPostFragment extends Fragment implements
     public void onDeletePostComment(boolean isPost) {
         loadDataFromDatabase();
     }
+
 }

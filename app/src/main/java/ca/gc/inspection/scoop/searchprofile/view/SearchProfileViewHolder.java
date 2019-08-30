@@ -25,6 +25,9 @@ import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_BOLD_COLOU
 import static ca.gc.inspection.scoop.util.TextFormat.POST_TEXT_FORMAT_HIGHLIGHT_COLOUR;
 import static ca.gc.inspection.scoop.util.TextFormat.TEXT_FORMAT_FOOTER_SEPARATOR;
 
+/**
+ * ViewHolder which displays a user's profile in the SearchProfileFragment
+ */
 public class SearchProfileViewHolder extends RecyclerView.ViewHolder implements
         SearchProfileContract.View.ViewHolder,
         UserProfileListener {
@@ -84,6 +87,12 @@ public class SearchProfileViewHolder extends RecyclerView.ViewHolder implements
         return profileImage;
     }
 
+    /**
+     * Uses the TextFormat to highlight relevant words and to show an italicized footer
+     * @param text
+     * @param textFormat
+     * @return
+     */
     public static SpannableStringBuilder getSpannableStringBuilderWithFormat(String text, TextFormat textFormat) {
         String fullText = text;
         String footer = textFormat.getFooter();

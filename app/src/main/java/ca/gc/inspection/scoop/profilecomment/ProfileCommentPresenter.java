@@ -74,15 +74,19 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
             if (mDataCache == null)
                 mDataCache = PostDataCache.createWithType(ProfileComment.class);
             else mDataCache.getProfileCommentList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
 
             mProfileCommentInteractor.getProfileComments(currentUser);
         }
     }
 
-    public String getReferenceIdByIndex(int i){
-        return Objects.requireNonNull(getItemByIndex(i)).getReferenceID();
-    }
-
+    /**
+     * Update the DataCache with the ProfileComments data to be displayed in the RecyclerView.
+     * @param commentsResponse
+     * @param imagesResponse
+     */
     @Override
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
 
@@ -111,6 +115,8 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
     public void onBindViewHolderAtPosition(ProfileCommentContract.View.ViewHolder viewHolderInterface, int i) {
         ProfileComment profileComment = getItemByIndex(i);
         bindProfileCommentDataToViewHolder(viewHolderInterface, profileComment);
+        bindEditCommentDataToViewHolder(viewHolderInterface, profileComment, i, mEditCommentCache);
+        bindViewHolderStateToViewHolder(viewHolderInterface, profileComment, i, mViewHolderStateCache);
     }
 
     public static void bindProfileCommentDataToViewHolder(
@@ -119,5 +125,9 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
             bindPostCommentDataToViewHolder(viewHolderInterface, profileComment);
             viewHolderInterface.setPostTitle(profileComment.getPostTitle());
         }
+    }
+    
+    public String getReferenceIdByIndex(int i){
+        return Objects.requireNonNull(getItemByIndex(i)).getReferenceID();
     }
 }

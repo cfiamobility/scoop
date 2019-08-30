@@ -109,6 +109,11 @@ public class SearchPostPresenter extends ProfilePostPresenter implements
         }
     }
 
+    /**
+     * Update the PostDataCache with the SearchPosts data to be displayed in the RecyclerView.
+     * @param postsResponse
+     * @param imagesResponse
+     */
     @Override
     public void setData(JSONArray postsResponse, JSONArray imagesResponse) {
 

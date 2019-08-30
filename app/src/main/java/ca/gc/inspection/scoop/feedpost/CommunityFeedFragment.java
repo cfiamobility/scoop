@@ -28,7 +28,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class CommunityFeedFragment extends Fragment implements
         FeedPostContract.View,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -127,6 +127,10 @@ public class CommunityFeedFragment extends Fragment implements
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * Helper method to load the posts from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void loadDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(true);
         mFeedPostPresenter.loadDataFromDatabase(getFeedType());
@@ -150,4 +154,5 @@ public class CommunityFeedFragment extends Fragment implements
     public void onDeletePostComment(boolean isPost) {
         loadDataFromDatabase();
     }
+
 }

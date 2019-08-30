@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
+import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.postcomment.PostDataCache;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilepost.ProfilePostPresenter;
@@ -82,6 +85,9 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
             if (mDataCache == null)
                 mDataCache = PostDataCache.createWithType(FeedPost.class);
             else mDataCache.getFeedPostList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
 
             if (feedType.equals("saved")) {
                 mFeedPostInteractor.getSavedPosts();
@@ -91,6 +97,11 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         }
     }
 
+    /**
+     * Update the DataCache with the FeedPost data to be displayed in the RecyclerView.
+     * @param feedPostsResponse
+     * @param imagesResponse
+     */
     @Override
     public void setData(JSONArray feedPostsResponse, JSONArray imagesResponse) {
         if ((feedPostsResponse.length() != imagesResponse.length()))
@@ -133,4 +144,31 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         }
     }
 
+    /**
+     * Feed post image path is stored in the DataCache which is indexed using the RecyclerView adapter
+     * position (0 ... n-1).
+     *
+     * @param i adapter position
+     * @return String of the feed post image path is used to construct the post image
+     */
+    @Override
+    public String getFeedPostImagePathByIndex(int i) {
+        return Objects.requireNonNull(getItemByIndex(i)).getFeedPostImagePath();
+    }
+
+    /**
+     * EditPostData used to store current state of post to start EditPostActivity.
+     * The relevant data is retrieved from the DataCache using the adapter position i.
+     *
+     * @param i     adapter position
+     * @return EditPostData is a data class which stores the current edits for a post
+     */
+    @Override
+    public EditPostData getEditPostData(int i) {
+        FeedPost feedPost = getItemByIndex(i);
+        return new EditPostData(feedPost.getActivityId(),
+                feedPost.getPostTitle(),
+                feedPost.getPostText(),
+                feedPost.getFeedPostImagePath());
+    }
 }

@@ -22,12 +22,12 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 /**
  * Fragment which acts as the main view for the viewing community feed action.
  * Responsible for creating the Presenter and Adapter
- * We implement PostOptionsDialogReceiver so that that the PostOptionsDialog can refresh the detailed post view when a post is deleted
+ * We implement DeleteCommentReceiver so that that the PostOptionsDialog can refresh the detailed post view when a post is deleted
  */
 public class DisplayPostFragment extends Fragment implements
         DisplayPostContract.View.Fragment,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView mRecyclerView;
@@ -113,14 +113,23 @@ public class DisplayPostFragment extends Fragment implements
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * Helper method to load the post/comments from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void loadDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(true);
         mDisplayPostPresenter.loadDataFromDatabase(mDisplayPostActivity.getActivityId());
     }
 
+    /**
+     * Reload the post/comments data when returning to the Fragment
+     */
     @Override
     public void onResume() {
         super.onResume();
+        if (mAdapter != null)
+            mAdapter.refreshAdapter();
         if (!mSwipeRefreshLayout.isRefreshing()) {
             loadDataFromDatabase();
         }
@@ -155,4 +164,5 @@ public class DisplayPostFragment extends Fragment implements
             loadDataFromDatabase();
         }
     }
+
 }

@@ -4,6 +4,13 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+import ca.gc.inspection.scoop.util.TextFormat;
+
+import static ca.gc.inspection.scoop.Config.TIME_ZONE_FORMAT;
 import static ca.gc.inspection.scoop.Config.USERID_KEY;
 import static ca.gc.inspection.scoop.postcomment.LikeState.NULL;
 
@@ -22,6 +29,9 @@ public class PostComment {
      * TODO: use mComment.isNull(key) for null checking
      */
     protected JSONObject mComment, mImage;
+    protected TextFormat mTextFormat = null;
+    protected static final String MODIFIED_DATE_LABEL = "Edited: ";
+    protected static final String MODIFIED_JUST_NOW = "Just now";
 
     public static final String PROFILE_COMMENT_ACTIVITYID_KEY = "activityid";
     /*  Disambiguation: PosterId vs UserId
@@ -37,6 +47,7 @@ public class PostComment {
      */
     public static final String PROFILE_COMMENT_LIKE_POSTERID_KEY = "posterid";
     public static final String PROFILE_COMMENT_DATE_KEY = "createddate";
+    public static final String PROFILE_COMMENT_MODIFIED_DATE_KEY = "modifieddate";
     public static final String PROFILE_COMMENT_PROFILE_IMAGE_KEY = "profileimage";
     public static final String PROFILE_COMMENT_POST_FIRST_NAME_KEY = "postfirstname";
     public static final String PROFILE_COMMENT_POST_LAST_NAME_KEY = "postlastname";
@@ -57,6 +68,10 @@ public class PostComment {
     public PostComment(JSONObject jsonComment, JSONObject jsonImage) {
         mComment = jsonComment;
         mImage = jsonImage;
+        String modifiedDatefooter = null;
+        if (getModifiedDate() != null && !getModifiedDate().isEmpty() && !getModifiedDate().equals(getCreatedDate()))
+            modifiedDatefooter = MODIFIED_DATE_LABEL + getFormattedModifiedDate();
+        mTextFormat = new TextFormat(null, getPostText(), modifiedDatefooter);
     }
 
     /**
@@ -91,7 +106,7 @@ public class PostComment {
     /**
      * @return date string
      */
-    public String getDate() {
+    public String getCreatedDate() {
         try {
             return mComment.getString(PROFILE_COMMENT_DATE_KEY);
         }
@@ -99,6 +114,30 @@ public class PostComment {
             e.printStackTrace();
             return "";
         }
+    }
+
+    /**
+     * @return date string
+     */
+    public String getModifiedDate() {
+        try {
+            return mComment.getString(PROFILE_COMMENT_MODIFIED_DATE_KEY);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * @return the modified date formatted with the time zone defined in the Config class.
+     */
+    public String getFormattedModifiedDate() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(TIME_ZONE_FORMAT)
+                .withZone(ZoneId.systemDefault());
+
+        ZonedDateTime zonedModifiedDate = ZonedDateTime.parse(getModifiedDate());
+        return dateTimeFormatter.format(zonedModifiedDate);
     }
 
     public String getFirstName() {
@@ -148,6 +187,23 @@ public class PostComment {
         catch (Exception e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+    /**
+     * Used to update the text of a post comment in the DataCache.
+     * Needed for editing a post - if the user does not pull down to refresh, the DataCache becomes stale.
+     * This means that scrolling up and down the RecyclerView will cause stale data to be binded to the
+     * view holders instead of the edited comment text.
+     *
+     * @param text  post comment text
+     */
+    public void setPostText(String text) {
+        try {
+            mComment.put(PROFILE_COMMENT_POST_TEXT_KEY, text);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -246,4 +302,12 @@ public class PostComment {
         }
     }
 
+    /**
+     * Used by the Presenter's onBind methods to format the post text. Formatting includes highlighting
+     * any number of words as well as an italicized footer which can contain any number of lines.
+     * @return
+     */
+    public TextFormat getTextFormat() {
+        return mTextFormat;
+    }
 }

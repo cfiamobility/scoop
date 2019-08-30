@@ -12,7 +12,7 @@ import ca.gc.inspection.scoop.profilepost.ProfilePostViewHolder;
 public class SearchPostViewHolder extends ProfilePostViewHolder
         implements SearchPostContract.View.ViewHolder {
     /**
-     * ViewHolder for viewing a profile post.
+     * ViewHolder for viewing a search post.
      */
 
     SearchPostContract.Presenter.ViewHolderAPI mPresenter;

@@ -1,28 +1,16 @@
 package ca.gc.inspection.scoop.profilelikes;
 
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.postcomment.PostCommentContract;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentContract;
-import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
-
-
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-
+import ca.gc.inspection.scoop.editpost.EditPostData;
+import ca.gc.inspection.scoop.postoptionsdialog.PostOptionsDialogReceiver;
 import ca.gc.inspection.scoop.profilecomment.ProfileCommentViewHolder;
-import ca.gc.inspection.scoop.R;
-import ca.gc.inspection.scoop.profilelikes.ProfileLikesContract;
+import static ca.gc.inspection.scoop.editpost.EditPostActivity.startEditPostActivity;
 
-import static android.view.View.GONE;
-
-public class ProfileLikesViewHolder extends ProfileCommentViewHolder
-        implements ProfileLikesContract.View.ViewHolder {
+public class ProfileLikesViewHolder extends ProfileCommentViewHolder implements
+        ProfileLikesContract.View.ViewHolder,
+        PostOptionsDialogReceiver.EditPostReceiver {
     /**
      * ViewHolder for viewing a profile post.
      */
@@ -30,11 +18,13 @@ public class ProfileLikesViewHolder extends ProfileCommentViewHolder
     ProfileLikesContract.Presenter.ViewHolderAPI mPresenter;
 
     public TextView commentCount;
+    private View mView;
 //    public ImageView optionsMenu;
 
 
     public ProfileLikesViewHolder(View v, ProfileLikesContract.Presenter.ViewHolderAPI presenter) {
         super(v, presenter);
+        mView = v;
         commentCount = v.findViewById(R.id.comment_count);
 //        optionsMenu = v.findViewById(R.id.options_menu);
 
@@ -65,4 +55,19 @@ public class ProfileLikesViewHolder extends ProfileCommentViewHolder
         return this;
     }
 
+
+    @Override
+    protected void setupEditComment(View v) {
+    }
+
+    /**
+     * When the PostOptionsDialog option for Edit is clicked, start the EditPostActivity.
+     *
+     * @param i adapter position of current post
+     */
+    @Override
+    public void onEditPost(int i) {
+        EditPostData editPostData = mPresenter.getEditPostData(i);
+        startEditPostActivity(mView.getContext(), editPostData);
+    }
 }

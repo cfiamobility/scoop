@@ -29,7 +29,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class ProfilePostFragment extends Fragment implements
         ProfilePostContract.View,
         SwipeRefreshLayout.OnRefreshListener,
-        PostOptionsDialogReceiver {
+        PostOptionsDialogReceiver.DeleteCommentReceiver {
 
     // recycler view widgets
     private RecyclerView postRecyclerView;
@@ -99,6 +99,10 @@ public class ProfilePostFragment extends Fragment implements
         postRecyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * Helper method to load the posts from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_profile_posts_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -148,4 +152,5 @@ public class ProfilePostFragment extends Fragment implements
     public void onDeletePostComment(boolean isPost) {
         loadDataFromDatabase();
     }
+
 }
