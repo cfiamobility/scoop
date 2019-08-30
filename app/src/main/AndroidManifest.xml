@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ca.gc.inspection.scoop">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera"
-        android:required="false"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:name="ca.gc.inspection.scoop.MyApplication"
@@ -17,6 +19,13 @@
         android:label="@string/app"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".info.InfoOpenSourceLibraries"></activity>
+        <activity android:name=".info.InfoTOS" />
+        <activity android:name=".info.InfoDataPolicy" />
+        <activity android:name=".info.InfoScoop101" />
+        <activity android:name=".displaypost.DisplayPostActivity" />
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
@@ -37,6 +46,7 @@
         <activity
             android:name=".signup.SignUpActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"/>
         <activity
@@ -50,6 +60,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".profile.OtherUserActivity" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"/>
@@ -77,7 +89,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>
