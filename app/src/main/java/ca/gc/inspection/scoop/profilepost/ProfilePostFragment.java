@@ -99,6 +99,10 @@ public class ProfilePostFragment extends Fragment implements
         postRecyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * Helper method to load the posts from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void setSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = view.findViewById(R.id.fragment_profile_posts_swipe);
         mSwipeRefreshLayout.setOnRefreshListener(this);

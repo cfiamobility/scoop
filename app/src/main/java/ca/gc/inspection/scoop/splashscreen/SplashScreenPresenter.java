@@ -1,5 +1,8 @@
 package ca.gc.inspection.scoop.splashscreen;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import ca.gc.inspection.scoop.util.NetworkUtils;
 
 /**
@@ -56,10 +59,11 @@ public class SplashScreenPresenter implements SplashScreenContract.Presenter {
     /**
      * Provides the userid and response token from the Interactor and passes it to the View
      * @param userid Unique user ID
-     * @param response Unique response token associated each session
+     * @param token Unique response token associated each session
+     * @param settings
      */
-    public void storePreferences (String userid, String response){
-        mSplashScreenView.storePreferences(userid, response);
+    public void storePreferences(String userid, String token, JSONArray settings) throws JSONException {
+        mSplashScreenView.storePreferences(userid, token, settings);
     }
 
 }

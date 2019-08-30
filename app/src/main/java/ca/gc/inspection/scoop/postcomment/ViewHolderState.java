@@ -58,6 +58,7 @@ public class ViewHolderState {
 
     public ViewHolderState setWaitingForResponse(boolean waitingForResponse) {
         mWaitingForResponse = waitingForResponse;
+        // allows method chaining
         return this;
     }
 }

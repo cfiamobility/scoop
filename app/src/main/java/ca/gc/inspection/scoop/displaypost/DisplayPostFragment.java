@@ -113,11 +113,18 @@ public class DisplayPostFragment extends Fragment implements
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * Helper method to load the post/comments from the database and update the SwipeRefreshLayout to
+     * show a loading circle
+     */
     private void loadDataFromDatabase() {
         mSwipeRefreshLayout.setRefreshing(true);
         mDisplayPostPresenter.loadDataFromDatabase(mDisplayPostActivity.getActivityId());
     }
 
+    /**
+     * Reload the post/comments data when returning to the Fragment
+     */
     @Override
     public void onResume() {
         super.onResume();

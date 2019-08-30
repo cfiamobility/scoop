@@ -7,6 +7,11 @@ import android.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Presenter layer object which specifies how text should be formatted. Used in the post/comment and
+ * search profile ViewHolders to highlight specific words. Also contains an italicized footer at
+ * the end of the text body.
+ */
 public class TextFormat {
     private static final String TAG = "TextFormat";
 
@@ -23,6 +28,14 @@ public class TextFormat {
         setBoldTextPositions(boldedWords, text);
     }
 
+    /**
+     * PostComment TextFormat does not highlight/bold any text. This helper method allows the subclass
+     * SearchPost to manually set the bold text positions.
+     *
+     * @param boldedWords   List of words to be highlighted/bolded
+     * @param text          to be searched for boldedwords
+     * @return              List of Pairs containing the start and end index in the post text to be highlighted
+     */
     public TextFormat setBoldTextPositions(String[] boldedWords, String text) {
         mBoldedWords = boldedWords;
         if (mBoldedWords != null) {
@@ -46,6 +59,10 @@ public class TextFormat {
         return this;
     }
 
+    /**
+     * Used by the ViewHolder for highlighting the relevant text
+     * @return List of Pairs containing the start and end index in the post text to be highlighted
+     */
     public List<Pair<Integer, Integer>> getBoldTextPositions() {
         return mBoldTextPositions;
     }
@@ -59,6 +76,12 @@ public class TextFormat {
         return this;
     }
 
+    /**
+     * Allows Presenter layer to add another line to the italicized footer message
+     * @param footer        Text to be appended
+     * @param separator     Usually a newline
+     * @return
+     */
     public TextFormat appendFooter(String footer, String separator) {
         if (mFooter == null) {
             mFooter = footer;

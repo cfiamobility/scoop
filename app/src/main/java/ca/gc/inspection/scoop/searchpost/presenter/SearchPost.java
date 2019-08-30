@@ -9,21 +9,23 @@ import ca.gc.inspection.scoop.search.SearchQuery;
 import ca.gc.inspection.scoop.util.TextFormat;
 import ca.gc.inspection.scoop.profilepost.ProfilePost;
 
+/**
+ * Data class which stores information for a single search post.
+ * Should only interact with the Presenter as this class is a helper data class.
+ * - Not an inner class of Presenter to simplify inheritance.
+ *
+ * The data is stored in the Json format provided by the database.
+ * Static string keys are used to access the relevant values in the Json objects
+ *
+ */
 public class SearchPost extends ProfilePost {
     private static final String TAG = "SearchPost";
     private static final String RELEVANCE_LABEL = "Relevance: ";
     private static final double LIKE_COUNT_LOGARITHMIC_WEIGHTING = 0.25;
+    // Weight of postTitle as a multiple of postText
     private static final double SEARCH_POST_TITLE_WEIGHT_MULTIPLIER = 2;
 
-    /**
-     * Data class which stores information for a single search post.
-     * Should only interact with the Presenter as this class is a helper data class.
-     * - Not an inner class of Presenter to simplify inheritance.
-     *
-     * The data is stored in the Json format provided by the database.
-     * Static string keys are used to access the relevant values in the Json objects
-     *
-     */
+
     private enum LikeCountWeighting {
         LINEAR, LOGARITHMIC
     }
@@ -50,6 +52,21 @@ public class SearchPost extends ProfilePost {
         return mTextFormat;
     }
 
+    /**
+     * See MatchedWordWeighting documentation.
+     *
+     * To calculate relevance we compute the getNumberOfMatchesWeightedBy separately for the
+     * postTitle and postText. postTitle is multiplied by SEARCH_POST_TITLE_WEIGHT_MULTIPLIER as
+     * matching words in the title should have more significance.
+     *
+     * Finally, the relevance score is weighted by the weightedLikeCount. The like count itself is
+     * also passed through a continuous logarithmic function which is defined for negative values.
+     * This function provides diminishing returns on a large number of likes in either the positive
+     * or negative direction.
+     *
+     * @param searchQuery
+     * @param weighting
+     */
     public void setRelevance(SearchQuery searchQuery,
                              MatchedWordWeighting weighting) {
         double weightedLikeCount = getLikeCountWeightedBy(LikeCountWeighting.LOGARITHMIC);

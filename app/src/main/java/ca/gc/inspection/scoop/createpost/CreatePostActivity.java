@@ -106,12 +106,11 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
         setPresenter(newPresenter());
 
-        /** Initialize edit texts, image view, and buttons for create Post xml
+        /* Initialize edit texts, image view, and buttons for create Post xml
          *  postTitle: title of the Post
          *  postText: message or description of the Post (set to have a character limit of 255)
          *  postImage: (OPTIONAL) user can choose to add a picture to their Post from either the camera, or the camera roll
          *  counter: character counter for postText
-         *
          */
         postTitle = findViewById(R.id.activity_create_post_et_title);
 
@@ -133,7 +132,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         Button cameraRoll = findViewById(R.id.activity_create_post_btn_image);
         Button send = findViewById(R.id.activity_create_post_btn_post);
 
-        /** OnClickListener for the camera button that launches the native camera app.
+        /* OnClickListener for the camera button that launches the native camera app.
          *  Deals with permission checks for Camera
          */
         camera.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +147,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         });
 
 
-        /** OnClickListenger for the camera roll button that launches the native photo app of the phone which
+        /* OnClickListenger for the camera roll button that launches the native photo app of the phone which
          *  allows users to select an image from the camera roll
          *  deals with permission checks for read external storage
          */
@@ -159,9 +158,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
             }
         });
 
-        /** OnClickListenger for the send button that will grab all the user inputs and send everthing to the CreatePostPresenter
-         *
-         */
+        // OnClickListenger for the send button that will grab all the user inputs and send everything to the CreatePostPresenter
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +188,8 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     /**
      * Receives the permission granted (or not granted) by the user to start an activity to take a
      * picture or get an image from the camera roll.
-     * Overrides Android Activity method.
+     * Overrides Android Activity method. This method is not called manually, it is a callback method
+     * for the Android framework.
      *
      * @param requestCode
      * @param permissions
@@ -222,7 +220,8 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     /**
      * Receives the result from the Intent used to take a picture or get an image from the camera roll.
      * Creates a Bitmap from the image and updates the GUI to display it.
-     * Overrides Android Activity method.
+     * Overrides Android Activity method. This method is not called manually, it is a callback method
+     * for the Android framework.
      *
      * @param requestCode
      * @param resultCode
@@ -293,6 +292,14 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
     }
 
+    /**
+     * Helper method to create a post by sending the user-inputted post data to the database.
+     * Encapsulates error handling and Snackbar error messages.
+     *
+     * @param postTitle
+     * @param postText
+     * @param postImage
+     */
     public void sendPostToDatabase(String postTitle, String postText, Drawable postImage) {
         if (postTitle.isEmpty()) {
             Snackbar.make(mCoordinatorLayout, R.string.create_post_title_empty_error, Snackbar.LENGTH_SHORT).show();

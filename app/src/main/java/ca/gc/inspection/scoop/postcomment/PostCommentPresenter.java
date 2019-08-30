@@ -93,15 +93,29 @@ public class PostCommentPresenter implements
         mAdapter = adapter;
     }
 
+    /**
+     * Calls the Interactor to refresh the DataCache using data retrieved from the database.
+     * loadDataFromDatabase for PostCommentPresenter is unused however it is overridden by
+     * its child classes.
+     * @param currentUser
+     */
     @Override
     public void loadDataFromDatabase(String currentUser) {
         if (mDataCache == null)
             mDataCache = PostDataCache.createWithType(PostComment.class);
         else mDataCache.getPostCommentList().clear();
+        /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+        to access an item which no longer exists when scrolling during a pull down to refresh */
+        mAdapter.refreshAdapter();
 
         mPostCommentInteractor.getPostComments(currentUser);
     }
 
+    /**
+     * Update the DataCache with the PostComments data to be displayed in the RecyclerView.
+     * @param commentsResponse
+     * @param imagesResponse
+     */
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
         if ((commentsResponse.length() != imagesResponse.length()))
             Log.i(TAG, "length of commentsResponse != imagesResponse");

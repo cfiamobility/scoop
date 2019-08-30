@@ -6,12 +6,12 @@ import ca.gc.inspection.scoop.Config;
 import ca.gc.inspection.scoop.util.NetworkUtils;
 import ca.gc.inspection.scoop.profilepost.ProfilePostInteractor;
 
+/**
+ * Interactor used to send requests to the network. Inherits from ProfilePostInteractor (which
+ * in turn inherits from PostCommentInteractor) so that Feed post has access to methods
+ * such as insert/update likes.
+ */
 public class FeedPostInteractor extends ProfilePostInteractor {
-    /**
-     * Interactor used to send requests to the network. Inherits from ProfilePostInteractor (which
-     * in turn inherits from PostCommentInteractor) so that Feed post has access to methods
-     * such as insert/update likes.
-     */
 
     /**
      * Empty constructor called by child classes (ie. DisplayPostInteractor) to allow them to set

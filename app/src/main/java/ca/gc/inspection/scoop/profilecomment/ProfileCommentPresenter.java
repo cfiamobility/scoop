@@ -74,11 +74,19 @@ public class ProfileCommentPresenter extends PostCommentPresenter implements
             if (mDataCache == null)
                 mDataCache = PostDataCache.createWithType(ProfileComment.class);
             else mDataCache.getProfileCommentList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
 
             mProfileCommentInteractor.getProfileComments(currentUser);
         }
     }
 
+    /**
+     * Update the DataCache with the ProfileComments data to be displayed in the RecyclerView.
+     * @param commentsResponse
+     * @param imagesResponse
+     */
     @Override
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
 

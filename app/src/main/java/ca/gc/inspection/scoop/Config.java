@@ -1,5 +1,13 @@
 package ca.gc.inspection.scoop;
 
+import android.content.SharedPreferences;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Config {
     public static String baseIP = "http://10.0.2.2:3000/";
 
@@ -30,4 +38,7 @@ public class Config {
 
     // used by DateTimeFormatter
     public static final String TIME_ZONE_FORMAT = "MM-dd-yyyy 'at' hh:mma";
+
+    // List of languages supported
+    public static final ArrayList<String> Languages = new ArrayList<String>(Arrays.asList("English", "French"));
 }

@@ -85,6 +85,9 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
             if (mDataCache == null)
                 mDataCache = PostDataCache.createWithType(FeedPost.class);
             else mDataCache.getFeedPostList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
 
             if (feedType.equals("saved")) {
                 mFeedPostInteractor.getSavedPosts();
@@ -94,6 +97,11 @@ public class FeedPostPresenter extends ProfilePostPresenter implements
         }
     }
 
+    /**
+     * Update the DataCache with the FeedPost data to be displayed in the RecyclerView.
+     * @param feedPostsResponse
+     * @param imagesResponse
+     */
     @Override
     public void setData(JSONArray feedPostsResponse, JSONArray imagesResponse) {
         if ((feedPostsResponse.length() != imagesResponse.length()))

@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ca.gc.inspection.scoop.editleavedialog.EditLeaveEventListener;
 import ca.gc.inspection.scoop.editpost.EditPostData;
 import ca.gc.inspection.scoop.feedpost.FeedPost;
 import ca.gc.inspection.scoop.feedpost.FeedPostContract;
@@ -77,6 +76,9 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         if (!refreshingData) {
             refreshingData = true;
             mDataCache.getFeedPostList().clear();
+            /* Refresh the adapter right after clearing the DataCache. Prevents the adapter from trying
+            to access an item which no longer exists when scrolling during a pull down to refresh */
+            mAdapter.refreshAdapter();
             wasDataSet = false;
             Log.d(TAG, "data cache length = " + getItemCount());
             mDisplayPostInteractor.getDetailedPost(activityId);
@@ -84,6 +86,12 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         }
     }
 
+    /**
+     * Update the DataCache with the Post data (implemented as a FeedPost) of the first item being
+     * displayed in the RecyclerView.
+     * @param postTextResponse
+     * @param postImageResponse
+     */
     public void setDetailedPostData(JSONArray postTextResponse, JSONArray postImageResponse) {
         JSONObject jsonPost = null;
         JSONObject jsonImage = null;
@@ -96,6 +104,8 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         FeedPost feedPost = new FeedPost(jsonPost, jsonImage);
         mDataCache.getFeedPostList().add(0, feedPost);
 
+        /* Notify the adapter when both the post and comment data has been loaded - avoids having the
+        first PostComment data being casted to a FeedPost during onBind */
         if (wasDataSet) {
             refreshingData = false;
             mAdapter.refreshAdapter();
@@ -104,6 +114,11 @@ class DisplayPostPresenter extends FeedPostPresenter implements
         wasDataSet = true;
     }
 
+    /**
+     * Update the DataCache with the PostComments data to be displayed in the RecyclerView.
+     * @param commentsResponse
+     * @param imagesResponse
+     */
     public void setData(JSONArray commentsResponse, JSONArray imagesResponse) {
 
         if ((commentsResponse.length() != imagesResponse.length()))
@@ -122,6 +137,8 @@ class DisplayPostPresenter extends FeedPostPresenter implements
             mDataCache.getPostCommentList().add(postComment);
         }
 
+        /* Notify the adapter when both the post and comment data has been loaded - avoids having the
+        first PostComment data being casted to a FeedPost during onBind */
         if (wasDataSet) {
             refreshingData = false;
             mAdapter.refreshAdapter();
